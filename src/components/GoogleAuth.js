@@ -1,12 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
+import "../style/header.css";
+import jwtDecode from "jwt-decode";
+
+// 600309209777-29sff65hsmud4j0gpt5icis5meaud1de.apps.googleusercontent.com
 
 const GoogleAuth = () => {
+  const handleCallbackResponse = (response) => {
+    let userObject = jwtDecode(response.credential)
+    console.log(userObject);
+};
+
+  useEffect(() => {
+    /* global google */
+    const google = window.google;
+    if (google) {
+      google.accounts.id.initialize({
+        client_id:
+          "600309209777-29sff65hsmud4j0gpt5icis5meaud1de.apps.googleusercontent.com",
+        callback: handleCallbackResponse,
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("buttonSignIn"),
+        { shape: "circle", size: "medium", type: "standard"}
+      )
+    }
+  }, []);
+
   return (
-    <div>
-      <button class="ui labeled icon button">
-        Login with
-        <i class="google icon"></i>
-      </button>
+    <div id="buttonSignIn">
+
+      {/* <button id="button" className="ui labeled icon button">
+        <div className="d-flex flex-row">
+          <p className="mb-0">Sign-in with</p>
+          <i className="google icon fs-4 pt-1 ps-2" />
+        </div>
+      </button> */}
     </div>
   );
 };

@@ -1,0 +1,38 @@
+.header-container {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  height: 10vh;
+  align-items: center;
+}
+
+.header-container h1 {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 300;
+}
+
+.divider-1 {
+  background-color: #f2f2f2;
+  height: 4vh;
+}
+
+.divider-2 {
+  background-color: #f2f2f2;
+  height: 2vh;
+}
+
+#button {
+  padding-left: 20px !important;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+#button:hover {
+  color: white;
+  background-color: red;
+}
+
+#button p {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
