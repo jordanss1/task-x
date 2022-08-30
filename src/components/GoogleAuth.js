@@ -1,12 +1,22 @@
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { signIn, signOut } from "../actions";
 import "../style/header.css";
 import jwtDecode from "jwt-decode";
-// 600309209777-29sff65hsmud4j0gpt5icis5meaud1de.apps.googleusercontent.com
 
-const GoogleAuth = () => {
+const GoogleAuth = ({ isSignedIn, signIn, signOut, userProfile }) => {
   const handleCallbackResponse = (response) => {
     const userObject = jwtDecode(response.credential);
-    console.log(userObject);
+    signIn(userObject);
+  };
+
+  const renderSignOutButton = () => {
+    <button id="button" className="ui labeled icon button">
+      <div className="d-flex flex-row">
+        <p className="mb-0">Sign-out</p>
+        <i className="google icon fs-4 pt-1 ps-2" />
+      </div>
+    </button>;
   };
 
   useEffect(() => {
@@ -26,16 +36,17 @@ const GoogleAuth = () => {
     }
   }, []);
 
-  return (
-    <div id="buttonSignIn">
-      {/* <button id="button" className="ui labeled icon button">
-        <div className="d-flex flex-row">
-          <p className="mb-0">Sign-in with</p>
-          <i className="google icon fs-4 pt-1 ps-2" />
-        </div>
-      </button>  */}
-    </div>
-  );
+  return <div id={!isSignedIn ? `${"buttonSignIn"}` : ""}></div>;
 };
 
-export default GoogleAuth;
+const mapStateToProps = (state) => {
+  return {
+    isSignedIn: state.auth.isSignedIn,
+    userProfile: state.auth.userProfile,
+  };
+};
+
+export default connect(mapStateToProps, {
+  signIn,
+  signOut,
+})(GoogleAuth);
