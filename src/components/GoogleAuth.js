@@ -6,7 +6,8 @@ import jwtDecode from "jwt-decode";
 
 const GoogleAuth = () => {
   const handleCallbackResponse = (response) => {
-    console.log(response);
+    const userObject = jwtDecode(response.credential);
+    console.log(userObject);//change
   };
 
   useEffect(() => {
