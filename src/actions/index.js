@@ -1,4 +1,5 @@
-import { SIGN_IN, SIGN_OUT } from "./types";
+import { SIGN_IN, SIGN_OUT, CREATE_TODO } from "./types";
+import todoList from "../apiAxios/todos";
 
 export const signIn = (userObject) => {
   return {
@@ -14,5 +15,17 @@ export const signIn = (userObject) => {
 export const signOut = () => {
   return {
     type: SIGN_OUT,
+  };
+};
+
+export const createTodo = (formValues) => {
+  return (dispatch, getState) => {
+    const { userId } = getState().auth.userProfile;
+    todoList.put("", { ...formValues, userId }).then(({ data }) => {
+      dispatch({
+        type: CREATE_TODO,
+        payload: data,
+      });
+    });
   };
 };

@@ -1,0 +1,18 @@
+#todoContainer {
+  height: 60vh;
+  background-color: #e9d8cf;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+#form-container {
+  height: 30vh;
+}
+
+.input-container {
+  height: 100%;
+}
+
+.submit {
+  width: 15%;
+}
