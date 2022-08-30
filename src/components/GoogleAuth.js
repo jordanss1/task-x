@@ -11,12 +11,18 @@ const GoogleAuth = ({ isSignedIn, signIn, signOut, userProfile }) => {
   };
 
   const renderSignOutButton = () => {
-    <button id="button" className="ui labeled icon button">
-      <div className="d-flex flex-row">
-        <p className="mb-0">Sign-out</p>
-        <i className="google icon fs-4 pt-1 ps-2" />
-      </div>
-    </button>;
+    if (!isSignedIn) {
+      return;
+    } else if (isSignedIn === true) {
+      return (
+        <button id="button" className="ui labeled icon button">
+          <div className="d-flex flex-row">
+            <p className="mb-0">Sign-out</p>
+            <i className="google icon fs-4 pt-1 ps-2" />
+          </div>
+        </button>
+      );
+    }
   };
 
   useEffect(() => {
@@ -36,7 +42,7 @@ const GoogleAuth = ({ isSignedIn, signIn, signOut, userProfile }) => {
     }
   }, []);
 
-  return <div id={!isSignedIn ? `${"buttonSignIn"}` : ""}></div>;
+  return <div id="buttonSignIn"></div>;
 };
 
 const mapStateToProps = (state) => {
