@@ -5,7 +5,9 @@ import jwtDecode from "jwt-decode";
 // 600309209777-29sff65hsmud4j0gpt5icis5meaud1de.apps.googleusercontent.com
 
 const GoogleAuth = () => {
-  useEffect(() => {}, []);
+  useEffect(() => {
+    
+  }, []);
 
   return (
     <button id="button" className="ui labeled icon button">
