@@ -18,14 +18,14 @@ export const signOut = () => {
   };
 };
 
-export const createTodo = (formValues) => {
+export const createTodo = (todo) => {
   return (dispatch, getState) => {
     const { userId } = getState().auth.userProfile;
-    todoList.post("/todos", formValues); //.then(({ data }) => {
-    //   dispatch({
-    //     type: CREATE_TODO,
-    //     payload: data,
-    //   });
-    // });
+    todoList.post("/todos", { todo, userId }).then(({ data }) => {
+      dispatch({
+        type: CREATE_TODO,
+        payload: data,
+      });
+    });
   };
 };

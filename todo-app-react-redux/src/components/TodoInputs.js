@@ -3,12 +3,17 @@ import { connect } from "react-redux";
 import { createTodo } from "../actions";
 import "../style/body.css";
 
-const TodoInputs = ({ createTodo }) => {
+const TodoInputs = ({ createTodo, isSignedIn }) => {
   const [value, setValue] = useState("");
+  let errorClass = "";
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createTodo(value);
+    if (isSignedIn === null) {
+      errorClass = "ui input error";
+    } else {
+      createTodo(value);
+    }
   };
 
   return (
@@ -18,7 +23,7 @@ const TodoInputs = ({ createTodo }) => {
       onSubmit={handleSubmit}
     >
       <div className="two fields mb-0 w-50 d-flex flex-column justify-content-evenly justify-content-center input-container align-items-center">
-        <div className="field w-75">
+        <div className={`${errorClass} field w-75`}>
           <input
             className="w-100"
             value={value}
@@ -33,6 +38,12 @@ const TodoInputs = ({ createTodo }) => {
   );
 };
 
-export default connect(null, {
+const mapStateToProps = ({ auth }) => {
+  return {
+    isSignedIn: auth.isSignedIn,
+  };
+};
+
+export default connect(mapStateToProps, {
   createTodo,
 })(TodoInputs);
