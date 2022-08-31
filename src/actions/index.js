@@ -21,11 +21,11 @@ export const signOut = () => {
 export const createTodo = (formValues) => {
   return (dispatch, getState) => {
     const { userId } = getState().auth.userProfile;
-    todoList.put("", { ...formValues, userId }).then(({ data }) => {
-      dispatch({
-        type: CREATE_TODO,
-        payload: data,
-      });
-    });
+    todoList.post("", { ...formValues, userId }); //.then(({ data }) => {
+    //   dispatch({
+    //     type: CREATE_TODO,
+    //     payload: data,
+    //   });
+    // });
   };
 };
