@@ -3,11 +3,12 @@ import { connect } from "react-redux";
 import { createTodo } from "../actions";
 import "../style/body.css";
 
-const TodoInputs = () => {
-  const [value, setValue] = React.useState("");
+const TodoInputs = ({ createTodo }) => {
+  const [value, setValue] = useState("");
 
-  const handleSubmit = () => {
-    console.log(value);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createTodo(value);
   };
 
   return (
@@ -26,7 +27,7 @@ const TodoInputs = () => {
             onChange={({ target }) => setValue(target.value)}
           />
         </div>
-        <div className="ui submit button sub-button">Submit</div>
+        <button className="ui submit button sub-button">Submit</button>
       </div>
     </form>
   );

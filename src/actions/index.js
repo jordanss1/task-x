@@ -21,7 +21,7 @@ export const signOut = () => {
 export const createTodo = (formValues) => {
   return (dispatch, getState) => {
     const { userId } = getState().auth.userProfile;
-    todoList.post("", { ...formValues, userId }); //.then(({ data }) => {
+    todoList.post("/todos", formValues); //.then(({ data }) => {
     //   dispatch({
     //     type: CREATE_TODO,
     //     payload: data,
