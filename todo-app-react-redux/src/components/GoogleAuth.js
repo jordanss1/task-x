@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { signIn, signOut } from "../actions";
+import { useDispatch, useSelector } from "react-redux";
+import { signIn, signOut } from "../features/auth";
+import { authState } from "../features/auth";
 import "../style/header.css";
 import jwtDecode from "jwt-decode";
 
-const GoogleAuth = ({ isSignedIn, signIn, signOut, userProfile }) => {
+const GoogleAuth = () => {
+  const dispatch = useDispatch();
+  const isSignedIn = useSelector(authState);
+
   const handleCallbackResponse = (response) => {
     const userObject = jwtDecode(response.credential);
-    signIn(userObject);
+    signIn(dispatch(userObject));
   };
 
   const handleSignOut = () => {
@@ -48,6 +52,8 @@ const GoogleAuth = ({ isSignedIn, signIn, signOut, userProfile }) => {
     }
   }, []);
 
+  console.log(isSignedIn)
+
   return (
     <div>
       <div id="buttonSignIn" hidden={!isSignedIn ? false : true}></div>
@@ -56,14 +62,4 @@ const GoogleAuth = ({ isSignedIn, signIn, signOut, userProfile }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    isSignedIn: state.auth.isSignedIn,
-    userProfile: state.auth.userProfile,
-  };
-};
-
-export default connect(mapStateToProps, {
-  signIn,
-  signOut,
-})(GoogleAuth);
+export default GoogleAuth;
