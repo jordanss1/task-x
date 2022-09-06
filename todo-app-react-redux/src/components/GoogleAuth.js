@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signIn, signOut } from "../features/auth";
-import { authState } from "../features/auth";
+import { signIn, signOut } from "../features/auth/authSlice";
+import { loginStatus } from "../features/auth/authSlice";
 import "../style/header.css";
 import jwtDecode from "jwt-decode";
 
 const GoogleAuth = () => {
   const dispatch = useDispatch();
-  const isSignedIn = useSelector(authState);
+  const isSignedIn = useSelector(loginStatus);
 
   const handleCallbackResponse = (response) => {
     const userObject = jwtDecode(response.credential);
@@ -15,7 +15,7 @@ const GoogleAuth = () => {
   };
 
   const handleSignOut = () => {
-    signOut();
+    dispatch(signOut());
   };
 
   const renderSignOutButton = () => {
@@ -51,8 +51,6 @@ const GoogleAuth = () => {
       });
     }
   }, []);
-
-  console.log(isSignedIn);
 
   return (
     <div>
