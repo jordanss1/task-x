@@ -10,9 +10,9 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     signIn: {
-      reducer: (state, action) => {
+      reducer(state, action) {
         state.isSignedIn = true;
-        state.userProfile.push(action.payload);
+        state.userProfile = action.payload;
       },
       prepare({ sub, name, picture }) {
         return {

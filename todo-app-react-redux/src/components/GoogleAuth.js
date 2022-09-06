@@ -11,7 +11,7 @@ const GoogleAuth = () => {
 
   const handleCallbackResponse = (response) => {
     const userObject = jwtDecode(response.credential);
-    signIn(dispatch(userObject));
+    dispatch(signIn(userObject));
   };
 
   const handleSignOut = () => {
@@ -52,7 +52,7 @@ const GoogleAuth = () => {
     }
   }, []);
 
-  console.log(isSignedIn)
+  console.log(isSignedIn);
 
   return (
     <div>
