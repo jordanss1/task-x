@@ -24,7 +24,7 @@ const GoogleAuth = () => {
   const renderSignOutButton = () => {
     if (isSignedIn === true) {
       return (
-        <div>
+        <div className="d-flex align-items-center me-3">
           <button
             id="button"
             onClick={handleSignOut}
@@ -38,6 +38,21 @@ const GoogleAuth = () => {
         </div>
       );
     }
+  };
+
+  const renderProfile = () => {
+    return (
+      <div className="d-flex justify-content-center me-5">
+        {userProfile && userProfile.img && (
+          <img className="img-profile me-1" src={`${userProfile.img}`}></img>
+        )}
+        {userProfile ? (
+          <h2 className="fs-5 name-heading mb-0 d-flex align-items-center">{`Welcome, ${userProfile.name}`}</h2>
+        ) : (
+          ""
+        )}
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -59,8 +74,9 @@ const GoogleAuth = () => {
   }, [isSignedIn]);
 
   return (
-    <div>
+    <div className="w-100 d-flex justify-content-evenly">
       <div id="buttonSignIn" hidden={!isSignedIn ? false : true}></div>
+      {renderProfile()}
       {renderSignOutButton()}
     </div>
   );

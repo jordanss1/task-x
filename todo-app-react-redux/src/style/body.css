@@ -1,8 +1,15 @@
-#todoContainer {
+#todo-back {
   height: 60vh;
   background-color: #e9d8cf;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
+}
+
+#todoContainer {
+  column-gap: 5px;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(auto, 20vw);
+  grid-template-rows: repeat(6, 10vh);
 }
 
 #form-container {
@@ -15,4 +22,18 @@
 
 .submit {
   width: 15%;
+}
+
+.message {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 100;
+}
+
+.message-div {
+  height: 100%;
+}
+
+.input-class {
+  overflow-y: scroll;
 }
