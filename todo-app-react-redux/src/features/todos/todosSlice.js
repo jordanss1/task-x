@@ -11,7 +11,7 @@ export const getTodos = createAsyncThunk("todos/getTodos", async (userId) => {
 export const createTodos = createAsyncThunk(
   "todos/createTodos",
   async (todo, { getState }) => {
-    const userId = getState().auth.userProfile.userId;
+    const { userId } = getState().auth.userProfile;
     const { data } = await todoApi.post("/todos", { todo, userId });
     return data;
   }
@@ -45,8 +45,9 @@ const todosSlice = createSlice({
       state.status = "pending";
     },
     [createTodos.fulfilled]: (state, action) => {
-      let newTodo = { [action.payload.id]: action.payload };
-      console.log(state, state.todos);
+      const newState = Object.values(state.todos);
+      newState.push(action.payload);
+      state.todos = _.mapKeys(newState, "id");
       state.status = "success";
     },
     [createTodos.rejected]: (state) => {

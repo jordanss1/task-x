@@ -1,0 +1,33 @@
+{
+  "todos": [
+    {
+      "todo": "Get groceries",
+      "userId": "117038401482671780523",
+      "id": 1
+    },
+    {
+      "todo": "Visit library",
+      "userId": "117038401482671780523",
+      "id": 2
+    },
+    {
+      "todo": "Go to gym",
+      "userId": "117038401482671780523",
+      "id": 3
+    },
+    {
+      "todo": "Go to gym",
+      "id": 4
+    },
+    {
+      "todo": "Sky dive",
+      "userId": "117038401482671780523",
+      "id": 5
+    },
+    {
+      "todo": "Go home",
+      "userId": "117038401482671780523",
+      "id": 6
+    }
+  ]
+}
