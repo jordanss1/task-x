@@ -9,7 +9,7 @@
   column-gap: 5px;
   grid-auto-flow: column;
   grid-auto-columns: minmax(auto, 20vw);
-  grid-template-rows: repeat(6, 10vh);
+  grid-template-rows: repeat(7, 7vh);
 }
 
 #form-container {

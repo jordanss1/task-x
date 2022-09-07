@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelector } from "../features/auth/authSlice";
+import { createTodos } from "../features/todos/todosSlice";
 import "../style/body.css";
 
 const TodoInputs = () => {
-  const { isSignedIn } = useSelector(authSelector);
+  const { isSignedIn, userProfile } = useSelector(authSelector);
   const dispatch = useDispatch();
 
   const [value, setValue] = useState("");
@@ -13,6 +14,8 @@ const TodoInputs = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const todo = value;
+    dispatch(createTodos(todo));
   };
 
   return (

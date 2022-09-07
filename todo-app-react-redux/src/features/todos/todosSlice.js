@@ -8,6 +8,15 @@ export const getTodos = createAsyncThunk("todos/getTodos", async (userId) => {
   return data;
 });
 
+export const createTodos = createAsyncThunk(
+  "todos/createTodos",
+  async (todo, { getState }) => {
+    const userId = getState().auth.userProfile.userId;
+    const { data } = await todoApi.post("/todos", { todo, userId });
+    return data;
+  }
+);
+
 const initialState = {
   todos: {},
   status: null,
@@ -30,6 +39,17 @@ const todosSlice = createSlice({
       state.status = "success";
     },
     [getTodos.rejected]: (state) => {
+      state.status = "failed";
+    },
+    [createTodos.pending]: (state) => {
+      state.status = "pending";
+    },
+    [createTodos.fulfilled]: (state, action) => {
+      let newTodo = { [action.payload.id]: action.payload };
+      console.log(state, state.todos);
+      state.status = "success";
+    },
+    [createTodos.rejected]: (state) => {
       state.status = "failed";
     },
   },
