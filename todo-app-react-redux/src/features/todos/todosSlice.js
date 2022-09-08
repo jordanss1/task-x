@@ -17,6 +17,21 @@ export const createTodos = createAsyncThunk(
   }
 );
 
+export const editTodo = createAsyncThunk(
+  "todos/editTodo",
+  async ({ editId, promptValue }) => {
+    const { data } = await todoApi.patch(`/todos/${editId}`, {
+      todo: promptValue,
+    });
+    return data;
+  }
+);
+
+export const deleteTodo = createAsyncThunk("todos/deleteTodo", async (id) => {
+  const response = await todoApi.delete(`/todos/${id}`);
+  console.log(response);
+});
+
 const initialState = {
   todos: {},
   status: null,
@@ -51,6 +66,25 @@ const todosSlice = createSlice({
       state.status = "success";
     },
     [createTodos.rejected]: (state) => {
+      state.status = "failed";
+    },
+    [editTodo.pending]: (state) => {
+      state.status = "pending";
+    },
+    [editTodo.fulfilled]: (state, action) => {
+      state.todos[action.payload.id] = action.payload;
+      state.status = "success";
+    },
+    [editTodo.rejected]: (state) => {
+      state.status = "failed";
+    },
+    [deleteTodo.pending]: (state) => {
+      state.status = "pending";
+    },
+    [deleteTodo.fulfilled]: (state, action) => {
+      state.status = "success";
+    },
+    [deleteTodo.rejected]: (state) => {
       state.status = "failed";
     },
   },

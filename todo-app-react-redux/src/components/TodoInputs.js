@@ -14,8 +14,7 @@ const TodoInputs = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const todo = value;
-    dispatch(createTodos(todo));
+    dispatch(createTodos(value));
   };
 
   return (
@@ -37,6 +36,7 @@ const TodoInputs = () => {
         <button
           disabled={!willDisableOrEnable}
           className="ui submit button sub-button"
+          id="submitBtn"
         >
           Submit
         </button>

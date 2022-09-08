@@ -11,7 +11,7 @@ const Header = () => {
           <i className="check square outline icon mb-2 fs-3"></i>
           <h1 className="fs-3 ">Todo-List</h1>
         </div>
-        <div className="d-flex justify-content-center">
+        <div className="signIn-div d-flex justify-content-center">
           <GoogleAuth />
         </div>
       </div>

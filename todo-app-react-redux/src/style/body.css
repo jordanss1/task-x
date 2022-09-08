@@ -1,15 +1,9 @@
-#todo-back {
+#todoContainer {
   height: 60vh;
   background-color: #e9d8cf;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-}
-
-#todoContainer {
-  column-gap: 5px;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(auto, 20vw);
-  grid-template-rows: repeat(7, 7vh);
+  overflow: scroll;
 }
 
 #form-container {
@@ -20,8 +14,8 @@
   height: 100%;
 }
 
-.submit {
-  width: 15%;
+#submitBtn {
+  width: 125px;
 }
 
 .message {
@@ -34,6 +28,59 @@
   height: 100%;
 }
 
-.input-class {
+.todo-class {
   overflow-y: scroll;
+  width: 40%;
 }
+
+.todo-text {
+  max-width: 370px;
+}
+
+#todoContainer .todo-class .icon-class {
+  width: 1.5em !important;
+  height: 1.5em !important;
+  padding: 0.25em 0em 0em 0.1em !important;
+}
+
+#todoContainer .todo-class .icon-class,
+.delete-icon {
+  padding-right: 0.1em !important;
+}
+
+@media screen and (max-width: 992px) {
+  #todoContainer {
+    overflow-y: scroll;
+  }
+
+  .todo-text {
+    width: 50vw;
+    font-size: 15px;
+    overflow: scroll;
+  }
+
+  .todo-class {
+    width: 60%;
+  }
+
+  #todoContainer {
+    height: 60vh;
+    background-color: #e9d8cf;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+  }
+}
+
+@media screen and (max-width: 713px) {
+  .todo-class {
+    width: 75%;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .todo-class {
+    width: 85%;
+  }
+
+}
+

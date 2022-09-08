@@ -40,3 +40,21 @@
 .img-profile {
   max-width: 55px;
 }
+
+@media screen and (max-width: 992px) {
+  .header-container {
+    display: flex;
+    flex-flow: column;
+    height: 15vh;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .signIn-div {
+    width: 100%;
+  }
+
+  #buttonSignIn {
+    margin-left: 35px;
+  }
+}

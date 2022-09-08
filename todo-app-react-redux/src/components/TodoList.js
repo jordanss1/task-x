@@ -1,34 +1,78 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { selectTodos } from "../features/todos/todosSlice";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectTodos,
+  editTodo,
+  deleteTodo,
+} from "../features/todos/todosSlice";
 import { authSelector } from "../features/auth/authSlice";
 import "../style/body.css";
 
 const TodoList = () => {
+  const dispatch = useDispatch();
   const todos = useSelector(selectTodos);
   const { isSignedIn } = useSelector(authSelector);
 
+  const [promptValue, setPromptValue] = useState("");
+  const [editId, setEditId] = useState(null);
+
+  const handlePromptValue = (id) => {
+    setPromptValue(prompt("Edit todo and submit"));
+    setEditId(id);
+  };
+
+  const handleDeleteTodo = (id) => {
+    const todoDiv = document.getElementById(id);
+    const message = "Are you sure you want to delete this?";
+    const confirmation = window.confirm(message);
+
+    if (confirmation) {
+      todoDiv.remove();
+      dispatch(deleteTodo(id));
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    if (promptValue && editId) {
+      const editObject = { editId, promptValue };
+      dispatch(editTodo(editObject));
+    }
+  }, [editId]);
+
   const renderTodos = () => {
     return (
-      <div id="todoContainer" className="d-grid px-3">
+      <React.Fragment>
         {todos &&
-          todos.map((todo) => {
+          todos.map(({ id, todo }) => {
             return (
               <div
-                key={todo.id}
-                className="input-class d-flex align-items-center"
+                key={id}
+                id={id}
+                className="todo-class d-flex align-items-center justify-content-around"
               >
-                <input
-                  className="me-1"
-                  id={`todo${todo.id}`}
-                  name="todo"
-                  type="checkbox"
-                />
-                <label htmlFor={`todo${todo.id}`}>{todo.todo}</label>
+                <p className="todo-text ms-3 ms-sm-0 text-center">{todo}</p>
+                <div className="ms-auto">
+                  <i
+                    className="opacity-75 icon-class bordered inverted black edit link icon"
+                    title={id}
+                    onClick={({ target }) =>
+                      handlePromptValue(parseInt(target.title))
+                    }
+                  ></i>
+                  <i
+                    title={id}
+                    className="opacity-75 icon-class delete-icon bordered inverted red close link icon"
+                    onClick={({ target }) =>
+                      handleDeleteTodo(parseInt(target.title))
+                    }
+                  ></i>
+                </div>
               </div>
             );
           })}
-      </div>
+      </React.Fragment>
     );
   };
 
@@ -41,7 +85,12 @@ const TodoList = () => {
   };
 
   return (
-    <div id="todo-back">{isSignedIn ? renderTodos() : renderMessage()}</div>
+    <div
+      id="todoContainer"
+      className="d-flex align-items-center flex-column px-3 py-3"
+    >
+      {isSignedIn ? renderTodos() : renderMessage()}
+    </div>
   );
 };
 

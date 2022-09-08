@@ -44,7 +44,10 @@ const GoogleAuth = () => {
     return (
       <div className="d-flex justify-content-center me-5">
         {userProfile && userProfile.img && (
-          <img className="img-profile me-1" src={`${userProfile.img}`}></img>
+          <img
+            className="img-profile me-sm-1 me-2"
+            src={`${userProfile.img}`}
+          ></img>
         )}
         {userProfile ? (
           <h2 className="fs-5 name-heading mb-0 d-flex align-items-center">{`Welcome, ${userProfile.name}`}</h2>
@@ -74,7 +77,7 @@ const GoogleAuth = () => {
   }, [isSignedIn]);
 
   return (
-    <div className="w-100 d-flex justify-content-evenly">
+    <div className="w-100 d-flex  justify-content-center">
       <div id="buttonSignIn" hidden={!isSignedIn ? false : true}></div>
       {renderProfile()}
       {renderSignOutButton()}
