@@ -30,11 +30,11 @@
 
 .todo-class {
   overflow-y: scroll;
-  width: 40%;
 }
 
 .todo-text {
   max-width: 370px;
+  width: 370px;
 }
 
 #todoContainer .todo-class .icon-class {
@@ -49,36 +49,18 @@
 }
 
 @media screen and (max-width: 992px) {
-  #todoContainer {
-    overflow-y: scroll;
-  }
-
   .todo-text {
-    width: 50vw;
+    max-width: 700px;
+    width: 75%;
     font-size: 15px;
     overflow: scroll;
   }
 
   .todo-class {
-    width: 60%;
+    width: 100%;
   }
 
-  #todoContainer {
-    height: 60vh;
-    background-color: #e9d8cf;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-  }
-}
-
-@media screen and (max-width: 713px) {
-  .todo-class {
-    width: 75%;
-  }
-}
-
-@media screen and (max-width: 576px) {
-  .todo-class {
-    width: 85%;
+  .todoContainer2 {
+    width: 100%;
   }
 }

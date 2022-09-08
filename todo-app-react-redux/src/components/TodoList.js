@@ -27,7 +27,6 @@ const TodoList = () => {
     const confirmation = window.confirm(message);
 
     if (confirmation) {
-      //todoDiv.remove();
       dispatch(deleteTodo(id));
     } else {
       return;
@@ -43,7 +42,7 @@ const TodoList = () => {
 
   const renderTodos = () => {
     return (
-      <React.Fragment>
+      <div className="todoContainer2">
         {todos &&
           todos.map(({ id, todo }) => {
             return (
@@ -72,7 +71,7 @@ const TodoList = () => {
               </div>
             );
           })}
-      </React.Fragment>
+      </div>
     );
   };
 
