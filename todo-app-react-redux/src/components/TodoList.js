@@ -27,7 +27,7 @@ const TodoList = () => {
     const confirmation = window.confirm(message);
 
     if (confirmation) {
-      todoDiv.remove();
+      //todoDiv.remove();
       dispatch(deleteTodo(id));
     } else {
       return;

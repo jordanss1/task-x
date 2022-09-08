@@ -27,10 +27,16 @@ export const editTodo = createAsyncThunk(
   }
 );
 
-export const deleteTodo = createAsyncThunk("todos/deleteTodo", async (id) => {
-  const response = await todoApi.delete(`/todos/${id}`);
-  console.log(response);
-});
+export const deleteTodo = createAsyncThunk(
+  "todos/deleteTodo",
+  async (id, { dispatch }) => {
+    todoApi.delete(`/todos/${id}`);
+    dispatch({
+      type: "todos/deleteTodo/fulfilled",
+      payload: id,
+    });
+  }
+);
 
 const initialState = {
   todos: {},
@@ -82,6 +88,7 @@ const todosSlice = createSlice({
       state.status = "pending";
     },
     [deleteTodo.fulfilled]: (state, action) => {
+      delete state.todos[action.payload];
       state.status = "success";
     },
     [deleteTodo.rejected]: (state) => {
@@ -95,3 +102,49 @@ export const selectTodos = (state) => Object.values(state.todos.todos);
 export const { emptyTodos } = todosSlice.actions;
 
 export default todosSlice.reducer;
+
+/*
+{
+      "todo": "Go to gym",
+      "id": 4
+    },
+    {
+      "todo": "Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt ut labore et dolor",
+      "id": 10
+    },
+    {
+      "todo": "Go to doctors",
+      "userId": "117038401482671780523",
+      "id": 12
+    },
+    {
+      "todo": "Lorem ipsum dolor sit amet",
+      "userId": "117038401482671780523",
+      "id": 13
+    },
+    {
+      "todo": "Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt ut labore et dolor",
+      "userId": "117038401482671780523",
+      "id": 14
+    },
+    {
+      "todo": "Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod ",
+      "userId": "117038401482671780523",
+      "id": 15
+    },
+    {
+      "todo": "Lorem ipsum dolor sit amet",
+      "userId": "117038401482671780523",
+      "id": 16
+    },
+    {
+      "todo": "Lorem ipsum dolor sit amet, consectetur adip, sed do",
+      "userId": "117038401482671780523",
+      "id": 17
+    },
+    {
+      "todo": "Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt ut labore et dolor",
+      "userId": "117038401482671780523",
+      "id": 18
+    }
+*/
