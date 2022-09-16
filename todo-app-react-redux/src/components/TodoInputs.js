@@ -15,6 +15,7 @@ const TodoInputs = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createTodos(value));
+    setValue("");
   };
 
   return (
