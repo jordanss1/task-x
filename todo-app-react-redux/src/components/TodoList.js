@@ -22,7 +22,6 @@ const TodoList = () => {
   };
 
   const handleDeleteTodo = (id) => {
-    const todoDiv = document.getElementById(id);
     const message = "Are you sure you want to delete this?";
     const confirmation = window.confirm(message);
 

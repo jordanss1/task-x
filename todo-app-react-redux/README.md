@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+<h1><b>Todo App with Google Authentication</b></h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h3><b>Outline of Usage</b></h3>
 
-## Available Scripts
+Authenticates user using Google sign-in allowing user to access, add, edit or delete saved todo items associated with their userId.
 
-In the project directory, you can run:
+User can only see and edit their todos associated with their userId and all other todos on the API are inaccessible.
 
-### `npm start`
+<h3><b>How to use app</b></h3>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<i>You must first start the api in the root directory to use this app (instructions at "Quick Start") </i>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+You must be authenticated with Google first before you can add, edit or delete todo items. First log-in with your google account by first pressing the "Sign in with Google" button in the top right.
 
-### `npm test`
+Once logged in you will have the ability to submit new todos and any todos associated with your userId will automatically generate in the body of the page.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+From here you can use the edit and delete icons to the right of your todo text to edit or delete your todo. Once clicked, the edit icon will show a prompt and what you put into the input will change your todo. The delete icon requires a confirmation to delete your todo.
 
-### `npm run build`
+To sign out press the "Sign out" button in the top right.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<h3><b>Quick Start</b></h3>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<ul>
+<li>Open your terminal and git clone the repository:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    $ git clone https://github.com/jordanss1/todo-app-react-redux
 
-### `npm run eject`
+</li>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+<li> Access the root folder containing the api and the project folder, "cd" into this directory and install the dependencies:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    $ npm install
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+</li>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<li> Access the "api" folder, "cd" into this directory and start it:
 
-## Learn More
+    $ npm start
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+</li>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<li> Then start the react application in the "todo-app-react-redux" folder
 
-### Code Splitting
+    $ npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+</li>
+</ul>
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<h3><b>Technologies Used</b></h3>
+<ul>
+<li>ReactJS</li>
+<li>Redux Toolkit</li>
+<li>CSS</li>
+<li>BootStrap</li>
+</ul>
