@@ -49,6 +49,8 @@ To sign out press the "Sign out" button in the top right.
 <h3><b>Technologies Used</b></h3>
 <ul>
 <li>ReactJS</li>
+<li>JavaScript</li>
+<li>HTML</li>
 <li>Redux Toolkit</li>
 <li>CSS</li>
 <li>BootStrap</li>
