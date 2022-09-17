@@ -52,4 +52,8 @@ To sign out press the "Sign out" button in the top right.
 <li>Redux Toolkit</li>
 <li>CSS</li>
 <li>BootStrap</li>
+<li>Semantic UI</li>
+<li>Axios</li>
+<li>API</li>
+<li>NPM</li>
 </ul>
