@@ -1,4 +1,4 @@
-<h1><b>Todo App with Google Authentication</b></h1>
+<h1><b>Todo App with Google Sign-in</b></h1>
 
 <h3><b>Outline of Usage</b></h3>
 
