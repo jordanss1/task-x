@@ -1,8 +1,8 @@
-<h1><b>Todo App with Google Authentication</b></h1>
+<h1><b>Todo App with Google Sign-in</b></h1>
 
 <h3><b>Outline of Usage</b></h3>
 
-Authenticates user using Google sign-in allowing user to access, add, edit or delete saved todo items associated with their userId.
+Authenticates user using Google sign-in allowing user to access, add, edit or delete saved todo items associated with their userId. Redux Toolkit implemented to make async requests and store the state of the application.
 
 User can only see and edit their todos associated with their userId and all other todos on the API are inaccessible.
 
@@ -49,7 +49,13 @@ To sign out press the "Sign out" button in the top right.
 <h3><b>Technologies Used</b></h3>
 <ul>
 <li>ReactJS</li>
+<li>JavaScript</li>
+<li>HTML</li>
 <li>Redux Toolkit</li>
 <li>CSS</li>
 <li>BootStrap</li>
+<li>Semantic UI</li>
+<li>Axios</li>
+<li>API</li>
+<li>NPM</li>
 </ul>
