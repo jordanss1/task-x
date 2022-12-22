@@ -15,6 +15,26 @@ const TodoList = () => {
 
   const [promptValue, setPromptValue] = useState("");
   const [editId, setEditId] = useState(null);
+  const [loading, setLoading] = useState(null);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      setLoading(true);
+    }
+
+    const id = setTimeout(() => {
+      setLoading(false);
+    }, 2500);
+
+    return () => clearTimeout(id);
+  }, [isSignedIn]);
+
+  useEffect(() => {
+    if (promptValue && editId) {
+      const editObject = { editId, promptValue };
+      dispatch(editTodo(editObject));
+    }
+  }, [editId]);
 
   const handlePromptValue = (id) => {
     setPromptValue(prompt("Edit todo and submit"));
@@ -32,18 +52,41 @@ const TodoList = () => {
     }
   };
 
-  useEffect(() => {
-    if (promptValue && editId) {
-      const editObject = { editId, promptValue };
-      dispatch(editTodo(editObject));
-    }
-  }, [editId]);
-
-  const renderTodos = () => {
-    return (
-      <div className="todoContainer2">
-        {todos &&
-          todos.map(({ id, todo }) => {
+  const renderBody = () => {
+    if (!isSignedIn) {
+      return (
+        <div className="d-flex start-container align-items-center w-100 flex-column px-3 py-3">
+          <div className="message-div d-flex align-items-center justify-content-center ">
+            <h2 className="message fs-3">Login to view and create todos..</h2>
+          </div>
+        </div>
+      );
+    } else if (isSignedIn && loading) {
+      return (
+        <div
+          id="placeholder"
+          className="d-flex align-items-center justify-content-center w-50 message-div flex-column px-3 py-3"
+        >
+          <div className="ui placeholder w-100">
+            <div className="paragraph">
+              <div className="line"></div>
+              <div className="line"></div>
+              <div className="line"></div>
+              <div className="line"></div>
+              <div className="line"></div>
+            </div>
+            <div className="paragraph">
+              <div className="line"></div>
+              <div className="line"></div>
+              <div className="line"></div>
+            </div>
+          </div>
+        </div>
+      );
+    } else if (isSignedIn && todos.length && !loading) {
+      return (
+        <div className="todo-container2">
+          {todos.map(({ id, todo }) => {
             return (
               <div
                 key={id}
@@ -70,26 +113,23 @@ const TodoList = () => {
               </div>
             );
           })}
-      </div>
-    );
+        </div>
+      );
+    } else if (isSignedIn && !todos.length && !loading) {
+      return (
+        <div
+          id="no-todos"
+          className="d-flex align-items-center flex-column px-3 py-3"
+        >
+          <div className="message-div no-todos d-flex align-items-center justify-content-center ">
+            <h2 className="message fs-3">Start creating todos!</h2>
+          </div>
+        </div>
+      );
+    }
   };
 
-  const renderMessage = () => {
-    return (
-      <div className="message-div d-flex align-items-center justify-content-center">
-        <h2 className="message fs-3">Login to see and create todos..</h2>
-      </div>
-    );
-  };
-
-  return (
-    <div
-      id="todoContainer"
-      className="d-flex align-items-center flex-column px-3 py-3"
-    >
-      {isSignedIn ? renderTodos() : renderMessage()}
-    </div>
-  );
+  return renderBody();
 };
 
 export default TodoList;

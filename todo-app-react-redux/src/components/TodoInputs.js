@@ -10,8 +10,6 @@ const TodoInputs = () => {
 
   const [value, setValue] = useState("");
 
-  let willDisableOrEnable = Boolean(isSignedIn) && Boolean(value);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createTodos(value));
@@ -20,11 +18,10 @@ const TodoInputs = () => {
 
   return (
     <form
-      className="ui small form d-flex align-items-center justify-content-center"
-      id="form-container"
+      className="ui small form-container form align-items-center justify-content-center w-50"
       onSubmit={handleSubmit}
     >
-      <div className="two fields mb-0 w-50 d-flex flex-column justify-content-evenly justify-content-center input-container align-items-center">
+      <div className="two fields mb-0 w-100 d-flex flex-column justify-content-evenly justify-content-center input-container align-items-center">
         <div className="field w-75">
           <input
             className="w-100"
@@ -35,8 +32,8 @@ const TodoInputs = () => {
           />
         </div>
         <button
-          disabled={!willDisableOrEnable}
-          className="ui submit button sub-button"
+          disabled={!value}
+          className="ui submit button rounded-pill sub-button"
           id="submitBtn"
         >
           Submit

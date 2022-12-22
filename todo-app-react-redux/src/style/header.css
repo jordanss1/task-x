@@ -3,9 +3,25 @@
   grid-template-columns: 60% 40%;
   height: 10vh;
   align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.342);
 }
 
-.header-container h1,
+.border-ani {
+  animation: border-ani 3s forwards;
+}
+
+@keyframes border-ani {
+  0% {
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+  }
+  50% {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.342);
+  }
+  100% {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.342);
+  }
+}
+
 .name-heading {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -17,12 +33,127 @@
   height: 4vh;
 }
 
+.todo-heading {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  opacity: 1;
+  font-weight: 300;
+}
+
+.logo-head {
+  animation: head-ani 3s forwards;
+}
+
+@keyframes head-ani {
+  0% {
+    font-weight: 400;
+    opacity: 0;
+  }
+  10% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    font-weight: 400;
+  }
+  100% {
+    opacity: 1;
+    font-weight: 300;
+  }
+}
+
+.todo-logo {
+  position: relative;
+  top: 0;
+  left: 0;
+  scale: 0.8;
+}
+
+.full-logo {
+  animation: full-ani 3s forwards;
+}
+
+@keyframes full-ani {
+  0% {
+    scale: 2;
+    top: 230px;
+    left: 240px;
+  }
+  15% {
+    scale: 2;
+    top: 230px;
+    left: 240px;
+  }
+  75% {
+    top: 0;
+    left: 0;
+  }
+  100% {
+    scale: 0.8;
+    top: 0;
+    left: 0;
+  }
+}
+
+.todo-icon {
+  font-size: 1.5em !important;
+  opacity: 1;
+  bottom: 0;
+}
+
+.logo-icon {
+  animation: logo-ani 3s forwards;
+}
+
+@keyframes logo-ani {
+  0% {
+    position: relative;
+    opacity: 0;
+    bottom: 90px;
+  }
+  15% {
+    opacity: 1;
+    bottom: 0;
+  }
+  60% {
+    font-size: 1em;
+  }
+  100% {
+    font-size: 1.5em;
+    opacity: 1;
+    bottom: 0;
+  }
+}
+
+.buttonSignIn {
+  opacity: 1;
+}
+
+.button-ani {
+  animation: button-ani 3s forwards;
+}
+
+@keyframes button-ani {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 #button {
   padding-left: 20px !important;
   border-radius: 10px;
   font-size: 13px;
   font-weight: 700;
-  width: 170px;
+  width: 130px;
   background-color: white;
   border: 1px solid #dadada;
 }
@@ -38,7 +169,34 @@
 }
 
 .img-profile {
-  max-width: 55px;
+  max-width: 45px;
+}
+
+.signIn-ani {
+  animation: signIn-ani 1s;
+}
+
+@keyframes signIn-ani {
+  0% {
+    right: 150px;
+  }
+  100% {
+    right: 0;
+  }
+}
+.signOut-ani {
+  animation: signOut-ani 1s forwards;
+}
+
+@keyframes signOut-ani {
+  0% {
+    right: 0;
+    opacity: 1;
+  }
+  100% {
+    right: 150px;
+    opacity: 0;
+  }
 }
 
 @media screen and (max-width: 992px) {
@@ -52,6 +210,7 @@
 
   .signIn-div {
     width: 100%;
+    position: relative;
   }
 
   #buttonSignIn {

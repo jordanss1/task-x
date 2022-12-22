@@ -5,11 +5,13 @@ import TodoInputs from "./TodoInputs";
 
 const App = () => {
   return (
-    <div>
+    <main>
       <Header />
-      <TodoList />
-      <TodoInputs />
-    </div>
+      <section className="bottom-container d-flex flex-column align-items-center justify-content-evenly">
+        <TodoList />
+        <TodoInputs />
+      </section>
+    </main>
   );
 };
 

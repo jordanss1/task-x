@@ -1,13 +1,80 @@
-#todoContainer {
-  height: 60vh;
-  background-color: #e9d8cf;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  overflow: scroll;
+#root,
+main {
+  height: 92%;
 }
 
-#form-container {
+.start-container {
+  height: 60vh;
+  background-color: #e9d8cf;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.306);
+  opacity: 1;
+  position: relative;
+  right: 0;
+}
+
+.start-ani {
+  animation: container-ani 3s forwards;
+}
+
+@keyframes container-ani {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.signOut-ani {
+  animation: signOut-ani 500ms forwards;
+}
+
+@keyframes signOut-ani {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    right: 150px;
+    opacity: 0;
+  }
+  100% {
+    right: 0;
+    opacity: 1;
+  }
+}
+
+.form-container {
   height: 30vh;
+  opacity: 0;
+}
+
+.form-ani-signIn {
+  animation: sign-in 1s forwards;
+}
+
+@keyframes sign-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.form-ani-signOut {
+  animation: sign-out 1s forwards;
+}
+
+@keyframes sign-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .input-container {
@@ -15,7 +82,11 @@
 }
 
 #submitBtn {
-  width: 125px;
+  width: 100px;
+}
+
+#placeholder {
+  height: 25% !important;
 }
 
 .message {
@@ -28,6 +99,10 @@
   height: 100%;
 }
 
+.loading {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
 .todo-class {
   overflow-y: scroll;
 }
@@ -35,6 +110,10 @@
 .todo-text {
   max-width: 370px;
   width: 370px;
+}
+
+.bottom-container {
+  height: 100%;
 }
 
 #todoContainer .todo-class .icon-class {
@@ -46,6 +125,31 @@
 #todoContainer .todo-class .icon-class,
 .delete-icon {
   padding-right: 0.1em !important;
+}
+
+.todo-container2 {
+  width: 50%;
+  opacity: 0;
+  animation: todos-ani-in 1s forwards;
+}
+
+@keyframes todos-ani-in {
+  100% {
+    opacity: 1;
+  }
+}
+
+.no-todos {
+  animation: no-ani 1s forwards;
+}
+
+@keyframes no-ani {
+  0% {
+    right: 50px;
+  }
+  100% {
+    right: 0;
+  }
 }
 
 @media screen and (max-width: 992px) {
@@ -60,7 +164,7 @@
     width: 100%;
   }
 
-  .todoContainer2 {
+  .todo-container2 {
     width: 100%;
   }
 }
