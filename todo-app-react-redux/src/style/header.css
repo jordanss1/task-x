@@ -172,8 +172,8 @@
   max-width: 45px;
 }
 
-.signIn-ani {
-  animation: signIn-ani 1s;
+.signOutButton-in {
+  animation: signOut-ing 1s;
 }
 
 @keyframes signIn-ani {
@@ -184,8 +184,8 @@
     right: 0;
   }
 }
-.signOut-ani {
-  animation: signOut-ani 1s forwards;
+.signOutButton-out {
+  animation: signOut-out 1s forwards;
 }
 
 @keyframes signOut-ani {

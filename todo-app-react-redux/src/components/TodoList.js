@@ -11,11 +11,29 @@ import "../style/body.css";
 const TodoList = () => {
   const dispatch = useDispatch();
   const todos = useSelector(selectTodos);
-  const { isSignedIn } = useSelector(authSelector);
+  const { isSignedIn, beenSignedIn, beenSignedOut } = useSelector(authSelector);
 
   const [promptValue, setPromptValue] = useState("");
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(null);
+
+  const classFunc = (classes) => {
+    if (beenSignedIn) {
+      return classes[0];
+    } else if (beenSignedOut) {
+      return classes[1];
+    }
+  };
+
+  const timeoutClassFunc = (classes) => {
+    if (beenSignedIn) {
+      setTimeout(() => {
+        return classes[0];
+      }, 2500);
+    } else if (beenSignedOut) {
+      return classes[1];
+    }
+  };
 
   useEffect(() => {
     if (isSignedIn) {
@@ -47,15 +65,19 @@ const TodoList = () => {
 
     if (confirmation) {
       dispatch(deleteTodo(id));
-    } else {
-      return;
     }
   };
 
   const renderBody = () => {
     if (!isSignedIn) {
+      const classes = ["signIn-container", "signOut-container"];
+
       return (
-        <div className="d-flex start-container align-items-center w-100 flex-column px-3 py-3">
+        <div
+          className={`d-flex start-container ${classFunc(
+            classes
+          )} align-items-center w-100 flex-column px-3 py-3`}
+        >
           <div className="message-div d-flex align-items-center justify-content-center ">
             <h2 className="message fs-3">Login to view and create todos..</h2>
           </div>
@@ -84,38 +106,40 @@ const TodoList = () => {
         </div>
       );
     } else if (isSignedIn && todos.length && !loading) {
+      const containerClasses = ["todos-in", "todos-out"];
+      const itemClasses = ["item-in", "item-out"];
+
       return (
-        <div className="todo-container2">
+        <div
+          className={`todo-container2 p-3 ${timeoutClassFunc(
+            containerClasses
+          )} d-flex flex-column align-items-center mt-2  justify-content-between `}
+        >
           {todos.map(({ id, todo }) => {
             return (
               <div
                 key={id}
-                id={id}
-                className="todo-class d-flex align-items-center justify-content-around"
+                className={`todo-class ${timeoutClassFunc(
+                  itemClasses
+                )} border rounded-pill p-1 d-flex align-items-center justify-content-around mb-2`}
               >
-                <p className="todo-text ms-3 ms-sm-0 text-center">{todo}</p>
-                <div className="ms-auto">
+                <p className="todo-text ms-3 ms-sm-0 ps-2 fs-4">{todo}</p>
+                {/* <div className="ms-auto">
                   <i
                     className="opacity-75 icon-class bordered inverted black edit link icon"
-                    title={id}
-                    onClick={({ target }) =>
-                      handlePromptValue(parseInt(target.title))
-                    }
+                    onClick={() => handlePromptValue(id)}
                   ></i>
                   <i
-                    title={id}
                     className="opacity-75 icon-class delete-icon bordered inverted red close link icon"
-                    onClick={({ target }) =>
-                      handleDeleteTodo(parseInt(target.title))
-                    }
+                    onClick={() => handleDeleteTodo(id)}
                   ></i>
-                </div>
+                </div> */}
               </div>
             );
           })}
         </div>
       );
-    } else if (isSignedIn && !todos.length && !loading) {
+    } else if (isSignedIn && !todos.length && !loading && !beenSignedOut) {
       return (
         <div
           id="no-todos"

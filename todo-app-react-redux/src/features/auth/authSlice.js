@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isSignedIn: false,
   userProfile: null,
+  beenSignedIn: null,
+  beenSignedOut: null,
 };
 
 export const authSlice = createSlice({
@@ -28,11 +30,19 @@ export const authSlice = createSlice({
       state.isSignedIn = false;
       state.userProfile = null;
     },
+    signingIn: (state) => {
+      state.beenSignedIn = true;
+      state.beenSignedOut = false;
+    },
+    signingOut: (state) => {
+      state.beenSignedOut = true;
+      state.beenSignedIn = false;
+    },
   },
 });
 
 export const authSelector = (state) => state.auth;
 
-export const { signIn, signOut } = authSlice.actions;
+export const { signIn, signOut, signingIn, signingOut } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signIn, signOut, authSelector } from "../features/auth/authSlice";
+import {
+  signIn,
+  signOut,
+  signingIn,
+  signingOut,
+  authSelector,
+} from "../features/auth/authSlice";
 import { getTodos, emptyTodos } from "../features/todos/todosSlice";
 import { initialiseGoogle } from "../features/auth/initialiseGoogle";
 import "../style/header.css";
@@ -8,24 +14,20 @@ import jwtDecode from "jwt-decode";
 
 const GoogleAuth = () => {
   const dispatch = useDispatch();
-  const { isSignedIn, userProfile } = useSelector(authSelector);
+  const { isSignedIn, userProfile, beenSignedIn, beenSignedOut } =
+    useSelector(authSelector);
+
   const [google, setGoogle] = useState("");
-  const [beenSignedOut, setBeenSignedOut] = useState(null);
 
   useEffect(() => {
-    const button = document.getElementsByClassName("buttonSignIn")[0];
-    button.classList.add("button-ani");
     setGoogle(window.google);
 
     const userObject = JSON.parse(window.localStorage.getItem("user"));
 
     if (userObject) {
+      dispatch(signingIn());
       dispatch(signIn(userObject));
     }
-
-    const id = setTimeout(() => button.classList.remove("button-ani"), 3000);
-
-    return () => clearTimeout(id);
   }, []);
 
   useEffect(() => {
@@ -37,33 +39,46 @@ const GoogleAuth = () => {
   useEffect(() => {
     if (isSignedIn && userProfile) {
       dispatch(getTodos(userProfile.userId));
-      setBeenSignedOut(false);
     } else {
       dispatch(emptyTodos());
     }
   }, [isSignedIn, userProfile]);
 
   useEffect(() => {
-    const startContainer =
-      document.getElementsByClassName("start-container")[0];
+    let id;
 
-    if (beenSignedOut && startContainer) {
-      startContainer.classList.add("signOut-ani");
+    const userObject = JSON.parse(window.localStorage.getItem("user"));
+
+    if (beenSignedIn && userObject) {
+      id = setTimeout(() => {
+        dispatch(signIn(userObject));
+      }, 500);
     }
+
+    return () => clearTimeout(id);
+  }, [beenSignedIn]);
+
+  useEffect(() => {
+    let id;
+
+    if (beenSignedOut) {
+      id = setTimeout(() => {
+        dispatch(signOut());
+      }, 500);
+    }
+
+    return () => clearTimeout(id);
   }, [beenSignedOut]);
 
   const handleCallbackResponse = (response) => {
     const userObject = jwtDecode(response.credential);
     window.localStorage.setItem("user", JSON.stringify(userObject));
-    dispatch(signIn(userObject));
+    dispatch(signingIn());
   };
 
   const handleSignOut = () => {
-    setTimeout(() => {
-      dispatch(signOut());
-      window.localStorage.removeItem("user");
-      setBeenSignedOut(true);
-    }, 1000);
+    window.localStorage.removeItem("user");
+    dispatch(signingOut());
   };
 
   const renderSignOutButton = () => {

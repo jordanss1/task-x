@@ -9,7 +9,6 @@ main {
   border-bottom: 1px solid rgba(0, 0, 0, 0.306);
   opacity: 1;
   position: relative;
-  right: 0;
 }
 
 .start-ani {
@@ -28,15 +27,12 @@ main {
   }
 }
 
-.signOut-ani {
-  animation: signOut-ani 500ms forwards;
+.signOut-container {
+  animation: signOut-ani 500ms ease-in forwards;
 }
 
 @keyframes signOut-ani {
   0% {
-    opacity: 0;
-  }
-  50% {
     right: 150px;
     opacity: 0;
   }
@@ -46,43 +42,78 @@ main {
   }
 }
 
+.signIn-container {
+  animation: signIn-ani 500ms ease-in forwards;
+}
+
+@keyframes signIn-ani {
+  0% {
+    right: 0;
+    opacity: 1;
+  }
+  100% {
+    right: 150px;
+    opacity: 0;
+  }
+}
+
 .form-container {
-  height: 30vh;
+  height: 10%;
   opacity: 0;
 }
 
 .form-ani-signIn {
-  animation: sign-in 1s forwards;
+  animation: form-in 2s forwards;
 }
 
-@keyframes sign-in {
+@keyframes form-in {
   0% {
+    opacity: 0;
+    height: 10%;
+  }
+  50% {
     opacity: 0;
   }
   100% {
     opacity: 1;
+    height: 40%;
   }
 }
 
 .form-ani-signOut {
-  animation: sign-out 1s forwards;
+  animation: form-out 1s forwards;
 }
 
-@keyframes sign-out {
+@keyframes form-out {
   0% {
     opacity: 1;
+    height: 40%;
   }
+
   100% {
     opacity: 0;
+    height: 10%;
   }
 }
 
 .input-container {
-  height: 100%;
+  height: 75%;
+  /* background: linear-gradient(90deg, white 12%, #e66465, #9198e5, white 87%); */
 }
 
-#submitBtn {
-  width: 100px;
+.input-div {
+  background-color: #e9d8cf4e;
+  padding: 0.1em 0.2em !important;
+}
+
+input.text-input::-webkit-input-placeholder {
+  color: black !important;
+}
+input.text-input::-moz-placeholder {
+  color: rgb(45, 45, 45) !important;
+}
+input.text-input:-moz-placeholder {
+  color: black !important;
 }
 
 #placeholder {
@@ -99,44 +130,49 @@ main {
   height: 100%;
 }
 
-.loading {
-  background-color: rgba(0, 0, 0, 0) !important;
-}
-
-.todo-class {
-  overflow-y: scroll;
-}
-
 .todo-text {
-  max-width: 370px;
-  width: 370px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 300;
+  max-width: 400px;
+  width: 400px;
 }
 
 .bottom-container {
   height: 100%;
 }
 
-#todoContainer .todo-class .icon-class {
-  width: 1.5em !important;
-  height: 1.5em !important;
-  padding: 0.25em 0em 0em 0.1em !important;
-}
-
-#todoContainer .todo-class .icon-class,
-.delete-icon {
-  padding-right: 0.1em !important;
-}
-
 .todo-container2 {
+  height: 60%;
   width: 50%;
   opacity: 0;
-  animation: todos-ani-in 1s forwards;
+  transition: 1s;
+  border: 1px solid rgb(57, 57, 57);
+  border-radius: 25px;
+  background: linear-gradient(45deg, #e66465, white, #9198e5);
 }
 
-@keyframes todos-ani-in {
-  100% {
-    opacity: 1;
-  }
+.todos-in {
+  opacity: 1;
+}
+
+.todos-out {
+  height: 20%;
+  opacity: 0;
+}
+
+.todo-class {
+  height: 60px;
+  opacity: 0;
+  transition: 2s;
+}
+
+.item-in {
+  opacity: 1;
+}
+
+.item-out {
+  opacity: 0;
 }
 
 .no-todos {

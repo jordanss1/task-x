@@ -4,20 +4,24 @@ import "../style/header.css";
 
 const Header = () => {
   useEffect(() => {
+    //initial render styles
+
     const icon = document.getElementsByClassName("todo-icon")[0];
     const logo = document.getElementsByClassName("todo-logo")[0];
     const heading = document.getElementsByClassName("todo-heading")[0];
     const container = document.getElementsByClassName("start-container")[0];
     const container2 = document.getElementsByClassName("header-container")[0];
-    let id;
+    const button = document.getElementsByClassName("buttonSignIn")[0];
 
+    button.classList.add("button-ani");
     container.classList.add("start-ani");
     container2.classList.add("border-ani");
     icon.classList.add("logo-icon");
     logo.classList.add("full-logo");
     heading.classList.add("logo-head");
 
-    id = setTimeout(() => {
+    let id = setTimeout(() => {
+      button.classList.remove("button-ani");
       container.classList.remove("start-ani");
       container2.classList.remove("border-ani");
       icon.classList.remove("logo-icon");
@@ -29,7 +33,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div>
+    <header>
       <div className="w-100 divider-1"></div>
       <div className="header-container container-fluid">
         <div className="d-flex todo-logo  flex-row justify-content-center">
@@ -40,7 +44,7 @@ const Header = () => {
           <GoogleAuth />
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
