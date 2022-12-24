@@ -5,6 +5,13 @@ import {
   editTodo,
   deleteTodo,
 } from "../features/todos/todosSlice";
+import {
+  todoContainerSet,
+  loginContainerSet,
+  noTodosSet,
+  holdId,
+} from "../features/classes/classesSlice";
+import { classSelector } from "../features/classes/classesSlice";
 import { authSelector } from "../features/auth/authSlice";
 import "../style/body.css";
 
@@ -12,37 +19,44 @@ const TodoList = () => {
   const dispatch = useDispatch();
   const todos = useSelector(selectTodos);
   const { isSignedIn, beenSignedIn, beenSignedOut } = useSelector(authSelector);
+  const { initialClasses, todoContainer, loginContainer, noTodos, id } =
+    useSelector(classSelector);
 
   const [promptValue, setPromptValue] = useState("");
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(null);
 
-  const classFunc = (classes) => {
-    if (beenSignedIn) {
-      return classes[0];
-    } else if (beenSignedOut) {
-      return classes[1];
+  useEffect(() => {
+    if (beenSignedIn && !isSignedIn) {
+      dispatch(loginContainerSet("signIn-container"));
     }
-  };
 
-  const timeoutClassFunc = (classes) => {
-    if (beenSignedIn) {
-      setTimeout(() => {
-        return classes[0];
-      }, 2500);
-    } else if (beenSignedOut) {
-      return classes[1];
+    if (beenSignedOut) {
+      dispatch(loginContainerSet("signOut-container"));
     }
-  };
+
+    if (beenSignedOut && todos.length) {
+      dispatch(todoContainerSet("todos-out"));
+    }
+
+    if (beenSignedOut && !todos.length) {
+      dispatch(noTodosSet("noTodos-out"));
+    }
+  }, [beenSignedIn, beenSignedOut]);
 
   useEffect(() => {
+    let id;
+
     if (isSignedIn) {
       setLoading(true);
-    }
 
-    const id = setTimeout(() => {
-      setLoading(false);
-    }, 2500);
+      id = setTimeout(() => {
+        setLoading(false);
+
+        dispatch(todoContainerSet("todos-in"));
+        dispatch(noTodosSet("noTodos-in"));
+      }, 2500);
+    }
 
     return () => clearTimeout(id);
   }, [isSignedIn]);
@@ -70,13 +84,11 @@ const TodoList = () => {
 
   const renderBody = () => {
     if (!isSignedIn) {
-      const classes = ["signIn-container", "signOut-container"];
+      const classes = `${initialClasses.container} ${loginContainer}`;
 
       return (
         <div
-          className={`d-flex start-container ${classFunc(
-            classes
-          )} align-items-center w-100 flex-column px-3 py-3`}
+          className={`d-flex start-container ${classes} align-items-center w-100 flex-column px-3 py-3`}
         >
           <div className="message-div d-flex align-items-center justify-content-center ">
             <h2 className="message fs-3">Login to view and create todos..</h2>
@@ -106,22 +118,15 @@ const TodoList = () => {
         </div>
       );
     } else if (isSignedIn && todos.length && !loading) {
-      const containerClasses = ["todos-in", "todos-out"];
-      const itemClasses = ["item-in", "item-out"];
-
       return (
         <div
-          className={`todo-container2 p-3 ${timeoutClassFunc(
-            containerClasses
-          )} d-flex flex-column align-items-center mt-2  justify-content-between `}
+          className={`todo-container2 ${todoContainer} p-3 d-flex flex-column align-items-center mt-2  justify-content-between `}
         >
           {todos.map(({ id, todo }) => {
             return (
               <div
                 key={id}
-                className={`todo-class ${timeoutClassFunc(
-                  itemClasses
-                )} border rounded-pill p-1 d-flex align-items-center justify-content-around mb-2`}
+                className={`todo-class todo${id} border rounded-pill p-1 d-flex align-items-center justify-content-around mb-2`}
               >
                 <p className="todo-text ms-3 ms-sm-0 ps-2 fs-4">{todo}</p>
                 {/* <div className="ms-auto">
@@ -142,8 +147,7 @@ const TodoList = () => {
     } else if (isSignedIn && !todos.length && !loading && !beenSignedOut) {
       return (
         <div
-          id="no-todos"
-          className="d-flex align-items-center flex-column px-3 py-3"
+          className={`no-todos ${noTodos} d-flex align-items-center flex-column px-3 py-3`}
         >
           <div className="message-div no-todos d-flex align-items-center justify-content-center ">
             <h2 className="message fs-3">Start creating todos!</h2>

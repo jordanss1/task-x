@@ -15,7 +15,7 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0);
   }
   50% {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.342);
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
   }
   100% {
     border-bottom: 1px solid rgba(0, 0, 0, 0.342);
@@ -127,6 +127,7 @@
 
 .buttonSignIn {
   opacity: 1;
+  position: relative;
 }
 
 .button-ani {
@@ -145,6 +146,36 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+.signInButton-in {
+  animation: signIn-ani1 500ms ease-in forwards;
+}
+
+@keyframes signIn-ani1 {
+  0% {
+    right: 150px;
+    opacity: 0;
+  }
+  100% {
+    right: 0;
+    opacity: 1;
+  }
+}
+
+.signInButton-out {
+  animation: signOut-ani1 500ms ease-in forwards;
+}
+
+@keyframes signOut-ani1 {
+  0% {
+    right: 0;
+    opacity: 1;
+  }
+  100% {
+    right: 150px;
+    opacity: 0;
   }
 }
 
@@ -172,29 +203,36 @@
   max-width: 45px;
 }
 
-.signOutButton-in {
-  animation: signOut-ing 1s;
+.buttonSignOut {
+  position: relative;
+  opacity: 0;
 }
 
-@keyframes signIn-ani {
+.signOutButton-in {
+  animation: signIn2-ani 500ms forwards 500ms;
+}
+
+@keyframes signIn2-ani {
   0% {
-    right: 150px;
+    left: 150px;
+    opacity: 0;
   }
   100% {
-    right: 0;
+    left: 0;
+    opacity: 1;
   }
 }
 .signOutButton-out {
-  animation: signOut-out 1s forwards;
+  animation: signOut2-ani 500ms forwards;
 }
 
-@keyframes signOut-ani {
+@keyframes signOut2-ani {
   0% {
-    right: 0;
+    left: 0;
     opacity: 1;
   }
   100% {
-    right: 150px;
+    left: 150px;
     opacity: 0;
   }
 }

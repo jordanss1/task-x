@@ -145,30 +145,74 @@ input.text-input:-moz-placeholder {
 .todo-container2 {
   height: 60%;
   width: 50%;
-  opacity: 0;
-  transition: 1s;
+  opacity: 1;
+  transition: 500ms;
   border: 1px solid rgb(57, 57, 57);
   border-radius: 25px;
   background: linear-gradient(45deg, #e66465, white, #9198e5);
 }
 
 .todos-in {
-  opacity: 1;
+  animation: todos-in 1s;
+}
+
+@keyframes todos-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .todos-out {
-  height: 20%;
-  opacity: 0;
+  animation: todos-out 500ms;
+}
+
+@keyframes todos-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .todo-class {
   height: 60px;
-  opacity: 0;
-  transition: 2s;
+  opacity: 1;
+  position: relative;
+  transition: 1s;
 }
 
 .item-in {
-  opacity: 1;
+  animation: item-in 500ms;
+}
+
+@keyframes item-in {
+  0% {
+    right: 50px;
+    opacity: 0;
+  }
+  100% {
+    right: 0;
+    opacity: 1;
+  }
+}
+
+.item-out {
+  animation: item-out 500ms;
+}
+
+@keyframes item-out {
+  0% {
+    right: 0px;
+    opacity: 1;
+  }
+  100% {
+    right: 50px;
+    opacity: 0;
+  }
 }
 
 .item-out {
@@ -176,15 +220,36 @@ input.text-input:-moz-placeholder {
 }
 
 .no-todos {
-  animation: no-ani 1s forwards;
+  position: relative;
 }
 
-@keyframes no-ani {
+.noTodos-in {
+  animation: noTodos-in 500ms forwards;
+}
+
+@keyframes noTodos-in {
   0% {
-    right: 50px;
+    left: 150px;
+    opacity: 0;
   }
   100% {
-    right: 0;
+    left: 0;
+    opacity: 1;
+  }
+}
+
+.noTodos-out {
+  animation: noTodos-out 500ms forwards;
+}
+
+@keyframes noTodos-out {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+  100% {
+    left: 150px;
+    opacity: 0;
   }
 }
 

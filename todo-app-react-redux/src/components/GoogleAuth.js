@@ -8,6 +8,11 @@ import {
   authSelector,
 } from "../features/auth/authSlice";
 import { getTodos, emptyTodos } from "../features/todos/todosSlice";
+import {
+  classSelector,
+  signInButtonSet,
+  signOutButtonSet,
+} from "../features/classes/classesSlice";
 import { initialiseGoogle } from "../features/auth/initialiseGoogle";
 import "../style/header.css";
 import jwtDecode from "jwt-decode";
@@ -16,6 +21,8 @@ const GoogleAuth = () => {
   const dispatch = useDispatch();
   const { isSignedIn, userProfile, beenSignedIn, beenSignedOut } =
     useSelector(authSelector);
+  const { initialClasses, signInButton, signOutButton } =
+    useSelector(classSelector);
 
   const [google, setGoogle] = useState("");
 
@@ -50,6 +57,9 @@ const GoogleAuth = () => {
     const userObject = JSON.parse(window.localStorage.getItem("user"));
 
     if (beenSignedIn && userObject) {
+      dispatch(signInButtonSet("signInButton-out"));
+      dispatch(signOutButtonSet("signOutButton-in"));
+
       id = setTimeout(() => {
         dispatch(signIn(userObject));
       }, 500);
@@ -62,6 +72,9 @@ const GoogleAuth = () => {
     let id;
 
     if (beenSignedOut) {
+      dispatch(signOutButtonSet("signOutButton-out"));
+      dispatch(signInButtonSet("signInButton-in"));
+
       id = setTimeout(() => {
         dispatch(signOut());
       }, 500);
@@ -80,6 +93,8 @@ const GoogleAuth = () => {
     window.localStorage.removeItem("user");
     dispatch(signingOut());
   };
+
+  const signInButtonClass = `${initialClasses.button} ${signInButton}`;
 
   const renderSignOutButton = () => {
     if (isSignedIn === true) {
@@ -119,11 +134,16 @@ const GoogleAuth = () => {
   };
 
   return (
-    <div className="w-100 d-flex justify-content-center">
-      <div className="buttonSignIn" hidden={!isSignedIn ? false : true}></div>
-      {renderProfile()}
-      {renderSignOutButton()}
-    </div>
+    <section className="w-100 d-flex justify-content-center">
+      <div
+        className={`buttonSignIn ${signInButtonClass}`}
+        hidden={!isSignedIn ? false : true}
+      ></div>
+      <section className={`d-flex buttonSignOut ${signOutButton}`}>
+        {renderProfile()}
+        {renderSignOutButton()}
+      </section>
+    </section>
   );
 };
 
