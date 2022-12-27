@@ -5,9 +5,10 @@ main {
 
 .start-container {
   height: 60vh;
+  width: 100%;
   background-color: #e9d8cf;
   border-bottom: 1px solid rgba(0, 0, 0, 0.306);
-  opacity: 1;
+  opacity: 0;
   position: relative;
 }
 
@@ -116,8 +117,25 @@ input.text-input:-moz-placeholder {
   color: black !important;
 }
 
-#placeholder {
-  height: 25% !important;
+.placeholder-container {
+  height: 60% !important;
+  opacity: 0;
+}
+
+.loading-ani {
+  animation: loading-ani 500ms forwards;
+}
+
+@keyframes loading-ani {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .message {
@@ -166,7 +184,7 @@ input.text-input:-moz-placeholder {
 }
 
 .todos-out {
-  animation: todos-out 500ms;
+  animation: todos-out 500ms forwards;
 }
 
 @keyframes todos-out {
@@ -178,13 +196,54 @@ input.text-input:-moz-placeholder {
   }
 }
 
-.todo-class {
-  height: 60px;
-  opacity: 1;
-  position: relative;
-  transition: 1s;
+.todo-container1 {
+  width: 85%;
 }
 
+.arrow-div {
+  height: 30px;
+  width: 30px;
+  border: 1px solid rgb(75, 75, 75);
+}
+
+.arrow-left {
+  rotate: 223deg;
+}
+
+.arrow-right {
+  rotate: 44deg;
+  margin-bottom: 5px !important;
+  margin-left: 3px !important;
+}
+
+#no-todos-container {
+  border: none;
+  background: none;
+  opacity: 1;
+}
+
+.todo-class {
+  height: 50px;
+  opacity: 1;
+  position: relative;
+  box-shadow: 0px 0px 5px 30px #9198e500 inset;
+  transition: 0.5s ease-out;
+}
+
+.todo-class .icon-class {
+  opacity: 0 !important;
+  box-shadow: 0px 0px 5px 30px #9198e5 inset !important;
+  transition: 1s ease-out;
+}
+
+.todo-class:hover {
+  box-shadow: 0px 0px 10px 2px #9198e597 inset;
+}
+
+.todo-class:hover .icon-class {
+  opacity: 1 !important;
+  box-shadow: 0px 0px 0px 10px #9198e500 inset !important;
+}
 .item-in {
   animation: item-in 500ms;
 }
@@ -201,7 +260,7 @@ input.text-input:-moz-placeholder {
 }
 
 .item-out {
-  animation: item-out 500ms;
+  animation: item-out 500ms forwards;
 }
 
 @keyframes item-out {
@@ -217,40 +276,6 @@ input.text-input:-moz-placeholder {
 
 .item-out {
   opacity: 0;
-}
-
-.no-todos {
-  position: relative;
-}
-
-.noTodos-in {
-  animation: noTodos-in 500ms forwards;
-}
-
-@keyframes noTodos-in {
-  0% {
-    left: 150px;
-    opacity: 0;
-  }
-  100% {
-    left: 0;
-    opacity: 1;
-  }
-}
-
-.noTodos-out {
-  animation: noTodos-out 500ms forwards;
-}
-
-@keyframes noTodos-out {
-  0% {
-    left: 0;
-    opacity: 1;
-  }
-  100% {
-    left: 150px;
-    opacity: 0;
-  }
 }
 
 @media screen and (max-width: 992px) {

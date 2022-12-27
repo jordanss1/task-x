@@ -5,6 +5,7 @@ import {
   signOut,
   signingIn,
   signingOut,
+  setLoading,
   authSelector,
 } from "../features/auth/authSlice";
 import { getTodos, emptyTodos } from "../features/todos/todosSlice";
@@ -12,6 +13,8 @@ import {
   classSelector,
   signInButtonSet,
   signOutButtonSet,
+  initialContainerSet,
+  loginContainerSet,
 } from "../features/classes/classesSlice";
 import { initialiseGoogle } from "../features/auth/initialiseGoogle";
 import "../style/header.css";
@@ -27,14 +30,20 @@ const GoogleAuth = () => {
   const [google, setGoogle] = useState("");
 
   useEffect(() => {
+    let id;
     setGoogle(window.google);
 
     const userObject = JSON.parse(window.localStorage.getItem("user"));
 
     if (userObject) {
+      dispatch(setLoading());
       dispatch(signingIn());
       dispatch(signIn(userObject));
+
+      id = setTimeout(() => setLoading(false), 2500);
     }
+
+    return () => clearTimeout(id);
   }, []);
 
   useEffect(() => {

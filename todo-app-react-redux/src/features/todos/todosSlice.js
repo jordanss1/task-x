@@ -1,11 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import _ from "lodash";
-import { holdId } from "../classes/classesSlice";
 import todoApi from "../../apiAxios/todos";
 
 export const getTodos = createAsyncThunk("todos/getTodos", async (userId) => {
   let { data } = await todoApi.get("/todos");
-  data = data.filter((todo) => todo.userId === userId);
+  data = data.filter((todo) => todo.userId === userId).slice(0, 6);
   return data;
 });
 
@@ -15,7 +14,11 @@ export const createTodos = createAsyncThunk(
     const { userId } = getState().auth.userProfile;
     const { data } = await todoApi.post("/todos", { todo, userId });
 
-    dispatch(holdId(data.id));
+    dispatch({
+      type: "classes/todoItemSet",
+      payload: { id: data.id, classProp: "item-in" },
+    });
+
     return data;
   }
 );
@@ -44,7 +47,6 @@ export const deleteTodo = createAsyncThunk(
 const initialState = {
   todos: {},
   status: null,
-  id: null,
 };
 
 const todosSlice = createSlice({

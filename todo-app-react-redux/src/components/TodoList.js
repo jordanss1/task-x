@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import RightArrow from "./Arrows/RightArrow";
+import LeftArrow from "./Arrows/LeftArrow";
 import {
   selectTodos,
   editTodo,
@@ -8,58 +10,58 @@ import {
 import {
   todoContainerSet,
   loginContainerSet,
-  noTodosSet,
-  holdId,
+  todoItemSet,
+  placeholderSet,
 } from "../features/classes/classesSlice";
 import { classSelector } from "../features/classes/classesSlice";
-import { authSelector } from "../features/auth/authSlice";
+import { authSelector, setLoading } from "../features/auth/authSlice";
 import "../style/body.css";
 
 const TodoList = () => {
   const dispatch = useDispatch();
   const todos = useSelector(selectTodos);
-  const { isSignedIn, beenSignedIn, beenSignedOut } = useSelector(authSelector);
-  const { initialClasses, todoContainer, loginContainer, noTodos, id } =
-    useSelector(classSelector);
+  const { isSignedIn, beenSignedIn, beenSignedOut, loading } =
+    useSelector(authSelector);
+  const {
+    initialClasses,
+    todoContainer,
+    loginContainer,
+    todoItem,
+    placeholder,
+  } = useSelector(classSelector);
 
   const [promptValue, setPromptValue] = useState("");
   const [editId, setEditId] = useState(null);
-  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
-    if (beenSignedIn && !isSignedIn) {
+    if (beenSignedIn) {
       dispatch(loginContainerSet("signIn-container"));
+      dispatch(placeholderSet("loading-ani"));
     }
 
     if (beenSignedOut) {
       dispatch(loginContainerSet("signOut-container"));
-    }
-
-    if (beenSignedOut && todos.length) {
       dispatch(todoContainerSet("todos-out"));
-    }
-
-    if (beenSignedOut && !todos.length) {
-      dispatch(noTodosSet("noTodos-out"));
     }
   }, [beenSignedIn, beenSignedOut]);
 
   useEffect(() => {
     let id;
 
-    if (isSignedIn) {
-      setLoading(true);
+    if (isSignedIn && !loading) {
+      dispatch(setLoading(true));
 
-      id = setTimeout(() => {
-        setLoading(false);
-
-        dispatch(todoContainerSet("todos-in"));
-        dispatch(noTodosSet("noTodos-in"));
-      }, 2500);
+      id = setTimeout(() => dispatch(setLoading(false)), 2500);
     }
 
     return () => clearTimeout(id);
   }, [isSignedIn]);
+
+  useEffect(() => {
+    if (isSignedIn && !loading) {
+      dispatch(todoContainerSet("todos-in"));
+    }
+  }, [loading]);
 
   useEffect(() => {
     if (promptValue && editId) {
@@ -68,18 +70,24 @@ const TodoList = () => {
     }
   }, [editId]);
 
+  useEffect(() => {
+    let id;
+
+    if (todoItem.id) {
+      id = setTimeout(() => dispatch(todoItemSet({})), 500);
+    }
+
+    return () => clearTimeout(id);
+  }, [todoItem]);
+
   const handlePromptValue = (id) => {
     setPromptValue(prompt("Edit todo and submit"));
     setEditId(id);
   };
 
   const handleDeleteTodo = (id) => {
-    const message = "Are you sure you want to delete this?";
-    const confirmation = window.confirm(message);
-
-    if (confirmation) {
-      dispatch(deleteTodo(id));
-    }
+    dispatch(todoItemSet({ id: id, classProp: "item-out" }));
+    setTimeout(() => dispatch(deleteTodo(id)), 500);
   };
 
   const renderBody = () => {
@@ -87,19 +95,18 @@ const TodoList = () => {
       const classes = `${initialClasses.container} ${loginContainer}`;
 
       return (
-        <div
+        <section
           className={`d-flex start-container ${classes} align-items-center w-100 flex-column px-3 py-3`}
         >
-          <div className="message-div d-flex align-items-center justify-content-center ">
+          <article className="message-div d-flex align-items-center justify-content-center ">
             <h2 className="message fs-3">Login to view and create todos..</h2>
-          </div>
-        </div>
+          </article>
+        </section>
       );
     } else if (isSignedIn && loading) {
       return (
-        <div
-          id="placeholder"
-          className="d-flex align-items-center justify-content-center w-50 message-div flex-column px-3 py-3"
+        <section
+          className={`placeholder-container ${placeholder} d-flex align-items-center justify-content-center w-50 message-div flex-column px-3 py-3`}
         >
           <div className="ui placeholder w-100">
             <div className="paragraph">
@@ -115,44 +122,53 @@ const TodoList = () => {
               <div className="line"></div>
             </div>
           </div>
-        </div>
+        </section>
       );
     } else if (isSignedIn && todos.length && !loading) {
       return (
-        <div
-          className={`todo-container2 ${todoContainer} p-3 d-flex flex-column align-items-center mt-2  justify-content-between `}
+        <section
+          className={`todo-container2 ${todoContainer} p-3 d-flex justify-content-center flex-row align-items-center mt-2 justify-content-evenly`}
         >
-          {todos.map(({ id, todo }) => {
-            return (
-              <div
-                key={id}
-                className={`todo-class todo${id} border rounded-pill p-1 d-flex align-items-center justify-content-around mb-2`}
-              >
-                <p className="todo-text ms-3 ms-sm-0 ps-2 fs-4">{todo}</p>
-                {/* <div className="ms-auto">
-                  <i
-                    className="opacity-75 icon-class bordered inverted black edit link icon"
-                    onClick={() => handlePromptValue(id)}
-                  ></i>
-                  <i
-                    className="opacity-75 icon-class delete-icon bordered inverted red close link icon"
-                    onClick={() => handleDeleteTodo(id)}
-                  ></i>
-                </div> */}
-              </div>
-            );
-          })}
-        </div>
+          <LeftArrow />
+          <div className="d-flex h-100 flex-column align-items-center todo-container1">
+            {todos.map(({ id, todo }) => {
+              return (
+                <article
+                  key={id}
+                  className={`todo-class ${
+                    todoItem.id === id ? todoItem.classProp : ""
+                  } border rounded-pill p-1 d-flex align-items-center justify-content-around mb-2`}
+                >
+                  <p className="todo-text ms-3 ms-sm-0 ps-4 pt-2 fs-4">
+                    {todo}
+                  </p>
+                  <div className="ms-auto">
+                    <i
+                      className="icon-class  rounded-pill bordered inverted black edit link icon"
+                      onClick={() => handlePromptValue(id)}
+                    ></i>
+                    <i
+                      className="icon-class delete-icon bordered  rounded-pill inverted red close link icon"
+                      onClick={() => handleDeleteTodo(id)}
+                    ></i>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+          <RightArrow />
+        </section>
       );
-    } else if (isSignedIn && !todos.length && !loading && !beenSignedOut) {
+    } else if (isSignedIn && !todos.length && !loading) {
       return (
-        <div
-          className={`no-todos ${noTodos} d-flex align-items-center flex-column px-3 py-3`}
+        <section
+          id="no-todos-container"
+          className={`todo-container2 ${todoContainer} d-flex align-items-center justify-content-center`}
         >
           <div className="message-div no-todos d-flex align-items-center justify-content-center ">
             <h2 className="message fs-3">Start creating todos!</h2>
           </div>
-        </div>
+        </section>
       );
     }
   };

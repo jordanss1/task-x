@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   initialClassesAdd,
   initialClassesRemove,
+  loginContainerSet,
 } from "../features/classes/classesSlice";
 import { classSelector } from "../features/classes/classesSlice";
 import "../style/header.css";
@@ -16,6 +17,7 @@ const Header = () => {
     //initial render styles
 
     dispatch(initialClassesAdd());
+    dispatch(loginContainerSet("start-ani"));
 
     let id = setTimeout(() => {
       dispatch(initialClassesRemove());

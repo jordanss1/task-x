@@ -11,15 +11,15 @@ const App = () => {
   const justified = isSignedIn ? "justify-content-evenly" : "";
 
   return (
-    <main>
+    <>
       <Header />
-      <section
+      <main
         className={`bottom-container d-flex flex-column align-items-center ${justified}`}
       >
         <TodoList />
         <TodoInputs />
-      </section>
-    </main>
+      </main>
+    </>
   );
 };
 

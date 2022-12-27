@@ -4,12 +4,11 @@ const initialState = {
   initialClasses: {},
   form: "",
   todoContainer: "",
-  todoItem: "",
-  noTodos: "",
   loginContainer: "",
   signInButton: "",
   signOutButton: "",
-  id: null,
+  todoItem: {},
+  placeholder: "",
 };
 
 export const classesSlice = createSlice({
@@ -19,7 +18,6 @@ export const classesSlice = createSlice({
     initialClassesAdd: (state) => {
       state.initialClasses = {
         button: "button-ani",
-        container: "start-ani",
         border: "border-ani",
         icon: "logo-icon",
         logo: "full-logo",
@@ -38,17 +36,27 @@ export const classesSlice = createSlice({
     todoContainerSet: (state, action) => {
       state.todoContainer = action.payload;
     },
-    holdId: (state, action) => {
-      state.id = action.payload;
-    },
-    noTodosSet: (state, action) => {
-      state.noTodos = action.payload;
+    todoItemSet: {
+      reducer(state, action) {
+        state.todoItem = action.payload;
+      },
+      prepare({ id, classProp }) {
+        return {
+          payload: {
+            id: id,
+            classProp: classProp,
+          },
+        };
+      },
     },
     signInButtonSet: (state, action) => {
       state.signInButton = action.payload;
     },
     signOutButtonSet: (state, action) => {
       state.signOutButton = action.payload;
+    },
+    placeholderSet: (state, action) => {
+      state.placeholder = action.payload;
     },
   },
 });
@@ -61,11 +69,10 @@ export const {
   formClassSet,
   todoContainerSet,
   todoItemSet,
-  noTodosSet,
-  holdId,
   loginContainerSet,
   signInButtonSet,
   signOutButtonSet,
+  placeholderSet,
 } = classesSlice.actions;
 
 export default classesSlice.reducer;

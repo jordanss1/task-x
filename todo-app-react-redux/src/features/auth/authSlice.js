@@ -5,6 +5,7 @@ const initialState = {
   userProfile: null,
   beenSignedIn: null,
   beenSignedOut: null,
+  loading: null,
 };
 
 export const authSlice = createSlice({
@@ -38,11 +39,15 @@ export const authSlice = createSlice({
       state.beenSignedOut = true;
       state.beenSignedIn = false;
     },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
   },
 });
 
 export const authSelector = (state) => state.auth;
 
-export const { signIn, signOut, signingIn, signingOut } = authSlice.actions;
+export const { signIn, signOut, signingIn, signingOut, setLoading } =
+  authSlice.actions;
 
 export default authSlice.reducer;
