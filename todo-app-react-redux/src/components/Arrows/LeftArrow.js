@@ -1,11 +1,17 @@
 import React from "react";
 
-const LeftArrow = () => {
+const LeftArrow = ({ classes, handleClick, equation, handleFocus }) => {
   return (
-    <div className="arrow-div rounded-pill d-flex align-items-center justify-content-center">
-      <i className="location arrow icon arrow-left pb-4 ms-1"></i>
+    <div
+      // onFocus={() => }
+      onClick={() => handleClick(equation)}
+      className={`arrow-div arrow-div2 ${classes.div} ${classes.divHover} rounded-pill d-flex align-items-center justify-content-center`}
+    >
+      <i
+        className={`location ${classes.arrow} ${classes.arrowHover} arrow icon arrow-left  pb-4 ms-1`}
+      ></i>
     </div>
   );
 };
- 
+
 export default LeftArrow;

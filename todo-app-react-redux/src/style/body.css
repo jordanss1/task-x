@@ -203,7 +203,40 @@ input.text-input:-moz-placeholder {
 .arrow-div {
   height: 30px;
   width: 30px;
-  border: 1px solid rgb(75, 75, 75);
+  border: 0px solid rgb(75, 75, 75);
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 3%,
+    rgba(255, 255, 255, 0) 5%,
+    rgba(255, 255, 255, 0) 15%
+  );
+  padding: 20px;
+  transition: 0.5s;
+}
+
+.arrow-enabled {
+  box-shadow: 1px 1px 2px 1px #000000;
+}
+
+.arrow {
+  color: #202020;
+  font-size: 14px !important;
+  transition: 0.5s;
+}
+
+.arrow-disabled {
+  color: #7b7b7b !important;
+  font-size: 12px !important;
+}
+
+.arrow-div-hover {
+  box-shadow: 1px 1px 5px #000000 !important;
+  padding: 24px;
+  margin: -4px;
+}
+
+.arrow-hover {
+  font-size: 15px !important;
 }
 
 .arrow-left {

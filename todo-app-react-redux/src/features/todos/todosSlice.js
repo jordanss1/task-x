@@ -4,7 +4,7 @@ import todoApi from "../../apiAxios/todos";
 
 export const getTodos = createAsyncThunk("todos/getTodos", async (userId) => {
   let { data } = await todoApi.get("/todos");
-  data = data.filter((todo) => todo.userId === userId).slice(0, 6);
+  data = data.filter((todo) => todo.userId === userId);
   return data;
 });
 
@@ -47,6 +47,7 @@ export const deleteTodo = createAsyncThunk(
 const initialState = {
   todos: {},
   status: null,
+  slicedTodos: [0, 6],
 };
 
 const todosSlice = createSlice({
@@ -55,6 +56,9 @@ const todosSlice = createSlice({
   reducers: {
     emptyTodos: (state) => {
       state.todos = {};
+    },
+    organiseTodos: (state, action) => {
+      state.slicedTodos = action.payload;
     },
   },
   extraReducers: {
@@ -103,8 +107,12 @@ const todosSlice = createSlice({
   },
 });
 
-export const selectTodos = (state) => Object.values(state.todos.todos);
+export const selectTodos = (state) => {
+  const todos = Object.values(state.todos.todos);
+  const { slicedTodos } = state.todos;
+  return { todos, slicedTodos };
+};
 
-export const { emptyTodos } = todosSlice.actions;
+export const { emptyTodos, organiseTodos } = todosSlice.actions;
 
 export default todosSlice.reducer;

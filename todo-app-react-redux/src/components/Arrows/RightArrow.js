@@ -1,9 +1,12 @@
 import React from "react";
 
-const RightArrow = () => {
+const RightArrow = ({ classes, handleClick, equation }) => {
   return (
-    <div className="arrow-div rounded-pill d-flex align-items-center justify-content-center">
-      <i className="location arrow icon arrow-right"></i>
+    <div
+      onClick={() => handleClick(equation)}
+      className={`arrow-div ${classes.div} rounded-pill d-flex align-items-center justify-content-center`}
+    >
+      <i className={`location ${classes.arrow} arrow icon arrow-right`}></i>
     </div>
   );
 };

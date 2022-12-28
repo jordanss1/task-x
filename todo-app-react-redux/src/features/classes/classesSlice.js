@@ -9,6 +9,9 @@ const initialState = {
   signOutButton: "",
   todoItem: {},
   placeholder: "",
+  leftArrow: {},
+  rightArrow: {},
+  hover: null,
 };
 
 export const classesSlice = createSlice({
@@ -58,6 +61,15 @@ export const classesSlice = createSlice({
     placeholderSet: (state, action) => {
       state.placeholder = action.payload;
     },
+    leftArrowSet: (state, action) => {
+      state.leftArrow = action.payload;
+    },
+    rightArrowSet: (state, action) => {
+      state.rightArrow = action.payload;
+    },
+    setHover: (state) => {
+      state.hover = !state.hover;
+    },
   },
 });
 
@@ -73,6 +85,9 @@ export const {
   signInButtonSet,
   signOutButtonSet,
   placeholderSet,
+  leftArrowSet,
+  rightArrowSet,
+  setHover,
 } = classesSlice.actions;
 
 export default classesSlice.reducer;
