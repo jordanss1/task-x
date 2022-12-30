@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RightArrow from "./Arrows/RightArrow";
 import LeftArrow from "./Arrows/LeftArrow";
@@ -16,6 +16,7 @@ import {
   leftArrowSet,
   rightArrowSet,
   setHover,
+  setClick,
 } from "../features/classes/classesSlice";
 import { classSelector } from "../features/classes/classesSlice";
 import { authSelector, setLoading } from "../features/auth/authSlice";
@@ -35,10 +36,13 @@ const TodoList = () => {
     leftArrow,
     rightArrow,
     hover,
+    click,
   } = useSelector(classSelector);
 
   const [promptValue, setPromptValue] = useState("");
   const [editId, setEditId] = useState(null);
+  const [empty, setEmpty] = useState(false);
+  const length = useRef(null);
 
   useEffect(() => {
     // Classes added when sign-in/out buttons are pressed
@@ -55,23 +59,10 @@ const TodoList = () => {
   }, [beenSignedIn, beenSignedOut]);
 
   useEffect(() => {
-    // Allows smooth loading from API
-
     let id;
-
-    if (isSignedIn && !loading) {
-      dispatch(setLoading(true));
-
-      id = setTimeout(() => dispatch(setLoading(false)), 2500);
-    }
-
-    return () => clearTimeout(id);
-  }, [isSignedIn]);
-
-  useEffect(() => {
     // Class added after loading is complete
 
-    if (isSignedIn && !loading) {
+    if (isSignedIn && !loading && !empty) {
       dispatch(todoContainerSet("todos-in"));
     }
 
@@ -81,21 +72,35 @@ const TodoList = () => {
       slicedTodos[0] === num1 && slicedTodos[1] === num2;
 
     if (todoPortion(0, 6)) {
-      dispatch(leftArrowSet({ arrow: "arrow-disabled" }));
+      id = setTimeout(
+        () => dispatch(leftArrowSet({ arrow: "arrow-disabled" })),
+        100
+      );
     }
 
     if (!todoPortion(0, 6)) {
-      dispatch(leftArrowSet({ div: "arrow-enabled" }));
+      id = setTimeout(
+        () => dispatch(leftArrowSet({ div: "arrow-enabled" })),
+        100
+      );
     }
 
     if (todos.length > slicedTodos[1]) {
-      dispatch(rightArrowSet({ div: "arrow-enabled" }));
+      id = setTimeout(
+        () => dispatch(rightArrowSet({ div: "arrow-enabled" })),
+        100
+      );
     }
 
     if (todos.length < slicedTodos[1] + 1) {
-      dispatch(rightArrowSet({ arrow: "arrow-disabled" }));
+      id = setTimeout(
+        () => dispatch(rightArrowSet({ arrow: "arrow-disabled" })),
+        100
+      );
     }
-  }, [loading, todoItem, slicedTodos]);
+
+    return () => clearTimeout(id);
+  }, [loading, todoItem, slicedTodos, empty]);
 
   useEffect(() => {
     // Updates todo item
@@ -111,12 +116,17 @@ const TodoList = () => {
 
     let id;
 
-    if (todoItem.id) {
+    if (todoItem.id && length.current > 1) {
       id = setTimeout(() => dispatch(todoItemSet({})), 500);
     }
 
     return () => clearTimeout(id);
   }, [todoItem]);
+
+  useEffect(() => {
+    length.current = todos.length;
+    console.log(length.current);
+  }, [todos]);
 
   const handlePromptValue = (id) => {
     setPromptValue(prompt("Edit todo and submit"));
@@ -124,19 +134,45 @@ const TodoList = () => {
   };
 
   const handleDeleteTodo = (id) => {
-    dispatch(todoItemSet({ id: id, classProp: "item-out" }));
-    setTimeout(() => dispatch(deleteTodo(id)), 500);
+    if (length.current > 1) {
+      dispatch(todoItemSet({ id: id, classProp: "item-out" }));
+      setTimeout(() => dispatch(deleteTodo(id)), 500);
+    } else if (length.current === 1) {
+      setEmpty(true);
+      dispatch(todoItemSet({ id: id, classProp: "item-out" }));
+      dispatch(todoContainerSet("todo-container-empty"));
+
+      setTimeout(() => {
+        setEmpty(false);
+        dispatch(todoItemSet({}));
+        dispatch(todoContainerSet(""));
+        dispatch(deleteTodo(id));
+      }, 1700);
+    }
   };
 
-  const handleArrowClick = useCallback(
-    (array) => {
-      dispatch(organiseTodos(array));
-    },
-    [slicedTodos]
-  );
+  const handleLeftArrowClick = useCallback(() => {
+    dispatch(organiseTodos([slicedTodos[0] - 6, slicedTodos[1] - 6]));
+    dispatch(setClick({ left: true, right: false }));
+    setTimeout(() => dispatch(setClick({ left: false, right: false })), 100);
+  }, [slicedTodos]);
 
-  const handleHover = () => {
-    dispatch(setHover());
+  const handleRightArrowClick = useCallback(() => {
+    dispatch(organiseTodos([slicedTodos[0] + 6, slicedTodos[1] + 6]));
+    dispatch(setClick({ left: false, right: true }));
+    setTimeout(() => dispatch(setClick({ left: false, right: false })), 100);
+  }, [slicedTodos]);
+
+  const classArrowsFunc = (hover, click, main) => {
+    if (hover && !click && main === "arrow-enabled") {
+      return "arrow-div-hover";
+    }
+    if (!hover && !click) {
+      return main;
+    }
+    if (click && main === "arrow-enabled") {
+      return "arrow-click";
+    }
   };
 
   const renderBody = () => {
@@ -154,8 +190,8 @@ const TodoList = () => {
           </article>
         </section>
       );
-    } else if (isSignedIn && loading) {
-      // Loading/ placeholder page while requesting from API
+    } else if (isSignedIn && loading && placeholder) {
+      // Loading placeholder page while requesting from API
 
       return (
         <section
@@ -185,10 +221,14 @@ const TodoList = () => {
           className={`todo-container2 ${todoContainer} p-3 d-flex justify-content-center flex-row align-items-center mt-2 justify-content-evenly`}
         >
           <LeftArrow
-            handleHover={handleHover}
-            equation={[slicedTodos[0] - 6, slicedTodos[1] - 6]}
+            handleClasses={classArrowsFunc}
+            click={click}
+            handleHover={(right, left) =>
+              dispatch(setHover({ right: right, left: left }))
+            }
+            hover={hover}
             classes={leftArrow}
-            handleClick={slicedTodos[0] === 0 ? () => {} : handleArrowClick}
+            handleClick={slicedTodos[0] === 0 ? () => {} : handleLeftArrowClick}
           />
           <div className="d-flex h-100 flex-column align-items-center todo-container1">
             {todos.slice(slicedTodos[0], slicedTodos[1]).map(({ id, todo }) => {
@@ -217,10 +257,15 @@ const TodoList = () => {
             })}
           </div>
           <RightArrow
-            equation={[slicedTodos[0] + 6, slicedTodos[1] + 6]}
+            handleClasses={classArrowsFunc}
+            click={click}
+            handleHover={(right, left) =>
+              dispatch(setHover({ right: right, left: left }))
+            }
+            hover={hover}
             classes={rightArrow}
             handleClick={
-              todos.length > slicedTodos[1] ? handleArrowClick : () => {}
+              todos.length > slicedTodos[1] ? handleRightArrowClick : () => {}
             }
           />
         </section>

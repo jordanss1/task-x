@@ -165,9 +165,34 @@ input.text-input:-moz-placeholder {
   width: 50%;
   opacity: 1;
   transition: 500ms;
-  border: 1px solid rgb(57, 57, 57);
   border-radius: 25px;
   background: linear-gradient(45deg, #e66465, white, #9198e5);
+  box-shadow: 1px 1px 10px #000000;
+}
+
+.todo-container-empty {
+  animation: todos-to-none 2s backwards;
+}
+
+@keyframes todos-to-none {
+  0% {
+    opacity: 1;
+    box-shadow: 1px 20px 20px #e66465;
+  }
+  25% {
+    width: 50%;
+    opacity: 1;
+    box-shadow: 20px 1px 20px #9198e5;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 1px 10px 20px #e66465;
+  }
+  100% {
+    width: 30%;
+    box-shadow: 10px 1px 20px #9198e5;
+    opacity: 0;
+  }
 }
 
 .todos-in {
@@ -203,25 +228,18 @@ input.text-input:-moz-placeholder {
 .arrow-div {
   height: 30px;
   width: 30px;
-  border: 0px solid rgb(75, 75, 75);
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 3%,
-    rgba(255, 255, 255, 0) 5%,
-    rgba(255, 255, 255, 0) 15%
-  );
   padding: 20px;
-  transition: 0.5s;
+  transition: 0.2s;
 }
 
 .arrow-enabled {
-  box-shadow: 1px 1px 2px 1px #000000;
+  box-shadow: 3px 3px 15px #000000;
 }
 
 .arrow {
   color: #202020;
   font-size: 14px !important;
-  transition: 0.5s;
+  transition: 0.2s;
 }
 
 .arrow-disabled {
@@ -230,13 +248,20 @@ input.text-input:-moz-placeholder {
 }
 
 .arrow-div-hover {
-  box-shadow: 1px 1px 5px #000000 !important;
-  padding: 24px;
-  margin: -4px;
+  box-shadow: 1px 5px 10px #000000;
+  padding: 22px;
+  cursor: pointer;
+  margin: -2px;
 }
 
 .arrow-hover {
   font-size: 15px !important;
+}
+
+.arrow-click {
+  box-shadow: 1px 1px 10px inset black;
+  padding: 15px;
+  margin: 5px;
 }
 
 .arrow-left {
@@ -253,6 +278,7 @@ input.text-input:-moz-placeholder {
   border: none;
   background: none;
   opacity: 1;
+  box-shadow: 0px 0px 0px #000000;
 }
 
 .todo-class {
@@ -307,8 +333,19 @@ input.text-input:-moz-placeholder {
   }
 }
 
-.item-out {
-  opacity: 0;
+.item-out-delay {
+  animation: item-out-delay 500ms forwards 1s;
+}
+
+@keyframes item-out-delay {
+  0% {
+    right: 0px;
+    opacity: 1;
+  }
+  100% {
+    right: 50px;
+    opacity: 0;
+  }
 }
 
 @media screen and (max-width: 992px) {

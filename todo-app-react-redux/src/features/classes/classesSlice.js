@@ -11,7 +11,8 @@ const initialState = {
   placeholder: "",
   leftArrow: {},
   rightArrow: {},
-  hover: null,
+  hover: {},
+  click: {},
 };
 
 export const classesSlice = createSlice({
@@ -67,8 +68,11 @@ export const classesSlice = createSlice({
     rightArrowSet: (state, action) => {
       state.rightArrow = action.payload;
     },
-    setHover: (state) => {
-      state.hover = !state.hover;
+    setHover: (state, action) => {
+      state.hover = action.payload;
+    },
+    setClick: (state, action) => {
+      state.click = action.payload;
     },
   },
 });
@@ -88,6 +92,7 @@ export const {
   leftArrowSet,
   rightArrowSet,
   setHover,
+  setClick,
 } = classesSlice.actions;
 
 export default classesSlice.reducer;
