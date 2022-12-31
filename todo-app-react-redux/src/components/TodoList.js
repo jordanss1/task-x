@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RightArrow from "./Arrows/RightArrow";
 import LeftArrow from "./Arrows/LeftArrow";
-import {
+import todosSlice, {
   selectTodos,
   editTodo,
   deleteTodo,
@@ -21,6 +21,7 @@ import {
 import { classSelector } from "../features/classes/classesSlice";
 import { authSelector, setLoading } from "../features/auth/authSlice";
 import "../style/body.css";
+import { slice } from "lodash";
 
 const TodoList = () => {
   const dispatch = useDispatch();
@@ -42,7 +43,8 @@ const TodoList = () => {
   const [promptValue, setPromptValue] = useState("");
   const [editId, setEditId] = useState(null);
   const [empty, setEmpty] = useState(false);
-  const length = useRef(null);
+  const [deleted, setDeleted] = useState(null);
+  const [length, setLength] = useState(null);
 
   useEffect(() => {
     // Classes added when sign-in/out buttons are pressed
@@ -103,6 +105,35 @@ const TodoList = () => {
   }, [loading, todoItem, slicedTodos, empty]);
 
   useEffect(() => {
+    // Sets right arrow enabled if page added
+    // Sets real length in order to trigger previous page if necessary
+
+    let id;
+
+    if (todos.length > slicedTodos[1]) {
+      id = setTimeout(
+        () => dispatch(rightArrowSet({ div: "arrow-enabled" })),
+        100
+      );
+    }
+
+    if (deleted) {
+      setLength(todos.length);
+    }
+
+    return () => clearTimeout(id);
+  }, [todos, deleted]);
+
+  useEffect(() => {
+    // Sets previous page if no more todos on current page
+
+    if (length % 6 === 0 && deleted) {
+      dispatch(organiseTodos([slicedTodos[0] - 6, slicedTodos[1] - 6]));
+      setDeleted(false);
+    }
+  }, [length]);
+
+  useEffect(() => {
     // Updates todo item
 
     if (promptValue && editId) {
@@ -111,33 +142,26 @@ const TodoList = () => {
     }
   }, [editId]);
 
-  useEffect(() => {
-    // Resets todo item class, to clear for next todo added
-
-    let id;
-
-    if (todoItem.id && length.current > 1) {
-      id = setTimeout(() => dispatch(todoItemSet({})), 500);
-    }
-
-    return () => clearTimeout(id);
-  }, [todoItem]);
-
-  useEffect(() => {
-    length.current = todos.length;
-    console.log(length.current);
-  }, [todos]);
-
   const handlePromptValue = (id) => {
     setPromptValue(prompt("Edit todo and submit"));
     setEditId(id);
   };
 
+  console.log(deleted);
   const handleDeleteTodo = (id) => {
-    if (length.current > 1) {
+    // The different conditions handle adding appropriate classes when all todos are deleted
+    // Smooth transition between containers
+
+    if (todos.length > 1) {
       dispatch(todoItemSet({ id: id, classProp: "item-out" }));
-      setTimeout(() => dispatch(deleteTodo(id)), 500);
-    } else if (length.current === 1) {
+
+      setTimeout(() => {
+        dispatch(todoItemSet({}));
+        dispatch(deleteTodo(id));
+        setDeleted(true);
+      }, 500);
+    } else if (todos.length === 1) {
+      setDeleted(false);
       setEmpty(true);
       dispatch(todoItemSet({ id: id, classProp: "item-out" }));
       dispatch(todoContainerSet("todo-container-empty"));
@@ -150,6 +174,8 @@ const TodoList = () => {
       }, 1700);
     }
   };
+
+  // These next functions deal with the logic of the arrows because they are stateless components
 
   const handleLeftArrowClick = useCallback(() => {
     dispatch(organiseTodos([slicedTodos[0] - 6, slicedTodos[1] - 6]));
@@ -242,7 +268,7 @@ const TodoList = () => {
                   <p className="todo-text ms-3 ms-sm-0 ps-4 pt-2 fs-4">
                     {todo}
                   </p>
-                  <div className="ms-auto">
+                  <div className="ms-auto icon-holder">
                     <i
                       className="icon-class  rounded-pill bordered inverted black edit link icon"
                       onClick={() => handlePromptValue(id)}
