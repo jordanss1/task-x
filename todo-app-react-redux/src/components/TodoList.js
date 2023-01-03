@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RightArrow from "./Arrows/RightArrow";
 import LeftArrow from "./Arrows/LeftArrow";
-import todosSlice, {
+import {
   selectTodos,
   editTodo,
   deleteTodo,
@@ -21,7 +21,6 @@ import {
 import { classSelector } from "../features/classes/classesSlice";
 import { authSelector, setLoading } from "../features/auth/authSlice";
 import "../style/body.css";
-import { slice } from "lodash";
 
 const TodoList = () => {
   const dispatch = useDispatch();

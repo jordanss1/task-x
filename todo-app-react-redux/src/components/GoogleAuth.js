@@ -13,8 +13,6 @@ import {
   classSelector,
   signInButtonSet,
   signOutButtonSet,
-  initialContainerSet,
-  loginContainerSet,
   placeholderSet,
 } from "../features/classes/classesSlice";
 import { initialiseGoogle } from "../features/auth/initialiseGoogle";
