@@ -192,7 +192,7 @@
 }
 
 #button:hover {
-  box-shadow: 1px 1px 2px inset #4f4f4f, -1px -1px 2px inset #4f4f4f;
+  box-shadow: 0px 0px 0px inset #4f4f4f87, 0px 0px 0px inset #4f4f4f9c;
 }
 
 #button p {

@@ -146,7 +146,6 @@ const TodoList = () => {
     setEditId(id);
   };
 
-  console.log(deleted);
   const handleDeleteTodo = (id) => {
     // The different conditions handle adding appropriate classes when all todos are deleted
     // Smooth transition between containers
