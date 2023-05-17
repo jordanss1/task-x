@@ -7,12 +7,10 @@ const initialState = {
   loginContainer: "",
   signInButton: "",
   signOutButton: "",
-  todoItem: {},
+  actionedTodoItem: {},
   placeholder: "",
   leftArrow: {},
   rightArrow: {},
-  hover: {},
-  click: {},
 };
 
 export const classesSlice = createSlice({
@@ -40,9 +38,9 @@ export const classesSlice = createSlice({
     todoContainerSet: (state, action) => {
       state.todoContainer = action.payload;
     },
-    todoItemSet: {
+    actionedTodoItemSet: {
       reducer(state, action) {
-        state.todoItem = action.payload;
+        state.actionedTodoItem = action.payload;
       },
       prepare({ id, classProp }) {
         return {
@@ -68,12 +66,6 @@ export const classesSlice = createSlice({
     rightArrowSet: (state, action) => {
       state.rightArrow = action.payload;
     },
-    setHover: (state, action) => {
-      state.hover = action.payload;
-    },
-    setClick: (state, action) => {
-      state.click = action.payload;
-    },
   },
 });
 
@@ -84,15 +76,13 @@ export const {
   initialClassesRemove,
   formClassSet,
   todoContainerSet,
-  todoItemSet,
+  actionedTodoItemSet,
   loginContainerSet,
   signInButtonSet,
   signOutButtonSet,
   placeholderSet,
   leftArrowSet,
   rightArrowSet,
-  setHover,
-  setClick,
 } = classesSlice.actions;
 
 export default classesSlice.reducer;

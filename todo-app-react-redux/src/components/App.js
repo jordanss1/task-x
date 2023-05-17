@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "./Header";
-import TodoList from "./TodoList";
-import TodoInputs from "./TodoInputs";
+import Header from "./header/Header";
+import TodoList from "./todos/TodoList";
+import TodoInputs from "./todos/TodoInputs";
 import { useSelector } from "react-redux";
 import { authSelector } from "../features/auth/authSlice";
 

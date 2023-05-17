@@ -15,7 +15,7 @@ export const createTodos = createAsyncThunk(
     const { data } = await todoApi.post("/todos", { todo, userId });
 
     dispatch({
-      type: "classes/todoItemSet",
+      type: "classes/actionedTodoItemSet",
       payload: { id: data.id, classProp: "item-in" },
     });
 
@@ -45,9 +45,8 @@ export const deleteTodo = createAsyncThunk(
 );
 
 const initialState = {
-  todos: {},
+  fullTodos: {},
   status: null,
-  slicedTodos: [0, 6],
 };
 
 const todosSlice = createSlice({
@@ -57,16 +56,13 @@ const todosSlice = createSlice({
     emptyTodos: (state) => {
       state.todos = {};
     },
-    organiseTodos: (state, action) => {
-      state.slicedTodos = action.payload;
-    },
   },
   extraReducers: {
     [getTodos.pending]: (state) => {
       state.status = "pending";
     },
     [getTodos.fulfilled]: (state, action) => {
-      state.todos = _.mapKeys(action.payload, "id");
+      state.fullTodos = _.mapKeys(action.payload, "id");
       state.status = "success";
     },
     [getTodos.rejected]: (state) => {
@@ -76,9 +72,9 @@ const todosSlice = createSlice({
       state.status = "pending";
     },
     [createTodos.fulfilled]: (state, action) => {
-      const newState = Object.values(state.todos);
+      const newState = Object.values(state.fullTodos);
       newState.push(action.payload);
-      state.todos = _.mapKeys(newState, "id");
+      state.fullTodos = _.mapKeys(newState, "id");
       state.status = "success";
     },
     [createTodos.rejected]: (state) => {
@@ -88,7 +84,7 @@ const todosSlice = createSlice({
       state.status = "pending";
     },
     [editTodo.fulfilled]: (state, action) => {
-      state.todos[action.payload.id] = action.payload;
+      state.fullTodos[action.payload.id] = action.payload;
       state.status = "success";
     },
     [editTodo.rejected]: (state) => {
@@ -98,7 +94,7 @@ const todosSlice = createSlice({
       state.status = "pending";
     },
     [deleteTodo.fulfilled]: (state, action) => {
-      delete state.todos[action.payload];
+      delete state.fullTodos[action.payload];
       state.status = "success";
     },
     [deleteTodo.rejected]: (state) => {
@@ -108,11 +104,10 @@ const todosSlice = createSlice({
 });
 
 export const selectTodos = (state) => {
-  const todos = Object.values(state.todos.todos);
-  const { slicedTodos } = state.todos;
-  return { todos, slicedTodos };
+  const fullTodos = Object.values(state.todos.fullTodos);
+  return { fullTodos };
 };
 
-export const { emptyTodos, organiseTodos } = todosSlice.actions;
+export const { emptyTodos } = todosSlice.actions;
 
 export default todosSlice.reducer;

@@ -1,27 +1,18 @@
 import React from "react";
 
-const LeftArrow = ({
-  classes,
-  handleClick,
-  handleHover,
-  hover,
-  click,
-  handleClasses,
-}) => {
+const LeftArrow = ({ state, handleClasses, classes }) => {
+  const { setLeftHover, leftClick, leftHover, handleLeftArrowClick } = state;
+  const div = handleClasses(leftHover, leftClick, classes.div);
   return (
     <div
-      onMouseEnter={() => handleHover(false, true)}
-      onMouseLeave={() => handleHover(false, false)}
-      onClick={() => handleClick()}
-      className={`arrow-div ${handleClasses(
-        hover.left,
-        click.left,
-        classes.div
-      )}  rounded-pill d-flex align-items-center justify-content-center`}
+      onMouseEnter={() => setLeftHover(true)}
+      onMouseLeave={() => setLeftHover(false)}
+      onClick={() => handleLeftArrowClick()}
+      className={`arrow-div ${div}  rounded-pill d-flex align-items-center justify-content-center`}
     >
       <i
         className={`location ${classes.arrow} ${
-          hover.left && classes.div === "arrow-enabled" ? "arrow-hover" : ""
+          leftHover && classes.div === "arrow-enabled" ? "arrow-hover" : ""
         } arrow icon arrow-left  pb-4 ms-1`}
       ></i>
     </div>
