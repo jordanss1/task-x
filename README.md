@@ -8,6 +8,8 @@ User can only see and edit their todos associated with their userId and all othe
 
 <h3><b>How to use app</b></h3>
 
+<b>You need a client ID from Google to use this app. Go <a href="https://developers.google.com/identity/oauth2/web/guides/get-google-api-clientid">here</a> and click "Configure a project" after logging in. See below under "Quick Start" where to add the client ID.</b>
+
 <i>You must first start the api in the root directory to use this app (instructions at "Quick Start") </i>
 
 You must be authenticated with Google first before you can add, edit or delete todo items. First log-in with your google account by first pressing the "Sign in with Google" button in the top right.
@@ -26,6 +28,10 @@ To sign out press the "Sign out" button in the top right.
     $ git clone https://github.com/jordanss1/todo-app-react-redux
 
 </li>
+    
+<li>Navigate to the "todo-app-react-redux/todo-app-react-redux" folder and create a .env file. Add the client ID you gained from Google from the above description into a variable called <b>REACT_APP_ID</b></li>
+    
+
 
 <li> Access the root folder containing the api and the project folder, "cd" into this directory and install the dependencies:
 
