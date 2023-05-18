@@ -1,29 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelector } from "../../features/auth/authSlice";
 import { createTodos } from "../../features/todos/todosSlice";
-import {
-  classSelector,
-  formClassSet,
-} from "../../features/classes/classesSlice";
+import { classSelector } from "../../features/classes/classesSlice";
 import "../../style/body.css";
 
 const TodoInputs = () => {
-  const { isSignedIn, beenSignedIn, beenSignedOut } = useSelector(authSelector);
+  const { isSignedIn, beenSignedIn } = useSelector(authSelector);
   const { form } = useSelector(classSelector);
   const [value, setValue] = useState("");
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    // Add classes to form
-
-    if (beenSignedIn) {
-      dispatch(formClassSet("form-ani-signIn"));
-    } else if (beenSignedOut) {
-      dispatch(formClassSet("form-ani-signOut"));
-    }
-  }, [beenSignedIn, beenSignedOut]);
 
   const handleSubmit = (e) => {
     // Function to create Todo
