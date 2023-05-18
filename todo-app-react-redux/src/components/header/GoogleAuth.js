@@ -17,10 +17,13 @@ import "../../style/header.css";
 
 const GoogleAuth = () => {
   const dispatch = useDispatch();
+
   const { isSignedIn, userProfile, beenSignedIn, beenSignedOut } =
     useSelector(authSelector);
+
   const { initialClasses, signInButton, signOutButton } =
     useSelector(classSelector);
+
   const { signInOrOut, handleCallbackResponse, handleSignOut } =
     usePreLoginLogout();
 
@@ -29,6 +32,7 @@ const GoogleAuth = () => {
 
   useEffect(() => {
     // On page load, checks if the user is still logged in
+
     let id;
     setGoogle(window.google);
 
@@ -68,6 +72,7 @@ const GoogleAuth = () => {
 
   useEffect(() => {
     // Animates the button containers when sign in begins
+
     let id;
 
     id = signInOrOut("signingIn");

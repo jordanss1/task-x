@@ -1,27 +1,16 @@
 import React, { useEffect } from "react";
 import GoogleAuth from "./GoogleAuth";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  initialClassesAdd,
-  initialClassesRemove,
-  loginContainerSet,
-} from "../../features/classes/classesSlice";
+import { useSelector } from "react-redux";
 import { classSelector } from "../../features/classes/classesSlice";
 import "../../style/header.css";
+import useClassesHook from "../../hooks/ClassesHooks";
 
 const Header = () => {
   const { initialClasses } = useSelector(classSelector);
-  const dispatch = useDispatch();
+  const { initialClassesFunc } = useClassesHook();
 
   useEffect(() => {
-    //initial render styles
-
-    dispatch(initialClassesAdd());
-    dispatch(loginContainerSet("start-ani"));
-
-    let id = setTimeout(() => {
-      dispatch(initialClassesRemove());
-    }, 3000);
+    const id = initialClassesFunc();
 
     return () => clearTimeout(id);
   }, []);
