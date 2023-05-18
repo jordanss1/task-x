@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   signIn,
@@ -9,8 +9,9 @@ import {
 } from "../features/auth/authSlice";
 import {
   todoContainerSet,
-  loginContainerSet,
   placeholderSet,
+  formClassSet,
+  loginContainerSet,
 } from "../features/classes/classesSlice";
 import useClassesHook from "./ClassesHooks";
 import jwtDecode from "jwt-decode";
@@ -19,7 +20,7 @@ export const usePreLoginLogout = () => {
   // Functions and side effects for pre-login and log-out such as classes and dispatching ACTUAL login and logout
 
   const { beenSignedIn, beenSignedOut } = useSelector(authSelector);
-  const { setAuthButton } = useClassesHook();
+  const { setAuthButtonClasses } = useClassesHook();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,11 +29,13 @@ export const usePreLoginLogout = () => {
     if (beenSignedIn) {
       dispatch(loginContainerSet("signIn-container"));
       dispatch(placeholderSet("loading-ani"));
+      dispatch(formClassSet("form-ani-signIn"));
     }
 
     if (beenSignedOut) {
       dispatch(loginContainerSet("signOut-container"));
       dispatch(todoContainerSet("todos-out"));
+      dispatch(formClassSet("form-ani-signOut"));
     }
   }, [beenSignedIn, beenSignedOut]);
 
@@ -47,7 +50,7 @@ export const usePreLoginLogout = () => {
       status === "signingIn" ? beenSignedIn && userObject : beenSignedOut;
 
     if (statusGuard) {
-      setAuthButton(status);
+      setAuthButtonClasses(status);
 
       id = setTimeout(() => {
         dispatch(status === "signingIn" ? signIn(userObject) : signOut());
