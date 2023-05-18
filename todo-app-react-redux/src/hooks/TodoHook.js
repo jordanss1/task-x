@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { leftArrowSet, rightArrowSet } from "../features/classes/classesSlice";
 import { selectTodos } from "../features/todos/todosSlice";
@@ -9,7 +9,6 @@ export const useTodosHook = () => {
   const [leftClick, setLeftClick] = useState(false);
   const [rightClick, setRightClick] = useState(false);
   const [indexes, setIndexes] = useState([0, 6]);
-  const [length, setLength] = useState(null);
   const dispatch = useDispatch();
   const { fullTodos } = useSelector(selectTodos);
 
@@ -17,9 +16,6 @@ export const useTodosHook = () => {
 
   const handleArrowClasses = () => {
     let id;
-
-    console.log(indexes);
-    console.log(fullTodos.length);
 
     if (indexes[0] === 0 && indexes[1] === 6) {
       id = setTimeout(
@@ -53,6 +49,8 @@ export const useTodosHook = () => {
   };
 
   const handleLeftArrowClick = () => {
+    // Left arrow works only if not on first page (indexes[0])
+
     if (indexes[0] !== 0) {
       setIndexes([indexes[0] - 6, indexes[1] - 6]);
       setLeftClick(true);
@@ -61,6 +59,8 @@ export const useTodosHook = () => {
   };
 
   const handleRightArrowClick = () => {
+    // Right arrow works only if total todos id more than the last sliced todos index (indexes[1])
+
     if (fullTodos.length > indexes[1]) {
       setIndexes([indexes[0] + 6, indexes[1] + 6]);
       setRightClick(true);
@@ -76,6 +76,7 @@ export const useTodosHook = () => {
     setLeftHover,
     handleLeftArrowClick,
   };
+
   const rightArrowState = {
     rightClick,
     rightHover,
