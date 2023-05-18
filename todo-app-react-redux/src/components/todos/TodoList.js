@@ -186,7 +186,7 @@ const TodoList = () => {
 
       return (
         <section
-          className={`todo-container2 ${todoContainer} p-3 d-flex justify-content-center flex-row align-items-center mt-2 justify-content-evenly`}
+          className={`todo-container2 ${todoContainer} p-3 d-flex justify-content-center flex-row align-items-center mt-3 justify-content-evenly`}
         >
           <LeftArrow
             state={leftArrowState}

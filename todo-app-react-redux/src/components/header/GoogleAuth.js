@@ -98,7 +98,7 @@ const GoogleAuth = () => {
   );
 
   const renderProfile = () => (
-    <div className="d-flex justify-content-center me-5">
+    <div className="d-flex justify-content-center me-2 me-sm-5">
       {userProfile.img && (
         <img
           className="img-profile me-sm-1 me-2 rounded-circle"
@@ -110,11 +110,16 @@ const GoogleAuth = () => {
   );
 
   return (
-    <section className="w-100 d-flex justify-content-center">
+    <section
+      className={`${
+        isSignedIn ? "w-100" : "w-50"
+      } d-flex justify-content-center`}
+    >
       <div
         ref={divRef}
-        className={`buttonSignIn ${signInButtonClass}`}
-        hidden={isSignedIn}
+        className={`buttonSignIn ${
+          isSignedIn ? "d-none" : "d-flex"
+        } justify-content-center ${signInButtonClass}`}
       >
         <GoogleLogin
           onSuccess={(response) => handleCallbackResponse(response)}
@@ -124,7 +129,9 @@ const GoogleAuth = () => {
         />
       </div>
 
-      <section className={`d-flex buttonSignOut ${signOutButton}`}>
+      <section
+        className={`d-flex buttonSignOut w-100 justify-content-sm-center justify-content-around ${signOutButton}`}
+      >
         {userProfile && renderProfile()}
         {isSignedIn && renderSignOutButton()}
       </section>

@@ -25,7 +25,7 @@ const Header = () => {
           className={`d-flex todo-logo ${initialClasses.logo} flex-row justify-content-center`}
         >
           <i
-            className={`check square todo-icon ${initialClasses.icon} outline icon mb-2 `}
+            className={`check square todo-icon ${initialClasses.icon} outline icon mb-2`}
           ></i>
           <h1 className={`todo-heading ${initialClasses.heading}`}>
             Todo-List
