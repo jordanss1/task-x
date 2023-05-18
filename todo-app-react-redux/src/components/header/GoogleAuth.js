@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   signIn,
@@ -11,8 +11,8 @@ import {
   classSelector,
   placeholderSet,
 } from "../../features/classes/classesSlice";
-import { initialiseGoogle } from "../../features/auth/initialiseGoogle";
 import { usePreLoginLogout } from "../../hooks/LoginAndAuthHook";
+import { GoogleLogin } from "@react-oauth/google";
 import "../../style/header.css";
 
 const GoogleAuth = () => {
@@ -27,14 +27,12 @@ const GoogleAuth = () => {
   const { signInOrOut, handleCallbackResponse, handleSignOut } =
     usePreLoginLogout();
 
-  const [google, setGoogle] = useState("");
   const divRef = useRef(null);
 
   useEffect(() => {
     // On page load, checks if the user is still logged in
 
     let id;
-    setGoogle(window.google);
 
     const userObject = JSON.parse(window.localStorage.getItem("user"));
 
@@ -51,14 +49,6 @@ const GoogleAuth = () => {
 
     return () => clearTimeout(id);
   }, [isSignedIn]);
-
-  useEffect(() => {
-    // Initializes the google sign-in button
-
-    if (google && divRef.current) {
-      initialiseGoogle(handleCallbackResponse, google);
-    }
-  }, [google]);
 
   useEffect(() => {
     // Fetches or removes todos depending on login status
@@ -125,7 +115,15 @@ const GoogleAuth = () => {
         ref={divRef}
         className={`buttonSignIn ${signInButtonClass}`}
         hidden={isSignedIn}
-      ></div>
+      >
+        <GoogleLogin
+          onSuccess={(response) => handleCallbackResponse(response)}
+          shape="circle"
+          size="medium"
+          type="standard"
+        />
+      </div>
+
       <section className={`d-flex buttonSignOut ${signOutButton}`}>
         {userProfile && renderProfile()}
         {isSignedIn && renderSignOutButton()}
