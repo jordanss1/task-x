@@ -2,11 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RightArrow from "../arrows/RightArrow";
 import LeftArrow from "../arrows/LeftArrow";
-import {
-  selectTodos,
-  editTodo,
-  deleteTodo,
-} from "../../features/todos/todosSlice";
+import { editTodo, deleteTodo } from "../../features/todos/todosSlice";
 import {
   todoContainerSet,
   actionedTodoItemSet,
@@ -63,33 +59,32 @@ const TodoList = () => {
   }, [loading, actionedTodoItem, indexes, empty, deleted]);
 
   useEffect(() => {
-    // Sets right arrow enabled if page added
     // Sets real length in order to trigger previous page if necessary
+
+    setLength(fullTodos.length);
+  }, [deleted, actionedTodoItem]);
+
+  useEffect(() => {
+    // Sets right arrow enabled if page added
+    // Navigates to previous page if no more todos on current page and not on first page
 
     let id;
 
-    if (fullTodos.length >= indexes[1]) {
+    if (length % 6 === 0 && deleted) {
+      setDeleted(false);
+      setIndexes(indexes[0] !== 0 ? [indexes[0] - 6, indexes[1] - 6] : indexes);
+      dispatch(rightArrowSet({ div: "arrow-disabled" }));
+    }
+
+    if (length >= indexes[1]) {
       id = setTimeout(
         () => dispatch(rightArrowSet({ div: "arrow-enabled" })),
         100
       );
     }
 
-    if (deleted) {
-      setLength(fullTodos.length);
-    }
-
     return () => clearTimeout(id);
-  }, [deleted, actionedTodoItem]);
-
-  useEffect(() => {
-    // Sets previous page if no more todos on current page
-
-    if (length % 6 === 0 && deleted) {
-      setDeleted(false);
-      setIndexes(indexes[0] !== 0 ? [indexes[0] - 6, indexes[1] - 6] : indexes);
-    }
-  }, [length]);
+  }, [length, actionedTodoItem]);
 
   useEffect(() => {
     // Updates todo item
@@ -108,7 +103,6 @@ const TodoList = () => {
   const handleDeleteTodo = (id) => {
     // The different conditions handle adding appropriate classes when all todos are deleted
     // Smooth transition between containers
-
     if (fullTodos.length > 1) {
       dispatch(actionedTodoItemSet({ id: id, classProp: "item-out" }));
 
@@ -132,19 +126,22 @@ const TodoList = () => {
     }
   };
 
-  // These next functions deal with the logic of the arrows because they are stateless components
+  // Manages the classes added to the arrows based on hover and click events
 
-  const handleDivClasses = (hover, click, main) => {
-    if (hover && !click && main === "arrow-enabled") {
-      return "arrow-div-hover";
-    }
-    if (!hover && !click) {
-      return main;
-    }
-    if (click && main === "arrow-enabled") {
-      return "arrow-click";
-    }
-  };
+  const handleDivClasses = useCallback(
+    (hover, click, main) => {
+      if (hover && !click && main === "arrow-enabled") {
+        return "arrow-div-hover";
+      }
+      if (!hover && !click) {
+        return main;
+      }
+      if (click && main === "arrow-enabled") {
+        return "arrow-click";
+      }
+    },
+    [rightArrowState, leftArrowState, rightArrow, leftArrow]
+  );
 
   const renderBody = () => {
     // Login page when not signed in
