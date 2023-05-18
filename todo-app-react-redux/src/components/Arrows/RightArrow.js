@@ -1,9 +1,11 @@
-import React from "react";
+import React, { memo } from "react";
 
 const RightArrow = ({ state, handleClasses, classes }) => {
   const { setRightHover, rightClick, rightHover, handleRightArrowClick } =
     state;
+
   const div = handleClasses(rightHover, rightClick, classes.div);
+
   return (
     <div
       onMouseEnter={() => setRightHover(true)}
@@ -20,4 +22,4 @@ const RightArrow = ({ state, handleClasses, classes }) => {
   );
 };
 
-export default RightArrow;
+export default memo(RightArrow);
