@@ -60,8 +60,9 @@ const TodoList = () => {
 
   useEffect(() => {
     // Sets real length in order to trigger previous page if necessary
-
-    setLength(fullTodos.length);
+    if (fullTodos) {
+      setLength(fullTodos.length);
+    }
   }, [deleted, actionedTodoItem]);
 
   useEffect(() => {
@@ -103,11 +104,12 @@ const TodoList = () => {
   const handleDeleteTodo = (id) => {
     // The different conditions handle adding appropriate classes when all todos are deleted
     // Smooth transition between containers
+
     if (fullTodos.length > 1) {
       dispatch(actionedTodoItemSet({ id: id, classProp: "item-out" }));
 
       setTimeout(() => {
-        dispatch(actionedTodoItemSet({}));
+        dispatch(actionedTodoItemSet({ arrow: null, div: null }));
         dispatch(deleteTodo(id));
         setDeleted(true);
       }, 300);
@@ -119,7 +121,7 @@ const TodoList = () => {
 
       setTimeout(() => {
         setEmpty(false);
-        dispatch(actionedTodoItemSet({}));
+        dispatch(actionedTodoItemSet({ arrow: null, div: null }));
         dispatch(todoContainerSet(""));
         dispatch(deleteTodo(id));
       }, 1700);
@@ -147,7 +149,7 @@ const TodoList = () => {
     // Login page when not signed in
 
     if (!isSignedIn) {
-      const classes = `${initialClasses.container} ${loginContainer}`;
+      const classes = `${initialClasses?.container} ${loginContainer}`;
 
       return (
         <section
@@ -181,7 +183,7 @@ const TodoList = () => {
           </div>
         </section>
       );
-    } else if (isSignedIn && fullTodos.length && !loading) {
+    } else if (isSignedIn && fullTodos?.length && !loading) {
       // After loading is complete and when todos exist
 
       return (
@@ -214,7 +216,7 @@ const TodoList = () => {
           />
         </section>
       );
-    } else if (isSignedIn && !fullTodos.length && !loading) {
+    } else if (isSignedIn && !fullTodos?.length && !loading) {
       // After loading is complete and when todos don't exist
 
       return (

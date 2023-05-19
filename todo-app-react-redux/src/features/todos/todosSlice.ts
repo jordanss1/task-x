@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, AsyncThunk } from "@reduxjs/toolkit";
 import _ from "lodash";
 import todoApi from "../../apiAxios/todos";
+import { StateType } from "../../app/store";
 
 export const getTodos = createAsyncThunk("todos/getTodos", async (userId) => {
   let { data } = await todoApi.get("/todos");
@@ -36,6 +37,7 @@ export const editTodo = createAsyncThunk(
 export const deleteTodo = createAsyncThunk(
   "todos/deleteTodo",
   async (id, { dispatch }) => {
+    console.log(id);
     todoApi.delete(`/todos/${id}`);
     dispatch({
       type: "todos/deleteTodo/fulfilled",
@@ -44,8 +46,19 @@ export const deleteTodo = createAsyncThunk(
   }
 );
 
-const initialState = {
-  fullTodos: {},
+type TodoType = {
+  todo: string;
+  userId: string;
+  id: number;
+};
+
+type TodosStateType = {
+  fullTodos: TodoType[] | null;
+  status: "success" | "failed" | "pending" | null;
+};
+
+const initialState: TodosStateType = {
+  fullTodos: null,
   status: null,
 };
 
@@ -54,7 +67,7 @@ const todosSlice = createSlice({
   initialState,
   reducers: {
     emptyTodos: (state) => {
-      state.todos = {};
+      state.fullTodos = null;
     },
   },
   extraReducers: {
@@ -103,8 +116,18 @@ const todosSlice = createSlice({
   },
 });
 
-export const selectTodos = (state) => {
-  const fullTodos = Object.values(state.todos.fullTodos);
+export type SelectTodosType = (state: StateType) => {
+  fullTodos: TodoType[] | null;
+};
+
+export const selectTodos: SelectTodosType = (state) => {
+  let fullTodos;
+  if (state.todos.fullTodos) {
+    const fullTodos = Object.values(state.todos.fullTodos);
+    return { fullTodos };
+  } else {
+    fullTodos = null;
+  }
   return { fullTodos };
 };
 

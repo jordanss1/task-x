@@ -80,7 +80,7 @@ const GoogleAuth = () => {
     return () => clearTimeout(id);
   }, [beenSignedOut]);
 
-  const signInButtonClass = `${initialClasses.button} ${signInButton}`;
+  const signInButtonClass = `${initialClasses?.button} ${signInButton}`;
 
   const renderSignOutButton = () => (
     <div className="d-flex align-items-center me-3">

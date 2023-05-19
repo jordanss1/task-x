@@ -4,7 +4,7 @@ const RightArrow = ({ state, handleClasses, classes }) => {
   const { setRightHover, rightClick, rightHover, handleRightArrowClick } =
     state;
 
-  const div = handleClasses(rightHover, rightClick, classes.div);
+  const div = handleClasses(rightHover, rightClick, classes?.div);
 
   return (
     <div
@@ -14,8 +14,8 @@ const RightArrow = ({ state, handleClasses, classes }) => {
       className={`arrow-div ${div} rounded-pill d-flex align-items-center justify-content-center`}
     >
       <i
-        className={`location ${classes.arrow} ${
-          rightHover && classes.div === "arrow-enabled" ? "arrow-hover" : ""
+        className={`location ${classes?.arrow} ${
+          rightHover && classes?.div === "arrow-enabled" ? "arrow-hover" : ""
         } arrow icon arrow-right`}
       ></i>
     </div>

@@ -3,9 +3,9 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { waitFor } from "@testing-library/react";
 import App from "../App";
-import { customRender } from "../../../test-utils/test-utils";
+import { customRender } from "../../test-utils/test-utils";
 import { Provider } from "react-redux";
-import { store } from "../../app/store";
+import { store } from "../../app/store.ts";
 
 const Wrapper = ({ children }) => {
   return <Provider store={store}>{children}</Provider>;

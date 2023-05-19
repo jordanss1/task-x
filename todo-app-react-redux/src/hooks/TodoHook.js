@@ -31,14 +31,14 @@ export const useTodosHook = () => {
       );
     }
 
-    if (fullTodos.length < indexes[1] + 1) {
+    if (fullTodos?.length < indexes[1] + 1) {
       id = setTimeout(
         () => dispatch(rightArrowSet({ arrow: "arrow-disabled" })),
         100
       );
     }
 
-    if (fullTodos.length > indexes[1]) {
+    if (fullTodos?.length > indexes[1]) {
       id = setTimeout(
         () => dispatch(rightArrowSet({ div: "arrow-enabled" })),
         100
@@ -68,7 +68,7 @@ export const useTodosHook = () => {
     }
   };
 
-  let todos = fullTodos.slice(indexes[0], indexes[1]);
+  let todos = fullTodos?.slice(indexes[0], indexes[1]);
 
   const leftArrowState = {
     leftClick,

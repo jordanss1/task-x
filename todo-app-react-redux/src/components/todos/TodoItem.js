@@ -7,10 +7,12 @@ const TodoItem = ({
   handlePromptValue,
   actionedTodo,
 }) => {
+  console.log(id);
+  console.log(actionedTodo);
   return (
     <article
       className={`todo-class ${
-        actionedTodo.id === id ? actionedTodo.classProp : ""
+        actionedTodo?.id === id ? actionedTodo?.classProp : ""
       } border rounded-pill p-1 d-flex align-items-center justify-content-around mb-2`}
     >
       <p className="todo-text ms-3 ms-sm-0 ps-4 pt-2 fs-4">{todo}</p>
