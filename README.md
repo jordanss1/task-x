@@ -56,6 +56,7 @@ To sign out press the "Sign out" button in the top right.
 <ul>
 <li>ReactJS</li>
 <li>JavaScript</li>
+<li>TypeScript</li>    
 <li>HTML</li>
 <li>Redux Toolkit</li>
 <li>CSS</li>
