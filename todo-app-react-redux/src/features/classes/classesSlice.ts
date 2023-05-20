@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { StateType } from "../../app/store";
 
 type InitialClassesType = {
   button: string;
@@ -105,7 +106,9 @@ export const classesSlice = createSlice({
   },
 });
 
-export const classSelector = (state) => state.classes;
+type ClassSelectorType = (state: StateType) => ClassesStateType;
+
+export const classSelector: ClassSelectorType = (state) => state.classes;
 
 export const {
   initialClassesAdd,

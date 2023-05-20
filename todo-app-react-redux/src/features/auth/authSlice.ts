@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { StateType } from "../../app/store";
 
-type UserProfileType = {
+export type UserProfileType = {
   userId: string;
   name: string;
   img: string;
@@ -59,7 +60,9 @@ export const authSlice = createSlice({
   },
 });
 
-export const authSelector = (state) => state.auth;
+type AuthSelectorType = (state: StateType) => AuthStateType;
+
+export const authSelector: AuthSelectorType = (state) => state.auth;
 
 export const { signIn, signOut, signingIn, signingOut, setLoading } =
   authSlice.actions;

@@ -2,11 +2,14 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RightArrow from "../arrows/RightArrow";
 import LeftArrow from "../arrows/LeftArrow";
-import { editTodo, deleteTodo } from "../../features/todos/todosSlice";
+import {
+  editTodo,
+  deleteTodo,
+  getTodos,
+} from "../../features/todos/todosSlice";
 import {
   todoContainerSet,
   actionedTodoItemSet,
-  rightArrowSet,
 } from "../../features/classes/classesSlice";
 import { classSelector } from "../../features/classes/classesSlice";
 import { authSelector } from "../../features/auth/authSlice";
@@ -16,7 +19,7 @@ import { useTodosHook } from "../../hooks/TodoHook";
 
 const TodoList = () => {
   const dispatch = useDispatch();
-  const { isSignedIn, loading } = useSelector(authSelector);
+  const { isSignedIn, loading, userProfile } = useSelector(authSelector);
   const {
     initialClasses,
     todoContainer,
@@ -32,16 +35,16 @@ const TodoList = () => {
     todos,
     indexes,
     handleArrowClasses,
-    setIndexes,
     leftArrowState,
     rightArrowState,
+    setDeleted,
+    setLength,
+    length,
   } = useTodosHook();
 
   const [promptValue, setPromptValue] = useState("");
   const [editId, setEditId] = useState(null);
   const [empty, setEmpty] = useState(false);
-  const [deleted, setDeleted] = useState(null);
-  const [length, setLength] = useState(null);
 
   useEffect(() => {
     let id;
@@ -56,36 +59,7 @@ const TodoList = () => {
     id = handleArrowClasses();
 
     return () => clearTimeout(id);
-  }, [loading, actionedTodoItem, indexes, empty, deleted]);
-
-  useEffect(() => {
-    // Sets real length in order to trigger previous page if necessary
-    if (fullTodos) {
-      setLength(fullTodos.length);
-    }
-  }, [deleted, actionedTodoItem]);
-
-  useEffect(() => {
-    // Sets right arrow enabled if page added
-    // Navigates to previous page if no more todos on current page and not on first page
-
-    let id;
-
-    if (length % 6 === 0 && deleted) {
-      setDeleted(false);
-      setIndexes(indexes[0] !== 0 ? [indexes[0] - 6, indexes[1] - 6] : indexes);
-      dispatch(rightArrowSet({ div: "arrow-disabled" }));
-    }
-
-    if (length >= indexes[1]) {
-      id = setTimeout(
-        () => dispatch(rightArrowSet({ div: "arrow-enabled" })),
-        100
-      );
-    }
-
-    return () => clearTimeout(id);
-  }, [length, actionedTodoItem]);
+  }, [loading, actionedTodoItem, length, indexes]);
 
   useEffect(() => {
     // Updates todo item
@@ -93,8 +67,9 @@ const TodoList = () => {
     if (promptValue && editId) {
       const editObject = { editId, promptValue };
       dispatch(editTodo(editObject));
+      dispatch(getTodos(userProfile.userId));
     }
-  }, [editId]);
+  }, [editId, promptValue]);
 
   const handlePromptValue = (id) => {
     setPromptValue(prompt("Edit todo and submit"));
@@ -105,25 +80,29 @@ const TodoList = () => {
     // The different conditions handle adding appropriate classes when all todos are deleted
     // Smooth transition between containers
 
+    const promise = () =>
+      new Promise((resolve) => resolve(dispatch(deleteTodo(id))));
+
     if (fullTodos.length > 1) {
       dispatch(actionedTodoItemSet({ id: id, classProp: "item-out" }));
 
-      setTimeout(() => {
+      setTimeout(async () => {
+        await promise();
         dispatch(actionedTodoItemSet({ arrow: null, div: null }));
-        dispatch(deleteTodo(id));
         setDeleted(true);
-      }, 300);
+        setLength(fullTodos.length);
+      }, 500);
     } else if (fullTodos.length === 1) {
       setDeleted(false);
       setEmpty(true);
       dispatch(actionedTodoItemSet({ id: id, classProp: "item-out" }));
       dispatch(todoContainerSet("todo-container-empty"));
 
-      setTimeout(() => {
+      setTimeout(async () => {
+        await promise();
         setEmpty(false);
         dispatch(actionedTodoItemSet({ arrow: null, div: null }));
         dispatch(todoContainerSet(""));
-        dispatch(deleteTodo(id));
       }, 1700);
     }
   };

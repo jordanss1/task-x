@@ -7,8 +7,6 @@ const TodoItem = ({
   handlePromptValue,
   actionedTodo,
 }) => {
-  console.log(id);
-  console.log(actionedTodo);
   return (
     <article
       className={`todo-class ${

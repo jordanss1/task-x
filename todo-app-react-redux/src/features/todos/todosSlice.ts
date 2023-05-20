@@ -1,18 +1,23 @@
-import { createSlice, createAsyncThunk, AsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, AnyAction } from "@reduxjs/toolkit";
 import _ from "lodash";
 import todoApi from "../../apiAxios/todos";
 import { StateType } from "../../app/store";
+import { UserProfileType } from "../auth/authSlice";
 
-export const getTodos = createAsyncThunk("todos/getTodos", async (userId) => {
-  let { data } = await todoApi.get("/todos");
-  data = data.filter((todo) => todo.userId === userId);
-  return data;
-});
+export const getTodos = createAsyncThunk(
+  "todos/getTodos",
+  async (userId: string): Promise<TodoType[] | []> => {
+    let { data } = await todoApi.get("/todos");
+    data = data.filter((todo: TodoType) => todo.userId === userId);
+    return data;
+  }
+);
 
 export const createTodos = createAsyncThunk(
-  "todos/createTodos",
-  async (todo, { getState, dispatch }) => {
-    const { userId } = getState().auth.userProfile;
+  "todos/createTodo",
+  async (todo: TodoType, { getState, dispatch }): Promise<TodoType> => {
+    const state = getState() as StateType;
+    const { userId } = state.auth.userProfile as UserProfileType;
     const { data } = await todoApi.post("/todos", { todo, userId });
 
     dispatch({
@@ -26,19 +31,26 @@ export const createTodos = createAsyncThunk(
 
 export const editTodo = createAsyncThunk(
   "todos/editTodo",
-  async ({ editId, promptValue }) => {
+  async ({
+    editId,
+    promptValue,
+  }: {
+    editId: number;
+    promptValue: string;
+  }): Promise<TodoType> => {
     const { data } = await todoApi.patch(`/todos/${editId}`, {
       todo: promptValue,
     });
+
     return data;
   }
 );
 
 export const deleteTodo = createAsyncThunk(
   "todos/deleteTodo",
-  async (id, { dispatch }) => {
-    console.log(id);
-    todoApi.delete(`/todos/${id}`);
+  async (id: number, { dispatch }) => {
+    await todoApi.delete(`/todos/${id}`);
+
     dispatch({
       type: "todos/deleteTodo/fulfilled",
       payload: id,
@@ -62,6 +74,20 @@ const initialState: TodosStateType = {
   status: null,
 };
 
+type ReducerMatcherType = (
+  action: AnyAction,
+  state: TodosStateType,
+  func: () => void
+) => void;
+
+const reducerMatcherFunctions: ReducerMatcherType = (action, state, func) => {
+  if (action.type.includes("pending")) state.status = "pending";
+  if (action.type.includes("fulfilled")) {
+    state.status = "success";
+    func();
+  } else state.status = "failed";
+};
+
 const todosSlice = createSlice({
   name: "todos",
   initialState,
@@ -70,49 +96,49 @@ const todosSlice = createSlice({
       state.fullTodos = null;
     },
   },
-  extraReducers: {
-    [getTodos.pending]: (state) => {
-      state.status = "pending";
-    },
-    [getTodos.fulfilled]: (state, action) => {
-      state.fullTodos = _.mapKeys(action.payload, "id");
-      state.status = "success";
-    },
-    [getTodos.rejected]: (state) => {
-      state.status = "failed";
-    },
-    [createTodos.pending]: (state) => {
-      state.status = "pending";
-    },
-    [createTodos.fulfilled]: (state, action) => {
-      const newState = Object.values(state.fullTodos);
-      newState.push(action.payload);
-      state.fullTodos = _.mapKeys(newState, "id");
-      state.status = "success";
-    },
-    [createTodos.rejected]: (state) => {
-      state.status = "failed";
-    },
-    [editTodo.pending]: (state) => {
-      state.status = "pending";
-    },
-    [editTodo.fulfilled]: (state, action) => {
-      state.fullTodos[action.payload.id] = action.payload;
-      state.status = "success";
-    },
-    [editTodo.rejected]: (state) => {
-      state.status = "failed";
-    },
-    [deleteTodo.pending]: (state) => {
-      state.status = "pending";
-    },
-    [deleteTodo.fulfilled]: (state, action) => {
-      delete state.fullTodos[action.payload];
-      state.status = "success";
-    },
-    [deleteTodo.rejected]: (state) => {
-      state.status = "failed";
-    },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(
+        (action) => action.type.includes("todos/getTodos"),
+        (state, action) => {
+          reducerMatcherFunctions(
+            action,
+            state,
+            () => (state.fullTodos = _.mapKeys(action.payload, "id"))
+          );
+        }
+      )
+      .addMatcher(
+        (action) => action.type.includes("todos/createTodo"),
+        (state, action) => {
+          reducerMatcherFunctions(action, state, () => {
+            const newState = state.fullTodos
+              ? Object.values(state.fullTodos)
+              : [];
+            state.fullTodos = _.mapKeys([...newState, action.payload], "id");
+          });
+        }
+      )
+      .addMatcher(
+        (action) => action.type.includes("todos/editTodo"),
+        (state, action) => {
+          reducerMatcherFunctions(action, state, () => {
+            if (state.fullTodos) {
+              state.fullTodos[action.payload.id] = action.payload;
+            }
+          });
+        }
+      )
+      .addMatcher(
+        (action) => action.type.includes("todos/deleteTodo"),
+        (state, action) => {
+          reducerMatcherFunctions(action, state, () => {
+            if (state.fullTodos) {
+              delete state.fullTodos[action.payload];
+            }
+          });
+        }
+      );
   },
 });
 
@@ -121,14 +147,11 @@ export type SelectTodosType = (state: StateType) => {
 };
 
 export const selectTodos: SelectTodosType = (state) => {
-  let fullTodos;
   if (state.todos.fullTodos) {
     const fullTodos = Object.values(state.todos.fullTodos);
     return { fullTodos };
-  } else {
-    fullTodos = null;
   }
-  return { fullTodos };
+  return { fullTodos: null };
 };
 
 export const { emptyTodos } = todosSlice.actions;
