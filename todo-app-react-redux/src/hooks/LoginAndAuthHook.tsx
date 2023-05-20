@@ -15,8 +15,39 @@ import {
 } from "../features/classes/classesSlice";
 import useClassesHook from "./ClassesHooks";
 import jwtDecode from "jwt-decode";
+import { CredentialResponse } from "@react-oauth/google";
 
-export const usePreLoginLogout = () => {
+type SignInOrOutClassesType = (
+  status: "signingIn" | "signingOut"
+) => NodeJS.Timeout;
+
+type HandleCallbackFuncType = (response: CredentialResponse) => void;
+
+type HandleSignOutFunc = () => void;
+
+type DecodedUserObject = {
+  aud: string;
+  azp: string;
+  email: string;
+  email_verified: boolean;
+  exp: number;
+  given_name: string;
+  iat: number;
+  iss: string;
+  jti: string;
+  name: string;
+  nbf: number;
+  picture: string;
+  sub: string;
+};
+
+type PreLoginHookType = () => {
+  signInOrOut: SignInOrOutClassesType;
+  handleCallbackResponse: HandleCallbackFuncType;
+  handleSignOut: HandleSignOutFunc;
+};
+
+export const usePreLoginLogout: PreLoginHookType = () => {
   // Functions and side effects for pre-login and log-out such as classes and dispatching ACTUAL login and logout
 
   const { beenSignedIn, beenSignedOut } = useSelector(authSelector);
@@ -41,10 +72,12 @@ export const usePreLoginLogout = () => {
 
   // Animates the button containers when sign in/out begins and dispatches actual sign in/out
 
-  const signInOrOut = (status) => {
+  const signInOrOut: SignInOrOutClassesType = (status) => {
     let id;
 
-    const userObject = JSON.parse(window.localStorage.getItem("user"));
+    const userObject = JSON.parse(
+      window.localStorage.getItem("user") as string
+    );
 
     const statusGuard =
       status === "signingIn" ? beenSignedIn && userObject : beenSignedOut;
@@ -57,16 +90,18 @@ export const usePreLoginLogout = () => {
       }, 500);
     }
 
-    return id;
+    return id as NodeJS.Timeout;
   };
 
-  const handleCallbackResponse = (response) => {
-    const userObject = jwtDecode(response.credential);
+  const handleCallbackResponse: HandleCallbackFuncType = (response) => {
+    const userObject: DecodedUserObject = jwtDecode(
+      response.credential as string
+    );
     window.localStorage.setItem("user", JSON.stringify(userObject));
     dispatch(signingIn());
   };
 
-  const handleSignOut = () => {
+  const handleSignOut: HandleSignOutFunc = () => {
     window.localStorage.removeItem("user");
     dispatch(signingOut());
   };

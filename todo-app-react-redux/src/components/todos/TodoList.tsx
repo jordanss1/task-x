@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, ReactElement } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RightArrow from "../arrows/ArrowRightArrow";
 import LeftArrow from "../arrows/ArrowLeftArrow";
@@ -6,6 +6,7 @@ import {
   editTodo,
   deleteTodo,
   getTodos,
+  AppThunkDispatch,
 } from "../../features/todos/todosSlice";
 import {
   todoContainerSet,
@@ -16,9 +17,10 @@ import { authSelector } from "../../features/auth/authSlice";
 import "../../style/body.css";
 import TodoItem from "./TodoItem";
 import { useTodosHook } from "../../hooks/TodoHook";
+import TodoPlaceholder from "./TodoPlaceholder";
 
-const TodoList = () => {
-  const dispatch = useDispatch();
+const TodoList = (): ReactElement => {
+  const dispatch = useDispatch<AppThunkDispatch>();
   const { isSignedIn, loading, userProfile } = useSelector(authSelector);
   const {
     initialClasses,
@@ -67,7 +69,7 @@ const TodoList = () => {
     if (promptValue && editId) {
       const editObject = { editId, promptValue };
       dispatch(editTodo(editObject));
-      dispatch(getTodos(userProfile.userId));
+      dispatch(getTodos(userProfile?.userId as string));
     }
   }, [editId, promptValue]);
 
@@ -141,27 +143,7 @@ const TodoList = () => {
       );
     } else if (isSignedIn && loading && placeholder) {
       // Loading placeholder page while requesting from API
-
-      return (
-        <section
-          className={`placeholder-container ${placeholder} d-flex align-items-center justify-content-center w-50 message-div flex-column px-3 py-3`}
-        >
-          <div className="ui placeholder w-100">
-            <div className="paragraph">
-              <div className="line"></div>
-              <div className="line"></div>
-              <div className="line"></div>
-              <div className="line"></div>
-              <div className="line"></div>
-            </div>
-            <div className="paragraph">
-              <div className="line"></div>
-              <div className="line"></div>
-              <div className="line"></div>
-            </div>
-          </div>
-        </section>
-      );
+      return <TodoPlaceholder placeholder={placeholder} />;
     } else if (isSignedIn && fullTodos?.length && !loading) {
       // After loading is complete and when todos exist
 
@@ -208,6 +190,8 @@ const TodoList = () => {
           </div>
         </section>
       );
+    } else {
+      return <TodoPlaceholder placeholder={placeholder} />;
     }
   };
 

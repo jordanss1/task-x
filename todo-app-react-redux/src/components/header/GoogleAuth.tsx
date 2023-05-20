@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   signIn,
@@ -6,7 +6,11 @@ import {
   setLoading,
   authSelector,
 } from "../../features/auth/authSlice";
-import { getTodos, emptyTodos } from "../../features/todos/todosSlice";
+import {
+  getTodos,
+  emptyTodos,
+  AppThunkDispatch,
+} from "../../features/todos/todosSlice";
 import {
   classSelector,
   placeholderSet,
@@ -16,7 +20,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import "../../style/header.css";
 
 const GoogleAuth = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppThunkDispatch>();
 
   const { isSignedIn, userProfile, beenSignedIn, beenSignedOut } =
     useSelector(authSelector);
@@ -32,11 +36,12 @@ const GoogleAuth = () => {
   useEffect(() => {
     // On page load, checks if the user is still logged in
 
-    let id;
+    let id: NodeJS.Timeout | number = 0;
 
-    const userObject = JSON.parse(window.localStorage.getItem("user"));
+    let userObject = window.localStorage.getItem("user");
 
     if (userObject) {
+      userObject = JSON.parse(userObject);
       dispatch(setLoading(true));
       dispatch(signingIn());
       dispatch(signIn(userObject));
@@ -63,7 +68,7 @@ const GoogleAuth = () => {
   useEffect(() => {
     // Animates the button containers when sign in begins
 
-    let id;
+    let id: NodeJS.Timeout;
 
     id = signInOrOut("signingIn");
 
@@ -73,7 +78,7 @@ const GoogleAuth = () => {
   useEffect(() => {
     // Animates the button containers when sign out begins
 
-    let id;
+    let id: NodeJS.Timeout;
 
     id = signInOrOut("signingOut");
 
@@ -99,13 +104,13 @@ const GoogleAuth = () => {
 
   const renderProfile = () => (
     <div className="d-flex justify-content-center me-2 me-sm-5">
-      {userProfile.img && (
+      {userProfile?.img && (
         <img
           className="img-profile me-sm-1 me-2 rounded-circle"
-          src={`${userProfile.img}`}
+          src={`${userProfile?.img}`}
         ></img>
       )}
-      <h2 className="fs-5 name-heading mb-0 d-flex align-items-center">{`Hi, ${userProfile.name}`}</h2>
+      <h2 className="fs-5 name-heading mb-0 d-flex align-items-center">{`Hi, ${userProfile?.name}`}</h2>
     </div>
   );
 

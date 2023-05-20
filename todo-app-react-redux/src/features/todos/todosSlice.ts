@@ -3,15 +3,18 @@ import {
   createAsyncThunk,
   AnyAction,
   PayloadAction,
+  ThunkDispatch,
 } from "@reduxjs/toolkit";
 import _ from "lodash";
 import todoApi from "../../apiAxios/todos";
 import { StateType } from "../../app/store";
 import { UserProfileType } from "../auth/authSlice";
 
+export type AppThunkDispatch = ThunkDispatch<StateType, string, AnyAction>;
+
 export const getTodos = createAsyncThunk(
   "todos/getTodos",
-  async (userId: string): Promise<TodoType[] | []> => {
+  async (userId: string) => {
     let { data } = await todoApi.get("/todos");
     data = data.filter((todo: TodoType) => todo.userId === userId);
     return data;

@@ -7,7 +7,16 @@ import {
   loginContainerSet,
 } from "../features/classes/classesSlice";
 
-const useClassesHook = () => {
+type SetAuthButtonType = (status: "signingIn" | "signingOut") => void;
+
+type InitialClassesFuncType = () => NodeJS.Timeout;
+
+type ClassesHookType = () => {
+  setAuthButtonClasses: SetAuthButtonType;
+  initialClassesFunc: InitialClassesFuncType;
+};
+
+const useClassesHook: ClassesHookType = () => {
   const dispatch = useDispatch();
 
   const initialClassesFunc = () => {
@@ -23,7 +32,7 @@ const useClassesHook = () => {
     return id;
   };
 
-  const setAuthButtonClasses = (status) => {
+  const setAuthButtonClasses: SetAuthButtonType = (status) => {
     const signInButton =
       status === "signingIn" ? "signInButton-out" : "signInButton-in";
     const signOutButton =
