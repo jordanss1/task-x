@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import RightArrow from "../arrows/RightArrow";
-import LeftArrow from "../arrows/LeftArrow";
+import RightArrow from "../arrows/ArrowRightArrow";
+import LeftArrow from "../arrows/ArrowLeftArrow";
 import {
   editTodo,
   deleteTodo,

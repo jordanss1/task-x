@@ -1,4 +1,9 @@
-import { createSlice, createAsyncThunk, AnyAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  AnyAction,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import _ from "lodash";
 import todoApi from "../../apiAxios/todos";
 import { StateType } from "../../app/store";
@@ -99,7 +104,8 @@ const todosSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
-        (action) => action.type.includes("todos/getTodos"),
+        (action: PayloadAction<TodoType[]>) =>
+          action.type.includes("todos/getTodos"),
         (state, action) => {
           reducerMatcherFunctions(
             action,
@@ -109,7 +115,8 @@ const todosSlice = createSlice({
         }
       )
       .addMatcher(
-        (action) => action.type.includes("todos/createTodo"),
+        (action: PayloadAction<TodoType>) =>
+          action.type.includes("todos/createTodo"),
         (state, action) => {
           reducerMatcherFunctions(action, state, () => {
             const newState = state.fullTodos
@@ -120,7 +127,8 @@ const todosSlice = createSlice({
         }
       )
       .addMatcher(
-        (action) => action.type.includes("todos/editTodo"),
+        (action: PayloadAction<TodoType>) =>
+          action.type.includes("todos/editTodo"),
         (state, action) => {
           reducerMatcherFunctions(action, state, () => {
             if (state.fullTodos) {
@@ -130,7 +138,8 @@ const todosSlice = createSlice({
         }
       )
       .addMatcher(
-        (action) => action.type.includes("todos/deleteTodo"),
+        (action: PayloadAction<number>) =>
+          action.type.includes("todos/deleteTodo"),
         (state, action) => {
           reducerMatcherFunctions(action, state, () => {
             if (state.fullTodos) {
