@@ -9,14 +9,14 @@ type InitialClassesType = {
   heading: string;
 };
 
-type ActionedTodoItemType = {
+export type ActionedTodoItemType = {
   id: number | null;
   classProp: string | null;
 };
 
-type ArrowType = {
-  arrow: string | null;
-  div: string | null;
+export type ArrowType = {
+  arrow?: string | null;
+  div?: string | null;
 };
 
 interface ClassesStateType {
@@ -77,7 +77,7 @@ export const classesSlice = createSlice({
       reducer(state, action: PayloadAction<ActionedTodoItemType>) {
         state.actionedTodoItem = action.payload;
       },
-      prepare({ id, classProp }: { id: number; classProp: string }): {
+      prepare({ id, classProp }: ActionedTodoItemType): {
         payload: ActionedTodoItemType;
       } {
         return {

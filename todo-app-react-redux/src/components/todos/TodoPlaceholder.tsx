@@ -1,4 +1,10 @@
-const TodoPlaceholder = ({ placeholder }: { placeholder: string }) => {
+import { ReactElement } from "react";
+
+const TodoPlaceholder = ({
+  placeholder,
+}: {
+  placeholder: string;
+}): ReactElement => {
   return (
     <section
       className={`placeholder-container ${placeholder} d-flex align-items-center justify-content-center w-50 message-div flex-column px-3 py-3`}

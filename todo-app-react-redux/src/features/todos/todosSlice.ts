@@ -23,7 +23,7 @@ export const getTodos = createAsyncThunk(
 
 export const createTodos = createAsyncThunk(
   "todos/createTodo",
-  async (todo: TodoType, { getState, dispatch }): Promise<TodoType> => {
+  async (todo: string, { getState, dispatch }): Promise<TodoType> => {
     const state = getState() as StateType;
     const { userId } = state.auth.userProfile as UserProfileType;
     const { data } = await todoApi.post("/todos", { todo, userId });
@@ -33,7 +33,7 @@ export const createTodos = createAsyncThunk(
       payload: { id: data.id, classProp: "item-in" },
     });
 
-    return data;
+    return data as TodoType;
   }
 );
 
@@ -66,7 +66,7 @@ export const deleteTodo = createAsyncThunk(
   }
 );
 
-type TodoType = {
+export type TodoType = {
   todo: string;
   userId: string;
   id: number;

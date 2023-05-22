@@ -32,7 +32,15 @@ export const authSlice = createSlice({
         state.isSignedIn = true;
         state.userProfile = action.payload;
       },
-      prepare({ sub, name, picture }) {
+      prepare({
+        sub,
+        name,
+        picture,
+      }: {
+        sub: string;
+        name: string;
+        picture: string;
+      }) {
         return {
           payload: {
             userId: sub,

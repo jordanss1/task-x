@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import GoogleAuth from "./GoogleAuth";
 import { useSelector } from "react-redux";
 import { classSelector } from "../../features/classes/classesSlice";

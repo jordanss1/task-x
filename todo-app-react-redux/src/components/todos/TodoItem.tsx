@@ -1,6 +1,22 @@
-import React from "react";
+import { ReactElement } from "react";
+import { ActionedTodoItemType } from "../../features/classes/classesSlice";
+import { HandlePromptAndDeleteFunc } from "./TodoList";
 
-const TodoItem = ({
+type TodoItemComponentType = ({
+  id,
+  todo,
+  handleDeleteTodo,
+  handlePromptValue,
+  actionedTodo,
+}: {
+  id: number;
+  todo: string;
+  handleDeleteTodo: HandlePromptAndDeleteFunc;
+  handlePromptValue: HandlePromptAndDeleteFunc;
+  actionedTodo: ActionedTodoItemType;
+}) => ReactElement;
+
+const TodoItem: TodoItemComponentType = ({
   id,
   todo,
   handleDeleteTodo,

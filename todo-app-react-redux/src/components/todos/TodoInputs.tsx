@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import { FormEvent, ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelector } from "../../features/auth/authSlice";
-import { createTodos } from "../../features/todos/todosSlice";
+import { AppThunkDispatch, createTodos } from "../../features/todos/todosSlice";
 import { classSelector } from "../../features/classes/classesSlice";
 import "../../style/body.css";
+import { AnyAction, AsyncThunkAction, Dispatch } from "@reduxjs/toolkit";
 
-const TodoInputs = () => {
+const TodoInputs = (): ReactElement => {
   const { isSignedIn, beenSignedIn } = useSelector(authSelector);
   const { form } = useSelector(classSelector);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string>("");
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppThunkDispatch>();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     // Function to create Todo
 
     e.preventDefault();
@@ -20,12 +21,12 @@ const TodoInputs = () => {
     setValue("");
   };
 
-  const hideForm = () => {
+  const hideForm = (): boolean => {
     // Hides form after classes finished
 
-    if (!isSignedIn && !beenSignedIn) {
+    if (!isSignedIn || !beenSignedIn) {
       return true;
-    } else if (beenSignedIn || isSignedIn) {
+    } else {
       return false;
     }
   };

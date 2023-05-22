@@ -5,6 +5,7 @@ import {
   signingIn,
   setLoading,
   authSelector,
+  UserProfileType,
 } from "../../features/auth/authSlice";
 import {
   getTodos,
@@ -18,6 +19,8 @@ import {
 import { usePreLoginLogout } from "../../hooks/LoginAndAuthHook";
 import { GoogleLogin } from "@react-oauth/google";
 import "../../style/header.css";
+
+type UserObjectType = { sub: string; name: string; picture: string };
 
 const GoogleAuth = () => {
   const dispatch = useDispatch<AppThunkDispatch>();
@@ -38,13 +41,14 @@ const GoogleAuth = () => {
 
     let id: NodeJS.Timeout | number = 0;
 
-    let userObject = window.localStorage.getItem("user");
+    let userObject: string | UserObjectType | null =
+      window.localStorage.getItem("user");
 
     if (userObject) {
-      userObject = JSON.parse(userObject);
+      userObject = JSON.parse(userObject as string);
       dispatch(setLoading(true));
       dispatch(signingIn());
-      dispatch(signIn(userObject));
+      dispatch(signIn(userObject as UserObjectType));
 
       id = setTimeout(() => {
         dispatch(placeholderSet(""));
