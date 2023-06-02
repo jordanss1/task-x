@@ -9,7 +9,7 @@ const TodoPlaceholder = ({
     <section
       className={`placeholder-container ${placeholder} d-flex align-items-center justify-content-center w-50 message-div flex-column px-3 py-3`}
     >
-      <div className="ui placeholder w-100">
+      <div data-testid="placeholder" className="ui placeholder w-100">
         <div className="paragraph">
           <div className="line"></div>
           <div className="line"></div>

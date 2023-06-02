@@ -1,4 +1,7 @@
 import { setupServer } from "msw/node";
-import { googleOAuth } from "./handlers";
+import { todosEndpoint } from "./handlers";
+import { todosExistForLoggedInUser } from "./api";
 
-export const server = setupServer(...googleOAuth);
+const data = todosEndpoint(todosExistForLoggedInUser);
+
+export const server = setupServer(...data);

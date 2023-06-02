@@ -1,29 +1,5 @@
-import { server } from "./mocks/server.js";
+import { server } from "./mocks/server";
 import { cleanup } from "@testing-library/react";
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./features/auth/authSlice.js";
-import todosReducer from "./features/todos/todosSlice.js";
-import classesReducer from "./features/classes/classesSlice.js";
-
-// const initial = {
-//   beenSignedIn: true,
-//   userProfile: { userId: 12345678, name: "Jordan", img: "" },
-// };
-
-// const storeConfigure = (state) => {
-//   return configureStore({
-//     reducer: {
-//       auth: authReducer,
-//       todos: todosReducer,
-//       classes: classesReducer,
-//     },
-//     preloadedState: {
-//       auth: state,
-//     },
-//   });
-// };
-
-// export const loggedInStore = storeConfigure(initial);
 
 // Establish API mocking before all tests.
 

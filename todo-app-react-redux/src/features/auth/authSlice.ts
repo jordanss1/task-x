@@ -7,7 +7,7 @@ export type UserProfileType = {
   img: string;
 };
 
-interface AuthStateType {
+export interface AuthStateType {
   isSignedIn: boolean;
   userProfile: UserProfileType | null;
   beenSignedIn: boolean;
