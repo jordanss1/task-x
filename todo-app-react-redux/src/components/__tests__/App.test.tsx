@@ -5,8 +5,9 @@ import App from "../App.tsx";
 import { customRender } from "../../test-utils/test-utils.tsx";
 import { Provider } from "react-redux";
 import { userProfile } from "../../mocks/index.tsx";
-import { waitFor } from "@testing-library/react";
+import { waitFor, act, findAllByText } from "@testing-library/react";
 import { store } from "../../app/store.ts";
+import { changeHandlerAndResponse, todosPost } from "../../mocks/handlers.ts";
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
   return <Provider store={store}>{children}</Provider>;
@@ -47,12 +48,38 @@ describe("Logged in user has todos", () => {
   afterEach(() => window.localStorage.clear());
 
   it("After loading is done the user's todos can be seen", async () => {
-    const { queryByTestId, findByText } = customRender(Wrapper, <App />);
+    const { queryByTestId, getByText } = customRender(Wrapper, <App />);
 
     await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
       timeout: 2500,
     });
 
-    expect(await findByText("User added")).toBeInTheDocument();
+    expect(getByText("User added")).toBeInTheDocument();
+  });
+
+  it("User can create todos", async () => {
+    const { queryByTestId, getByPlaceholderText, getByTestId, findByText } =
+      customRender(Wrapper, <App />);
+
+    const input = getByPlaceholderText("Enter todo...");
+    const submitButton = getByTestId("submit-button");
+
+    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
+      timeout: 2500,
+    });
+
+    changeHandlerAndResponse(todosPost, {
+      todo: "New todo",
+      userId: "12345678",
+      id: 13,
+    });
+
+    await user.type(input, "New todo");
+
+    expect(input).toHaveValue("New todo");
+
+    await user.click(submitButton);
+
+    expect(await findByText("New todo")).toBeInTheDocument();
   });
 });

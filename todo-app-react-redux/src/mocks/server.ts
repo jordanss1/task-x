@@ -1,7 +1,7 @@
 import { setupServer } from "msw/node";
-import { todosEndpoint } from "./handlers";
+import { todosGet } from "./handlers";
 import { todosExistForLoggedInUser } from "./api";
 
-const data = todosEndpoint(todosExistForLoggedInUser);
+const data = todosGet(todosExistForLoggedInUser);
 
-export const server = setupServer(...data);
+export const server = setupServer(data);

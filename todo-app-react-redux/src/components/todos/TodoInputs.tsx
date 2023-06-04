@@ -51,6 +51,7 @@ const TodoInputs = (): ReactElement => {
           hidden={hideForm()}
           disabled={!value}
           className="ui submit button rounded-pill sub-button"
+          data-testid="submit-button"
         >
           Submit
         </button>

@@ -21,6 +21,4 @@ export const Store = ({
 export const customRender = (
   wrapper: JSXElementConstructor<{ children: ReactNode | ReactNode[] }>,
   components: ReactElement
-) => {
-  return render(components, { wrapper: wrapper });
-};
+) => render(components, { wrapper: wrapper });
