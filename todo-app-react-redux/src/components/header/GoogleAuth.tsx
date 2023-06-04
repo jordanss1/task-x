@@ -5,7 +5,6 @@ import {
   signingIn,
   setLoading,
   authSelector,
-  UserProfileType,
 } from "../../features/auth/authSlice";
 import {
   getTodos,

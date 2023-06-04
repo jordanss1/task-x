@@ -9,13 +9,15 @@ import authReducer, { AuthStateType } from "../features/auth/authSlice";
 import todosReducer from "../features/todos/todosSlice";
 import classesReducer from "../features/classes/classesSlice";
 
-export const initial: AuthStateType = {
-  isSignedIn: true,
-  userProfile: { userId: "12345678", name: "Jordan", img: "" },
-  beenSignedIn: true,
-  beenSignedOut: false,
-  loading: true,
-};
+export const userProfile = { sub: "12345678", name: "Jordan", picture: "" };
+
+// export const initial: AuthStateType = {
+//   isSignedIn: true,
+//   userProfile: { userId: "12345678", name: "Jordan", img: "" },
+//   beenSignedIn: true,
+//   beenSignedOut: false,
+//   loading: true,
+// };
 
 // const storeConfigure = (state: AuthStateType) => {
 //   return configureStore({

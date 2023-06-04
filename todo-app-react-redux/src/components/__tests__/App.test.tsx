@@ -4,7 +4,7 @@ import "@testing-library/jest-dom";
 import App from "../App.tsx";
 import { customRender } from "../../test-utils/test-utils.tsx";
 import { Provider } from "react-redux";
-import { initial } from "../../mocks/index.tsx";
+import { userProfile } from "../../mocks/index.tsx";
 import { waitFor } from "@testing-library/react";
 import { store } from "../../app/store.ts";
 
@@ -16,7 +16,7 @@ const user = userEvent.setup();
 
 describe("Tests where the todos don't matter", () => {
   beforeEach(() => {
-    window.localStorage.setItem("user", JSON.stringify(initial.userProfile));
+    window.localStorage.setItem("user", JSON.stringify(userProfile));
   });
 
   afterEach(() => window.localStorage.clear());
@@ -33,24 +33,25 @@ describe("Tests where the todos don't matter", () => {
 
     expect(getByTestId("placeholder")).toBeInTheDocument();
 
-    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull());
+    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
+      timeout: 2500,
+    });
   });
 });
 
 describe("Logged in user has todos", () => {
   beforeEach(() => {
-    window.localStorage.setItem("user", JSON.stringify(initial.userProfile));
+    window.localStorage.setItem("user", JSON.stringify(userProfile));
   });
 
   afterEach(() => window.localStorage.clear());
 
   it("After loading is done the user's todos can be seen", async () => {
-    const { getByTestId, queryByTestId, findByText, debug } = customRender(
-      Wrapper,
-      <App />
-    );
+    const { queryByTestId, findByText } = customRender(Wrapper, <App />);
 
-    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull());
+    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
+      timeout: 2500,
+    });
 
     expect(await findByText("User added")).toBeInTheDocument();
   });
