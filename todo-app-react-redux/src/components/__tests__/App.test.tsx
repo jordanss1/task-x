@@ -5,10 +5,19 @@ import App from "../App.tsx";
 import { customRender } from "../../test-utils/test-utils.tsx";
 import { Provider } from "react-redux";
 import { userProfile } from "../../mocks/index.tsx";
-import { waitFor, act, findAllByText } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import { store } from "../../app/store.ts";
 import { changeTodoHandler } from "../../mocks/handlers.ts";
-import { todosExistForLoggedInUser } from "../../mocks/api.ts";
+import {
+  multipleTodosExistForLoggedInUser,
+  oneTodoExistsForLoggedInUser,
+} from "../../mocks/api.ts";
+import { TodoType } from "../../features/todos/todosSlice.ts";
+
+type CreateTodoType = (
+  queries: (HTMLInputElement | HTMLButtonElement)[],
+  todo: TodoType
+) => Promise<void>;
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
   return <Provider store={store}>{children}</Provider>;
@@ -16,10 +25,23 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
 
 const user = userEvent.setup();
 
+const createTodoFunction: CreateTodoType = async (queries, todo) => {
+  const input = queries[0];
+  const submitButton = queries[1];
+
+  changeTodoHandler(todo);
+
+  await user.type(input, "New todo");
+
+  expect(input).toHaveValue("New todo");
+
+  await user.click(submitButton);
+};
+
 describe("Tests where the todos don't matter", () => {
   beforeEach(() => {
     window.localStorage.setItem("user", JSON.stringify(userProfile));
-    changeTodoHandler(todosExistForLoggedInUser);
+    changeTodoHandler(oneTodoExistsForLoggedInUser);
   });
 
   afterEach(() => window.localStorage.clear());
@@ -45,7 +67,7 @@ describe("Tests where the todos don't matter", () => {
 describe("Logged in user has todos", () => {
   beforeEach(() => {
     window.localStorage.setItem("user", JSON.stringify(userProfile));
-    changeTodoHandler(todosExistForLoggedInUser);
+    changeTodoHandler(oneTodoExistsForLoggedInUser);
   });
 
   afterEach(() => window.localStorage.clear());
@@ -64,25 +86,84 @@ describe("Logged in user has todos", () => {
     const { queryByTestId, getByPlaceholderText, getByTestId, findByText } =
       customRender(Wrapper, <App />);
 
-    const input = getByPlaceholderText("Enter todo...");
-    const submitButton = getByTestId("submit-button");
+    const input = getByPlaceholderText("Enter todo...") as HTMLInputElement;
+    const submitButton = getByTestId("submit-button") as HTMLButtonElement;
+
+    const queries = [input, submitButton];
+
+    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
+      timeout: 2500,
+    });
+
+    await createTodoFunction(queries, {
+      todo: "New todo",
+      userId: "12345678",
+      id: 13,
+    });
+
+    expect(await findByText("New todo")).toBeInTheDocument();
+  });
+
+  it("User can edit todo", async () => {
+    const { queryByTestId, getByTestId, findByText } = customRender(
+      Wrapper,
+      <App />
+    );
+
+    let windowPrompt = jest
+      .spyOn(window, "prompt")
+      .mockImplementation(() => "done");
 
     await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
       timeout: 2500,
     });
 
     changeTodoHandler({
+      todo: "done",
+      userId: "12345678",
+      id: 12,
+    });
+
+    const editButton = getByTestId("edit-todo");
+
+    await user.click(editButton);
+
+    expect(windowPrompt).toHaveBeenCalled();
+
+    expect(await findByText("done")).toBeInTheDocument();
+  });
+
+  it("User can delete todo", async () => {
+    const {
+      queryByText,
+      getByTestId,
+      queryByTestId,
+      getByPlaceholderText,
+      findByText,
+      getAllByTestId,
+    } = customRender(Wrapper, <App />);
+
+    const input = getByPlaceholderText("Enter todo...") as HTMLInputElement;
+    const submitButton = getByTestId("submit-button") as HTMLButtonElement;
+
+    const queries = [input, submitButton];
+
+    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
+      timeout: 2500,
+    });
+
+    await createTodoFunction(queries, {
       todo: "New todo",
       userId: "12345678",
       id: 13,
     });
 
-    await user.type(input, "New todo");
-
-    expect(input).toHaveValue("New todo");
-
-    await user.click(submitButton);
+    changeTodoHandler();
 
     expect(await findByText("New todo")).toBeInTheDocument();
+
+    await user.click(getAllByTestId("delete-todo")[1]);
+
+    await waitFor(() => expect(queryByText("New todo")).toBeNull());
   });
 });

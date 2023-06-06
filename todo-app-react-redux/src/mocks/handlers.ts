@@ -4,7 +4,7 @@ import { server } from "./server";
 
 type ResponseTypes = TodoType[] | TodoType;
 
-export const changeTodoHandler = (data: ResponseTypes) => {
+export const changeTodoHandler = async (data?: ResponseTypes) => {
   let selectedHandler;
 
   if (data && data instanceof Array) {
@@ -15,7 +15,7 @@ export const changeTodoHandler = (data: ResponseTypes) => {
     ];
   } else if (data && data.id) {
     selectedHandler = [
-      rest.patch("http://localhost:3001/todos", (req, res, ctx) =>
+      rest.patch("http://localhost:3001/todos/:id", (req, res, ctx) =>
         res(ctx.status(200), ctx.json(data))
       ),
       rest.post("http://localhost:3001/todos", (req, res, ctx) =>
@@ -24,7 +24,7 @@ export const changeTodoHandler = (data: ResponseTypes) => {
     ];
   } else {
     selectedHandler = [
-      rest.delete("http://localhost:3001/todos", (req, res, ctx) =>
+      rest.delete("http://localhost:3001/todos/:id", (req, res, ctx) =>
         res(ctx.status(200))
       ),
     ];
@@ -32,12 +32,3 @@ export const changeTodoHandler = (data: ResponseTypes) => {
 
   server.use(...selectedHandler);
 };
-
-export const googleOAuth = [
-  rest.get("https://accounts.google.com/gsi/client", (req, res, ctx) => {
-    return res(ctx.status(200));
-  }),
-  rest.get("https://accounts.google.com/gsi/button", (req, res, ctx) => {
-    return res(ctx.status(200));
-  }),
-];
