@@ -67,6 +67,7 @@ To sign out press the "Sign out" button in the top right.
 <li>Redux Toolkit</li>
 <li>Jest</li>
 <li>React Testing Library</li>
+<li>Mock Service Worker</li>
 <li>CSS</li>
 <li>BootStrap</li>
 <li>Semantic UI</li>
