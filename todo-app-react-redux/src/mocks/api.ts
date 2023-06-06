@@ -1,6 +1,6 @@
 import { TodoType } from "../features/todos/todosSlice";
 
-export const todosExistForLoggedInUser: TodoType[] | [] = [
+export const todosExistForLoggedInUser: TodoType[] = [
   {
     todo: "Go to gym",
     userId: "7286382",
@@ -23,7 +23,7 @@ export const todosExistForLoggedInUser: TodoType[] | [] = [
   },
 ];
 
-export const noTodosForLoggedInUser: TodoType[] | [] = [
+export const noTodosForLoggedInUser: TodoType[] = [
   {
     todo: "Go to gym",
     userId: "7286382",

@@ -7,7 +7,8 @@ import { Provider } from "react-redux";
 import { userProfile } from "../../mocks/index.tsx";
 import { waitFor, act, findAllByText } from "@testing-library/react";
 import { store } from "../../app/store.ts";
-import { changeHandlerAndResponse, todosPost } from "../../mocks/handlers.ts";
+import { changeTodoHandler } from "../../mocks/handlers.ts";
+import { todosExistForLoggedInUser } from "../../mocks/api.ts";
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
   return <Provider store={store}>{children}</Provider>;
@@ -18,6 +19,7 @@ const user = userEvent.setup();
 describe("Tests where the todos don't matter", () => {
   beforeEach(() => {
     window.localStorage.setItem("user", JSON.stringify(userProfile));
+    changeTodoHandler(todosExistForLoggedInUser);
   });
 
   afterEach(() => window.localStorage.clear());
@@ -43,6 +45,7 @@ describe("Tests where the todos don't matter", () => {
 describe("Logged in user has todos", () => {
   beforeEach(() => {
     window.localStorage.setItem("user", JSON.stringify(userProfile));
+    changeTodoHandler(todosExistForLoggedInUser);
   });
 
   afterEach(() => window.localStorage.clear());
@@ -68,7 +71,7 @@ describe("Logged in user has todos", () => {
       timeout: 2500,
     });
 
-    changeHandlerAndResponse(todosPost, {
+    changeTodoHandler({
       todo: "New todo",
       userId: "12345678",
       id: 13,
