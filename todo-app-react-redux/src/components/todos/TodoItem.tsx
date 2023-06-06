@@ -32,10 +32,12 @@ const TodoItem: TodoItemComponentType = ({
       <p className="todo-text ms-3 ms-sm-0 ps-4 pt-2 fs-4">{todo}</p>
       <div className="ms-auto icon-holder">
         <i
-          className="icon-class  rounded-pill bordered inverted black edit link icon"
+          data-testid="edit-todo"
+          className="icon-class rounded-pill bordered inverted black edit link icon"
           onClick={() => handlePromptValue(id)}
         ></i>
         <i
+          data-testid="delete-todo"
           className="icon-class delete-icon bordered  rounded-pill inverted red close link icon"
           onClick={() => handleDeleteTodo(id)}
         ></i>

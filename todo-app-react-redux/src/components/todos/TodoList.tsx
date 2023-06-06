@@ -76,7 +76,6 @@ const TodoList = (): ReactElement => {
     if (promptValue && editId) {
       const editObject = { editId, promptValue };
       dispatch(editTodo(editObject));
-      dispatch(getTodos(userProfile?.userId as string));
     }
   }, [editId, promptValue]);
 
