@@ -28,6 +28,7 @@ const TodoItem: TodoItemComponentType = ({
       className={`todo-class ${
         actionedTodo?.id === id ? actionedTodo?.classProp : ""
       } border rounded-pill p-1 d-flex align-items-center justify-content-around mb-2`}
+      data-testid="todo-item"
     >
       <p className="todo-text ms-3 ms-sm-0 ps-4 pt-2 fs-4">{todo}</p>
       <div className="ms-auto icon-holder">

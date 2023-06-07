@@ -5,7 +5,7 @@ import App from "../App.tsx";
 import { customRender } from "../../test-utils/test-utils.tsx";
 import { Provider } from "react-redux";
 import { userProfile } from "../../mocks/index.tsx";
-import { waitFor, act } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import { store } from "../../app/store.ts";
 import { changeTodoHandler } from "../../mocks/handlers.ts";
 import {
@@ -47,7 +47,7 @@ describe("Tests where the todos don't matter", () => {
   afterEach(() => window.localStorage.clear());
 
   it("When signed in the the sign-out button and welcome message should be visible", async () => {
-    const { getByText } = await customRender(Wrapper, <App />);
+    const { getByText } = customRender(Wrapper, <App />);
 
     expect(getByText("Sign out")).toBeInTheDocument();
     expect(getByText("Hi, Jordan")).toBeInTheDocument();
@@ -165,5 +165,113 @@ describe("Logged in user has todos", () => {
     await user.click(getAllByTestId("delete-todo")[1]);
 
     await waitFor(() => expect(queryByText("New todo")).toBeNull());
+  });
+
+  it("User deletes final todo and the page implores user to create todos", async () => {
+    const { queryByText, getByTestId, queryByTestId, getByText } = customRender(
+      Wrapper,
+      <App />
+    );
+
+    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
+      timeout: 2500,
+    });
+
+    expect(getByText("User added")).toBeInTheDocument();
+
+    changeTodoHandler();
+
+    await user.click(getByTestId("delete-todo"));
+
+    await waitFor(
+      () => {
+        expect(queryByText("User added")).toBeNull();
+        expect(getByText("Start creating todos!")).toBeInTheDocument();
+      },
+      {
+        timeout: 1700,
+      }
+    );
+  });
+});
+
+describe("Logged in user has many todos and arrows that change pages work as they should", () => {
+  beforeEach(() => {
+    window.localStorage.setItem("user", JSON.stringify(userProfile));
+    changeTodoHandler(multipleTodosExistForLoggedInUser);
+  });
+
+  afterEach(() => window.localStorage.clear());
+
+  it("With six todos both arrows are disabled and when clicked the arrows can't change the page", async () => {
+    const { getByTestId, queryByTestId, getAllByTestId } = customRender(
+      Wrapper,
+      <App />
+    );
+
+    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
+      timeout: 2500,
+    });
+
+    const firstPageTodos = getAllByTestId("todo-item");
+
+    expect(firstPageTodos.length).toBe(6);
+
+    const leftArrow = getByTestId("left-arrow");
+    const rightArrow = getByTestId("right-arrow");
+
+    expect(leftArrow && rightArrow).not.toHaveClass("arrow-enabled");
+
+    await user.click(leftArrow && rightArrow);
+
+    expect(firstPageTodos[0]).toBeInTheDocument();
+  });
+
+  it("When adding more than six todos the right arrow is activated and clicking it changes to second page. Then clicking the left arrow changes the page back and the arrows have the styles and class to reflect functionality", async () => {
+    const {
+      getByTestId,
+      queryByTestId,
+      findByText,
+      findAllByText,
+      getByPlaceholderText,
+      getAllByTestId,
+    } = customRender(Wrapper, <App />);
+
+    const input = getByPlaceholderText("Enter todo...") as HTMLInputElement;
+    const submitButton = getByTestId("submit-button") as HTMLButtonElement;
+
+    const queries = [input, submitButton];
+
+    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
+      timeout: 2500,
+    });
+
+    const leftArrow = getByTestId("left-arrow");
+    const rightArrow = getByTestId("right-arrow");
+
+    expect(getAllByTestId("todo-item").length).toBe(6);
+
+    await createTodoFunction(queries, {
+      todo: "Second page todo",
+      userId: "12345678",
+      id: 18,
+    });
+
+    await waitFor(() => {
+      expect(rightArrow).toHaveClass("arrow-enabled");
+      user.click(rightArrow);
+    });
+
+    const secondPageTodo = await findByText("Second page todo");
+
+    expect(secondPageTodo).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(leftArrow).toHaveClass("arrow-enabled");
+      expect(rightArrow).not.toHaveClass("arrow-enabled");
+      user.click(leftArrow);
+    });
+
+    expect((await findAllByText("First page todos"))[0]).toBeInTheDocument();
   });
 });

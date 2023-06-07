@@ -31,6 +31,7 @@ const LeftArrow = ({
       onMouseLeave={() => setLeftHover(false)}
       onClick={() => handleLeftArrowClick()}
       className={`arrow-div ${div}  rounded-pill d-flex align-items-center justify-content-center`}
+      data-testid="left-arrow"
     >
       <i
         className={`location ${classes.arrow} ${

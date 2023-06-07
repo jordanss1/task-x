@@ -25,66 +25,33 @@ export const oneTodoExistsForLoggedInUser: TodoType[] = [
 
 export const multipleTodosExistForLoggedInUser = [
   {
-    todo: "Go to gym",
-    userId: "7286382",
-    id: 4,
-  },
-  {
-    todo: "Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt ut labore et olr",
-    userId: "7286382",
-    id: 10,
-  },
-  {
-    todo: "t",
-    userId: "117038401482671780523",
-    id: 11,
-  },
-  {
-    todo: "User added",
+    todo: "First page todos",
     userId: "12345678",
     id: 12,
   },
   {
-    todo: "User added",
+    todo: "First page todos",
     userId: "12345678",
     id: 13,
   },
   {
-    todo: "User added",
+    todo: "First page todos",
     userId: "12345678",
     id: 14,
   },
   {
-    todo: "User added",
+    todo: "First page todos",
     userId: "12345678",
     id: 15,
   },
   {
-    todo: "User added",
+    todo: "First page todos",
     userId: "12345678",
     id: 16,
   },
   {
-    todo: "Latest todo",
+    todo: "First page todos",
     userId: "12345678",
     id: 17,
-  },
-];
-
-export const noTodosForLoggedInUser: TodoType[] = [
-  {
-    todo: "Go to gym",
-    userId: "7286382",
-    id: 4,
-  },
-  {
-    todo: "Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt ut labore et olr",
-    userId: "7286382",
-    id: 10,
-  },
-  {
-    todo: "t",
-    userId: "117038401482671780523",
-    id: 11,
   },
 ];
