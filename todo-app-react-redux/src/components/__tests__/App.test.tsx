@@ -5,7 +5,7 @@ import App from "../App.tsx";
 import { customRender } from "../../test-utils/test-utils.tsx";
 import { Provider } from "react-redux";
 import { userProfile } from "../../mocks/index.tsx";
-import { waitFor } from "@testing-library/react";
+import { waitFor, act } from "@testing-library/react";
 import { store } from "../../app/store.ts";
 import { changeTodoHandler } from "../../mocks/handlers.ts";
 import {
@@ -47,7 +47,7 @@ describe("Tests where the todos don't matter", () => {
   afterEach(() => window.localStorage.clear());
 
   it("When signed in the the sign-out button and welcome message should be visible", async () => {
-    const { getByText } = customRender(Wrapper, <App />);
+    const { getByText } = await customRender(Wrapper, <App />);
 
     expect(getByText("Sign out")).toBeInTheDocument();
     expect(getByText("Hi, Jordan")).toBeInTheDocument();

@@ -113,7 +113,8 @@ const todosSlice = createSlice({
           reducerMatcherFunctions(
             action,
             state,
-            () => (state.fullTodos = _.mapKeys(action.payload, "id"))
+            () =>
+              (state.fullTodos = _.mapKeys(action.payload, "id") as TodoType[])
           );
         }
       )
@@ -125,7 +126,10 @@ const todosSlice = createSlice({
             const newState = state.fullTodos
               ? Object.values(state.fullTodos)
               : [];
-            state.fullTodos = _.mapKeys([...newState, action.payload], "id");
+            state.fullTodos = _.mapKeys(
+              [...newState, action.payload],
+              "id"
+            ) as TodoType[];
           });
         }
       )
