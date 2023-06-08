@@ -46,7 +46,7 @@ describe("Tests where the todos don't matter", () => {
 
   afterEach(() => window.localStorage.clear());
 
-  it("When signed in the the sign-out button and welcome message should be visible", async () => {
+  it("When signed in the sign-out button and welcome message should be visible", async () => {
     const { getByText } = customRender(Wrapper, <App />);
 
     expect(getByText("Sign out")).toBeInTheDocument();
@@ -61,6 +61,25 @@ describe("Tests where the todos don't matter", () => {
     await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
       timeout: 2500,
     });
+  });
+
+  it("When signed in the the user can press the Sign Out button and see the 'Login to create todos' message", async () => {
+    const { getByText, findByText, queryByText } = customRender(
+      Wrapper,
+      <App />
+    );
+
+    const signOutButton = getByText("Sign out") as HTMLButtonElement;
+
+    expect(signOutButton).toBeInTheDocument();
+
+    await user.click(signOutButton);
+
+    expect(
+      await findByText("Login to view and create todos..")
+    ).toBeInTheDocument();
+
+    expect(queryByText("Sign out")).toBeNull();
   });
 });
 
@@ -227,7 +246,7 @@ describe("Logged in user has many todos and arrows that change pages work as the
     expect(firstPageTodos[0]).toBeInTheDocument();
   });
 
-  it("When adding more than six todos the right arrow is activated and clicking it changes to second page. Then clicking the left arrow changes the page back and the arrows have the styles and class to reflect functionality", async () => {
+  it("When adding more than six todos the right arrow is activated and clicking it changes to second page. Then clicking the left arrow changes the page back and the arrows have the styles and class to reflect functionality of hover and todos", async () => {
     const {
       getByTestId,
       queryByTestId,
@@ -257,20 +276,65 @@ describe("Logged in user has many todos and arrows that change pages work as the
       id: 18,
     });
 
-    await waitFor(() => {
+    await waitFor(async () => {
       expect(rightArrow).toHaveClass("arrow-enabled");
-      user.click(rightArrow);
+      await user.hover(rightArrow);
+      expect(rightArrow).toHaveClass("arrow-div-hover");
+      await user.click(rightArrow);
     });
 
     const secondPageTodo = await findByText("Second page todo");
 
     expect(secondPageTodo).toBeInTheDocument();
 
-    await waitFor(() => {
+    await waitFor(async () => {
       expect(leftArrow).toHaveClass("arrow-enabled");
       expect(rightArrow).not.toHaveClass("arrow-enabled");
+      await user.hover(leftArrow);
+      expect(leftArrow).toHaveClass("arrow-div-hover");
+      await user.hover(rightArrow);
       user.click(leftArrow);
     });
+
+    expect((await findAllByText("First page todos"))[0]).toBeInTheDocument();
+  });
+
+  it("With seven todos the seventh while on the second page, the page is automatically set backwards so you can see the only six todos left", async () => {
+    const {
+      getByTestId,
+      queryByTestId,
+      findByText,
+      findAllByText,
+      getByPlaceholderText,
+      getAllByTestId,
+    } = customRender(Wrapper, <App />);
+
+    const input = getByPlaceholderText("Enter todo...") as HTMLInputElement;
+    const submitButton = getByTestId("submit-button") as HTMLButtonElement;
+
+    const queries = [input, submitButton];
+
+    await waitFor(() => expect(queryByTestId("placeholder")).toBeNull(), {
+      timeout: 2500,
+    });
+
+    const rightArrow = getByTestId("right-arrow");
+
+    await createTodoFunction(queries, {
+      todo: "Second page todo",
+      userId: "12345678",
+      id: 18,
+    });
+
+    await user.click(rightArrow);
+
+    const secondPageTodo = await findByText("Second page todo");
+
+    expect(secondPageTodo).toBeInTheDocument();
+
+    changeTodoHandler();
+
+    await user.click(getByTestId("delete-todo"));
 
     expect((await findAllByText("First page todos"))[0]).toBeInTheDocument();
   });
