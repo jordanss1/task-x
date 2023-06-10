@@ -306,7 +306,6 @@ describe("Logged in user has many todos and arrows that change pages work as the
       findByText,
       findAllByText,
       getByPlaceholderText,
-      getAllByTestId,
     } = customRender(Wrapper, <App />);
 
     const input = getByPlaceholderText("Enter todo...") as HTMLInputElement;

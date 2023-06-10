@@ -1,28 +1,22 @@
-import { ReactElement } from "react";
+import { ReactElement, memo } from "react";
 import { ActionedTodoItemType } from "../../features/classes/classesSlice";
-import { HandlePromptAndDeleteFunc } from "./TodoList";
+import { HandlePromptAndDeleteFunc } from "./TodoContainer";
 
-type TodoItemComponentType = ({
-  id,
-  todo,
-  handleDeleteTodo,
-  handlePromptValue,
-  actionedTodo,
-}: {
+type TodoItemPropsType = {
   id: number;
   todo: string;
   handleDeleteTodo: HandlePromptAndDeleteFunc;
   handlePromptValue: HandlePromptAndDeleteFunc;
   actionedTodo: ActionedTodoItemType;
-}) => ReactElement;
+};
 
-const TodoItem: TodoItemComponentType = ({
+const TodoItem = ({
   id,
   todo,
   handleDeleteTodo,
   handlePromptValue,
   actionedTodo,
-}) => {
+}: TodoItemPropsType): ReactElement => {
   return (
     <article
       className={`todo-class ${
@@ -47,4 +41,4 @@ const TodoItem: TodoItemComponentType = ({
   );
 };
 
-export default TodoItem;
+export default memo(TodoItem);

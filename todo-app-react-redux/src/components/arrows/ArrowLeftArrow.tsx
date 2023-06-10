@@ -1,6 +1,6 @@
 import { memo, ReactElement } from "react";
 import { ArrowStateType } from "../../hooks/TodoHook";
-import { HandleDivClassesType } from "../todos/TodoList";
+import { HandleDivClassesType } from "../todos/TodoListWithTodos";
 import { ArrowType } from "../../features/classes/classesSlice";
 
 interface LeftArrowPropTypes {

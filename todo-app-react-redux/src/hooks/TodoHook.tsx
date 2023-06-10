@@ -1,11 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   classSelector,
   leftArrowSet,
   rightArrowSet,
+  actionedTodoItemSet,
+  todoContainerSet,
 } from "../features/classes/classesSlice";
-import { TodoType, selectTodos } from "../features/todos/todosSlice";
+import {
+  TodoType,
+  selectTodos,
+  deleteTodo,
+  AppThunkDispatch,
+} from "../features/todos/todosSlice";
 
 type HandleArrowClassesType = () => NodeJS.Timeout | number;
 
@@ -31,13 +38,14 @@ export const useTodosHook = () => {
   const [indexes, setIndexes] = useState<number[]>([0, 6]);
   const [length, setLength] = useState<number | null>(null);
   const [deleted, setDeleted] = useState<boolean | null>(null);
-  const dispatch = useDispatch();
+  const [empty, setEmpty] = useState(false);
+  const dispatch = useDispatch<AppThunkDispatch>();
   const { fullTodos } = useSelector(selectTodos);
 
   useEffect(() => {
     // Sets real length in order to trigger previous page if necessary
     if (fullTodos) setLength(fullTodos.length);
-  }, [fullTodos]);
+  }, [fullTodos, actionedTodoItem.classProp]);
 
   useEffect(() => {
     // Sets right arrow enabled if page added
@@ -47,7 +55,7 @@ export const useTodosHook = () => {
       setDeleted(false);
       setIndexes(indexes[0] !== 0 ? [indexes[0] - 6, indexes[1] - 6] : indexes);
     }
-  }, [length, actionedTodoItem]);
+  }, [length, actionedTodoItem.classProp]);
 
   // Below code "disables" the arrows depending on todos length and page
 
@@ -105,25 +113,60 @@ export const useTodosHook = () => {
     }
   };
 
+  const deleteTodoPromise = (id: number) =>
+    new Promise((resolve) => resolve(dispatch(deleteTodo(id))));
+
+  const deleteWhenMultipleTodos = (todos: TodoType[], id: number) => {
+    dispatch(actionedTodoItemSet({ id: id, classProp: "item-out" }));
+
+    setTimeout(async () => {
+      await deleteTodoPromise(id);
+      dispatch(actionedTodoItemSet({ id: null, classProp: null }));
+      setDeleted(true);
+      setLength(todos.length);
+    }, 500);
+  };
+
+  const deleteLastTodo = (id: number) => {
+    setDeleted(false);
+    setEmpty(true);
+    dispatch(actionedTodoItemSet({ id: id, classProp: "item-out" }));
+    dispatch(todoContainerSet("todo-container-empty"));
+
+    setTimeout(async () => {
+      await deleteTodoPromise(id);
+      setEmpty(false);
+      dispatch(actionedTodoItemSet({ id: null, classProp: null }));
+      dispatch(todoContainerSet(""));
+    }, 1700);
+  };
+
   let todos: TodoType[] | null = fullTodos
     ? fullTodos.slice(indexes[0], indexes[1])
     : null;
 
-  const leftArrowState = {
-    leftClick,
-    leftHover,
-    setLeftHover,
-    handleLeftArrowClick,
-  };
+  const leftArrowState = useMemo(
+    () => ({
+      leftClick,
+      leftHover,
+      setLeftHover,
+      handleLeftArrowClick,
+    }),
+    [leftClick, leftHover, setLeftHover, handleLeftArrowClick]
+  );
 
-  const rightArrowState = {
-    rightClick,
-    rightHover,
-    setRightHover,
-    handleRightArrowClick,
-  };
+  const rightArrowState = useMemo(
+    () => ({
+      rightClick,
+      rightHover,
+      setRightHover,
+      handleRightArrowClick,
+    }),
+    [rightClick, rightHover, setRightHover, handleRightArrowClick]
+  );
 
   return {
+    empty,
     length,
     todos,
     fullTodos,
@@ -134,5 +177,7 @@ export const useTodosHook = () => {
     setLength,
     leftArrowState,
     rightArrowState,
+    deleteLastTodo,
+    deleteWhenMultipleTodos,
   };
 };

@@ -4,7 +4,6 @@ import { authSelector } from "../../features/auth/authSlice";
 import { AppThunkDispatch, createTodos } from "../../features/todos/todosSlice";
 import { classSelector } from "../../features/classes/classesSlice";
 import "../../style/body.css";
-import { AnyAction, AsyncThunkAction, Dispatch } from "@reduxjs/toolkit";
 
 const TodoInputs = (): ReactElement => {
   const { isSignedIn, beenSignedIn } = useSelector(authSelector);

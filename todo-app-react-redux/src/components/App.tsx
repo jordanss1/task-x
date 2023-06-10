@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import Header from "./header/Header";
-import TodoList from "./todos/TodoList";
+import TodoContainer from "./todos/TodoContainer";
 import TodoInputs from "./todos/TodoInputs";
 import { useSelector } from "react-redux";
 import { authSelector } from "../features/auth/authSlice";
@@ -17,7 +17,7 @@ const App = (): ReactElement => {
       <main
         className={`bottom-container d-flex flex-column align-items-center ${justified}`}
       >
-        <TodoList />
+        <TodoContainer />
         <TodoInputs />
       </main>
     </GoogleOAuthProvider>

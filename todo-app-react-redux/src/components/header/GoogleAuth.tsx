@@ -66,7 +66,7 @@ const GoogleAuth = () => {
     } else {
       dispatch(emptyTodos());
     }
-  }, [isSignedIn, userProfile]);
+  }, [isSignedIn, userProfile?.name]);
 
   useEffect(() => {
     // Animates the button containers when sign in begins
