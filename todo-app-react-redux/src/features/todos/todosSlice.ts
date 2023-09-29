@@ -1,16 +1,14 @@
 import {
-  createSlice,
-  createAsyncThunk,
   AnyAction,
   PayloadAction,
   ThunkDispatch,
+  createAsyncThunk,
+  createSlice,
 } from "@reduxjs/toolkit";
 import _ from "lodash";
 import todoApi from "../../apiAxios/todos";
 import { StateType } from "../../app/store";
 import { UserProfileType } from "../auth/authSlice";
-
-export type AppThunkDispatch = ThunkDispatch<StateType, string, AnyAction>;
 
 export const getTodos = createAsyncThunk(
   "todos/getTodos",

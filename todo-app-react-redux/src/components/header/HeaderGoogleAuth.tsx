@@ -1,23 +1,14 @@
+import { GoogleLogin } from "@react-oauth/google";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { AppThunkDispatch } from "../../app/store";
 import {
+  authSelector,
+  setLoading,
   signIn,
   signingIn,
-  setLoading,
-  authSelector,
 } from "../../features/auth/authSlice";
-import {
-  getTodos,
-  emptyTodos,
-  AppThunkDispatch,
-} from "../../features/todos/todosSlice";
-import {
-  classSelector,
-  placeholderSet,
-} from "../../features/classes/classesSlice";
-import { usePreLoginLogout } from "../../hooks/LoginAndAuthHook";
-import { GoogleLogin } from "@react-oauth/google";
-import "../../style/header.css";
+import { emptyTodos, getTodos } from "../../features/todos/todosSlice";
 
 type UserObjectType = { sub: string; name: string; picture: string };
 
@@ -26,12 +17,6 @@ const GoogleAuth = () => {
 
   const { isSignedIn, userProfile, beenSignedIn, beenSignedOut } =
     useSelector(authSelector);
-
-  const { initialClasses, signInButton, signOutButton } =
-    useSelector(classSelector);
-
-  const { signInOrOut, handleCallbackResponse, handleSignOut } =
-    usePreLoginLogout();
 
   const divRef = useRef(null);
 
@@ -50,7 +35,6 @@ const GoogleAuth = () => {
       dispatch(signIn(userObject as UserObjectType));
 
       id = setTimeout(() => {
-        dispatch(placeholderSet(""));
         dispatch(setLoading(false));
       }, 2500);
     }
@@ -73,8 +57,6 @@ const GoogleAuth = () => {
 
     let id: NodeJS.Timeout;
 
-    id = signInOrOut("signingIn");
-
     return () => clearTimeout(id);
   }, [beenSignedIn]);
 
@@ -83,20 +65,12 @@ const GoogleAuth = () => {
 
     let id: NodeJS.Timeout;
 
-    id = signInOrOut("signingOut");
-
     return () => clearTimeout(id);
   }, [beenSignedOut]);
 
-  const signInButtonClass = `${initialClasses?.button} ${signInButton}`;
-
   const renderSignOutButton = () => (
     <div className="d-flex align-items-center me-3">
-      <button
-        id="button"
-        onClick={handleSignOut}
-        className="ui labeled icon button p-2"
-      >
+      <button id="button" className="ui labeled icon button p-2">
         <div className="d-flex justify-content-center flex-row">
           <p className="mb-0">Sign out</p>
           <i className="google icon fs-4 pt-1 ps-2" />
@@ -127,10 +101,10 @@ const GoogleAuth = () => {
         ref={divRef}
         className={`buttonSignIn ${
           isSignedIn ? "d-none" : "d-flex"
-        } justify-content-center ${signInButtonClass}`}
+        } justify-content-center`}
       >
         <GoogleLogin
-          onSuccess={(response) => handleCallbackResponse(response)}
+          onSuccess={(response) => () => console.log(response)}
           shape="circle"
           size="medium"
           type="standard"
@@ -138,7 +112,7 @@ const GoogleAuth = () => {
       </div>
 
       <section
-        className={`d-flex buttonSignOut w-100 justify-content-sm-center justify-content-around ${signOutButton}`}
+        className={`d-flex buttonSignOut w-100 justify-content-sm-center justify-content-around`}
       >
         {userProfile && renderProfile()}
         {isSignedIn && renderSignOutButton()}
