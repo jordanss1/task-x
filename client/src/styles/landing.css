@@ -1,0 +1,15 @@
+.landing {
+  height: 70vh;
+}
+
+.landing_hero {
+  height: 100%;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8));
+  z-index: 1;
+}
+
+.landing_hero_BG {
+  max-width: 70%;
+  margin: 0 auto;
+  z-index: 2;
+}

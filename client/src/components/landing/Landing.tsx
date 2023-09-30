@@ -1,13 +1,13 @@
 import { ReactElement } from "react";
 import "../../styles/landing.css";
+import LandingHeader from "./LandingHeader";
 import LandingHero from "./LandingHero";
-import LandingFooter from "./LandingNews";
 
 const Landing = (): ReactElement => {
   return (
     <main className="landing">
+      <LandingHeader />
       <LandingHero />
-      <LandingFooter />
     </main>
   );
 };

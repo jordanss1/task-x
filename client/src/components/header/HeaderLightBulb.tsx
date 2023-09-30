@@ -3,8 +3,8 @@ import { ReactElement } from "react";
 const HeaderLightBulb = (): ReactElement => {
   return (
     <svg
-      height="50px"
-      width="50px"
+      height="45px"
+      width="45px"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 64 64"
