@@ -3,15 +3,3 @@ body,
   min-height: 100vh;
 }
 
-footer {
-  max-width: 70%;
-  margin: 0 auto;
-  height: 18vh;
-}
-
-.footer_links {
-  font-size: 16px;
-  font-weight: 700;
-  font-family: "Jura", sans-serif;
-  cursor: pointer;
-}

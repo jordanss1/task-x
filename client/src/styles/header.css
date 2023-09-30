@@ -1,16 +1,1 @@
-.header {
-  max-width: 70%;
-  height: 12vh;
-  margin: 0 auto;
-}
 
-.header_heading {
-  font-size: 20px;
-  font-weight: 700;
-  font-family: "Jura", sans-serif;
-  cursor: pointer;
-}
-
-.header_logo {
-  margin: 0 auto 0 0;
-}
