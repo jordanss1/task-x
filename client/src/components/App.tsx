@@ -1,10 +1,10 @@
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ReactElement } from "react";
+import { useSelector } from "react-redux";
+import { authSelector } from "../features/auth/authSlice";
 import Header from "./header/Header";
 import TodoContainer from "./todos/TodoContainer";
 import TodoInputs from "./todos/TodoInputs";
-import { useSelector } from "react-redux";
-import { authSelector } from "../features/auth/authSlice";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const App = (): ReactElement => {
   const { isSignedIn } = useSelector(authSelector);
