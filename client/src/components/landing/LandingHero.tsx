@@ -1,6 +1,7 @@
 import { Variants } from "framer-motion";
 import { ReactElement, useState } from "react";
 import { clipboard, github, google, wallOfTodos } from "../../assets";
+import Button from "../Button";
 import { SidebarHeadingsType, sidebarItems } from "./content";
 
 const sidebarVariants: Variants = {
@@ -21,29 +22,36 @@ const LandingHero = (): ReactElement => {
     switch (hero) {
       case "Popular!":
         return (
-          <div>
-            <h2>Your todo-list could make you famous!</h2>
-            <p>
-              Submit your todos to the Wall of Todos and have your peers vote on
-              your everyday tasks.
-            </p>
+          <div className="hero_content">
+            <h2>Todo famous?</h2>
+            <div>
+              <p>
+                Submit your todos to the Wall of Todos and have your peers vote
+                on your everyday tasks.
+              </p>
+            </div>
           </div>
         );
       case "Prioritize":
         return (
-          <div>
-            <h2>Order your todos for maximum day to day efficiency</h2>
-            <p>No one can stop you not even Zues himself.</p>
+          <div className="hero_content">
+            <h2>Order your todos</h2>
+            <div>
+              <p>You'll be so efficient Zues himself cannot stop you.</p>
+            </div>
           </div>
         );
       case "Welcome":
         return (
-          <div>
-            <h2>Login with Google!</h2>
-            <p>
-              View our privacy policy; we only take what is necessary for you to
-              use the service.
-            </p>
+          <div className="hero_content">
+            <h2>Login with Google</h2>
+            <div>
+              <p>
+                View our privacy policy; we only take what is necessary for you
+                to use the service.
+              </p>
+              <Button label="Login" />
+            </div>
           </div>
         );
     }
@@ -62,9 +70,16 @@ const LandingHero = (): ReactElement => {
 
   return (
     <div className="hero">
-      <div className="hero_left">{renderContent()}</div>
-      <div className="hero_right">{renderSidebar}</div>
-      <div className="hero_centered_image" />
+      <div className="hero_left w-100 d-flex align-items-center">
+        {renderContent()}
+      </div>
+      <div className="hero_right d-flex justify-content-evenly flex-column">
+        {renderSidebar}
+      </div>
+      <div className="hero_centered_image">
+        <div />
+        <div />
+      </div>
     </div>
   );
 };
