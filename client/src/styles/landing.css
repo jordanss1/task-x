@@ -1,7 +1,7 @@
 .header {
   max-width: 100%;
   height: 12vh;
-  padding: 0 150px;
+  padding: 0 100px;
 }
 
 .header_heading {
@@ -25,7 +25,7 @@
   height: 70vh;
   z-index: 1;
   display: grid;
-  padding: 0 150px;
+  padding: 0 100px;
   grid-template-columns: auto max-content;
 }
 
@@ -52,16 +52,26 @@
 
 .hero_content {
   font-family: "Jura", sans-serif;
+  max-width: 380px;
   width: 100%;
-  height: 250px;
+  height: 300px;
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
+  background: radial-gradient(
+    circle at 10% 50%,
+    rgba(0, 0, 0, 0.4),
+    transparent
+  );
+  padding: 20px;
+  border-radius: 30px;
 }
 
 .hero_content h2 {
   font-family: "Orbitron", sans-serif !important;
   font-weight: 400;
+  text-shadow: -10px -1px 30px rgba(0, 0, 0);
+  color: #e0dcd9;
   width: 100%;
   font-size: 46px;
 }
@@ -75,14 +85,19 @@
   position: absolute !important;
   width: 70%;
   height: 70%;
-  left: 0;
+  left: 65px;
   right: 0;
   top: 0;
-  bottom: 75px;
+  bottom: 60px;
   margin: auto;
   z-index: 0;
   background-size: cover !important;
-  opacity: 0.7;
+  opacity: 0.8;
+}
+
+.hero_center_image_div {
+  position: relative;
+  left: 30px;
 }
 
 .hero_center_image_div,
@@ -97,24 +112,37 @@
 .hero_center_backdrop_container {
   position: absolute !important;
   width: 70%;
-  height: 70%;
-  left: 0;
+  height: 75%;
+  left: 100px;
   right: 0;
   top: 0;
-  bottom: 75px;
+  bottom: -15px;
   margin: auto;
   z-index: -1;
 }
 
+.hero_center_backdrop_1,
+.hero_center_backdrop_2 {
+  width: 200px;
+  height: 400px;
+  position: relative;
+  border-radius: 40px;
+  box-shadow: 5px 5px 30px 5px black;
+}
+
 .hero_center_backdrop_1 {
-  width: 100px;
-  height: 100px;
-  background-color: #991fff;
+  right: 90px;
+  background: radial-gradient(circle at 10% 20%, #991fff 30%, black);
+}
+
+.hero_center_backdrop_2 {
+  bottom: 10px;
+  right: -90px;
+  background: radial-gradient(circle at -10% 90%, #991fff 50%, black);
 }
 
 footer {
-  max-width: 70%;
-  margin: 0 auto;
+  padding: 0 100px;
   height: 18vh;
 }
 

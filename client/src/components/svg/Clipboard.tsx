@@ -15,9 +15,9 @@ const Clipboard = ({ size }: SVGPropsType): ReactElement => {
       xmlSpace="preserve"
     >
       <g id="Layer_1">
-        <g>
+        {/* <g>
           <circle fill="#77B3D4" cx="32" cy="32" r="32" />
-        </g>
+        </g> */}
         <g opacity="0.2">
           <path
             fill="#231F20"
@@ -49,7 +49,14 @@ const Clipboard = ({ size }: SVGPropsType): ReactElement => {
           <rect x="22" y="36" fill="#E0E0D1" width="20" height="2" />
         </g>
         <g>
-          <rect x="22" y="40" fill="#E0E0D1" width="20" height="2" />
+          <rect
+            x="22"
+            y="40"
+            fill="rgba(0,0,0,0)"
+            opacity={0}
+            width="20"
+            height="2"
+          />
         </g>
         <g opacity="0.2">
           <path
