@@ -1,7 +1,10 @@
 import { Variants } from "framer-motion";
 import { ReactElement, useState } from "react";
-import { clipboard, github, google, wallOfTodos } from "../../assets";
 import Button from "../Button";
+import Clipboard from "../svg/Clipboard";
+import Github from "../svg/Github";
+import Google from "../svg/Google";
+import Social from "../svg/Social";
 import { SidebarHeadingsType, sidebarItems } from "./content";
 
 const sidebarVariants: Variants = {
@@ -60,11 +63,23 @@ const LandingHero = (): ReactElement => {
   const renderImage = () => {
     switch (hero) {
       case "Popular!":
-        return wallOfTodos;
+        return (
+          <div className="hero_center_image_div">
+            <Social size={300} />
+          </div>
+        );
       case "Prioritize":
-        return clipboard;
+        return (
+          <div className="hero_center_image_div">
+            <Clipboard size={300} />
+          </div>
+        );
       case "Welcome":
-        return google;
+        return (
+          <div className="hero_center_image_div">
+            <Google size={300} />
+          </div>
+        );
     }
   };
 
@@ -73,12 +88,15 @@ const LandingHero = (): ReactElement => {
       <div className="hero_left w-100 d-flex align-items-center">
         {renderContent()}
       </div>
+      <div className="hero_center">
+        {renderImage()}
+        <div className="hero_center_backdrop_container flex-column">
+          <div className="hero_center_backdrop_1" />
+          <div className="hero_center_backdrop_2" />
+        </div>
+      </div>
       <div className="hero_right d-flex justify-content-evenly flex-column">
         {renderSidebar}
-      </div>
-      <div className="hero_centered_image">
-        <div />
-        <div />
       </div>
     </div>
   );
