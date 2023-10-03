@@ -1,11 +1,13 @@
+import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import { SVGPropsType } from "./svgTypes";
 
-const Clipboard = ({ size }: SVGPropsType): ReactElement => {
+const Clipboard = ({ size, ...props }: SVGPropsType): ReactElement => {
   size = size ?? 60;
 
   return (
-    <svg
+    <motion.svg
+      {...props}
       width={`${size}px`}
       height={`${size}px`}
       version="1.1"
@@ -72,7 +74,7 @@ const Clipboard = ({ size }: SVGPropsType): ReactElement => {
         </g>
       </g>
       <g id="Layer_2"></g>
-    </svg>
+    </motion.svg>
   );
 };
 

@@ -1,11 +1,13 @@
+import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import { SVGPropsType } from "./svgTypes";
 
-const Social = ({ size }: SVGPropsType): ReactElement => {
+const Social = ({ size, ...props }: SVGPropsType): ReactElement => {
   size = size ?? 60;
 
   return (
-    <svg
+    <motion.svg
+      {...props}
       width={`${size}px`}
       height={`${size}px`}
       version="1.1"
@@ -83,7 +85,7 @@ const Social = ({ size }: SVGPropsType): ReactElement => {
         d="M408.708,422.154c0,23.169-22.107,44.496-35.659,44.496c-13.583,0-35.659-21.327-35.659-44.496
         c0-23.17,15.956-38.454,35.659-38.454C392.721,383.7,408.708,398.985,408.708,422.154z"
       />
-    </svg>
+    </motion.svg>
   );
 };
 
