@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import LandingHeroContent from "./LandingHeroLeftContent";
+import LandingHeroLeftContent from "./LandingHeroLeftContent";
 import { contentItems } from "./content";
 
 const LandingHeroLeft = ({ hero }: { hero: string }): ReactElement => {
@@ -8,7 +8,9 @@ const LandingHeroLeft = ({ hero }: { hero: string }): ReactElement => {
 
     const { heading, body, button } = contentItems[index];
 
-    return <LandingHeroContent heading={heading} body={body} button={button} />;
+    return (
+      <LandingHeroLeftContent heading={heading} body={body} button={button} />
+    );
   };
 
   return (

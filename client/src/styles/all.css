@@ -4,5 +4,9 @@ body,
 }
 
 .basic_button {
-  
+  border-radius: 20px;
+  background-color: #991fff;
+  color: #fff;
+  font-weight: 600 !important;
+  font-size: 18px;
 }

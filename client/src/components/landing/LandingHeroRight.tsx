@@ -16,7 +16,7 @@ const LandingHeroRight = ({
 }: LandingHeroRightPropsType): ReactElement => {
   const renderSidebar = sidebarItems.map(({ heading, body }, i) => (
     <motion.div
-      className="hero_right_tab py-3 px-4"
+      className="hero_right_tab py-3 px-3 px-sm-4"
       onClick={() => handleClick(heading, i)}
       key={heading}
     >

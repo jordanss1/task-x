@@ -1,4 +1,4 @@
-import { MotionProps, motion } from "framer-motion";
+import { MotionProps, MotionStyle, motion } from "framer-motion";
 import { ReactElement } from "react";
 
 interface ButtonPropsType extends MotionProps {
@@ -9,10 +9,11 @@ interface ButtonPropsType extends MotionProps {
 const Button = ({
   label,
   onClick,
+
   ...props
 }: ButtonPropsType): ReactElement => {
   return (
-    <motion.button className="basic_button" {...props} onClick={onClick}>
+    <motion.button className="basic_button p-2" {...props} onClick={onClick}>
       {label}
     </motion.button>
   );

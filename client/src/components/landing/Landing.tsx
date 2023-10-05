@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import "../../styles/landing.css";
-import LandingHeader from "./LandingHeader";
+import Header from "../header/Header";
 import LandingHero from "./LandingHero";
 
 //
@@ -10,7 +10,7 @@ import LandingHero from "./LandingHero";
 const Landing = (): ReactElement => {
   return (
     <motion.main className="landing">
-      <LandingHeader />
+      <Header />
       <LandingHero />
     </motion.main>
   );
