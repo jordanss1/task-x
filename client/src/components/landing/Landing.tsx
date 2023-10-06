@@ -10,7 +10,7 @@ import LandingHero from "./LandingHero";
 const Landing = (): ReactElement => {
   return (
     <motion.main className="landing">
-      <Header />
+      <Header containerClass="header" />
       <LandingHero />
     </motion.main>
   );

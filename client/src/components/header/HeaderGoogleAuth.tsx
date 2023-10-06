@@ -1,22 +1,19 @@
-import { GoogleLogin } from "@react-oauth/google";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import jwtDecode from "jwt-decode";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { AppThunkDispatch } from "../../app/store";
-import {
-  authSelector,
-  setLoading,
-  signIn,
-  signingIn,
-} from "../../features/auth/authSlice";
+import { authSelector, signIn } from "../../features/auth/authSlice";
 import { emptyTodos, getTodos } from "../../features/todos/todosSlice";
 
 type UserObjectType = { sub: string; name: string; picture: string };
 
 const GoogleAuth = () => {
   const dispatch = useDispatch<AppThunkDispatch>();
+  const navigate = useNavigate();
 
-  const { isSignedIn, userProfile, beenSignedIn, beenSignedOut } =
-    useSelector(authSelector);
+  const { isSignedIn, userProfile } = useSelector(authSelector);
 
   const divRef = useRef(null);
 
@@ -25,22 +22,15 @@ const GoogleAuth = () => {
 
     let id: NodeJS.Timeout | number = 0;
 
-    let userObject: string | UserObjectType | null =
-      window.localStorage.getItem("user");
+    let credential: string | null = window.localStorage.getItem("credential");
 
-    if (userObject) {
-      userObject = JSON.parse(userObject as string);
-      dispatch(setLoading(true));
-      dispatch(signingIn());
-      dispatch(signIn(userObject as UserObjectType));
-
-      id = setTimeout(() => {
-        dispatch(setLoading(false));
-      }, 2500);
+    if (credential) {
+      dispatch(signIn(jwtDecode(JSON.parse(credential))));
+      // navigate("/dashboard");
     }
 
     return () => clearTimeout(id);
-  }, [isSignedIn]);
+  }, []);
 
   useEffect(() => {
     // Fetches or removes todos depending on login status
@@ -51,33 +41,6 @@ const GoogleAuth = () => {
       dispatch(emptyTodos());
     }
   }, [isSignedIn, userProfile?.name]);
-
-  useEffect(() => {
-    // Animates the button containers when sign in begins
-
-    let id: NodeJS.Timeout;
-
-    return () => clearTimeout(id);
-  }, [beenSignedIn]);
-
-  useEffect(() => {
-    // Animates the button containers when sign out begins
-
-    let id: NodeJS.Timeout;
-
-    return () => clearTimeout(id);
-  }, [beenSignedOut]);
-
-  const renderSignOutButton = () => (
-    <div className="d-flex align-items-center me-3">
-      <button id="button" className="ui labeled icon button p-2">
-        <div className="d-flex justify-content-center flex-row">
-          <p className="mb-0">Sign out</p>
-          <i className="google icon fs-4 pt-1 ps-2" />
-        </div>
-      </button>
-    </div>
-  );
 
   const renderProfile = () => (
     <div className="d-flex justify-content-center me-2 me-sm-5">
@@ -90,6 +53,13 @@ const GoogleAuth = () => {
       <h2 className="fs-5 name-heading mb-0 d-flex align-items-center">{`Hi, ${userProfile?.name}`}</h2>
     </div>
   );
+
+  const handleResponse = (response: CredentialResponse["credential"]) => {
+    if (response) {
+      window.localStorage.setItem("credential", JSON.stringify(response));
+      dispatch(signIn(jwtDecode(response)));
+    }
+  };
 
   return (
     <section
@@ -104,19 +74,13 @@ const GoogleAuth = () => {
         } justify-content-center`}
       >
         <GoogleLogin
-          onSuccess={(response) => () => console.log(response)}
+          onSuccess={({ credential }) => handleResponse(credential)}
           shape="circle"
           size="medium"
           type="standard"
         />
       </div>
-
-      <section
-        className={`d-flex buttonSignOut w-100 justify-content-sm-center justify-content-around`}
-      >
-        {userProfile && renderProfile()}
-        {isSignedIn && renderSignOutButton()}
-      </section>
+     
     </section>
   );
 };

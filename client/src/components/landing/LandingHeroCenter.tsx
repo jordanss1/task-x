@@ -72,10 +72,12 @@ const backDrop2 = (smallScreen: boolean): Variants => {
 const SVGVariants: Variants = {
   hidden: {
     x: -50,
+    scale: 0.8,
     opacity: 0,
   },
   visible: (speed) => ({
     x: 0,
+    scale: 1,
     opacity: 1,
     transition: {
       ease: "backInOut",
@@ -84,10 +86,11 @@ const SVGVariants: Variants = {
   }),
   exit: (speed) => ({
     x: 50,
+    scale: 0.8,
     opacity: 0,
     transition: {
       ease: "backInOut",
-      duration: speed === "slow" ? 0.3 : 0.15,
+      duration: speed === "slow" ? 0.15 : 0.05,
     },
   }),
 };

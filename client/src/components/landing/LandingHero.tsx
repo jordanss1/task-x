@@ -34,11 +34,11 @@ const LandingHero = (): ReactElement => {
   };
 
   return (
-    <div className="hero">
+    <section className="hero">
       <LandingHeroLeft hero={hero} />
       <LandingHeroCenter hero={hero} speed={speed} />
       <LandingHeroRight hero={hero} speed={speed} handleClick={handleClick} />
-    </div>
+    </section>
   );
 };
 

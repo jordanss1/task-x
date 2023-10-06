@@ -9,7 +9,7 @@ type HeaderPropsType = {
 };
 
 const Header = ({ containerClass, nav }: HeaderPropsType): ReactElement => {
-  containerClass = containerClass ?? "header";
+  containerClass = containerClass ? containerClass : "";
 
   const renderContent = () => {
     if (nav) {
