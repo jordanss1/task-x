@@ -10,6 +10,7 @@
   font-family: "Jura", sans-serif;
   cursor: pointer;
   user-select: none;
+  letter-spacing: 1px;
 }
 
 .header_logo {

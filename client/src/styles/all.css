@@ -3,10 +3,18 @@ body,
   min-height: 100vh;
 }
 
-.basic_button {
+.hero_button {
+  font-family: "Jura", sans-serif;
   border-radius: 20px;
   background-color: #991fff;
   color: #fff;
   font-weight: 600 !important;
   font-size: 18px;
+}
+
+.menu_circle {
+  width: 6px;
+  height: 6px;
+  background-color: black;
+  border-radius: 50%;
 }

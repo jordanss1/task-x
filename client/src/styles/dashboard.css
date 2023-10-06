@@ -1,3 +1,91 @@
-.dashboard_main {
+.dashboard {
   padding: 20px 100px;
+}
+
+.dashboard nav {
+  height: 100%;
+  text-align: center;
+}
+
+.dashboard_nav {
+  height: 100%;
+  list-style: none;
+  display: flex;
+  gap: 10px;
+}
+
+.dashboard_nav li {
+  border-radius: 5px;
+}
+
+.dashboard_header {
+  height: 70px;
+}
+
+.dashboard_nav_button {
+  border: none;
+  background: transparent;
+  font-family: "Jura", sans-serif;
+}
+
+.dashboard_menu_button {
+  display: none;
+  gap: 4px;
+  z-index: 5;
+}
+
+@media screen and (max-width: 576px) {
+  .dashboard {
+    padding: 20px 50px;
+  }
+
+  .dashboard .header_heading {
+    font-size: 18px !important;
+  }
+
+  .dashboard nav > i {
+    display: block;
+  }
+
+  .dashboard nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .dashboard_nav {
+    padding-top: 100px !important;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    right: -75%;
+    top: 0;
+    background: radial-gradient(
+      circle at -10% 10%,
+      rgba(0, 0, 0, 0.5),
+      #991fff 30%,
+      rgba(0, 0, 0)
+    );
+    gap: 0;
+    z-index: 3;
+  }
+
+  .dashboard_nav li {
+    border-radius: 0;
+    cursor: pointer;
+    padding: 10px 0;
+  }
+
+  .dashboard_nav li button {
+    font-size: 22px !important;
+    font-family: "Orbitron", sans-serif !important;
+    letter-spacing: 3px;
+    font-weight: 300 !important;
+    padding: 0 10px !important;
+  }
+
+  .dashboard_menu_button {
+    display: flex;
+    cursor: pointer;
+  }
 }

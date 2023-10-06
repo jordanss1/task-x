@@ -1,20 +1,23 @@
-import { MotionProps, MotionStyle, motion } from "framer-motion";
-import { ReactElement } from "react";
+import { MotionProps, motion } from "framer-motion";
+import { ReactElement, ReactNode } from "react";
 
 interface ButtonPropsType extends MotionProps {
-  label: string;
+  children?: ReactNode;
+  className?: string;
   onClick?: (e?: React.MouseEvent) => void;
 }
 
 const Button = ({
-  label,
+  children,
+  className,
   onClick,
-
   ...props
 }: ButtonPropsType): ReactElement => {
+  className = className ?? "";
+
   return (
-    <motion.button className="basic_button p-2" {...props} onClick={onClick}>
-      {label}
+    <motion.button className={className} {...props} onClick={onClick}>
+      {children}
     </motion.button>
   );
 };
