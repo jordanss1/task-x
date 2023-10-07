@@ -1,6 +1,7 @@
 .landing {
   height: 100vh;
-  background: linear-gradient(to right, #f4f0ed 0%, #e0dcd9 50%, #f4f0ed 100%);
+  background: linear-gradient(60deg, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
+  isolation: isolate;
 }
 
 .hero {
@@ -9,14 +10,11 @@
   display: grid;
   padding: 50px 100px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center;
+  align-items: center;
 }
 
 .hero_left {
-  max-width: 500px;
-  z-index: 1;
-}
-
-.hero_left_content {
   font-family: "Jura", sans-serif;
   max-width: 380px;
   width: 100%;
@@ -24,19 +22,28 @@
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0, 0, 0, 0.2) 20%,
-    rgba(0, 0, 0, 0.3) 70%,
-    transparent
-  );
-  padding: 20px;
+  padding: 30px;
   border-radius: 30px;
   outline: 8px solid #e0dcd978;
+  position: relative;
 }
 
-.hero_left_content_heading {
+.hero_left::after {
+  z-index: -1;
+  mix-blend-mode: difference;
+  content: "";
+  background: linear-gradient(
+    120deg,
+    rgb(62, 62, 62),
+    rgb(109, 109, 109),
+    rgb(62, 62, 62)
+  );
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+}
+
+.hero_left_heading {
   font-family: "Orbitron", sans-serif !important;
   font-weight: 400;
   text-shadow: -0px 0px 20px rgba(0, 0, 0);
@@ -45,7 +52,7 @@
   font-size: 46px;
 }
 
-.hero_left_content_body {
+.hero_left_body {
   max-width: 250px;
   width: 100%;
   color: white;
@@ -53,18 +60,23 @@
 }
 
 .hero_right {
-  background: linear-gradient(
-    to top,
-    transparent 0%,
-    rgba(0, 0, 0, 0.3) 20%,
-    rgba(0, 0, 0, 0.3) 70%,
-    transparent
-  );
   border-radius: 20px;
   padding: 10px;
   max-width: 250px;
   justify-self: flex-end;
   outline: 8px solid #e0dcd9;
+  height: 100%;
+  position: relative;
+}
+
+.hero_right::after {
+  z-index: -1;
+  mix-blend-mode: multiply;
+  content: "";
+  background: linear-gradient(120deg, #991fff, #e0dcd9, #991fff);
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
 }
 
 .hero_right,
@@ -78,6 +90,7 @@
   position: relative;
   z-index: 2;
   color: #fff;
+  mix-blend-mode: plus-lighter;
   text-shadow: -10px -1px 30px rgba(0, 0, 0);
 }
 
@@ -106,7 +119,7 @@
   top: 0;
   bottom: 0;
   margin: auto;
-  z-index: 0;
+  z-index: -3;
   background-size: cover !important;
   opacity: 0.8;
 }
@@ -120,7 +133,6 @@
 .hero_center_backdrop_container {
   width: 100%;
   height: 100%;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -163,6 +175,10 @@
   .hero_center_image_div {
     left: 0;
   }
+
+  .hero_center_backdrop_container {
+    left: 50px;
+  }
 }
 
 @media screen and (max-width: 800px) {
@@ -172,45 +188,39 @@
 
   .hero {
     padding: 0;
+    padding-bottom: 20px;
     grid-template-columns: repeat(auto-fit, minmax(351px, 1fr));
     gap: 100px;
     align-items: first baseline;
   }
 
   .hero_right {
-    /* order: -1 !important; */
     flex-direction: row !important;
-    background: radial-gradient(
-      circle at 50% 50%,
-      #991fff 50%,
-      rgba(0, 0, 0, 0.8)
-    );
-    z-index: 2;
+    position: relative;
+    max-height: 120px;
+    align-self: flex-end;
   }
 
   .hero_center {
     right: 50px;
     width: 100%;
+    top: 25%;
   }
 
   .hero_left,
-  .hero_left_content,
   .hero_right {
     max-width: 100%;
     width: 100%;
   }
 
-  .hero_left_content {
-    background: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.7) 0%,
-      rgba(0, 0, 0, 0.5) 90%
-    );
-    height: 250px;
+  .hero_left {
+    max-height: 260px;
+    padding: 20px;
   }
 
-  .hero_left_content_body {
-    max-width: 350px;
+  .hero_left_body {
+    max-width: 450px;
+    font-size: large;
   }
 
   .hero_center_backdrop_container {
@@ -245,12 +255,12 @@
     grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   }
 
-  .hero_left_content_heading {
+  .hero_left_heading {
     font-size: 26px;
   }
 
-  .hero_left_content div {
-    font-size: 15px;
+  .hero_left_body {
+    font-size: 14px;
   }
 
   .hero_right,

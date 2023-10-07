@@ -12,7 +12,6 @@ const Google = ({ size, ...props }: SVGPropsType): ReactElement => {
       height={`${size}px`}
       viewBox="0 0 14 14"
       role="img"
-      focusable="false"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
     >

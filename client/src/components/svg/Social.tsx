@@ -11,7 +11,6 @@ const Social = ({ size, ...props }: SVGPropsType): ReactElement => {
       width={`${size}px`}
       height={`${size}px`}
       version="1.1"
-      id="Layer_1"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 511.6 511.6"

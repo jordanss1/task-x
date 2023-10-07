@@ -84,15 +84,6 @@ const SVGVariants: Variants = {
       duration: speed === "slow" ? 0.3 : 0.15,
     },
   }),
-  exit: (speed) => ({
-    x: 50,
-    scale: 0.8,
-    opacity: 0,
-    transition: {
-      ease: "backInOut",
-      duration: speed === "slow" ? 0.15 : 0.05,
-    },
-  }),
 };
 
 type LandingHeroCenterPropsType = {
@@ -116,16 +107,15 @@ const LandingHeroCenter = ({
     },
   };
 
+  const props: SVGPropsType = {
+    variants: SVGVariants,
+    initial: "hidden",
+    animate: "visible",
+    custom: speed.current,
+  };
+
   const renderImage = () => {
     const iconSize = is800 ? 200 : 300;
-
-    const props: SVGPropsType = {
-      variants: SVGVariants,
-      initial: "hidden",
-      animate: "visible",
-      exit: "exit",
-      custom: speed.current,
-    };
 
     switch (hero) {
       case "Popular":
@@ -139,11 +129,7 @@ const LandingHeroCenter = ({
 
   return (
     <div className="hero_center">
-      <div className="hero_center_image_div">
-        <AnimatePresence mode="wait" initial={false}>
-          {renderImage()}
-        </AnimatePresence>
-      </div>
+      <div className="hero_center_image_div">{renderImage()}</div>
       <div className="hero_center_backdrop_container flex-column">
         <LandingHeroCenterBackdrop
           layoutId="backdrop_1"
