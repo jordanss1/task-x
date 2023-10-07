@@ -5,7 +5,7 @@ body,
 
 .hero_button {
   font-family: "Jura", sans-serif;
-  border-radius: 20px;
+  border-radius: 30px !important;
   background-color: #991fff;
   color: #fff;
   font-weight: 600 !important;

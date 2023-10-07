@@ -12,7 +12,6 @@ const backDrop1 = (smallScreen: boolean): Variants => {
     Welcome: (speed) => ({
       x: 0,
       y: 0,
-      background: "radial-gradient(circle at 10% 20%, #991fff 30%, black)",
       transition: {
         ease: "backInOut",
         duration: speed === "slow" ? 0.7 : 0.4,
@@ -20,7 +19,6 @@ const backDrop1 = (smallScreen: boolean): Variants => {
     }),
     Prioritize: (speed) => ({
       x: smallScreen ? 130 : 170,
-      background: "radial-gradient(circle at 110% 20%, #991fff 70%, black)",
       transition: {
         ease: "backInOut",
         duration: speed === "slow" ? 0.7 : 0.4,
@@ -29,7 +27,6 @@ const backDrop1 = (smallScreen: boolean): Variants => {
     Popular: (speed) => ({
       y: smallScreen ? 120 : 170,
       x: smallScreen ? 160 : 200,
-      background: "radial-gradient(circle at 10% 20%, #991fff 30%, black)",
       transition: {
         ease: "backInOut",
         duration: speed === "slow" ? 0.7 : 0.4,
@@ -43,7 +40,6 @@ const backDrop2 = (smallScreen: boolean): Variants => {
     Welcome: (speed) => ({
       x: 0,
       y: 0,
-      background: "radial-gradient(circle at -10% 90%, #991fff 50%, black)",
       transition: {
         ease: "backInOut",
         duration: speed === "slow" ? 0.7 : 0.4,
@@ -51,7 +47,6 @@ const backDrop2 = (smallScreen: boolean): Variants => {
     }),
     Prioritize: (speed) => ({
       x: smallScreen ? -130 : -190,
-      background: "radial-gradient(circle at 110% 90%, #991fff 50%, black)",
       transition: {
         ease: "backInOut",
         duration: speed === "slow" ? 0.7 : 0.4,
@@ -60,7 +55,6 @@ const backDrop2 = (smallScreen: boolean): Variants => {
     Popular: (speed) => ({
       x: smallScreen ? -120 : -180,
       y: -170,
-      background: "radial-gradient(circle at -10% 90%, #991fff 50%, black)",
       transition: {
         ease: "backInOut",
         duration: speed === "slow" ? 0.7 : 0.4,
@@ -81,7 +75,7 @@ const SVGVariants: Variants = {
     opacity: 1,
     transition: {
       ease: "backInOut",
-      duration: speed === "slow" ? 0.3 : 0.15,
+      duration: speed === "slow" ? 0.6 : 0.3,
     },
   }),
 };
@@ -103,7 +97,8 @@ const LandingHeroCenter = ({
     animate: hero,
     custom: speed.current,
     style: {
-      boxShadow: "5px 5px 30px 5px black",
+      // boxShadow: "5px 5px 30px 5px black",
+      mixBlendMode: "color-burn",
     },
   };
 
