@@ -124,15 +124,13 @@ const LandingHeroCenter = ({
   return (
     <div className="hero_center">
       <div className="hero_center_image_div">{renderImage()}</div>
-      <div className="hero_center_backdrop_container flex-column">
+      <div className="hero_center_backdrop_container flex-col">
         <LandingHeroCenterBackdrop
-          layoutId="backdrop_1"
           className="hero_center_backdrop_1"
           variants={backDrop1(screenWidth)}
           {...backdropProps}
         />
         <LandingHeroCenterBackdrop
-          layoutId="backdrop_2"
           className="hero_center_backdrop_2"
           variants={backDrop2(screenWidth)}
           {...backdropProps}

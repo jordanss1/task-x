@@ -2,13 +2,15 @@ import { MotionProps, motion } from "framer-motion";
 import { ReactElement, ReactNode } from "react";
 
 interface ButtonPropsType extends MotionProps {
-  children?: ReactNode;
+  label: string;
+  icon?: ReactNode;
   className?: string;
   onClick?: (e?: React.MouseEvent) => void;
 }
 
 const Button = ({
-  children,
+  label,
+  icon,
   className,
   onClick,
   ...props
@@ -16,8 +18,13 @@ const Button = ({
   className = className ?? "";
 
   return (
-    <motion.button className={className} {...props} onClick={onClick}>
-      {children}
+    <motion.button
+      className={`${className} ${icon ? "flex" : ""}`}
+      onClick={onClick}
+      {...props}
+    >
+      <span>{label}</span>
+      {icon}
     </motion.button>
   );
 };

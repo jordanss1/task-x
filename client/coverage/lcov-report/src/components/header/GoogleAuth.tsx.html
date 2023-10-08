@@ -1,68 +1,64 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <title>Code coverage report for src/components/header/GoogleAuth.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
     <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style type='text/css'>
-        .coverage-summary .sorter {
-            background-image: url(../../../sort-arrow-sprite.png);
-        }
+    <style type="text/css">
+      .coverage-summary .sorter {
+        background-image: url(../../../sort-arrow-sprite.png);
+      }
     </style>
-</head>
-    
-<body>
-<div class='wrapper'>
-    <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/header</a> GoogleAuth.tsx</h1>
-        <div class='clearfix'>
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">97.36% </span>
-                <span class="quiet">Statements</span>
-                <span class='fraction'>37/38</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">93.75% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>15/16</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">91.66% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>11/12</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">97.14% </span>
-                <span class="quiet">Lines</span>
-                <span class='fraction'>34/35</span>
-            </div>
-        
-            
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="pad1">
+        <h1>
+          <a href="../../../index.html">All files</a> /
+          <a href="index.html">src/components/header</a> GoogleAuth.tsx
+        </h1>
+        <div class="clearfix">
+          <div class="fl pad1y space-right2">
+            <span class="strong">97.36% </span>
+            <span class="quiet">Statements</span>
+            <span class="fraction">37/38</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">93.75% </span>
+            <span class="quiet">Branches</span>
+            <span class="fraction">15/16</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">91.66% </span>
+            <span class="quiet">Functions</span>
+            <span class="fraction">11/12</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">97.14% </span>
+            <span class="quiet">Lines</span>
+            <span class="fraction">34/35</span>
+          </div>
         </div>
         <p class="quiet">
-            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+          Press <em>n</em> or <em>j</em> to go to the next uncovered block,
+          <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
         <template id="filterTemplate">
-            <div class="quiet">
-                Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
-            </div>
+          <div class="quiet">
+            Filter:
+            <input oninput="onInput()" type="search" id="fileSearch" />
+          </div>
         </template>
-    </div>
-    <div class='status-line high'></div>
-    <pre><table class="coverage">
+      </div>
+      <div class="status-line high"></div>
+      <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
 <a name='L3'></a><a href='#L3'>3</a>
@@ -456,13 +452,13 @@ const GoogleAuth = () =&gt; {
   const signInButtonClass = `${initialClasses?.button} ${signInButton}`;
 &nbsp;
   const renderSignOutButton = () =&gt; (
-    &lt;div className="d-flex align-items-center me-3"&gt;
+    &lt;div className="flex align-items-center me-3"&gt;
       &lt;button
         id="button"
         onClick={handleSignOut}
         className="ui labeled icon button p-2"
       &gt;
-        &lt;div className="d-flex justify-content-center flex-row"&gt;
+        &lt;div className="flex justify-content-center flex-row"&gt;
           &lt;p className="mb-0"&gt;Sign out&lt;/p&gt;
           &lt;i className="google icon fs-4 pt-1 ps-2" /&gt;
         &lt;/div&gt;
@@ -471,14 +467,14 @@ const GoogleAuth = () =&gt; {
   );
 &nbsp;
   const renderProfile = () =&gt; (
-    &lt;div className="d-flex justify-content-center me-2 me-sm-5"&gt;
+    &lt;div className="flex justify-content-center me-2 me-sm-5"&gt;
       {userProfile?.img &amp;&amp; (
 <span class="branch-1 cbranch-no" title="branch not covered" >        &lt;img</span>
           className="img-profile me-sm-1 me-2 rounded-circle"
           src={`${userProfile?.img}`}
         &gt;&lt;/img&gt;
       )}
-      &lt;h2 className="fs-5 name-heading mb-0 d-flex align-items-center"&gt;{`Hi, ${userProfile?.name}`}&lt;/h2&gt;
+      &lt;h2 className="fs-5 name-heading mb-0 flex align-items-center"&gt;{`Hi, ${userProfile?.name}`}&lt;/h2&gt;
     &lt;/div&gt;
   );
 &nbsp;
@@ -486,12 +482,12 @@ const GoogleAuth = () =&gt; {
     &lt;section
       className={`${
         isSignedIn ? "w-100" : "w-50"
-      } d-flex justify-content-center`}
+      } flex justify-content-center`}
     &gt;
       &lt;div
         ref={divRef}
         className={`buttonSignIn ${
-          isSignedIn ? "d-none" : "d-flex"
+          isSignedIn ? "d-none" : "flex"
         } justify-content-center ${signInButtonClass}`}
       &gt;
         &lt;GoogleLogin
@@ -503,7 +499,7 @@ const GoogleAuth = () =&gt; {
       &lt;/div&gt;
 &nbsp;
       &lt;section
-        className={`d-flex buttonSignOut w-100 justify-content-sm-center justify-content-around ${signOutButton}`}
+        className={`flex buttonSignOut w-100 justify-content-sm-center justify-content-around ${signOutButton}`}
       &gt;
         {userProfile &amp;&amp; renderProfile()}
         {isSignedIn &amp;&amp; renderSignOutButton()}
@@ -515,21 +511,27 @@ const GoogleAuth = () =&gt; {
 export default GoogleAuth;
 &nbsp;</pre></td></tr></table></pre>
 
-                <div class='push'></div><!-- for sticky footer -->
-            </div><!-- /wrapper -->
-            <div class='footer quiet pad2 space-top1 center small'>
-                Code coverage generated by
-                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-06-08T18:13:19.963Z
-            </div>
-        <script src="../../../prettify.js"></script>
-        <script>
-            window.onload = function () {
-                prettyPrint();
-            };
-        </script>
-        <script src="../../../sorter.js"></script>
-        <script src="../../../block-navigation.js"></script>
-    </body>
+      <div class="push"></div>
+      <!-- for sticky footer -->
+    </div>
+    <!-- /wrapper -->
+    <div class="footer quiet pad2 space-top1 center small">
+      Code coverage generated by
+      <a
+        href="https://istanbul.js.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >istanbul</a
+      >
+      at 2023-06-08T18:13:19.963Z
+    </div>
+    <script src="../../../prettify.js"></script>
+    <script>
+      window.onload = function () {
+        prettyPrint();
+      };
+    </script>
+    <script src="../../../sorter.js"></script>
+    <script src="../../../block-navigation.js"></script>
+  </body>
 </html>
-    

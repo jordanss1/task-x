@@ -13,20 +13,20 @@ export type HandleClickType = (
 const LandingHero = (): ReactElement => {
   const [hero, setHero] = useState<SidebarHeadingsType>("Welcome");
 
-  const timer = useRef<NodeJS.Timeout | number>(0);
+  const timer = useRef<NodeJS.Timer | number>(0);
 
   const speed = useRef<"slow" | "fast">("slow");
 
   useEffect(() => {
     timer.current = setHeroInterval(setHero);
 
-    return () => clearInterval(timer.current);
+    return () => clearInterval(timer.current as number);
   }, []);
 
   const handleClick = (heading: typeof hero, currentIndex: number) => {
     speed.current = "fast";
 
-    clearInterval(timer.current);
+    clearInterval(timer.current as number);
 
     setHero(heading);
 

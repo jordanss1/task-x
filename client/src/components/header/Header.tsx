@@ -17,17 +17,15 @@ const Header = ({ containerClass, nav }: HeaderPropsType): ReactElement => {
     }
 
     return (
-      <div className="header_sign_in d-flex justify-content-center">
+      <div className="header_sign_in flex justify-center">
         <HeaderGoogleAuth />
       </div>
     );
   };
 
   return (
-    <header
-      className={`${containerClass} d-flex justify-content-center align-items-center`}
-    >
-      <div className="header_logo d-flex justify-content-center align-items-center">
+    <header className={`${containerClass} flex justify-center items-center`}>
+      <div className="header_logo flex justify-center items-center">
         <HeaderLightBulb />
         <h1 className="header_heading ps-1">Todo World</h1>
       </div>

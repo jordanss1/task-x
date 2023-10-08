@@ -43,14 +43,14 @@ const GoogleAuth = () => {
   }, [isSignedIn, userProfile?.name]);
 
   const renderProfile = () => (
-    <div className="d-flex justify-content-center me-2 me-sm-5">
+    <div className="flex justify-center me-2 me-sm-5">
       {userProfile?.img && (
         <img
           className="img-profile me-sm-1 me-2 rounded-circle"
           src={`${userProfile?.img}`}
         ></img>
       )}
-      <h2 className="fs-5 name-heading mb-0 d-flex align-items-center">{`Hi, ${userProfile?.name}`}</h2>
+      <h2 className="fs-5 name-heading mb-0 flex items-center">{`Hi, ${userProfile?.name}`}</h2>
     </div>
   );
 
@@ -63,15 +63,13 @@ const GoogleAuth = () => {
 
   return (
     <section
-      className={`${
-        isSignedIn ? "w-100" : "w-50"
-      } d-flex justify-content-center`}
+      className={`${isSignedIn ? "w-full" : "w-6/12"} flex justify-center`}
     >
       <div
         ref={divRef}
         className={`buttonSignIn ${
-          isSignedIn ? "d-none" : "d-flex"
-        } justify-content-center`}
+          isSignedIn ? "d-none" : "flex"
+        } justify-center`}
       >
         <GoogleLogin
           onSuccess={({ credential }) => handleResponse(credential)}
@@ -80,7 +78,6 @@ const GoogleAuth = () => {
           type="standard"
         />
       </div>
-     
     </section>
   );
 };

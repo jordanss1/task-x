@@ -1,14 +1,7 @@
-import { Variants, motion } from "framer-motion";
+import { Variants } from "framer-motion";
 import { ReactElement } from "react";
 import Button from "../Button";
 import { SidebarHeadingsType, contentItems } from "./content";
-
-type LandingHeroContentType = {
-  hero: SidebarHeadingsType;
-  body: string;
-  heading: string;
-  button?: boolean;
-};
 
 const buttonVariants: Variants = {
   hovered: {
@@ -43,8 +36,7 @@ const LandingHeroLeft = ({
       variants={buttonVariants}
       whileHover="hovered"
       whileTap="tapped"
-      layoutId="button"
-      children="Login with Google"
+      label="Login with Google"
     />
   );
 
@@ -54,7 +46,7 @@ const LandingHeroLeft = ({
       <div className="hero_left_body">
         <p>{body}</p>
       </div>
-      <div className="pt-3">{button && renderButton}</div>
+      <div className="pt-5">{button && renderButton}</div>
     </div>
   );
 };

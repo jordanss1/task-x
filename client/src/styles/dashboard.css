@@ -1,5 +1,5 @@
 .dashboard {
-  padding: 20px 100px;
+  padding: 0 100px;
 }
 
 .dashboard nav {
@@ -11,21 +11,19 @@
   height: 100%;
   list-style: none;
   display: flex;
-  gap: 10px;
 }
 
 .dashboard_nav li {
-  border-radius: 5px;
+  font-family: "Jura", sans-serif;
 }
 
 .dashboard_header {
-  height: 70px;
+  height: 10vh;
 }
 
 .dashboard_nav_button {
   border: none;
   background: transparent;
-  font-family: "Jura", sans-serif;
 }
 
 .dashboard_menu_button {
@@ -50,6 +48,7 @@
   .dashboard nav {
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
 
   .dashboard_nav {

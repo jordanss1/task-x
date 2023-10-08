@@ -7,18 +7,10 @@ interface LandingHeroCenterBackdropPropsType extends MotionProps {
 
 const LandingHeroCenterBackdrop = ({
   className,
-  layoutId,
   variants,
   ...props
 }: LandingHeroCenterBackdropPropsType): ReactElement => {
-  return (
-    <motion.div
-      layoutId={layoutId}
-      variants={variants}
-      className={className}
-      {...props}
-    />
-  );
+  return <motion.div variants={variants} className={className} {...props} />;
 };
 
 export default LandingHeroCenterBackdrop;

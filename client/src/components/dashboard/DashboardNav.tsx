@@ -1,33 +1,32 @@
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import Button from "../Button";
+import ButtonPopout from "../ButtonPopout";
 import MenuButton from "../MenuButton";
-import { headerList } from "./content";
-
-const listItemVariants: Variants = {
-  hover: {
-    backgroundColor: "rgba(0,0,0,.3)",
-  },
-};
+import { settingsList } from "./content";
 
 const DashboardNav = (): ReactElement => {
-  const renderList = headerList.map((item) => (
-    <motion.li
-      variants={listItemVariants}
-      whileHover="hover"
-      className="d-sm-flex"
-    >
-      <Button
-        children={item}
-        className="dashboard_nav_button p-2 fs-6 fw-bold"
-      />
-    </motion.li>
-  ));
+  const renderSettings = () => {
+    return (
+      <div className="position-absolute top-0 bottom-0 start-0 end-0">
+        {settingsList.map((setting) => (
+          <Button label={setting} />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <nav>
-      <MenuButton />
-      <ul className="dashboard_nav p-0 m-0">{renderList}</ul>
+      <MenuButton>
+        <ul className="dashboard_nav p-0 m-0">
+          <li className="flex items-center">
+            <ButtonPopout label="Settings" className="bg-transparent border-0">
+              {renderSettings()}
+            </ButtonPopout>
+          </li>
+        </ul>
+      </MenuButton>
     </nav>
   );
 };

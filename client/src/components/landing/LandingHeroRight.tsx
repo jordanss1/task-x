@@ -38,7 +38,7 @@ const LandingHeroRight = ({
 }: LandingHeroRightPropsType): ReactElement => {
   const renderSidebar = sidebarItems.map(({ heading, body }, i) => (
     <motion.div
-      className="hero_right_tab py-3 px-3 px-sm-4"
+      className="hero_right_tab max-[800px]:max-w-[200px] px-2 py-5 sm:px-4 px-sm-4"
       style={{
         borderRadius: 20,
         background:
@@ -47,7 +47,6 @@ const LandingHeroRight = ({
       variants={tabVariants}
       onClick={() => handleClick(heading, i)}
       key={heading}
-      layoutId="one"
       custom={heading === hero}
       whileHover="hovered"
     >
@@ -65,13 +64,23 @@ const LandingHeroRight = ({
           }}
         />
       )}
-      <motion.h3 variants={textVariants}>{heading}</motion.h3>
-      <motion.span variants={textVariants}>{body}</motion.span>
+      <motion.h3
+        className="text-[15px] md:text-[18px] font-extrabold select-none"
+        variants={textVariants}
+      >
+        {heading}
+      </motion.h3>
+      <motion.span
+        className="text-xs sm:text-sm md:text-sm select-none"
+        variants={textVariants}
+      >
+        {body}
+      </motion.span>
     </motion.div>
   ));
 
   return (
-    <div className="hero_right d-flex justify-content-evenly flex-column">
+    <div className="hero_right flex justify-evenly flex-col gap-0.5">
       {renderSidebar}
     </div>
   );

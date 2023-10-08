@@ -1,1 +1,1 @@
-export const headerList = ["Edit Profile", "Sign Out"];
+export const settingsList = ["Edit Profile", "Sign Out"];

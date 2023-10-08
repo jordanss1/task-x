@@ -18,3 +18,8 @@ body,
   background-color: black;
   border-radius: 50%;
 }
+
+.small_icon {
+  position: relative;
+  bottom: 5px;
+}
