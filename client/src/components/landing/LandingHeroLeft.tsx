@@ -36,13 +36,14 @@ const LandingHeroLeft = ({
       variants={buttonVariants}
       whileHover="hovered"
       whileTap="tapped"
+      fontSize={18}
       label="Login with Google"
     />
   );
 
   return (
     <div className="hero_left">
-      <h2 className="hero_left_heading">{heading}</h2>
+      <h2 className="hero_left_heading text-balance">{heading}</h2>
       <div className="hero_left_body">
         <p>{body}</p>
       </div>

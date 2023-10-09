@@ -9,7 +9,6 @@ body,
   background-color: #991fff;
   color: #fff;
   font-weight: 600 !important;
-  font-size: 18px;
 }
 
 .menu_circle {
@@ -17,9 +16,4 @@ body,
   height: 6px;
   background-color: black;
   border-radius: 50%;
-}
-
-.small_icon {
-  position: relative;
-  bottom: 5px;
 }

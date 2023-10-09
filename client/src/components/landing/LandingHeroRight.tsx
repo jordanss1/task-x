@@ -71,7 +71,7 @@ const LandingHeroRight = ({
         {heading}
       </motion.h3>
       <motion.span
-        className="text-xs sm:text-sm md:text-sm select-none"
+        className="text-xs text-balance sm:text-sm md:text-sm select-none"
         variants={textVariants}
       >
         {body}

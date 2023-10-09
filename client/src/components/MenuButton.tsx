@@ -1,9 +1,14 @@
 import { ReactElement, ReactNode } from "react";
 
-const MenuButton = ({ children }: { children: ReactNode }): ReactElement => {
+type MenuButtonPropsType = { children: ReactNode; className: string };
+
+const MenuButton = ({
+  children,
+  className,
+}: MenuButtonPropsType): ReactElement => {
   return (
     <>
-      <div className="dashboard_menu_button">
+      <div className={className}>
         <div className="menu_circle" />
         <div className="menu_circle" />
         <div className="menu_circle" />

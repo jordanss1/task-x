@@ -1,44 +1,58 @@
-import { Variants } from "framer-motion";
-import { ReactElement, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ReactElement, ReactNode, useState } from "react";
 import Button from "./Button";
 import SmallIcon from "./SmallIcon";
 
 type ButtonPopoutPropsType = {
-  children: React.ReactNode;
-  label: string;
-  size?: number;
+  children: ReactNode;
+  icon?: ReactNode;
+  label?: string;
+  fontSize?: number;
+  iconSize?: number;
   className?: string;
-};
-
-const buttonVariants: Variants = {
-  hover: {
-    backgroundColor: "rgba(180,180,180)",
-  },
 };
 
 const ButtonPopout = ({
   label,
-  size,
+  icon,
+  iconSize,
+  fontSize,
   className,
   children,
 }: ButtonPopoutPropsType): ReactElement => {
   const [expanded, setExpanded] = useState(false);
 
   className = className ?? "";
-  const icon = expanded ? "angle up icon" : "angle down icon";
+  iconSize = iconSize ?? 12;
+  fontSize = fontSize ?? 12;
+  label = label ?? "";
 
-  size = 5;
+  icon = icon ? (
+    icon
+  ) : (
+    <SmallIcon size={iconSize} icon={"fa solid fa-angle-down"} />
+  );
 
   return (
     <Button
       label={label}
+      fontSize={fontSize}
       onClick={() => setExpanded((prev) => !prev)}
-      icon={<SmallIcon className={`small_icon text-${size}`} icon={icon} />}
-      className={`${className} relative p-2 text-${size}`}
-      variants={buttonVariants}
-      whileHover="hover"
+      icon={icon}
+      className={`${className} relative p-2 gap-0.5`}
     >
-      {expanded && children}
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1, transition: { ease: "easeIn" } }}
+            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
+            className={`absolute w-full top-[40px] origin-top-right h-fit bottom-0 right-0 px-0 border-[1px] rounded-lg overflow-hidden`}
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Button>
   );
 };

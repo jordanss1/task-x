@@ -25,9 +25,9 @@ const Header = ({ containerClass, nav }: HeaderPropsType): ReactElement => {
 
   return (
     <header className={`${containerClass} flex justify-center items-center`}>
-      <div className="header_logo flex justify-center items-center">
+      <div className="header_logo mr-auto flex justify-center items-center">
         <HeaderLightBulb />
-        <h1 className="header_heading ps-1">Todo World</h1>
+        <h1 className="header_heading text-xl font-bold cursor-pointer select-none tracking-tighter ps-1">Todo World</h1>
       </div>
       {renderContent()}
     </header>
