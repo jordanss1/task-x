@@ -1,44 +1,68 @@
-import { Variants, motion, useSpring } from "framer-motion";
-import { ReactElement } from "react";
-import colors from "../../assets/colors";
-import Button from "../Button";
+import { motion } from "framer-motion";
+import { ReactElement, useRef } from "react";
 import ButtonPopout from "../ButtonPopout";
-import MenuButton from "../MenuButton";
-import Bell from "../svg/Bell";
-import { settingsList } from "./content";
+import MenuPopout from "../MenuPopout";
+import NotificationBell from "../NotificationBell";
+import { notifications, settingsList } from "./content";
 
 const DashboardNav = (): ReactElement => {
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
   const renderSettings = settingsList.map((setting) => (
-    <Button
+    <motion.div
+      key={setting}
       transition={{ duration: 0.6 }}
-      className="w-full p-2 hover:bg-slate-100 text-slate-800 hover:text-black rounded-[3px] text-left text-xs"
-      label={setting}
-    />
+      className="w-full p-2 ps-4 sm:ps-0 hover:bg-slate-600 hover:text-slate-300 sm:hover:bg-slate-100 text-slate-800 sm:hover:text-black sm:rounded-[3px] text-left text-xl sm:text-xs"
+    >
+      {setting}
+    </motion.div>
   ));
 
-  const renderNotification = () => {};
+  const renderNotifications = () => {
+    return notifications.length ? (
+      notifications.map((notification) => (
+        <div
+          key={notification}
+          className="w-full p-2 hover:bg-slate-100 text-slate-800 hover:text-black rounded-[3px] text-left text-xs"
+        >
+          {notification}
+        </div>
+      ))
+    ) : (
+      <div className="w-full p-2 hover:bg-slate-100 text-slate-800 hover:text-black rounded-[3px] text-left text-xs">
+        No notifications
+      </div>
+    );
+  };
 
   return (
     <nav>
-      <MenuButton className="sm:hidden gap-1 z-[5] flex p-2 rounded-lg">
-        <motion.ul className="dashboard_nav align-center sm:h-full list-none flex gap-2 sm:static fixed sm:flex-row flex-col sm:pt-0 pt-[100px] sm:w-fit w-[75%] -right-3/4 z-3 top-0 m-0">
-          <li>
-            <ButtonPopout icon={<Bell />}>
-              <></>
-            </ButtonPopout>
-          </li>
-          <li className="flex items-center">
-            <ButtonPopout
-              iconSize={10}
-              fontSize={15}
-              label="Account"
-              className="bg-transparent border-0"
-            >
-              {renderSettings}
-            </ButtonPopout>
-          </li>
-        </motion.ul>
-      </MenuButton>
+      <motion.ul className="font-[jura] text-sl items-center list-none flex gap-6 sm:gap-2 z-3">
+        <li>
+          <ButtonPopout
+            width={"250px"}
+            icon={<NotificationBell notifications={[]} />}
+          >
+            {renderNotifications()}
+          </ButtonPopout>
+        </li>
+        <li className="sm:flex hidden items-center">
+          <ButtonPopout
+            width="175px"
+            iconSize={10}
+            fontSize={15}
+            label="Account"
+            className="bg-transparent border-0"
+          >
+            {renderSettings}
+          </ButtonPopout>
+        </li>
+        <MenuPopout className="sm:hidden relative z-[5] gap-1 flex items-center">
+          <motion.div className="dashboard_nav fixed pt-[min(25vh,100px)] w-8/12 right-0 top-0 bottom-0 left-9/12 cursor-default">
+            {renderSettings}
+          </motion.div>
+        </MenuPopout>
+      </motion.ul>
     </nav>
   );
 };

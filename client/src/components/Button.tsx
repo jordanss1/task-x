@@ -1,8 +1,8 @@
 import { MotionProps, motion } from "framer-motion";
-import { ReactElement, ReactNode } from "react";
+import { ForwardedRef, ReactElement, ReactNode, forwardRef } from "react";
 
 interface ButtonPropsType extends MotionProps {
-  label: string;
+  label?: string;
   fontSize?: number;
   icon?: ReactNode;
   className?: string;
@@ -10,30 +10,32 @@ interface ButtonPropsType extends MotionProps {
   onClick?: (e?: React.MouseEvent) => void;
 }
 
-const Button = ({
-  label,
-  icon,
-  fontSize,
-  className,
-  children,
-  onClick,
-  ...props
-}: ButtonPropsType): ReactElement => {
-  className = className ?? "";
-
-  console.log(fontSize);
-
-  return (
-    <motion.button
-      className={`${className} ${icon ? "flex items-baseline" : ""}`}
-      onClick={onClick}
-      {...props}
-    >
-      <span style={{ fontSize: `${fontSize ?? 12}px` }}>{label}</span>
-      {icon}
-      {children}
-    </motion.button>
-  );
-};
+const Button = forwardRef(
+  (
+    {
+      label = "",
+      icon,
+      fontSize = 12,
+      className,
+      children,
+      onClick,
+      ...props
+    }: ButtonPropsType,
+    ref?: ForwardedRef<HTMLButtonElement>
+  ): ReactElement => {
+    return (
+      <motion.button
+        ref={ref}
+        className={`${className ?? ""} ${icon ? "flex items-baseline" : ""}`}
+        onClick={onClick}
+        {...props}
+      >
+        {label && <span style={{ fontSize: `${fontSize}px` }}>{label}</span>}
+        {icon}
+        {children}
+      </motion.button>
+    );
+  }
+);
 
 export default Button;

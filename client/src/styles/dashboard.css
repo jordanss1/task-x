@@ -6,21 +6,8 @@
   text-align: center;
 }
 
-.dashboard_nav li {
-  font-family: "Jura", sans-serif;
-}
-
 .dashboard_header {
-  height: 10vh;
-}
-
-.dashboard_nav_button {
-  border: none;
-  background: transparent;
-}
-
-.dashboard_menu_button {
-  z-index: 5;
+  height: 100px;
 }
 
 @media screen and (max-width: 640px) {
