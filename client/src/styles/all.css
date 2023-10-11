@@ -1,6 +1,7 @@
 body,
 #root {
   min-height: 100vh;
+  isolation: isolate;
 }
 
 .hero_button {
@@ -15,4 +16,12 @@ body,
   width: 6px;
   height: 6px;
   border-radius: 50%;
+}
+
+.popout_z_index {
+  z-index: 15;
+}
+
+.popout_button_z_index {
+  z-index: 16;
 }

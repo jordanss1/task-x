@@ -5,9 +5,9 @@ import DashboardNav from "./DashboardNav";
 
 const Dashboard = (): ReactElement => {
   return (
-    <main className="dashboard">
+    <div className="dashboard">
       <Header containerClass="dashboard_header" nav={<DashboardNav />} />
-    </main>
+    </div>
   );
 };
 

@@ -8,6 +8,7 @@ type ButtonPopoutPropsType = {
   width?: string;
   icon?: ReactNode;
   label?: string;
+  height?: string;
   fontSize?: number;
   iconSize?: number;
   className?: string;
@@ -16,6 +17,7 @@ type ButtonPopoutPropsType = {
 const ButtonPopout = ({
   label = "",
   width = "100%",
+  height = "fit-content",
   icon,
   iconSize = 12,
   fontSize = 12,
@@ -28,6 +30,7 @@ const ButtonPopout = ({
   const exitModal = (e: MouseEvent) => {
     if (buttonRef.current && !buttonRef.current.contains(e.target as Node)) {
       setExpanded(false);
+
       document.removeEventListener("click", exitModal);
     }
   };
@@ -38,9 +41,7 @@ const ButtonPopout = ({
       return;
     }
 
-    return () => {
-      document.removeEventListener("click", exitModal);
-    };
+    return () => document.removeEventListener("click", exitModal);
   }, [expanded]);
 
   return (
@@ -60,8 +61,8 @@ const ButtonPopout = ({
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1, transition: { ease: "easeIn" } }}
             exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
-            style={{ width }}
-            className={`absolute top-[40px] origin-top-right h-fit bottom-0 right-0 px-0 border-[1px] rounded-lg overflow-hidden`}
+            style={{ width, height }}
+            className="absolute top-[40px] origin-top-right cursor-default h-fit bottom-0 right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-white"
           >
             {children}
           </motion.div>

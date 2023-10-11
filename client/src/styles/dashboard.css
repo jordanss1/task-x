@@ -1,5 +1,7 @@
 .dashboard {
   padding: 0 100px;
+  background: linear-gradient(to right, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
+  box-shadow: 1px 1px 2px black;
 }
 
 .dashboard nav {
@@ -12,7 +14,7 @@
 
 @media screen and (max-width: 640px) {
   .dashboard {
-    padding: 20px 50px;
+    padding: 0px 70px;
   }
 
   .dashboard .header_heading {
@@ -26,16 +28,12 @@
   .dashboard nav {
     display: flex;
     align-items: center;
-    cursor: pointer;
   }
 
   .dashboard_nav {
-    background: radial-gradient(
-      circle at -10% 10%,
-      rgba(0, 0, 0, 0.5),
-      #991fff 30%,
-      rgba(0, 0, 0)
-    );
+    background: linear-gradient(120deg, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
+    box-shadow: inset 3px 1px 5px #787573;
+    border-radius: 3px;
   }
 
   .dashboard_nav li {

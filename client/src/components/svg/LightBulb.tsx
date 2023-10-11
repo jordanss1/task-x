@@ -1,15 +1,14 @@
 import { ReactElement } from "react";
 
-const HeaderLightBulb = (): ReactElement => {
+const LightBulb = ({ size = 45 }: { size?: number }): ReactElement => {
   return (
     <svg
-      height="45px"
-      width="45px"
+      height={`${size}px`}
+      width={`${size}px`}
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 64 64"
       xmlSpace="preserve"
-      style={{ cursor: "pointer" }}
     >
       <g>
         <g>
@@ -83,4 +82,4 @@ const HeaderLightBulb = (): ReactElement => {
   );
 };
 
-export default HeaderLightBulb;
+export default LightBulb;
