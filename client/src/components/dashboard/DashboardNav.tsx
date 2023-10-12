@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
+import { fonts } from "../../constants";
 import ButtonPopout from "../ButtonPopout";
 import MenuPopout from "../MenuPopout";
 import NotificationBell from "../NotificationBell";
@@ -28,7 +29,10 @@ const DashboardNav = (): ReactElement => {
         </div>
       ))
     ) : (
-      <div className="w-full p-2 h-full flex items-center justify-center  text-slate-800 rounded-[3px] text-sm">
+      <div
+        style={{ fontFamily: fonts.exo }}
+        className="w-full p-2 h-full flex items-center justify-center text-slate-800 rounded-[3px] text-sm"
+      >
         No notifications
       </div>
     );
@@ -61,15 +65,16 @@ const DashboardNav = (): ReactElement => {
           <motion.div
             key={2}
             initial={{
-              scaleX: .3,
-              filter: "blur(20px)",
+              scaleX: 0.6,
+              filter: "blur(10px)",
             }}
             animate={{
               scaleX: 1,
               filter: "blur(0px)",
             }}
             exit={{
-              scaleX: 0,
+              scaleX: 0.8,
+              opacity: 0,
             }}
             className="dashboard_nav origin-right popout_z_index fixed pt-[min(25vh,120px)] w-8/12 right-0 top-0 bottom-0 left-9/12 cursor-default overflow-hidden"
           >

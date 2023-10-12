@@ -1,6 +1,6 @@
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
-import colors from "../../constants/colors";
+import colors from "../../constants";
 import { HandleClickType } from "./LandingHero";
 import { sidebarItems } from "./content";
 

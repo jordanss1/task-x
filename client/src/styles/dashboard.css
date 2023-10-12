@@ -1,22 +1,14 @@
-.dashboard {
-  padding: 0 100px;
-  background: linear-gradient(to right, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
-  box-shadow: 1px 1px 2px black;
-}
-
 .dashboard nav {
   text-align: center;
 }
 
 .dashboard_header {
   height: 100px;
+  background: linear-gradient(to right, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
+  padding: 0 100px;
 }
 
 @media screen and (max-width: 640px) {
-  .dashboard {
-    padding: 0px 70px;
-  }
-
   .dashboard .header_heading {
     font-size: 18px !important;
   }
@@ -32,7 +24,7 @@
 
   .dashboard_nav {
     background: linear-gradient(120deg, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
-    box-shadow: inset 3px 1px 5px #787573;
+    box-shadow: 1px 1px 20px #787573;
     border-radius: 3px;
   }
 
