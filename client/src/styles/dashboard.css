@@ -1,14 +1,32 @@
+.dashboard {
+  background: linear-gradient(to bottom, #f4f0ed 0%, #e0dcd9 30%, #f4f0ed 100%);
+  padding: 0 50px;
+}
+
 .dashboard nav {
   text-align: center;
 }
 
 .dashboard_header {
-  height: 100px;
-  background: linear-gradient(to right, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
-  padding: 0 100px;
+  height: 80px;
+  align-items: end;
+}
+
+.dashboard_panel {
+  background: linear-gradient(to left, #e0dcd9 0%, #e0dcd9, #f4f0ed 100%);
+  box-shadow: 1px 1px #e0dcd9, -1px -1px rgba(0, 0, 0);
 }
 
 @media screen and (max-width: 640px) {
+  .dashboard {
+    padding: 0 50px;
+  }
+
+  .dashboard_header {
+    gap: 5px;
+    padding-bottom: 10px;
+  }
+
   .dashboard .header_heading {
     font-size: 18px !important;
   }

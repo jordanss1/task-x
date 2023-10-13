@@ -1,8 +1,14 @@
 import { ReactElement } from "react";
 
-const LightBulb = ({ size = 45 }: { size?: number }): ReactElement => {
+type LightBulbPropsType = {
+  size?: number;
+  onClick?: () => void;
+};
+
+const LightBulb = ({ size = 45, onClick }: LightBulbPropsType): ReactElement => {
   return (
     <svg
+      onClick={onClick}
       height={`${size}px`}
       width={`${size}px`}
       version="1.1"

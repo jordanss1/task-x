@@ -8,13 +8,14 @@ import LightBulb from "../svg/LightBulb";
 import { notifications, settingsList } from "./content";
 
 const DashboardNav = (): ReactElement => {
-  const renderSettings = settingsList.map((setting) => (
+  const renderSettings = settingsList.map(({ icon, label }) => (
     <motion.div
-      key={setting}
+      key={label}
       transition={{ duration: 0.6 }}
-      className="w-full p-2 ps-8 sm:ps-2 hover:bg-slate-500 hover:text-slate-200 sm:hover:bg-slate-100 text-black sm:hover:text-slate-800 sm:rounded-[3px] text-left text-xl sm:text-xs sm:z-auto z-[16] relative sm:block cursor-pointer"
+      className="w-full gap-4 sm:gap-2 items-center p-2 ps-8 sm:ps-2 hover:bg-slate-500 hover:text-slate-200 sm:hover:bg-slate-200 sm:text-slate-700 sm:hover:text-black sm:rounded-[3px] text-left text-xl sm:text-xs sm:z-auto z-[16] relative flex cursor-pointer"
     >
-      {setting}
+      <i className={icon} />
+      <span>{label}</span>
     </motion.div>
   ));
 
@@ -40,7 +41,7 @@ const DashboardNav = (): ReactElement => {
 
   return (
     <nav>
-      <motion.ul className="font-[jura] text-sl items-center list-none flex gap-6 sm:gap-2 z-3">
+      <motion.ul className="font-[jura] text-sl items-center list-none flex gap-6 sm:gap-5 z-3">
         <li>
           <ButtonPopout
             width={"250px"}

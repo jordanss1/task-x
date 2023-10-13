@@ -26,10 +26,14 @@ const Header = ({ containerClass, nav }: HeaderPropsType): ReactElement => {
   return (
     <header className={`${containerClass} flex justify-center items-center`}>
       <div className="header_logo cursor-pointer mr-auto flex justify-center items-center">
-        <LightBulb />
-        <h1 className="header_heading text-xl font-bold cursor-pointer select-none tracking-tighter ps-1">
-          Todo World
-        </h1>
+        {!nav && (
+          <>
+            <LightBulb />
+            <h1 className="header_heading text-xl font-bold cursor-pointer select-none tracking-tighter ps-1">
+              Todo World
+            </h1>
+          </>
+        )}
       </div>
       {renderContent()}
     </header>

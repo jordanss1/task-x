@@ -62,7 +62,7 @@ const ButtonPopout = ({
             animate={{ opacity: 1, scale: 1, transition: { ease: "easeIn" } }}
             exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
             style={{ width, height }}
-            className="absolute top-[40px] origin-top-right cursor-default h-fit bottom-0 right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-white border-slate-400"
+            className="absolute top-[40px] origin-top-right cursor-default h-fit bottom-0 right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
           >
             {children}
           </motion.div>
