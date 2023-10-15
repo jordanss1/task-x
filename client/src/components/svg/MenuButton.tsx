@@ -1,8 +1,21 @@
+import { MotionProps, motion } from "framer-motion";
 import { ReactElement } from "react";
 
-const MenuButton = (): ReactElement => {
+interface MenuButtonPropsType extends MotionProps {
+  className?: string;
+  onClick?: () => void;
+}
+
+const MenuButton = ({
+  className,
+  onClick,
+  ...props
+}: MenuButtonPropsType): ReactElement => {
   return (
-    <svg
+    <motion.svg
+      {...props}
+      onClick={onClick}
+      className={className}
       width="30px"
       height="30px"
       viewBox="0 0 24 24"
@@ -25,7 +38,7 @@ const MenuButton = (): ReactElement => {
         d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
         fill="#1C274C"
       />
-    </svg>
+    </motion.svg>
   );
 };
 

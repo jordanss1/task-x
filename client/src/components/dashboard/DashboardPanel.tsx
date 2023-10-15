@@ -1,43 +1,90 @@
 import { motion } from "framer-motion";
-import { ReactElement } from "react";
+import { capitalize } from "lodash";
+import { ReactElement, useState } from "react";
+import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import Button from "../Button";
-import Home from "../svg/Home";
+import HeaderLogo from "../header/HeaderLogo";
 import LightBulb from "../svg/LightBulb";
-import World from "../svg/World";
+import MenuButton from "../svg/MenuButton";
+import { PanelButtonType, panelButtons } from "./content";
 
 type DashboardPanelPropsType = {
   setActive: React.Dispatch<React.SetStateAction<"home" | "social">>;
   active: "home" | "social";
+  expanded: boolean;
+  setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const DashboardPanel = ({
   active,
   setActive,
+  expanded,
+  setExpanded,
 }: DashboardPanelPropsType): ReactElement => {
-  return (
-    <section className="dashboard_panel sm:py-7 flex sm:gap-6 sm:flex-col items-center fixed left-0 sm:top-0 bottom-0 sm:h-full h-20 sm:w-32 w-full">
-      <div className="sm:block hidden pb-2 border-b-[2px] border-[#991fff30]">
-        <LightBulb size={60} />
+  const mobile = useMediaQuery(640);
+
+  const renderButtons = panelButtons.map(
+    ({ Element, label }: PanelButtonType) => (
+      <div
+        key={label}
+        className="min-w-[50px]  sm:min-w-0 sm:w-full flex justify-center"
+      >
+        <Button
+          style={{
+            padding: !active ? "auto" : "",
+            outline: !active ? "1px solid transparent" : "",
+          }}
+          animate={{
+            background:
+              active === label ? "var(--bg-active)" : "var(--bg-inactive)",
+            outline:
+              active === label
+                ? "var(--border-active)"
+                : "var(--border-inactive)",
+            scale: expanded ? "var(--scale-to)" : "var(--scale-from)",
+            padding: active === label ? "var(--p-from)" : "var(--p-to)",
+            transition: { duration: 0.1 },
+          }}
+          onClick={() => setActive(label)}
+          className="group min-h-[50px] sm:min-h-0 [--bg-active:linear-gradient(120deg,_rgb(153,_31,_255),_rgb(202,_255,_159))] [--bg-inactive:linear-gradient(120deg,rgb(242,_238,_235),rgb(242,_238,_235))] sm:[--bg-inactive:linear-gradient(120deg,_rgb(153,_31,_255,_0),_rgb(202,_255,_159_0))]  sm:[--border-active:1px_solid_#991FFF] sm:[--border-inactive:1px_solid_#991FFF00] [--border-active:3px_solid_rgb(242,_238,_235)] [--border-inactive:1px_solid_rgb(242,_238,_235)] scale-125 sm:scale-[.9] sm:[--scale-from:.9] sm:[--scale-to:1.1] [--scale-to:1.2] [--scale-from:1.2] transition-all relative rounded-[30%] [--p-from:1rem] [--p-to:.5rem_.8rem] sm:[--p-from:1rem] sm:[--p-to:1rem] p-4 sm:bottom-0 bottom-[45px]"
+        >
+          <Element
+            animate={
+              mobile
+                ? {
+                    y: active === label ? 0 : 12,
+                    scale: active === label ? 1 : 0.8,
+                  }
+                : {}
+            }
+            active={active === label ? true : false}
+          />
+          <motion.span className="absolute rounded-full sm:bg-[rgb(54,54,54)]  w-full sm:inline panel_span font-[jura] sm:text-slate-200 text-slate-800 transition-all duration-300 delay-75 sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:left-[52px] sm:[--opacity-from:1] sm:[--opacity-to:0] [--opacity-from:1] [--opacity-to:0] sm:text-xs text-[10px] font-semibold -bottom-[20px] -left-0 sm:bottom-3 sm:p-1 sm:left-11">
+            {capitalize(label)}
+          </motion.span>
+        </Button>
       </div>
-      <Button
-        animate={{
-          background: active === "home" ? "rgb(6 182 212)" : "rgb(0,0,0,0)",
-        }}
-        onClick={() => setActive("home")}
-        className="group rounded-full p-4"
-      >
-        <Home active={active === "home" ? true : false} />
-      </Button>
-      <Button
-        animate={{
-          background: active === "social" ? "rgb(6 182 212)" : "rgb(0,0,0, 0)",
-        }}
-        onClick={() => setActive("social")}
-        className="group rounded-full p-4"
-      >
-        <World active={active === "social" ? true : false} />
-      </Button>
-    </section>
+    )
+  );
+
+  return (
+    <motion.section
+      style={{ width: mobile ? "100%" : "70px" }}
+      animate={{ width: expanded ? "var(--w-from)" : "var(--w-to)" }}
+      className="dashboard_panel sm:py-7 flex justify-center sm:justify-start gap-8 sm:gap-6 sm:flex-col items-center fixed left-0 sm:top-0 bottom-0 sm:h-full h-11 sm:w-32 w-full sm:[--w-from:155px] sm:[--w-to:70px] [--w-from:100%] [--w-to:100%]"
+    >
+      <div className="sm:flex gap-1 w-full justify-center items-center hidden min-h-[60px]">
+        <motion.div className="flex justify-center flex-[2]">
+          <MenuButton
+            animate={{ scale: expanded ? 1.1 : 1 }}
+            onClick={() => setExpanded((prev) => !prev)}
+            className="cursor-pointer"
+          />
+        </motion.div>
+        {expanded && <HeaderLogo iconSize={55} fontSize={15} />}
+      </div>
+      {renderButtons}
+    </motion.section>
   );
 };
 

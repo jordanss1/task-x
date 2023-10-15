@@ -14,7 +14,7 @@
 
 .dashboard_panel {
   background: linear-gradient(to left, #e0dcd9 0%, #e0dcd9, #f4f0ed 100%);
-  box-shadow: 1px 1px #e0dcd9, -1px -1px rgba(0, 0, 0);
+  box-shadow: 1px 2px 5px rgb(50, 50, 50);
 }
 
 @media screen and (max-width: 640px) {
@@ -25,6 +25,11 @@
   .dashboard_header {
     gap: 5px;
     padding-bottom: 10px;
+  }
+
+  .dashboard_panel {
+    background: linear-gradient(to bottom, #e0dcd9 0%, #e0dcd9, #f4f0ed 100%);
+    box-shadow: none;
   }
 
   .dashboard .header_heading {
@@ -42,7 +47,6 @@
 
   .dashboard_nav {
     background: linear-gradient(120deg, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
-    box-shadow: 1px 1px 20px #787573;
     border-radius: 3px;
   }
 

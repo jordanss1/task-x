@@ -1,7 +1,9 @@
 import { ReactElement } from "react";
+import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import "../../styles/header.css";
 import LightBulb from "../svg/LightBulb";
 import HeaderGoogleAuth from "./HeaderGoogleAuth";
+import HeaderLogo from "./HeaderLogo";
 
 type HeaderPropsType = {
   containerClass?: string;
@@ -10,6 +12,7 @@ type HeaderPropsType = {
 
 const Header = ({ containerClass, nav }: HeaderPropsType): ReactElement => {
   containerClass = containerClass ? containerClass : "";
+  const mobile = useMediaQuery(640);
 
   const renderContent = () => {
     if (nav) {
@@ -26,14 +29,7 @@ const Header = ({ containerClass, nav }: HeaderPropsType): ReactElement => {
   return (
     <header className={`${containerClass} flex justify-center items-center`}>
       <div className="header_logo cursor-pointer mr-auto flex justify-center items-center">
-        {!nav && (
-          <>
-            <LightBulb />
-            <h1 className="header_heading text-xl font-bold cursor-pointer select-none tracking-tighter ps-1">
-              Todo World
-            </h1>
-          </>
-        )}
+        {(!nav || mobile) && <HeaderLogo />}
       </div>
       {renderContent()}
     </header>

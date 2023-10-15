@@ -1,10 +1,16 @@
-import { motion } from "framer-motion";
+import { AnimationProps, MotionProps, motion } from "framer-motion";
 import { ReactElement } from "react";
+import { DashButtonPropsType } from "./World";
 
-const Home = ({ active }: { active: boolean }): ReactElement => {
+const Home = ({ active, ...props }: DashButtonPropsType): ReactElement => {
+  const { animate } = props;
+
   return (
     <motion.svg
-      animate={{ fill: active ? "rgba(225,225,225)" : "rgba(0,0,0)" }}
+      animate={{
+        fill: active ? "rgba(225,225,225)" : "rgba(0,0,0)",
+        ...(animate as AnimationProps),
+      }}
       xmlns="http://www.w3.org/2000/svg"
       height="1em"
       fill="white"
