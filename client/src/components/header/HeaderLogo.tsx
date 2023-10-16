@@ -15,9 +15,10 @@ const HeaderLogo = ({
       <LightBulb size={iconSize ?? 45} />
       <h1
         style={{ fontSize: `${fontSize}px` }}
-        className="header_heading w-fit leading-none font-bold  select-none tracking-tighter ps-1"
+        className="header_heading w-fit leading-none font-bold select-none tracking-tighter px-1 whitespace-nowrap"
       >
-        Todo World
+        <span className="text-md">Task</span>
+        <span className="logo_X ps-1 text-md">X</span>
       </h1>
     </div>
   );

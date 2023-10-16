@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import { fonts } from "../constants";
 
 const NotificationBell = ({
   notifications,
@@ -24,7 +25,10 @@ const NotificationBell = ({
         <path fill="none" d="M0 0h24v24H0z" />
       </svg>
       {notifications && (
-        <div className="absolute font-[Exo] w-fit h-fit px-1 bottom-3 text-xs left-4 rounded-sm bg-red-500 text-slate-50">
+        <div
+          style={{ fontFamily: fonts.exo }}
+          className="absolute w-fit h-fit px-1 bottom-3 text-xs left-4 rounded-sm bg-red-500 text-slate-50"
+        >
           88
         </div>
       )}

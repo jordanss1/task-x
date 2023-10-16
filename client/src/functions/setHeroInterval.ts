@@ -19,7 +19,7 @@ const setHeroInterval: SetHeroIntervalType = (setHero, currentIndex, speed) => {
     index = index < stateValues.length - 1 ? index + 1 : 0;
 
     setHero(stateValues[index]);
-  }, 3500);
+  }, 4500);
 };
 
 export default setHeroInterval;

@@ -1,15 +1,15 @@
 export const sidebarItems = [
   {
     heading: "Welcome",
-    body: "Learn about Todo World",
+    body: "Learn about Task X",
   },
   {
     heading: "Prioritize",
-    body: "Order your Todos",
+    body: "Order your Tasks",
   },
   {
     heading: "Popular",
-    body: "Wall of Todos",
+    body: "Task Wall",
   },
 ] as const;
 
@@ -18,15 +18,15 @@ export type SidebarHeadingsType = (typeof sidebarItems)[number]["heading"];
 export const contentItems = [
   {
     heading: "Login with Google",
-    body: " We take the minimum amount of data to run the service. View our privacy policy.",
+    body: "We take the minimum amount of data to run the service. View our privacy policy.",
     button: true,
   },
   {
-    heading: "Order your todos",
-    body: "Create todos to keep your life organised. Even time will learn to obey you!",
+    heading: "Order your tasks",
+    body: "Create tasks to keep your life organised. Set the date and time it should be completed.",
   },
   {
-    heading: "Todo famous?",
-    body: "Submit your todos to the Wall of Todos and have your peers vote on your everyday tasks.",
+    heading: "Need motivation?",
+    body: "Submit your tasks to the Task Wall and have your peers vote and give you advice.",
   },
 ];

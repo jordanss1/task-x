@@ -10,6 +10,10 @@
   font-family: "Jura", sans-serif;
 }
 
+.logo_X {
+  font-family: Orbitron;
+}
+
 @media screen and (max-width: 800px) {
   .header {
     padding: 0;

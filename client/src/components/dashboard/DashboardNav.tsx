@@ -41,7 +41,10 @@ const DashboardNav = (): ReactElement => {
 
   return (
     <nav>
-      <motion.ul className="font-[jura] text-sl items-center list-none flex gap-6 sm:gap-5 z-3">
+      <motion.ul
+        style={{ fontFamily: fonts.jura }}
+        className="text-sl items-center list-none flex gap-6 sm:gap-5 z-3"
+      >
         <li>
           <ButtonPopout
             width={"250px"}
