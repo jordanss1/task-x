@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 
-type TodoHeaderPropsType = {
+type TaskNavPropsType = {
   header: string;
 };
 
-const TodoHeader = ({ header }: TodoHeaderPropsType): ReactElement => {
+const TaskNav = ({ header }: TaskNavPropsType): ReactElement => {
   return (
     <section>
       <h2>{header}</h2>
@@ -12,4 +12,4 @@ const TodoHeader = ({ header }: TodoHeaderPropsType): ReactElement => {
   );
 };
 
-export default TodoHeader;
+export default TaskNav;

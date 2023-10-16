@@ -9,15 +9,15 @@ import MenuButton from "../svg/MenuButton";
 import { PanelButtonType, panelButtons } from "./content";
 
 type DashboardPanelPropsType = {
-  setActive: React.Dispatch<React.SetStateAction<"home" | "social">>;
-  active: "home" | "social";
+  setApp: React.Dispatch<React.SetStateAction<"home" | "social">>;
+  app: "home" | "social";
   expanded: boolean;
   setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const DashboardPanel = ({
-  active,
-  setActive,
+  app,
+  setApp,
   expanded,
   setExpanded,
 }: DashboardPanelPropsType): ReactElement => {
@@ -31,32 +31,30 @@ const DashboardPanel = ({
       >
         <Button
           style={{
-            padding: !active ? "auto" : "",
-            outline: !active ? "1px solid transparent" : "",
+            padding: !app ? "auto" : "",
+            outline: !app ? "1px solid transparent" : "",
           }}
           animate={{
             background:
-              active === label ? "var(--bg-active)" : "var(--bg-inactive)",
+              app === label ? "var(--bg-active)" : "var(--bg-inactive)",
             outline:
-              active === label
-                ? "var(--border-active)"
-                : "var(--border-inactive)",
-            padding: active === label ? "var(--p-from)" : "var(--p-to)",
+              app === label ? "var(--border-active)" : "var(--border-inactive)",
+            padding: app === label ? "var(--p-from)" : "var(--p-to)",
             transition: { duration: 0.1 },
           }}
-          onClick={() => setActive(label)}
+          onClick={() => setApp(label)}
           className="group min-h-[50px] sm:min-h-0 [--bg-active:linear-gradient(120deg,_rgb(153,_31,_255),_rgb(202,_255,_159))] [--bg-inactive:linear-gradient(120deg,rgb(242,_238,_235),rgb(242,_238,_235))] sm:[--bg-inactive:linear-gradient(120deg,_rgb(153,_31,_255,_0),_rgb(202,_255,_159_0))]  sm:[--border-active:1px_solid_#991FFF] sm:[--border-inactive:1px_solid_#991FFF00] [--border-active:3px_solid_rgb(242,_238,_235)] [--border-inactive:1px_solid_rgb(242,_238,_235)] scale-125 sm:scale-[.9]  transition-all relative rounded-[30%] [--p-from:1rem] [--p-to:.5rem_.8rem] sm:[--p-from:1rem] sm:[--p-to:1rem] p-4 sm:bottom-0 bottom-[45px]"
         >
           <Element
             animate={
               mobile
                 ? {
-                    y: active === label ? 0 : 12,
-                    scale: active === label ? 1 : 0.8,
+                    y: app === label ? 0 : 12,
+                    scale: app === label ? 1 : 0.8,
                   }
                 : {}
             }
-            active={active === label ? true : false}
+            active={app === label ? true : false}
           />
           {!expanded && (
             <motion.span
