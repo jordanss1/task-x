@@ -1,3 +1,4 @@
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -8,10 +9,24 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLDivElement
 );
 
+const theme = createTheme({
+  components: {
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          fontSize: "14px",
+        },
+      },
+    },
+  },
+});
+
 root.render(
   <Router>
     <Provider store={store}>
-      <App />
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
     </Provider>
   </Router>
 );

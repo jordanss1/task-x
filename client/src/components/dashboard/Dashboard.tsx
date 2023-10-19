@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { ReactElement, useState } from "react";
 import "../../styles/dashboard.css";
+import Calendar from "../Calendar";
 import Header from "../header/Header";
 import TasksContainer from "../tasks/TasksContainer";
+import TaskList from "../tasks/task-list/TaskList";
 import DashboardNav from "./DashboardNav";
 import DashboardPanel from "./DashboardPanel";
 
@@ -17,7 +19,7 @@ const Dashboard = (): ReactElement => {
           ? "var(--p-left-to)"
           : "var(--p-left-from)",
       }}
-      className="dashboard min-h-screen sm:[--p-left-from:70px] sm:[--p-left-to:155px] [--p-left-to:50px] [--p-left-from:50px]"
+      className="dashboard min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:155px] [--p-left-to:50px] [--p-left-from:50px]"
     >
       <Header containerClass="dashboard_header" nav={<DashboardNav />} />
       <main className="isolate">
@@ -27,7 +29,7 @@ const Dashboard = (): ReactElement => {
           setApp={setApp}
           app={app}
         />
-        <TasksContainer app={app} />
+        <TaskList />
       </main>
     </motion.div>
   );
