@@ -5,10 +5,9 @@ import SmallIcon from "./SmallIcon";
 
 type ButtonPopoutPropsType = {
   children: ReactNode;
-  width?: string;
+  action?: "hover" | "click";
   icon?: ReactNode;
   label?: string;
-  height?: string;
   fontSize?: number;
   iconSize?: number;
   className?: string;
@@ -16,8 +15,7 @@ type ButtonPopoutPropsType = {
 
 const ButtonPopout = ({
   label = "",
-  width = "100%",
-  height = "fit-content",
+  action = "click",
   icon,
   iconSize = 12,
   fontSize = 12,
@@ -44,30 +42,26 @@ const ButtonPopout = ({
     return () => document.removeEventListener("click", exitModal);
   }, [expanded]);
 
+  const onClick =
+    action === "click" ? () => setExpanded((prev) => !prev) : () => {};
+
+  const onHover = (expanded: boolean) =>
+    action === "hover" ? () => setExpanded(expanded) : () => {};
+
   return (
     <Button
       ref={buttonRef}
       label={label}
       fontSize={fontSize}
-      onClick={() => setExpanded((prev) => !prev)}
+      onClick={onClick}
+      onMouseEnter={onHover(true)}
+      onMouseLeave={onHover(false)}
       icon={
         icon ?? <SmallIcon size={iconSize} icon={"fa solid fa-angle-down"} />
       }
-      className={`${className} relative p-2 gap-0.5`}
+      className={`${className} relative`}
     >
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1, transition: { ease: "easeIn" } }}
-            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
-            style={{ width, height }}
-            className="absolute top-[40px] origin-top-right cursor-default h-fit bottom-0 right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
-          >
-            {children}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <AnimatePresence initial={false}>{expanded && children}</AnimatePresence>
     </Button>
   );
 };

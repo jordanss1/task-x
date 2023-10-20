@@ -20,22 +20,31 @@ const DashboardNav = (): ReactElement => {
   ));
 
   const renderNotifications = () => {
-    return notifications.length ? (
-      notifications.map((notification) => (
-        <div
-          key={notification}
-          className="w-full p-2 hover:bg-slate-100 text-slate-800 hover:text-black rounded-[3px] text-left text-xs"
-        >
-          {notification}
-        </div>
-      ))
-    ) : (
-      <div
-        style={{ fontFamily: fonts.exo }}
-        className="w-full p-2 h-full flex items-center justify-center text-slate-800 rounded-[3px] text-sm"
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.85 }}
+        animate={{ opacity: 1, scale: 1, transition: { ease: "easeIn" } }}
+        exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
+        className="absolute z-[5] w-44 top-[40px] cursor-default origin-top-right h-fit right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
       >
-        No notifications
-      </div>
+        {notifications.length ? (
+          notifications.map((notification) => (
+            <div
+              key={notification}
+              className="w-full p-2 hover:bg-slate-100 text-slate-800 hover:text-black rounded-[3px] text-left text-xs"
+            >
+              {notification}
+            </div>
+          ))
+        ) : (
+          <div
+            style={{ fontFamily: fonts.jura }}
+            className="w-full p-2 h-full flex items-center justify-center text-slate-800 rounded-[3px] text-sm"
+          >
+            No notifications
+          </div>
+        )}
+      </motion.div>
     );
   };
 
@@ -47,22 +56,28 @@ const DashboardNav = (): ReactElement => {
       >
         <li>
           <ButtonPopout
-            width={"250px"}
-            height="100px"
             icon={<NotificationBell notifications={[]} />}
+            action="click"
           >
             {renderNotifications()}
           </ButtonPopout>
         </li>
         <li className="sm:flex hidden items-center">
           <ButtonPopout
-            width="175px"
             iconSize={10}
             fontSize={15}
             label="Account"
             className="border-0"
+            action="click"
           >
-            {renderSettings}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1, transition: { ease: "easeIn" } }}
+              exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
+              className="absolute w-44 z-[5] top-[40px] cursor-default origin-top-right h-fit right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+            >
+              {renderSettings}
+            </motion.div>
           </ButtonPopout>
         </li>
         <MenuPopout className="sm:hidden relative gap-1 flex items-center">

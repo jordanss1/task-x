@@ -11,7 +11,7 @@ const tasks = [
   },
   {
     task: "Study for my exam",
-    dueBy: dayjs().subtract(1, "hour"),
+    dueBy: undefined,
     created: dayjs().subtract(5, "days"),
     onTaskWall: true,
   },
@@ -30,14 +30,10 @@ const tasks = [
 ];
 
 const TaskList = (): ReactElement => {
-  const isTaskDue = (date: Dayjs) => {
-    date.isBefore(dayjs());
-  };
-
   return (
-    <section className="grid grid-cols-[repeat(auto-fit,_minmax(230px,_1fr))] gap-8  justify-items-center pt-20">
-      {tasks.map((task) => (
-        <TaskListTask task={task} />
+    <section className="grid grid-cols-[repeat(auto-fit,_minmax(230px,_1fr))] gap-8  justify-items-center py-20">
+      {tasks.map((task, i) => (
+        <TaskListTask key={i} task={task} />
       ))}
     </section>
   );

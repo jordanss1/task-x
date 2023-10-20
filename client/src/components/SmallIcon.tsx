@@ -9,7 +9,7 @@ const SmallIcon = ({
 }: SmallIconPropsType): ReactElement => {
   className = `${icon} ${className ?? ""}`;
 
-  return <i style={{ fontSize: size ?? 12 }} className={className} />;
+  return <i style={{ fontSize: `${size ?? 12}px` }} className={className} />;
 };
 
 export default SmallIcon;
