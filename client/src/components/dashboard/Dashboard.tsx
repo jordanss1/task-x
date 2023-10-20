@@ -14,12 +14,13 @@ const Dashboard = (): ReactElement => {
 
   return (
     <motion.div
+      style={{ paddingLeft: "var(--p-left-from)" }}
       animate={{
         paddingLeft: sidebarExpanded
           ? "var(--p-left-to)"
           : "var(--p-left-from)",
       }}
-      className="dashboard min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:155px] [--p-left-to:50px] [--p-left-from:50px]"
+      className="dashboard min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
     >
       <Header containerClass="dashboard_header" nav={<DashboardNav />} />
       <main className="isolate">

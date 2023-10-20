@@ -4,6 +4,19 @@ body,
   isolation: isolate;
 }
 
+.paper {
+  background: repeating-linear-gradient(
+    #f1ede9,
+    #f1ede9 31px,
+    #94acd4 31px,
+    #94acd4 32px
+  );
+  line-height: 34px;
+  padding-top: 5px;
+  min-height: 100px;
+  outline: 0;
+}
+
 .hero_button {
   font-family: "Jura", sans-serif;
   border-radius: 30px !important;
