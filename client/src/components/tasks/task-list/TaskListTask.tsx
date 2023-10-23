@@ -1,17 +1,24 @@
 import dayjs, { Dayjs } from "dayjs";
 import { motion } from "framer-motion";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { colors, fonts } from "../../../constants";
 import { taskStatus } from "../../../functions/taskStatus";
 import { TaskType } from "../../../types";
 import ButtonPopout from "../../ButtonPopout";
 import SmallIcon from "../../SmallIcon";
+import ToggleSwitch from "../../ToggleSwitch";
 
 type TaskListTaskPropsType = {
   task: TaskType;
+  index: number;
 };
 
-const TaskListTask = ({ task }: TaskListTaskPropsType): ReactElement => {
+const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
+  const [editing, setEditing] = useState(false);
+  const [publicVisibility, setPublicVisibility] = useState(false);
+
+  const handleToggle = () => setPublicVisibility((prev) => !prev);
+
   const { taskIsOverdue, timeFormat, notDue } = taskStatus(task.dueBy);
 
   const renderStatus = () => {
@@ -50,26 +57,89 @@ const TaskListTask = ({ task }: TaskListTaskPropsType): ReactElement => {
     }
   };
 
+  const renderEditPill = (
+    <>
+      <motion.div
+        layoutDependency={editing}
+        layoutId={`edit-pill-${index}`}
+        style={{
+          borderRadius: "20px",
+          bottom: editing ? "0" : "-10px",
+          left: "0px",
+          height: editing ? "105%" : "130%",
+          background: `conic-gradient( 
+          ${colors.purple} 20%,
+          blue 20% 40%,
+          ${colors.yellow} 40% 60%,
+          ${colors.purple} 60% 80%,
+          blue 80%
+        )`,
+        }}
+        className="absolute w-full -z-[5]"
+      />
+      <motion.div
+        layoutDependency={editing}
+        layoutId={`edit-overlay-${index}`}
+        style={{
+          borderRadius: "20px",
+          bottom: editing ? "0" : "-10px",
+          left: "0px",
+          height: editing ? "105%" : "130%",
+          background: editing ? `rgb(0,0,0,.5)` : `rgb(0,0,0, 0)`,
+        }}
+        className="absolute w-full -z-[4]"
+      />
+    </>
+  );
+
   return (
     <motion.div
-      style={{
-        background: `linear-gradient(120deg, ${colors.whiteShades[0]}, ${colors.whiteShades[1]})`,
-        outline: `1px solid rgb(160,160,160)`,
-        boxShadow:
-          "1px 1px 1px rgb(160,160,160), -1px -1px 10px rgb(160,160,160)",
-      }}
-      className="py-4 relative max-w-[230px] rounded-3xl w-full min-h-[260px] p-2 items-center justify-center"
+      onClick={() => setEditing((prev) => !prev)}
+      className="relative flex flex-col gap-9 max-w-[230px] rounded-3xl w-full p-2"
     >
-      <div>{renderStatus()}</div>
-      <textarea
-        value={task.task}
+      {editing && renderEditPill}
+      <motion.div
+        className="p-1  relative rounded-xl"
         style={{
-          outline: `1px solid rgb(160,160,160)`,
-          borderBottom: "none",
-          fontFamily: fonts.exo,
+          outline: `1px solid rgb(70,70,70)`,
         }}
-        className="paper resize-none text-xs px-2 w-full rounded-xl max-w-full"
-      />
+      >
+        {renderStatus()}
+      </motion.div>
+      <motion.div
+        animate={{
+          padding: editing ? "0 10px" : "0 12px",
+        }}
+        style={{ padding: "0 12px" }}
+        className="relative"
+      >
+        {!editing && renderEditPill}
+        <div className="py-3">
+          <textarea
+            value={task.task}
+            style={{
+              outline: `1px solid rgb(70,70,70)`,
+              borderBottom: "none",
+              fontFamily: fonts.exo,
+              boxShadow: `inset 1px 1px 10px rgb(80,80,80), inset -1px -1px 10px rgb(80,80,80)`,
+            }}
+            className="paper relative resize-none text-sm px-3 w-full rounded-xl max-w-full"
+          />
+        </div>
+        <div
+          style={{
+            background: `linear-gradient(to right, rgb(0,0,0), rgb(30,30,30))`,
+          }}
+          className="task-toggle relative w-3/4 p-1 rounded-xl ms-auto"
+        >
+          <ToggleSwitch
+            disabled={!editing}
+            label={publicVisibility ? "Public" : "Private"}
+            handleToggle={handleToggle}
+            toggled={publicVisibility}
+          />
+        </div>
+      </motion.div>
     </motion.div>
   );
 };

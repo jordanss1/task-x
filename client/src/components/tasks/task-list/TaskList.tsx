@@ -33,7 +33,7 @@ const TaskList = (): ReactElement => {
   return (
     <section className="grid grid-cols-[repeat(auto-fit,_minmax(230px,_1fr))] gap-8  justify-items-center py-20">
       {tasks.map((task, i) => (
-        <TaskListTask key={i} task={task} />
+        <TaskListTask key={i} index={i} task={task} />
       ))}
     </section>
   );

@@ -20,10 +20,10 @@ const Dashboard = (): ReactElement => {
           ? "var(--p-left-to)"
           : "var(--p-left-from)",
       }}
-      className="dashboard min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
+      className="dashboard isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
     >
       <Header containerClass="dashboard_header" nav={<DashboardNav />} />
-      <main className="isolate">
+      <main>
         <DashboardPanel
           expanded={sidebarExpanded}
           setExpanded={setSidebarExpanded}
