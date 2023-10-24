@@ -45,20 +45,15 @@ const ModalBackground = ({
       ) : (
         <motion.div
           className="modal_normal absolute inset-0"
+          style={{ background, zIndex: zIndex - 1, mixBlendMode }}
           initial={{
-            background:
-              "linear-gradient(130deg, rgb(46, 46, 46,0), #e0dcd900, rgb(46, 46, 46,0)",
+            opacity: 0,
           }}
           animate={{
-            background,
+            opacity: 1,
           }}
           exit={{
-            background:
-              "linear-gradient(130deg, rgb(46, 46, 46,0), #e0dcd900, rgb(46, 46, 46,0)",
-          }}
-          style={{
-            zIndex: zIndex - 1,
-            mixBlendMode,
+            opacity: 0,
           }}
         />
       )}

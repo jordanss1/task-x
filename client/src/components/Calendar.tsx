@@ -1,3 +1,4 @@
+import { createTheme } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -15,6 +16,17 @@ const Calendar = ({
   const utcDate = value?.toISOString();
   const localeDate = dayjs(utcDate).toDate();
 
+  const theme = createTheme({
+    components: {
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            fontSize: "14px",
+          },
+        },
+      },
+    },
+  });
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

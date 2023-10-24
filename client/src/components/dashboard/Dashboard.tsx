@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
 import { ReactElement, useState } from "react";
 import "../../styles/dashboard.css";
-import Calendar from "../Calendar";
 import Header from "../header/Header";
-import TasksContainer from "../tasks/TasksContainer";
 import TaskList from "../tasks/task-list/TaskList";
 import DashboardNav from "./DashboardNav";
 import DashboardPanel from "./DashboardPanel";

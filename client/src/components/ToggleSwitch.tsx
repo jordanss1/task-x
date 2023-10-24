@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
-import { colors } from "../constants";
+import { colors, fonts } from "../constants";
 
 type ToggleSwitchPropsType = {
   label: string;
@@ -17,29 +17,42 @@ const ToggleSwitch = ({
 }: ToggleSwitchPropsType): ReactElement => {
   return (
     <div
+      style={{ cursor: disabled ? "default" : "pointer" }}
       onClick={handleToggle}
-      className="flex cursor-pointer justify-end items-center gap-2 pr-1"
+      className="flex justify-between justify-end items-center gap-2 pr-1"
     >
-      <span className="mix-blend-exclusion">{label}</span>
+      <span
+        style={{
+          fontFamily: fonts.orbitron,
+          color: disabled ? "rgb(120,120,120)" : colors.whiteShades[1],
+        }}
+        className="ps-2 text-xs"
+      >
+        {label}
+      </span>
       <motion.div
         style={{
           justifyContent: toggled ? "flex-end" : "flex-start",
         }}
         animate={{
-          boxShadow: toggled
-            ? `inset 1px 1px 5px ${colors.purple}, inset -1px -1px 5px ${colors.purple}`
-            : `inset 1px 1px 5px rgb(153, 31, 255, 0), inset -1px -1px 5px rgb(153, 31, 255, 0)`,
-          background: disabled
-            ? "linear-gradient(to left, rgb(20,20,20), rgb(40,40,40))"
-            : "linear-gradient(to left, rgb(60,60,60), rgb(80,80,80))",
+          boxShadow: disabled
+            ? `inset 1px 1px 2px rgb(60, 60, 60, 0), inset -1px -1px 2px rgb(60, 60, 60, 0)`
+            : toggled
+            ? `inset 1px 1px 1px rgb(153, 31, 255,.4), inset -1px -1px 1px rgb(153, 31, 255,.4)`
+            : `inset 1px 1px 2px rgb(60, 60, 60, .5), inset -1px -1px 2px rgb(60, 60, 60, .5)`,
+          background: disabled ? "rgb(30,30,30)" : "rgb(35,35,35)",
         }}
         className="rounded-3xl flex w-16 h-9 items-center px-1"
       >
         <motion.div
           animate={{
-            background: `linear-gradient(120deg, rgb(30,30,30), ${colors.purple})`,
+            background: disabled
+              ? `linear-gradient(120deg, rgb(30,30,30), rgb(153, 31, 255,.5) 60%, rgb(30,30,30))`
+              : `linear-gradient(120deg, rgb(30,30,30), ${colors.purple}, rgb(30,30,30))`,
+            outline: disabled ? "1px solid rgb(55,55,55)" : "0px solid white",
+            transition: { type: "spring", duration: 0.8 },
           }}
-          transition={{ type: "spring", duration: 0.8 }}
+          layoutDependency={toggled}
           layout
           className="rounded-full h-7 w-7"
         />

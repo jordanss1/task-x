@@ -1,10 +1,13 @@
 import dayjs, { Dayjs } from "dayjs";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement, useState } from "react";
 import { colors, fonts } from "../../../constants";
 import { taskStatus } from "../../../functions/taskStatus";
+import "../../../styles/mui-overrides/task.css";
 import { TaskType } from "../../../types";
 import ButtonPopout from "../../ButtonPopout";
+import Calendar from "../../Calendar";
+import ModalBackground from "../../ModalBackground";
 import SmallIcon from "../../SmallIcon";
 import ToggleSwitch from "../../ToggleSwitch";
 
@@ -16,6 +19,8 @@ type TaskListTaskPropsType = {
 const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
   const [editing, setEditing] = useState(false);
   const [publicVisibility, setPublicVisibility] = useState(false);
+  const [dueDate, setDueDate] = useState(dayjs().add(1, "hour"));
+  const [taskValue, setTaskValue] = useState(task.task);
 
   const handleToggle = () => setPublicVisibility((prev) => !prev);
 
@@ -62,11 +67,15 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
       <motion.div
         layoutDependency={editing}
         layoutId={`edit-pill-${index}`}
+        animate={{
+          bottom: editing ? "0px" : "-18px",
+          height: editing ? "101%" : "130%",
+        }}
         style={{
           borderRadius: "20px",
-          bottom: editing ? "0" : "-10px",
-          left: "0px",
-          height: editing ? "105%" : "130%",
+          bottom: "-18px",
+          height: "130%",
+          left: "-2px",
           background: `conic-gradient( 
           ${colors.purple} 20%,
           blue 20% 40%,
@@ -74,73 +83,113 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
           ${colors.purple} 60% 80%,
           blue 80%
         )`,
+          boxShadow: "1px 1px 5px rgba(0,0,0), -1px -1px 5px rgb(0,0,0)",
         }}
-        className="absolute w-full -z-[5]"
+        className="absolute w-[102%] -z-[5]"
       />
       <motion.div
         layoutDependency={editing}
         layoutId={`edit-overlay-${index}`}
         style={{
           borderRadius: "20px",
-          bottom: editing ? "0" : "-10px",
-          left: "0px",
-          height: editing ? "105%" : "130%",
-          background: editing ? `rgb(0,0,0,.5)` : `rgb(0,0,0, 0)`,
+          bottom: editing ? "0" : "-18px",
+          left: "-2px",
+          height: editing ? "101%" : "130%",
+          background: !editing ? `rgb(0,0,0,.3)` : `rgb(0,0,0,0)`,
         }}
-        className="absolute w-full -z-[4]"
+        className="absolute w-[102%] -z-[4]"
       />
     </>
   );
 
   return (
-    <motion.div
-      onClick={() => setEditing((prev) => !prev)}
-      className="relative flex flex-col gap-9 max-w-[230px] rounded-3xl w-full p-2"
-    >
-      {editing && renderEditPill}
+    <>
+      {editing && (
+        <ModalBackground
+          background="rgba(0,0,0,.2)"
+          mixBlendMode="color-burn"
+          onClick={() => setEditing(false)}
+        />
+      )}
       <motion.div
-        className="p-1  relative rounded-xl"
+        animate={{ scale: editing ? 1.2 : 1 }}
+        onClick={() => setEditing((prev) => !prev)}
         style={{
-          outline: `1px solid rgb(70,70,70)`,
+          zIndex: editing ? 10 : "initial",
+          gap: editing ? "16px" : "32px",
         }}
+        className="relative flex flex-col p-4 max-w-[230px] rounded-3xl w-full"
       >
-        {renderStatus()}
-      </motion.div>
-      <motion.div
-        animate={{
-          padding: editing ? "0 10px" : "0 12px",
-        }}
-        style={{ padding: "0 12px" }}
-        className="relative"
-      >
-        {!editing && renderEditPill}
-        <div className="py-3">
-          <textarea
-            value={task.task}
-            style={{
-              outline: `1px solid rgb(70,70,70)`,
-              borderBottom: "none",
-              fontFamily: fonts.exo,
-              boxShadow: `inset 1px 1px 10px rgb(80,80,80), inset -1px -1px 10px rgb(80,80,80)`,
-            }}
-            className="paper relative resize-none text-sm px-3 w-full rounded-xl max-w-full"
-          />
-        </div>
-        <div
+        {editing && renderEditPill}
+        <motion.div
+          className="relative rounded-xl"
           style={{
-            background: `linear-gradient(to right, rgb(0,0,0), rgb(30,30,30))`,
+            outline: `1px solid rgb(70,70,70)`,
+            padding: "0 12px",
           }}
-          className="task-toggle relative w-3/4 p-1 rounded-xl ms-auto"
         >
-          <ToggleSwitch
-            disabled={!editing}
-            label={publicVisibility ? "Public" : "Private"}
-            handleToggle={handleToggle}
-            toggled={publicVisibility}
-          />
-        </div>
+          {renderStatus()}
+        </motion.div>
+        <motion.div
+          animate={{
+            padding: editing ? "0 0px" : "0 12px",
+          }}
+          style={{ padding: "0 12px" }}
+          className="relative flex flex-col gap-4"
+        >
+          {!editing && renderEditPill}
+          <motion.div layout layoutDependency={editing} className="py-1">
+            <motion.textarea
+              value={taskValue}
+              style={{
+                outline: `2px solid rgb(180,180,180)`,
+                borderBottom: "none",
+                fontFamily: fonts.jura,
+                boxShadow: `inset 1px 1px 10px rgb(80,80,80), inset -1px -1px 10px rgb(80,80,80)`,
+                cursor: editing ? "text" : "default",
+              }}
+              onChange={({ target }) => setTaskValue(target.value)}
+              disabled={!editing}
+              className="paper relative resize-none text-sm px-3 w-full rounded-xl max-w-full"
+            />
+          </motion.div>
+          <AnimatePresence mode="wait">
+            {editing && (
+              <motion.div
+                className="relative"
+                initial={{ position: "absolute", opacity: 0 }}
+                animate={{ position: "relative", opacity: 1 }}
+                exit={{
+                  opacity: 0,
+                  height: "0px",
+                }}
+              >
+                <motion.div className="absolute h-[115%] w-full bottom-1 -z-[3] left-0" />
+                <Calendar setDate={() => setDueDate} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <div
+            style={{
+              background: editing
+                ? `linear-gradient(to right, rgb(30,30,30), rgb(10,10,10), rgb(30,30,30))`
+                : `linear-gradient(to right, rgb(0,0,0), rgb(0,0,0), rgb(0,0,0))`,
+              outline: editing
+                ? "rgb(180, 180, 180) solid 1px"
+                : "1px solid rgb(255,255,255,0)",
+            }}
+            className="task-toggle isolate relative w-full p-1 rounded-xl ms-auto"
+          >
+            <ToggleSwitch
+              disabled={!editing}
+              label={publicVisibility ? "Public" : "Private"}
+              handleToggle={handleToggle}
+              toggled={publicVisibility}
+            />
+          </div>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </>
   );
 };
 
