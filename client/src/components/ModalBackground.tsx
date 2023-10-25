@@ -22,7 +22,7 @@ const ModalBackground = ({
     <>
       <motion.div
         onClick={onClick}
-        style={{ zIndex }}
+        style={{ zIndex, width }}
         className="absolute inset-0"
       />
       {blur ? (
@@ -51,6 +51,7 @@ const ModalBackground = ({
           }}
           animate={{
             opacity: 1,
+            transition: { duration: 1 },
           }}
           exit={{
             opacity: 0,

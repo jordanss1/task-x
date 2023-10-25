@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
-import { AnimatePresence, motion } from "framer-motion";
-import { ReactElement, useState } from "react";
+import { AnimatePresence, motion, useAnimate } from "framer-motion";
+import { ReactElement, useEffect, useState } from "react";
 import { colors, fonts } from "../../../constants";
 import { taskStatus } from "../../../functions/taskStatus";
 import "../../../styles/mui-overrides/task.css";
@@ -21,10 +21,40 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
   const [publicVisibility, setPublicVisibility] = useState(false);
   const [dueDate, setDueDate] = useState(dayjs().add(1, "hour"));
   const [taskValue, setTaskValue] = useState(task.task);
+  const [scope, animate] = useAnimate();
+
+  useEffect(() => {
+    if (editing) {
+      animate(
+        scope.current,
+        {
+          background: [
+            `conic-gradient( 
+            ${colors.purple} -50%,
+            rgb(0, 0, 255) -20% -40%,
+            ${colors.yellow} -40% -60%,
+            ${colors.purple} -60% -80%,
+            rgb(0, 0, 255) -80%
+          )`,
+            `conic-gradient( 
+            ${colors.purple} 20%,
+            rgb(0, 0, 255) 20% 40%,
+            ${colors.yellow} 40% 60%,
+            ${colors.purple} 60% 80%,
+            rgb(0, 0, 255) 80%
+          )`,
+          ],
+        },
+        { type: "spring", stiffness: 70 }
+      );
+    }
+  }, [editing]);
 
   const handleToggle = () => setPublicVisibility((prev) => !prev);
 
-  const { taskIsOverdue, timeFormat, notDue } = taskStatus(task.dueBy);
+  const { taskIsOverdue, timeLeft, timeFormat, notDue } = taskStatus(
+    task.dueBy
+  );
 
   const renderStatus = () => {
     if (notDue) {
@@ -48,15 +78,11 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
     }
 
     if (taskIsOverdue) {
-      return (
-        <span>
-          Due in <span>{task.dueBy?.diff(dayjs(), "hours")}</span>
-        </span>
-      );
+      return <span>Overdue</span>;
     } else {
       return (
         <span>
-          Due in <span>{task.dueBy?.diff(dayjs(), "hours")}</span>
+          Due in <span>{`${timeLeft} ${timeFormat}`}</span>
         </span>
       );
     }
@@ -65,6 +91,7 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
   const renderEditPill = (
     <>
       <motion.div
+        ref={scope}
         layoutDependency={editing}
         layoutId={`edit-pill-${index}`}
         animate={{
@@ -76,45 +103,86 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
           bottom: "-18px",
           height: "130%",
           left: "-2px",
-          background: `conic-gradient( 
-          ${colors.purple} 20%,
-          blue 20% 40%,
-          ${colors.yellow} 40% 60%,
-          ${colors.purple} 60% 80%,
-          blue 80%
-        )`,
           boxShadow: "1px 1px 5px rgba(0,0,0), -1px -1px 5px rgb(0,0,0)",
+          background: `conic-gradient( 
+            ${colors.purple} 20%,
+            blue 20% 40%,
+            ${colors.yellow} 40% 60%,
+            ${colors.purple} 60% 80%,
+            blue 80%
+          )`,
         }}
         className="absolute w-[102%] -z-[5]"
       />
       <motion.div
         layoutDependency={editing}
         layoutId={`edit-overlay-${index}`}
-        style={{
-          borderRadius: "20px",
-          bottom: editing ? "0" : "-18px",
-          left: "-2px",
+        animate={{
+          bottom: editing ? "0px" : "-18px",
           height: editing ? "101%" : "130%",
           background: !editing ? `rgb(0,0,0,.3)` : `rgb(0,0,0,0)`,
+        }}
+        style={{
+          bottom: "-18px",
+          height: "130%",
+          borderRadius: "20px",
+          left: "-2px",
+          background: "rgb(0,0,0,.3)",
         }}
         className="absolute w-[102%] -z-[4]"
       />
     </>
   );
 
+  const handleEdit = async () => {
+    if (!editing) {
+      await animate(
+        scope.current,
+        {
+          background: [
+            `conic-gradient( 
+          ${colors.purple} 20%,
+          rgb(0, 0, 255) 20% 40%,
+          ${colors.yellow} 40% 60%,
+          ${colors.purple} 60% 80%,
+          rgb(0, 0, 255) 80%
+        `,
+            `conic-gradient( 
+            ${colors.purple} 100%,
+            rgb(0, 0, 255) 20% 40%,
+            ${colors.yellow} 40% 60%,
+            ${colors.purple} 60% 80%,
+            rgb(0, 0, 255) 80%
+          )`,
+          ],
+        },
+        { duration: 0.3, type: "tween", ease: "easeIn" }
+      );
+
+      setEditing(true);
+    } else setEditing(false);
+  };
+
   return (
     <>
-      {editing && (
-        <ModalBackground
-          background="rgba(0,0,0,.2)"
-          mixBlendMode="color-burn"
-          onClick={() => setEditing(false)}
-        />
-      )}
+      <AnimatePresence mode="wait">
+        {editing && (
+          <ModalBackground
+            key={1}
+            mixBlendMode="normal"
+            background="rgba(0,0,0,.2)"
+            onClick={() => setEditing(false)}
+          />
+        )}
+      </AnimatePresence>
       <motion.div
-        animate={{ scale: editing ? 1.2 : 1 }}
-        onClick={() => setEditing((prev) => !prev)}
+        animate={{
+          scale: editing ? 1.2 : 1,
+          transition: { ease: "easeIn" },
+        }}
+        onClick={() => handleEdit()}
         style={{
+          scale: 1,
           zIndex: editing ? 10 : "initial",
           gap: editing ? "16px" : "32px",
         }}
@@ -158,7 +226,10 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
               <motion.div
                 className="relative"
                 initial={{ position: "absolute", opacity: 0 }}
-                animate={{ position: "relative", opacity: 1 }}
+                animate={{
+                  position: "relative",
+                  opacity: 1,
+                }}
                 exit={{
                   opacity: 0,
                   height: "0px",
@@ -169,8 +240,8 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
               </motion.div>
             )}
           </AnimatePresence>
-          <div
-            style={{
+          <motion.div
+            animate={{
               background: editing
                 ? `linear-gradient(to right, rgb(30,30,30), rgb(10,10,10), rgb(30,30,30))`
                 : `linear-gradient(to right, rgb(0,0,0), rgb(0,0,0), rgb(0,0,0))`,
@@ -186,7 +257,7 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
               handleToggle={handleToggle}
               toggled={publicVisibility}
             />
-          </div>
+          </motion.div>
         </motion.div>
       </motion.div>
     </>

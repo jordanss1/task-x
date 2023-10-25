@@ -85,15 +85,24 @@ const DashboardNav = (): ReactElement => {
             key={2}
             initial={{
               scaleX: 0.6,
-              filter: "blur(10px)",
+              filter: "blur(5px)",
             }}
             animate={{
               scaleX: 1,
               filter: "blur(0px)",
+              opacity: 1,
+              transition: {
+                filter: { delay: 0.1 },
+              },
             }}
             exit={{
               scaleX: 0.8,
               opacity: 0,
+              filter: "blur(2px)",
+              transition: {
+                ease: "easeIn",
+                filter: { delay: 0.1 },
+              },
             }}
             className="dashboard_nav origin-right popout_z_index fixed pt-[min(25vh,120px)] w-8/12 right-0 top-0 bottom-0 left-9/12 cursor-default overflow-hidden"
           >
