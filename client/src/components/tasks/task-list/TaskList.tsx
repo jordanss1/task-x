@@ -5,7 +5,7 @@ import TaskListTask from "./TaskListTask";
 const tasks = [
   {
     task: "Take my last exam of the year for nursing school!",
-    dueBy: dayjs().add(2, "week"),
+    dueBy: dayjs().subtract(2, "week"),
     created: dayjs().subtract(2, "days"),
     onTaskWall: false,
   },

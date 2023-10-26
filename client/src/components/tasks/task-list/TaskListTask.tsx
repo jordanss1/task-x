@@ -10,6 +10,8 @@ import Calendar from "../../Calendar";
 import ModalBackground from "../../ModalBackground";
 import SmallIcon from "../../SmallIcon";
 import ToggleSwitch from "../../ToggleSwitch";
+import TaskOverlay from "./TaskOverlay";
+import TaskStatus from "./TaskStatus";
 
 type TaskListTaskPropsType = {
   task: TaskType;
@@ -50,90 +52,6 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
     }
   }, [editing]);
 
-  const handleToggle = () => setPublicVisibility((prev) => !prev);
-
-  const { taskIsOverdue, timeLeft, timeFormat, notDue } = taskStatus(
-    task.dueBy
-  );
-
-  const renderStatus = () => {
-    if (notDue) {
-      return (
-        <ButtonPopout
-          className="gap-1 p-1 rounded-lg outline-1 outline outline-slate-500"
-          action="hover"
-          label="Not due"
-          icon={<SmallIcon size={10} icon="fa-solid fa-info" />}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 0.8, scale: 1, transition: { ease: "easeIn" } }}
-            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
-            className="absolute p-1 w-32 bottom-[35px] cursor-default origin-bottom-right h-fit right-0  border-[1px] rounded-lg overflow-hidden text-xs bg-[#f4f0ed] border-slate-400"
-          >
-            You can set due date using the edit button
-          </motion.div>
-        </ButtonPopout>
-      );
-    }
-
-    if (taskIsOverdue) {
-      return <span>Overdue</span>;
-    } else {
-      return (
-        <span>
-          Due in <span>{`${timeLeft} ${timeFormat}`}</span>
-        </span>
-      );
-    }
-  };
-
-  const renderEditPill = (
-    <>
-      <motion.div
-        ref={scope}
-        layoutDependency={editing}
-        layoutId={`edit-pill-${index}`}
-        animate={{
-          bottom: editing ? "0px" : "-18px",
-          height: editing ? "101%" : "130%",
-        }}
-        style={{
-          borderRadius: "20px",
-          bottom: "-18px",
-          height: "130%",
-          left: "-2px",
-          boxShadow: "1px 1px 5px rgba(0,0,0), -1px -1px 5px rgb(0,0,0)",
-          background: `conic-gradient( 
-            ${colors.purple} 20%,
-            blue 20% 40%,
-            ${colors.yellow} 40% 60%,
-            ${colors.purple} 60% 80%,
-            blue 80%
-          )`,
-        }}
-        className="absolute w-[102%] -z-[5]"
-      />
-      <motion.div
-        layoutDependency={editing}
-        layoutId={`edit-overlay-${index}`}
-        animate={{
-          bottom: editing ? "0px" : "-18px",
-          height: editing ? "101%" : "130%",
-          background: !editing ? `rgb(0,0,0,.3)` : `rgb(0,0,0,0)`,
-        }}
-        style={{
-          bottom: "-18px",
-          height: "130%",
-          borderRadius: "20px",
-          left: "-2px",
-          background: "rgb(0,0,0,.3)",
-        }}
-        className="absolute w-[102%] -z-[4]"
-      />
-    </>
-  );
-
   const handleEdit = async () => {
     if (!editing) {
       await animate(
@@ -163,6 +81,10 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
     } else setEditing(false);
   };
 
+  const handleToggle = editing
+    ? () => setPublicVisibility((prev) => !prev)
+    : () => {};
+
   return (
     <>
       <AnimatePresence mode="wait">
@@ -178,26 +100,23 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
       <motion.div
         animate={{
           scale: editing ? 1.2 : 1,
+          gap: editing ? "16px" : "32px",
+          zIndex: editing ? 10 : "initial",
           transition: { ease: "easeIn" },
         }}
-        onClick={() => handleEdit()}
         style={{
           scale: 1,
-          zIndex: editing ? 10 : "initial",
-          gap: editing ? "16px" : "32px",
         }}
-        className="relative flex flex-col p-4 max-w-[230px] rounded-3xl w-full"
+        className="relative gap-8 flex flex-col p-4 max-w-[230px] rounded-3xl w-full"
       >
-        {editing && renderEditPill}
-        <motion.div
-          className="relative rounded-xl"
-          style={{
-            outline: `1px solid rgb(70,70,70)`,
-            padding: "0 12px",
-          }}
-        >
-          {renderStatus()}
-        </motion.div>
+        {editing && (
+          <TaskOverlay index={index} editing={editing} scope={scope} />
+        )}
+        <TaskStatus
+          editing={editing}
+          handleEdit={handleEdit}
+          dueBy={task.dueBy}
+        />
         <motion.div
           animate={{
             padding: editing ? "0 0px" : "0 12px",
@@ -205,20 +124,21 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
           style={{ padding: "0 12px" }}
           className="relative flex flex-col gap-4"
         >
-          {!editing && renderEditPill}
+          {!editing && (
+            <TaskOverlay index={index} editing={editing} scope={scope} />
+          )}
           <motion.div layout layoutDependency={editing} className="py-1">
-            <motion.textarea
+            <textarea
               value={taskValue}
               style={{
                 outline: `2px solid rgb(180,180,180)`,
-                borderBottom: "none",
                 fontFamily: fonts.jura,
                 boxShadow: `inset 1px 1px 10px rgb(80,80,80), inset -1px -1px 10px rgb(80,80,80)`,
                 cursor: editing ? "text" : "default",
               }}
               onChange={({ target }) => setTaskValue(target.value)}
               disabled={!editing}
-              className="paper relative resize-none text-sm px-3 w-full rounded-xl max-w-full"
+              className="paper border-b-0 relative resize-none text-sm px-3 w-full rounded-xl max-w-full"
             />
           </motion.div>
           <AnimatePresence mode="wait">

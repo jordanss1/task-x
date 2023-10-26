@@ -4,7 +4,7 @@ export const taskStatus = (date?: Dayjs) => {
   let timeLeft;
   let timeFormat;
   let taskIsOverdue;
-  let notDue;
+  let noDueDate;
 
   const months = date?.diff(dayjs(), "months");
   const weeks = date?.diff(dayjs(), "weeks");
@@ -14,7 +14,7 @@ export const taskStatus = (date?: Dayjs) => {
   const seconds = date?.diff(dayjs(), "seconds");
 
   if (!date) {
-    notDue = true;
+    noDueDate = true;
   } else if (dayjs().isAfter(date) || dayjs().isSame(date)) {
     taskIsOverdue = true;
   } else if (dayjs().isBefore(date) && months) {
@@ -43,5 +43,5 @@ export const taskStatus = (date?: Dayjs) => {
     timeFormat = seconds > 1 ? "seconds" : "second";
   }
 
-  return { taskIsOverdue, timeLeft, timeFormat, notDue };
+  return { taskIsOverdue, timeLeft, timeFormat, noDueDate };
 };

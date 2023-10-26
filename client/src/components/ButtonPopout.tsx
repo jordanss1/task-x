@@ -1,17 +1,17 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { ReactElement, ReactNode, useEffect, useRef, useState } from "react";
-import Button from "./Button";
+import Button, { MotionButton } from "./Button";
 import SmallIcon from "./SmallIcon";
 
-type ButtonPopoutPropsType = {
+interface ButtonPopoutPropsType extends MotionButton {
   children: ReactNode;
   action?: "hover" | "click";
   icon?: ReactNode;
-  label?: string;
+  label?: ReactNode;
   fontSize?: number;
   iconSize?: number;
   className?: string;
-};
+}
 
 const ButtonPopout = ({
   label = "",
@@ -21,6 +21,7 @@ const ButtonPopout = ({
   fontSize = 12,
   className = "",
   children,
+  ...props
 }: ButtonPopoutPropsType): ReactElement => {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const [expanded, setExpanded] = useState(false);
@@ -60,6 +61,7 @@ const ButtonPopout = ({
         icon ?? <SmallIcon size={iconSize} icon={"fa solid fa-angle-down"} />
       }
       className={`${className} relative`}
+      {...props}
     >
       <AnimatePresence initial={false}>{expanded && children}</AnimatePresence>
     </Button>

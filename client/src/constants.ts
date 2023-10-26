@@ -3,6 +3,10 @@ export const colors = {
   purple: "rgb(153, 31, 255)",
   green: "rgb(133, 255, 31)",
   yellow: "rgb(202, 255, 159)",
+  buttonGradient: [
+    "linear-gradient(120deg, rgb(153, 31, 255,0), rgb(202, 255, 159,0))",
+    "linear-gradient(120deg, rgb(153, 31, 255), rgb(202, 255, 159))",
+  ],
 };
 
 export const fonts = {

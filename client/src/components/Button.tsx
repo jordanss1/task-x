@@ -1,10 +1,10 @@
 import { MotionProps, motion } from "framer-motion";
 import { ForwardedRef, ReactElement, ReactNode, forwardRef } from "react";
 
-type MotionButton = MotionProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
+export type MotionButton = MotionProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 type ButtonPropsType = MotionButton & {
-  label?: string;
+  label?: ReactNode;
   fontSize?: number;
   icon?: ReactNode;
   className?: string;
@@ -29,7 +29,11 @@ const Button = forwardRef(
         className={`${className ?? ""} ${icon ? "flex items-baseline" : ""}`}
         {...props}
       >
-        {label && <span style={{ fontSize: `${fontSize}px` }}>{label}</span>}
+        {typeof label === "string" ? (
+          <span style={{ fontSize: `${fontSize}px` }}>{label}</span>
+        ) : (
+          label
+        )}
         {icon}
         {children}
       </motion.button>

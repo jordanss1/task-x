@@ -19,7 +19,7 @@ const ToggleSwitch = ({
     <div
       style={{ cursor: disabled ? "default" : "pointer" }}
       onClick={handleToggle}
-      className="flex justify-between justify-end items-center gap-2 pr-1"
+      className="flex justify-between justify-end items-center py-[2px] gap-2 pr-1"
     >
       <span
         style={{
@@ -41,8 +41,9 @@ const ToggleSwitch = ({
             ? `inset 1px 1px 1px rgb(153, 31, 255,.4), inset -1px -1px 1px rgb(153, 31, 255,.4)`
             : `inset 1px 1px 2px rgb(60, 60, 60, .5), inset -1px -1px 2px rgb(60, 60, 60, .5)`,
           background: disabled ? "rgb(30,30,30)" : "rgb(35,35,35)",
+          transition: { type: "spring", duration: 0.3 },
         }}
-        className="rounded-3xl flex w-16 h-9 items-center px-1"
+        className="rounded-3xl flex w-16 h-8 items-center px-1"
       >
         <motion.div
           animate={{
@@ -50,7 +51,7 @@ const ToggleSwitch = ({
               ? `linear-gradient(120deg, rgb(30,30,30), rgb(153, 31, 255,.5) 60%, rgb(30,30,30))`
               : `linear-gradient(120deg, rgb(30,30,30), ${colors.purple}, rgb(30,30,30))`,
             outline: disabled ? "1px solid rgb(55,55,55)" : "0px solid white",
-            transition: { type: "spring", duration: 0.8 },
+            transition: { type: "spring", duration: 0.4 },
           }}
           layoutDependency={toggled}
           layout
