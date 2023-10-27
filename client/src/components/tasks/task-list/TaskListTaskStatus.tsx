@@ -4,9 +4,9 @@ import { ReactElement } from "react";
 import { colors } from "../../../constants";
 import Button from "../../Button";
 import SmallIcon from "../../SmallIcon";
-import TaskStatusPopout from "./TaskStatusPopout";
+import TaskListTaskStatusPopout from "./TaskListTaskStatusPopout";
 
-type TaskStatusPropsType = {
+type TaskListTaskStatusPropsType = {
   dueBy: Dayjs | undefined;
   editing: boolean;
   handleEdit: () => void;
@@ -14,9 +14,7 @@ type TaskStatusPropsType = {
 
 const containerVariants: Variants = {
   animate: (editing: boolean) => ({
-    background: editing
-      ? `linear-gradient(to right, rgb(30,30,30), rgb(10,10,10), rgb(30,30,30))`
-      : `linear-gradient(to right, rgb(30,30,30,0), rgb(10,10,10,0), rgb(30,30,30,0))`,
+    background: editing ? colors.blackGradient[1] : colors.blackGradient[0],
     outline: editing
       ? "1px solid rgb(224, 220, 217)"
       : "1px solid rgb(224, 220, 217,0)",
@@ -36,11 +34,11 @@ const buttonVariants: Variants = {
   }),
 };
 
-const TaskStatus = ({
+const TaskListTaskStatus = ({
   dueBy,
   editing,
   handleEdit,
-}: TaskStatusPropsType): ReactElement => {
+}: TaskListTaskStatusPropsType): ReactElement => {
   const buttonStyle = {
     background: colors.buttonGradient[0],
     boxShadow:
@@ -48,12 +46,10 @@ const TaskStatus = ({
     outline: "1px solid rgb(224, 220, 217,0)",
   };
 
-  console.log(editing);
-
   return (
     <motion.div
       style={{
-        background: `linear-gradient(to right, rgb(30,30,30,0), rgb(10,10,10,0), rgb(30,30,30,0))`,
+        background: colors.blackGradient[0],
         padding: "0px",
         outline: "1px solid rgb(224, 220, 217,0)",
       }}
@@ -62,7 +58,7 @@ const TaskStatus = ({
       animate="animate"
       className="relative flex items-center justify-between min-h-[29px] rounded-xl"
     >
-      <TaskStatusPopout editing={editing} dueBy={dueBy} />
+      <TaskListTaskStatusPopout editing={editing} dueBy={dueBy} />
       <motion.div
         animate={{
           gap: editing ? "13px" : "8px",
@@ -105,4 +101,4 @@ const TaskStatus = ({
   );
 };
 
-export default TaskStatus;
+export default TaskListTaskStatus;

@@ -2,17 +2,17 @@ import { AnimationScope, motion, useAnimate } from "framer-motion";
 import { ReactElement, useEffect } from "react";
 import { colors } from "../../../constants";
 
-type TaskOverlayPropsType = {
+type TaskListTaskOverlayPropsType = {
   editing: boolean;
   index: number;
   scope: AnimationScope;
 };
 
-const TaskOverlay = ({
+const TaskListTaskOverlay = ({
   editing,
   index,
   scope,
-}: TaskOverlayPropsType): ReactElement => {
+}: TaskListTaskOverlayPropsType): ReactElement => {
 
   return (
     <>
@@ -61,4 +61,4 @@ const TaskOverlay = ({
   );
 };
 
-export default TaskOverlay;
+export default TaskListTaskOverlay;

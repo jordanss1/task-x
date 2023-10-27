@@ -9,32 +9,25 @@ import { ReactElement, useState } from "react";
 const Calendar = ({
   setDate,
 }: {
-  setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>;
+  setDate: React.Dispatch<React.SetStateAction<Dayjs>>;
 }): ReactElement => {
-  const [value, setValue] = useState<Dayjs | null>(dayjs().add(1, "hour"));
+  const [value, setValue] = useState<Dayjs>(dayjs().add(1, "hour"));
 
   const utcDate = value?.toISOString();
   const localeDate = dayjs(utcDate).toDate();
 
-  const theme = createTheme({
-    components: {
-      MuiOutlinedInput: {
-        styleOverrides: {
-          root: {
-            fontSize: "14px",
-          },
-        },
-      },
-    },
-  });
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker
         className="ps-6"
         value={value}
-        onAccept={(value) => setDate(value)}
-        onChange={(value) => setValue(value)}
+        onAccept={(value) => {
+          if (value) setDate(value);
+        }}
+        onChange={(value) => {
+          if (value) setValue(value);
+        }}
         viewRenderers={{
           hours: renderTimeViewClock,
           minutes: renderTimeViewClock,

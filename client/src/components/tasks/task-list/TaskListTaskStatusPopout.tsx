@@ -1,12 +1,15 @@
 import { Dayjs } from "dayjs";
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
-import { fonts } from "../../../constants";
+import { colors, fonts } from "../../../constants";
 import { taskStatus } from "../../../functions/taskStatus";
 import ButtonPopout from "../../ButtonPopout";
 import SmallIcon from "../../SmallIcon";
 
-type TaskStatusPopoutPropsType = { editing: boolean; dueBy: Dayjs | undefined };
+type TaskListTaskStatusPopoutPropsType = {
+  editing: boolean;
+  dueBy: Dayjs | undefined;
+};
 
 const popoutVariants: Variants = {
   initial: { opacity: 0, scale: 0.85 },
@@ -14,10 +17,10 @@ const popoutVariants: Variants = {
   exit: { opacity: 0, scale: 0.95, transition: { duration: 0.1 } },
 };
 
-const TaskStatusPopout = ({
+const TaskListTaskStatusPopout = ({
   editing,
   dueBy,
-}: TaskStatusPopoutPropsType): ReactElement => {
+}: TaskListTaskStatusPopoutPropsType): ReactElement => {
   const { taskIsOverdue, timeLeft, timeFormat, noDueDate } = taskStatus(dueBy);
 
   const renderDueLabel = (
@@ -27,14 +30,14 @@ const TaskStatusPopout = ({
           color: taskIsOverdue
             ? "red"
             : editing && !taskIsOverdue
-            ? "rgb(224, 220, 217)"
+            ? colors.whiteShades[2]
             : "rgb(0,0,0)",
         }}
         className="fa-solid fa-clock text-[rgb(0,0,0)] relative top-[2px] pe-1"
       />
       <motion.span
         animate={{
-          color: editing ? "rgb(224, 220, 217)" : "rgb(0,0,0)",
+          color: editing ? colors.whiteShades[2] : "rgb(0,0,0)",
           fontSize: editing ? "12px" : "14px",
         }}
         className="text-[rgb(0,0,0)]"
@@ -63,7 +66,7 @@ const TaskStatusPopout = ({
         }}
         animate={{
           background: editing ? "rgb(0,0,0,0)" : "rgb(255,255,255, 0)",
-          color: editing ? "rgb(224, 220, 217)" : "rgb(0,0,0)",
+          color: editing ? colors.whiteShades[2] : "rgb(0,0,0)",
         }}
         whileHover={{
           background: editing ? "rgb(0, 0, 0, 0)" : "rgb(180,180,180)",
@@ -79,7 +82,7 @@ const TaskStatusPopout = ({
               color: "rgb(0,0,0)",
             }}
             animate={{
-              color: editing ? "rgb(224, 220, 217)" : "rgb(0,0,0)",
+              color: editing ? colors.whiteShades[2] : "rgb(0,0,0)",
             }}
             size={14}
             className="relative ps-1 bottom-[1px] font-extrabold"
@@ -132,4 +135,4 @@ const TaskStatusPopout = ({
   }
 };
 
-export default TaskStatusPopout;
+export default TaskListTaskStatusPopout;

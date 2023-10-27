@@ -1,27 +1,36 @@
-import dayjs, { Dayjs } from "dayjs";
-import { AnimatePresence, motion, useAnimate } from "framer-motion";
+import dayjs from "dayjs";
+import { AnimatePresence, Variants, motion, useAnimate } from "framer-motion";
 import { ReactElement, useEffect, useState } from "react";
 import { colors, fonts } from "../../../constants";
-import { taskStatus } from "../../../functions/taskStatus";
 import "../../../styles/mui-overrides/task.css";
 import { TaskType } from "../../../types";
-import ButtonPopout from "../../ButtonPopout";
-import Calendar from "../../Calendar";
 import ModalBackground from "../../ModalBackground";
-import SmallIcon from "../../SmallIcon";
 import ToggleSwitch from "../../ToggleSwitch";
-import TaskOverlay from "./TaskOverlay";
-import TaskStatus from "./TaskStatus";
+import TaskCalender from "../TaskCalender";
+import TaskListTaskOverlay from "./TaskListTaskOverlay";
+import TaskListTaskStatus from "./TaskListTaskStatus";
 
 type TaskListTaskPropsType = {
   task: TaskType;
   index: number;
 };
 
+const toggleVariants: Variants = {
+  animate: (editing) => ({
+    background: editing
+      ? colors.blackGradient[1]
+      : `linear-gradient(to right, rgb(0,0,0), rgb(0,0,0), rgb(0,0,0))`,
+    outline: editing
+      ? "rgb(180, 180, 180) solid 1px"
+      : "1px solid rgb(255,255,255,0)",
+  }),
+};
+
 const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
   const [editing, setEditing] = useState(false);
   const [publicVisibility, setPublicVisibility] = useState(false);
   const [dueDate, setDueDate] = useState(dayjs().add(1, "hour"));
+
   const [taskValue, setTaskValue] = useState(task.task);
   const [scope, animate] = useAnimate();
 
@@ -110,9 +119,9 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
         className="relative gap-8 flex flex-col p-4 max-w-[230px] rounded-3xl w-full"
       >
         {editing && (
-          <TaskOverlay index={index} editing={editing} scope={scope} />
+          <TaskListTaskOverlay index={index} editing={editing} scope={scope} />
         )}
-        <TaskStatus
+        <TaskListTaskStatus
           editing={editing}
           handleEdit={handleEdit}
           dueBy={task.dueBy}
@@ -125,7 +134,12 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
           className="relative flex flex-col gap-4"
         >
           {!editing && (
-            <TaskOverlay index={index} editing={editing} scope={scope} />
+            <TaskListTaskOverlay
+              key="calender"
+              index={index}
+              editing={editing}
+              scope={scope}
+            />
           )}
           <motion.div layout layoutDependency={editing} className="py-1">
             <textarea
@@ -143,8 +157,7 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
           </motion.div>
           <AnimatePresence mode="wait">
             {editing && (
-              <motion.div
-                className="relative"
+              <TaskCalender
                 initial={{ position: "absolute", opacity: 0 }}
                 animate={{
                   position: "relative",
@@ -154,21 +167,20 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
                   opacity: 0,
                   height: "0px",
                 }}
-              >
-                <motion.div className="absolute h-[115%] w-full bottom-1 -z-[3] left-0" />
-                <Calendar setDate={() => setDueDate} />
-              </motion.div>
+                style={{
+                  outline: "rgb(180, 180, 180) solid 1px",
+                  background: colors.blackGradient[1],
+                }}
+                className="flex min-h-[45px] relative isolate px-3 gap-3 rounded-xl  items-center"
+                handleDate={setDueDate}
+                taskDueEnabled={task.taskDueEnabled}
+              />
             )}
           </AnimatePresence>
           <motion.div
-            animate={{
-              background: editing
-                ? `linear-gradient(to right, rgb(30,30,30), rgb(10,10,10), rgb(30,30,30))`
-                : `linear-gradient(to right, rgb(0,0,0), rgb(0,0,0), rgb(0,0,0))`,
-              outline: editing
-                ? "rgb(180, 180, 180) solid 1px"
-                : "1px solid rgb(255,255,255,0)",
-            }}
+            custom={editing}
+            variants={toggleVariants}
+            animate="animate"
             className="task-toggle isolate relative w-full p-1 rounded-xl ms-auto"
           >
             <ToggleSwitch
