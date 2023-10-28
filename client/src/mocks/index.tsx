@@ -3,11 +3,9 @@ import {
   GoogleLogin,
   GoogleOAuthProvider,
 } from "@react-oauth/google";
-import { usePreLoginLogout } from "../hooks/LoginAndAuthHook.tsx";
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer, { AuthStateType } from "../features/auth/authSlice.ts";
-import todosReducer from "../features/todos/todosSlice.ts";
-import classesReducer from "../features/classes/classesSlice.ts";
+import authReducer, { AuthStateType } from "../features/auth/authSlice";
+import todosReducer from "../features/todos/todosSlice";
 
 export const userProfile = { sub: "12345678", name: "Jordan", picture: "" };
 

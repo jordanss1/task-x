@@ -1,42 +1,37 @@
-import { useEffect } from "react";
-import GoogleAuth from "./GoogleAuth";
-import { useSelector } from "react-redux";
-import { classSelector } from "../../features/classes/classesSlice";
-import "../../style/header.css";
-import useClassesHook from "../../hooks/ClassesHooks";
+import { ReactElement } from "react";
+import { useMediaQuery } from "../../hooks/MediaQueryHooks";
+import "../../styles/header.css";
+import LightBulb from "../svg/LightBulb";
+import HeaderGoogleAuth from "./HeaderGoogleAuth";
+import HeaderLogo from "./HeaderLogo";
 
-const Header = () => {
-  const { initialClasses } = useSelector(classSelector);
-  const { initialClassesFunc } = useClassesHook();
+type HeaderPropsType = {
+  containerClass?: string;
+  nav?: React.ReactNode;
+};
 
-  useEffect(() => {
-    const id = initialClassesFunc();
+const Header = ({ containerClass, nav }: HeaderPropsType): ReactElement => {
+  containerClass = containerClass ? containerClass : "";
+  const mobile = useMediaQuery(640);
 
-    return () => clearTimeout(id);
-  }, []);
+  const renderContent = () => {
+    if (nav) {
+      return nav;
+    }
+
+    return (
+      <div className="header_sign_in flex justify-center">
+        <HeaderGoogleAuth />
+      </div>
+    );
+  };
 
   return (
-    <header>
-      <>
-        <div className="w-100 divider-1"></div>
-        <div
-          className={`header-container ${initialClasses?.border} container-fluid`}
-        >
-          <div
-            className={`d-flex todo-logo ${initialClasses?.logo} flex-row justify-content-center`}
-          >
-            <i
-              className={`check square todo-icon ${initialClasses?.icon} outline icon mb-2`}
-            ></i>
-            <h1 className={`todo-heading ${initialClasses?.heading}`}>
-              Todo-List
-            </h1>
-          </div>
-          <div className="signIn-div d-flex justify-content-center">
-            <GoogleAuth />
-          </div>
-        </div>
-      </>
+    <header className={`${containerClass} flex justify-center items-center`}>
+      <div className="header_logo cursor-pointer mr-auto flex justify-center items-center">
+        {(!nav || mobile) && <HeaderLogo />}
+      </div>
+      {renderContent()}
     </header>
   );
 };

@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1686248000388" clover="3.2.0">
+  <project timestamp="1686248000388" name="All files">
+    <metrics statements="328" coveredstatements="320" conditionals="152" coveredconditionals="145" methods="114" coveredmethods="111" elements="594" coveredelements="576" complexity="0" loc="328" ncloc="328" packages="13" files="23" classes="23"/>
+    <package name="src">
+      <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="index.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\index.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.apiAxios">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="todos.ts" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\apiAxios\todos.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="src.app">
+      <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="store.ts" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\app\store.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components">
+      <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <file name="App.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\components\App.tsx">
+        <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="76" type="stmt"/>
+        <line num="12" count="75" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="75" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.arrows">
+      <metrics statements="14" coveredstatements="14" conditionals="12" coveredconditionals="12" methods="8" coveredmethods="8"/>
+      <file name="ArrowLeftArrow.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\components\arrows\ArrowLeftArrow.tsx">
+        <metrics statements="7" coveredstatements="7" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="20" count="94" type="stmt"/>
+        <line num="22" count="94" type="stmt"/>
+        <line num="28" count="94" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+      </file>
+      <file name="ArrowRightArrow.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\components\arrows\ArrowRightArrow.tsx">
+        <metrics statements="7" coveredstatements="7" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="21" count="94" type="stmt"/>
+        <line num="23" count="94" type="stmt"/>
+        <line num="29" count="94" type="stmt"/>
+        <line num="31" count="4" type="stmt"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="33" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.header">
+      <metrics statements="42" coveredstatements="41" conditionals="16" coveredconditionals="15" methods="15" coveredmethods="14"/>
+      <file name="GoogleAuth.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\components\header\GoogleAuth.tsx">
+        <metrics statements="35" coveredstatements="34" conditionals="16" coveredconditionals="15" methods="12" coveredmethods="11"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="119" type="stmt"/>
+        <line num="28" count="119" type="stmt"/>
+        <line num="31" count="119" type="stmt"/>
+        <line num="34" count="119" type="stmt"/>
+        <line num="36" count="119" type="stmt"/>
+        <line num="38" count="119" type="stmt"/>
+        <line num="41" count="14" type="stmt"/>
+        <line num="44" count="14" type="stmt"/>
+        <line num="46" count="14" type="cond" truecount="2" falsecount="0"/>
+        <line num="47" count="13" type="stmt"/>
+        <line num="48" count="13" type="stmt"/>
+        <line num="49" count="13" type="stmt"/>
+        <line num="50" count="13" type="stmt"/>
+        <line num="52" count="13" type="stmt"/>
+        <line num="53" count="9" type="stmt"/>
+        <line num="54" count="9" type="stmt"/>
+        <line num="58" count="14" type="stmt"/>
+        <line num="61" count="119" type="stmt"/>
+        <line num="64" count="34" type="cond" truecount="4" falsecount="0"/>
+        <line num="65" count="31" type="stmt"/>
+        <line num="67" count="3" type="stmt"/>
+        <line num="71" count="119" type="stmt"/>
+        <line num="76" count="14" type="stmt"/>
+        <line num="78" count="14" type="stmt"/>
+        <line num="81" count="119" type="stmt"/>
+        <line num="86" count="13" type="stmt"/>
+        <line num="88" count="13" type="stmt"/>
+        <line num="91" count="119" type="stmt"/>
+        <line num="93" count="119" type="stmt"/>
+        <line num="94" count="116" type="stmt"/>
+        <line num="108" count="119" type="stmt"/>
+        <line num="109" count="116" type="stmt"/>
+        <line num="120" count="119" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+      </file>
+      <file name="Header.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\components\header\Header.tsx">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="130" type="stmt"/>
+        <line num="10" count="130" type="stmt"/>
+        <line num="12" count="130" type="stmt"/>
+        <line num="13" count="11" type="stmt"/>
+        <line num="15" count="11" type="stmt"/>
+        <line num="18" count="130" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.todos">
+      <metrics statements="79" coveredstatements="79" conditionals="53" coveredconditionals="52" methods="20" coveredmethods="20"/>
+      <file name="TodoInputs.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\components\todos\TodoInputs.tsx">
+        <metrics statements="15" coveredstatements="15" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="4"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="191" type="stmt"/>
+        <line num="11" count="191" type="stmt"/>
+        <line num="12" count="191" type="stmt"/>
+        <line num="14" count="191" type="stmt"/>
+        <line num="16" count="191" type="stmt"/>
+        <line num="19" count="4" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="24" count="191" type="stmt"/>
+        <line num="27" count="382" type="cond" truecount="4" falsecount="0"/>
+        <line num="28" count="18" type="stmt"/>
+        <line num="30" count="364" type="stmt"/>
+        <line num="34" count="191" type="stmt"/>
+        <line num="47" count="32" type="stmt"/>
+      </file>
+      <file name="TodoItem.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\components\todos\TodoItem.tsx">
+        <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="26" count="228" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="43" count="3" type="stmt"/>
+      </file>
+      <file name="TodoList.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\components\todos\TodoList.tsx">
+        <metrics statements="58" coveredstatements="58" conditionals="47" coveredconditionals="46" methods="12" coveredmethods="12"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="284" type="stmt"/>
+        <line num="32" count="283" type="stmt"/>
+        <line num="40" count="283" type="stmt"/>
+        <line num="52" count="283" type="stmt"/>
+        <line num="54" count="283" type="stmt"/>
+        <line num="55" count="283" type="stmt"/>
+        <line num="56" count="283" type="stmt"/>
+        <line num="58" count="283" type="stmt"/>
+        <line num="62" count="63" type="cond" truecount="5" falsecount="0"/>
+        <line num="63" count="36" type="stmt"/>
+        <line num="68" count="63" type="stmt"/>
+        <line num="70" count="63" type="stmt"/>
+        <line num="73" count="283" type="stmt"/>
+        <line num="76" count="12" type="cond" truecount="4" falsecount="0"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="82" count="283" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="84" count="1" type="stmt"/>
+        <line num="87" count="283" type="stmt"/>
+        <line num="91" count="3" type="stmt"/>
+        <line num="92" count="3" type="stmt"/>
+        <line num="94" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="95" count="2" type="stmt"/>
+        <line num="97" count="2" type="stmt"/>
+        <line num="98" count="2" type="stmt"/>
+        <line num="99" count="2" type="stmt"/>
+        <line num="100" count="2" type="stmt"/>
+        <line num="101" count="2" type="stmt"/>
+        <line num="103" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="104" count="1" type="stmt"/>
+        <line num="105" count="1" type="stmt"/>
+        <line num="106" count="1" type="stmt"/>
+        <line num="107" count="1" type="stmt"/>
+        <line num="109" count="1" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="111" count="1" type="stmt"/>
+        <line num="112" count="1" type="stmt"/>
+        <line num="113" count="1" type="stmt"/>
+        <line num="120" count="283" type="stmt"/>
+        <line num="122" count="188" type="cond" truecount="5" falsecount="0"/>
+        <line num="123" count="3" type="stmt"/>
+        <line num="125" count="185" type="cond" truecount="4" falsecount="0"/>
+        <line num="126" count="170" type="stmt"/>
+        <line num="128" count="15" type="cond" truecount="4" falsecount="0"/>
+        <line num="129" count="4" type="stmt"/>
+        <line num="131" count="11" type="stmt"/>
+        <line num="138" count="283" type="cond" truecount="2" falsecount="0"/>
+        <line num="139" count="5" type="stmt"/>
+        <line num="148" count="278" type="cond" truecount="5" falsecount="0"/>
+        <line num="151" count="127" type="stmt"/>
+        <line num="162" count="305" type="stmt"/>
+        <line num="181" count="151" type="cond" truecount="5" falsecount="0"/>
+        <line num="184" count="6" type="stmt"/>
+        <line num="194" count="145" type="cond" truecount="5" falsecount="0"/>
+        <line num="197" count="144" type="stmt"/>
+        <line num="199" count="1" type="stmt"/>
+      </file>
+      <file name="TodoPlaceholder.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\components\todos\TodoPlaceholder.tsx">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="8" count="110" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.auth">
+      <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="7"/>
+      <file name="authSlice.ts" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\features\auth\authSlice.ts">
+        <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="7"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="32" count="22" type="stmt"/>
+        <line num="33" count="22" type="stmt"/>
+        <line num="44" count="22" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="58" count="13" type="stmt"/>
+        <line num="59" count="13" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="66" count="22" type="stmt"/>
+        <line num="73" count="2603" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.classes">
+      <metrics statements="16" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="13" coveredmethods="13"/>
+      <file name="classesSlice.ts" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\features\classes\classesSlice.ts">
+        <metrics statements="16" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="13" coveredmethods="13"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="56" count="11" type="stmt"/>
+        <line num="65" count="4" type="stmt"/>
+        <line num="68" count="13" type="stmt"/>
+        <line num="71" count="24" type="stmt"/>
+        <line num="74" count="40" type="stmt"/>
+        <line num="78" count="10" type="stmt"/>
+        <line num="83" count="6" type="stmt"/>
+        <line num="92" count="13" type="stmt"/>
+        <line num="95" count="13" type="stmt"/>
+        <line num="98" count="20" type="stmt"/>
+        <line num="101" count="38" type="stmt"/>
+        <line num="104" count="19" type="stmt"/>
+        <line num="111" count="2078" type="stmt"/>
+        <line num="125" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.todos">
+      <metrics statements="47" coveredstatements="47" conditionals="12" coveredconditionals="9" methods="21" coveredmethods="21"/>
+      <file name="todosSlice.ts" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\features\todos\todosSlice.ts">
+        <metrics statements="47" coveredstatements="47" conditionals="12" coveredconditionals="9" methods="21" coveredmethods="21"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="18" count="31" type="stmt"/>
+        <line num="19" count="142" type="stmt"/>
+        <line num="20" count="31" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="27" count="4" type="stmt"/>
+        <line num="28" count="4" type="stmt"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="31" count="4" type="stmt"/>
+        <line num="36" count="4" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="60" count="3" type="stmt"/>
+        <line num="62" count="3" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
+        <line num="92" count="81" type="cond" truecount="2" falsecount="0"/>
+        <line num="93" count="81" type="cond" truecount="2" falsecount="0"/>
+        <line num="94" count="42" type="stmt"/>
+        <line num="95" count="42" type="stmt"/>
+        <line num="96" count="39" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="104" count="3" type="stmt"/>
+        <line num="108" count="1" type="stmt"/>
+        <line num="111" count="351" type="stmt"/>
+        <line num="113" count="62" type="stmt"/>
+        <line num="117" count="31" type="stmt"/>
+        <line num="123" count="351" type="stmt"/>
+        <line num="125" count="8" type="stmt"/>
+        <line num="126" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="129" count="4" type="stmt"/>
+        <line num="138" count="351" type="stmt"/>
+        <line num="140" count="2" type="stmt"/>
+        <line num="141" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="142" count="1" type="stmt"/>
+        <line num="149" count="351" type="stmt"/>
+        <line num="151" count="9" type="stmt"/>
+        <line num="152" count="6" type="cond" truecount="1" falsecount="1"/>
+        <line num="153" count="6" type="stmt"/>
+        <line num="165" count="1" type="stmt"/>
+        <line num="166" count="213" type="cond" truecount="2" falsecount="0"/>
+        <line num="167" count="193" type="stmt"/>
+        <line num="168" count="193" type="stmt"/>
+        <line num="170" count="20" type="stmt"/>
+        <line num="173" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.hooks">
+      <metrics statements="89" coveredstatements="86" conditionals="49" coveredconditionals="47" methods="22" coveredmethods="21"/>
+      <file name="ClassesHooks.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\hooks\ClassesHooks.tsx">
+        <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="4"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="249" type="stmt"/>
+        <line num="22" count="249" type="stmt"/>
+        <line num="25" count="11" type="stmt"/>
+        <line num="26" count="11" type="stmt"/>
+        <line num="28" count="11" type="stmt"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="32" count="11" type="stmt"/>
+        <line num="35" count="249" type="stmt"/>
+        <line num="37" count="13" type="cond" truecount="2" falsecount="0"/>
+        <line num="39" count="13" type="cond" truecount="2" falsecount="0"/>
+        <line num="41" count="13" type="stmt"/>
+        <line num="42" count="13" type="stmt"/>
+        <line num="45" count="249" type="stmt"/>
+      </file>
+      <file name="LoginAndAuthHook.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\hooks\LoginAndAuthHook.tsx">
+        <metrics statements="29" coveredstatements="26" conditionals="12" coveredconditionals="12" methods="6" coveredmethods="5"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="53" count="119" type="stmt"/>
+        <line num="54" count="119" type="stmt"/>
+        <line num="55" count="119" type="stmt"/>
+        <line num="57" count="119" type="stmt"/>
+        <line num="60" count="14" type="cond" truecount="2" falsecount="0"/>
+        <line num="61" count="11" type="stmt"/>
+        <line num="62" count="11" type="stmt"/>
+        <line num="63" count="11" type="stmt"/>
+        <line num="66" count="14" type="cond" truecount="2" falsecount="0"/>
+        <line num="67" count="2" type="stmt"/>
+        <line num="68" count="2" type="stmt"/>
+        <line num="69" count="2" type="stmt"/>
+        <line num="75" count="119" type="stmt"/>
+        <line num="78" count="27" type="stmt"/>
+        <line num="83" count="27" type="cond" truecount="4" falsecount="0"/>
+        <line num="85" count="27" type="cond" truecount="2" falsecount="0"/>
+        <line num="86" count="13" type="stmt"/>
+        <line num="88" count="13" type="stmt"/>
+        <line num="89" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="93" count="27" type="stmt"/>
+        <line num="96" count="119" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="104" count="119" type="stmt"/>
+        <line num="105" count="1" type="stmt"/>
+        <line num="106" count="1" type="stmt"/>
+        <line num="109" count="119" type="stmt"/>
+      </file>
+      <file name="TodoHook.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\hooks\TodoHook.tsx">
+        <metrics statements="46" coveredstatements="46" conditionals="33" coveredconditionals="31" methods="12" coveredmethods="12"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="283" type="stmt"/>
+        <line num="27" count="283" type="stmt"/>
+        <line num="28" count="283" type="stmt"/>
+        <line num="29" count="283" type="stmt"/>
+        <line num="30" count="283" type="stmt"/>
+        <line num="31" count="283" type="stmt"/>
+        <line num="32" count="283" type="stmt"/>
+        <line num="33" count="283" type="stmt"/>
+        <line num="34" count="283" type="stmt"/>
+        <line num="35" count="283" type="stmt"/>
+        <line num="37" count="283" type="stmt"/>
+        <line num="39" count="170" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="283" type="stmt"/>
+        <line num="46" count="41" type="cond" truecount="5" falsecount="0"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="48" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="54" count="283" type="stmt"/>
+        <line num="55" count="63" type="stmt"/>
+        <line num="57" count="63" type="cond" truecount="4" falsecount="0"/>
+        <line num="58" count="58" type="stmt"/>
+        <line num="59" count="35" type="stmt"/>
+        <line num="64" count="63" type="cond" truecount="4" falsecount="0"/>
+        <line num="65" count="5" type="stmt"/>
+        <line num="66" count="3" type="stmt"/>
+        <line num="71" count="63" type="cond" truecount="4" falsecount="0"/>
+        <line num="72" count="37" type="stmt"/>
+        <line num="73" count="18" type="stmt"/>
+        <line num="78" count="63" type="cond" truecount="4" falsecount="0"/>
+        <line num="79" count="4" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="85" count="63" type="stmt"/>
+        <line num="88" count="283" type="stmt"/>
+        <line num="91" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="92" count="1" type="stmt"/>
+        <line num="93" count="1" type="stmt"/>
+        <line num="94" count="1" type="stmt"/>
+        <line num="98" count="283" type="stmt"/>
+        <line num="101" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="102" count="2" type="stmt"/>
+        <line num="103" count="2" type="stmt"/>
+        <line num="104" count="2" type="stmt"/>
+        <line num="108" count="283" type="cond" truecount="2" falsecount="0"/>
+        <line num="112" count="283" type="stmt"/>
+        <line num="119" count="283" type="stmt"/>
+        <line num="126" count="283" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.mocks">
+      <metrics statements="15" coveredstatements="15" conditionals="8" coveredconditionals="8" methods="5" coveredmethods="5"/>
+      <file name="api.ts" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\mocks\api.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+      </file>
+      <file name="handlers.ts" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\mocks\handlers.ts">
+        <metrics statements="11" coveredstatements="11" conditionals="8" coveredconditionals="8" methods="5" coveredmethods="5"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="10" count="19" type="cond" truecount="4" falsecount="0"/>
+        <line num="11" count="11" type="stmt"/>
+        <line num="14" count="31" type="stmt"/>
+        <line num="17" count="8" type="cond" truecount="4" falsecount="0"/>
+        <line num="18" count="5" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="25" count="4" type="stmt"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="37" count="19" type="stmt"/>
+      </file>
+      <file name="index.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\mocks\index.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="12" count="1" type="stmt"/>
+      </file>
+      <file name="server.ts" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\mocks\server.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.test-utils">
+      <metrics statements="5" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+      <file name="test-utils.tsx" path="C:\Users\jorda\Documents\Code\Projects\ROOTs\Module 5\todo-app-react-redux\todo-app-react-redux\src\test-utils\test-utils.tsx">
+        <metrics statements="5" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="24" count="11" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

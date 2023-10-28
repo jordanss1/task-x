@@ -1,0 +1,71 @@
+.dashboard {
+  background: linear-gradient(to bottom, #f4f0ed 0%, #e0dcd9 30%, #f4f0ed 100%);
+  padding: 0 50px;
+}
+
+.dashboard nav {
+  text-align: center;
+}
+
+.dashboard_header {
+  height: 80px;
+  align-items: end;
+}
+
+.dashboard_panel {
+  background: linear-gradient(to left, #e0dcd9 0%, #e0dcd9, #f4f0ed 100%);
+  box-shadow: 1px 2px 5px rgb(50, 50, 50);
+}
+
+@media screen and (max-width: 640px) {
+  .dashboard {
+    padding: 0 50px;
+  }
+
+  .dashboard_header {
+    gap: 5px;
+    padding-bottom: 10px;
+  }
+
+  .dashboard_panel {
+    background: linear-gradient(to bottom, #e0dcd9 0%, #e0dcd9, #f4f0ed 100%);
+    box-shadow: none;
+  }
+
+  .dashboard .header_heading {
+    font-size: 18px !important;
+  }
+
+  .dashboard nav > i {
+    display: block;
+  }
+
+  .dashboard nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .dashboard_nav {
+    background: linear-gradient(120deg, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
+    border-radius: 3px;
+  }
+
+  .dashboard_nav li {
+    border-radius: 0;
+    cursor: pointer;
+    padding: 10px 0;
+  }
+
+  .dashboard_nav li button {
+    font-size: 22px !important;
+    font-family: "Orbitron", sans-serif !important;
+    letter-spacing: 3px;
+    font-weight: 300 !important;
+    padding: 0 10px !important;
+  }
+
+  .dashboard_menu_button {
+    display: flex;
+    cursor: pointer;
+  }
+}

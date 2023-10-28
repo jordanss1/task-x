@@ -1,0 +1,340 @@
+.landing {
+  background: linear-gradient(60deg, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
+}
+
+.hero {
+  height: 88vh;
+  display: grid;
+  padding: 50px 79px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center;
+  align-items: center;
+  isolation: isolate;
+}
+
+.hero_left {
+  font-family: "Jura", sans-serif;
+  max-width: 380px;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: 30px;
+  outline: 8px solid #e0dcd978;
+  position: relative;
+}
+
+.hero_left::after {
+  z-index: -1;
+  mix-blend-mode: hard-light;
+  content: "";
+  background: linear-gradient(
+    120deg,
+    rgb(62, 62, 62),
+    rgb(109, 109, 109),
+    rgb(62, 62, 62)
+  );
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+}
+
+.hero_left_heading {
+  font-family: "Orbitron", sans-serif !important;
+  font-weight: 400;
+  filter: drop-shadow(1px 1px 4px black);
+  color: white;
+  width: 100%;
+  font-size: 46px;
+}
+
+.hero_left_body {
+  max-width: 250px;
+  width: 100%;
+  color: white;
+  text-shadow: -0px 0px 20px rgba(0, 0, 0);
+}
+
+.hero_right {
+  border-radius: 20px;
+  padding: 10px;
+  max-width: 250px;
+  justify-self: flex-end;
+  height: 100%;
+  position: relative;
+}
+
+.hero_right::after {
+  z-index: -1;
+  mix-blend-mode: hue;
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+}
+
+.hero_right,
+.hero_right h3 {
+  font-family: "Jura", sans-serif !important;
+}
+
+.hero_right h3,
+.hero_right span {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  mix-blend-mode: plus-lighter !important;
+  text-shadow: 4px 2px 10px rgba(0, 0, 0);
+}
+
+.hero_right span {
+  left: 12px;
+}
+
+.hero_right_tab {
+  cursor: pointer;
+  position: relative;
+}
+
+.hero_right_tab_bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(circle at 10% 20%, #991fff 30%, rgb(58, 58, 58));
+}
+
+.hero_center {
+  position: absolute !important;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  margin: auto;
+  z-index: -3;
+  position: relative;
+  background: linear-gradient(60deg, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
+}
+
+.hero_center::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../assets/multicolored-1.jpg");
+  z-index: -2;
+  background-repeat: no-repeat;
+  background-size: 900px 600px;
+  margin: auto;
+  background-position: 60%;
+  mix-blend-mode: multiply;
+}
+
+.hero_center::before {
+  content: "";
+  position: absolute;
+  z-index: -9;
+  inset: 20% 0 0 0;
+  filter: blur(100px);
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0.2)
+  );
+}
+
+.hero_center_image_div {
+  position: relative;
+}
+
+.hero_center_image_div svg {
+  position: relative;
+  left: 60px;
+}
+
+.hero_center_image_div,
+.hero_center_backdrop_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero_center_backdrop_container {
+  position: absolute !important;
+  width: 70%;
+  left: 150px;
+  max-height: 363px;
+  right: 0;
+  top: 0;
+  bottom: -15px;
+  margin: auto;
+  z-index: -1;
+}
+
+.hero_center_backdrop_1,
+.hero_center_backdrop_2 {
+  width: 200px;
+  height: 400px;
+  position: relative;
+  border-radius: 40px;
+  box-shadow: 1px 1px 10px 1px black;
+}
+
+.hero_center_backdrop_1 {
+  right: 90px;
+  background: radial-gradient(circle at 10% 20%, #991fff 60%, rgb(81, 81, 81));
+}
+
+.hero_center_backdrop_2 {
+  bottom: 10px;
+  right: -90px;
+  background: radial-gradient(circle at -10% 90%, #991fff 60%, rgb(81, 81, 81));
+}
+
+@media screen and (max-width: 1050px) {
+  .hero_center,
+  .hero_center_image_div {
+    left: 0;
+  }
+
+  .hero_center_backdrop_container {
+    left: 120px;
+  }
+
+  .hero_center_image_div svg {
+    left: 30px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .landing {
+    padding: 0 20px;
+  }
+
+  .hero_center::after {
+    inset: 0 0 0 20px;
+    background-size: cover;
+    background-position-x: calc(10vw - 10%);
+  }
+
+  .hero_center::before {
+    inset: 0;
+    filter: blur(100px);
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgb(0, 0, 0, 0.7) 70%
+    );
+  }
+
+  .hero_center_image_div svg {
+    left: 0px;
+  }
+
+  .hero {
+    padding: 0;
+    padding-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(351px, 1fr));
+    gap: 100px;
+    align-items: first baseline;
+  }
+
+  .hero_right {
+    flex-direction: row !important;
+    position: relative;
+    max-height: 120px;
+    align-self: flex-end;
+  }
+
+  .hero_right::after {
+    mix-blend-mode: multiply;
+    background: linear-gradient(120deg, #991fff, #e0dcd9, #991fff);
+  }
+
+  .hero_right_tab {
+    width: 100%;
+  }
+
+  .hero_center {
+    right: 50px;
+    width: 100%;
+  }
+
+  .hero_left,
+  .hero_right {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .hero_left {
+    max-height: 260px;
+    padding: 20px;
+  }
+
+  .hero_left_body {
+    max-width: 450px;
+    font-size: large;
+  }
+
+  .hero_center_backdrop_container {
+    left: 0;
+    top: 100px;
+  }
+
+  .hero_center_backdrop_1 {
+    right: 65px;
+  }
+
+  .hero_center_backdrop_2 {
+    bottom: 0px;
+    right: -65px;
+  }
+
+  .hero_center_backdrop_1,
+  .hero_center_backdrop_2 {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .hero_right span {
+    left: 8px;
+  }
+
+  .hero_center_backdrop_1,
+  .hero_center_backdrop_2 {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    border-radius: 40px;
+    box-shadow: 1px 1px 10px 1px black;
+  }
+
+  .hero_center::after {
+    background-size: cover;
+    background-position-x: calc(100vw - 400px);
+    background-position-y: 50%;
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .hero {
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  }
+
+  .hero_left_heading {
+    font-size: 26px;
+  }
+
+  .hero_left_body {
+    font-size: 14px;
+  }
+
+  .hero_right,
+  .hero_right h3 {
+    padding: 0;
+  }
+}
