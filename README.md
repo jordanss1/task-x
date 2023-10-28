@@ -1,11 +1,6 @@
 <h1><b>Todo App with Google Sign-in</b></h1>
 
 
-
-https://github.com/jordanss1/todo-app-react-redux/assets/101638406/4f3ea175-943d-48dc-8d94-ca0ddb17674c
-
-
-
 <h3><b>Outline of Usage</b></h3>
 
 Authenticates user using Google sign-in allowing user to access, add, edit or delete saved todo items associated with their userId. Redux Toolkit implemented to make async requests and store the state of the application.
