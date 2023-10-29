@@ -38,7 +38,7 @@ const LandingHeroRight = ({
 }: LandingHeroRightPropsType): ReactElement => {
   const renderSidebar = sidebarItems.map(({ heading, body }, i) => (
     <motion.div
-      className="hero_right_tab max-[800px]:max-w-[200px] px-2 py-5 sm:px-4 px-sm-4"
+      className="hero_right_tab max-[800px]:max-w-[200px] px-4 py-5 sm:px-5"
       style={{
         borderRadius: 20,
         background:
@@ -56,7 +56,7 @@ const LandingHeroRight = ({
           className="hero_right_tab_bg"
           style={{
             borderRadius: 20,
-            boxShadow: "2px 2px 20px 1px black",
+            boxShadow: "2px 2px 10px black",
           }}
           transition={{
             type: "spring",

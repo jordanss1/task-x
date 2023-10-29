@@ -1,18 +1,33 @@
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { capitalize } from "lodash";
 import { ReactElement } from "react";
-import { fonts } from "../../constants";
+import { colors, fonts } from "../../constants";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import Button from "../Button";
 import HeaderLogo from "../header/HeaderLogo";
 import MenuButton from "../svg/MenuButton";
-import { PanelButtonType, panelButtons } from "./content";
+import { panelButtons, PanelButtonType } from "./content";
 
 type DashboardPanelPropsType = {
   setApp: React.Dispatch<React.SetStateAction<"home" | "social">>;
   app: "home" | "social";
   expanded: boolean;
   setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const buttonVariants: Variants = {
+  animate: (active) => ({
+    background: active ? colors.buttonGradients[1] : colors.buttonGradients[0],
+    outline: active ? "var(--border-active)" : "var(--border-inactive)",
+    padding: active ? "var(--p-from)" : "var(--p-to)",
+    transition: { duration: 0.01 },
+  }),
+  hovered: {
+    scale: 1.1,
+    background: colors.hoveredButtonGradient,
+    boxShadow:
+      "1px 1px 5px rgba(0,0,0), -1px -1px 10px rgba(0,0,0,.5), inset .3px .3px 1px rgb(202, 255, 159), inset -.3px -.3px 1px rgb(202, 255, 159)",
+  },
 };
 
 const DashboardPanel = ({
@@ -33,18 +48,14 @@ const DashboardPanel = ({
           style={{
             padding: "var(--p-from)",
             outline: "var(--border-active)",
-            background: "var(--bg-inactive)",
+            background: colors.buttonGradients[0],
           }}
-          animate={{
-            background:
-              app === label ? "var(--bg-active)" : "var(--bg-inactive)",
-            outline:
-              app === label ? "var(--border-active)" : "var(--border-inactive)",
-            padding: app === label ? "var(--p-from)" : "var(--p-to)",
-            transition: { duration: 0.01 },
-          }}
+          variants={buttonVariants}
+          animate="animate"
+          whileHover={app === label ? "hovered" : ""}
+          custom={app === label}
           onClick={() => setApp(label)}
-          className="group min-h-[50px] sm:min-h-0 [--bg-active:linear-gradient(120deg,_rgb(153,_31,_255),_rgb(202,_255,_159))] [--bg-inactive:linear-gradient(120deg,rgb(153,_31,_255,0),_rgb(202,_255,_159,0))] sm:[--bg-inactive:linear-gradient(120deg,_rgb(153,_31,_255,_0),_rgb(202,_255,_159_0))]  sm:[--border-active:1px_solid_#991FFF] sm:[--border-inactive:1px_solid_#991FFF00] [--border-active:3px_solid_rgb(242,_238,_235)] [--border-inactive:3px_solid_rgb(242,_238,_235,0)] scale-[1.10] sm:scale-[.9]  transition-all relative rounded-[30%] [--p-from:1rem] [--p-to:.5rem_.8rem] sm:[--p-from:1rem] sm:[--p-to:1rem] p-4 sm:bottom-0 bottom-[32px]"
+          className="group min-h-[50px] sm:min-h-0 sm:[--border-active:1px_solid_#991FFF] sm:[--border-inactive:1px_solid_#991FFF00] [--border-active:3px_solid_rgb(242,_238,_235)] [--border-inactive:3px_solid_rgb(242,_238,_235,0)] scale-[1.10] sm:scale-[.9]  transition-all relative rounded-[30%] [--p-from:1rem] [--p-to:.5rem_.8rem] sm:[--p-from:1rem] sm:[--p-to:1rem] p-4 sm:bottom-0 bottom-[32px]"
         >
           <Element
             animate={
@@ -69,7 +80,7 @@ const DashboardPanel = ({
         {expanded && (
           <motion.span
             style={{ fontFamily: fonts.jura }}
-            className="ps-4 text-slate-800 text-sm font-semibold sm:inline hidden"
+            className="ps-5 text-slate-800 text-xs font-semibold sm:inline hidden"
           >
             {capitalize(label)}
           </motion.span>

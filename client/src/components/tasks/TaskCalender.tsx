@@ -28,7 +28,7 @@ const TaskCalender = ({
           fontFamily: fonts.orbitron,
           flex: enableDueDate ? 0 : 2,
         }}
-        className="text-xs"
+        className="text-xs cursor-pointer"
       >
         <Checkbox
           enableDueDate={enableDueDate}

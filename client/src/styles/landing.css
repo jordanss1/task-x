@@ -103,6 +103,7 @@
   inset: 0;
   z-index: 1;
   background: radial-gradient(circle at 10% 20%, #991fff 30%, rgb(58, 58, 58));
+  box-shadow: inset 1px 1px 10px rgb(202, 255, 159);
 }
 
 .hero_center {

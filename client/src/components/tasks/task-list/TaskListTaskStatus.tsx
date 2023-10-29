@@ -24,13 +24,29 @@ const containerVariants: Variants = {
 
 const buttonVariants: Variants = {
   animate: (editing: boolean) => ({
-    background: editing ? colors.buttonGradient[1] : colors.buttonGradient[0],
-    boxShadow: editing
-      ? "inset 3px 3px 1px #18181840, inset -3px -3px 6px #18181840"
-      : "inset 3px 3px 3px rgba(255, 255, 255, 0), inset -3px -3px 1px rgba(0, 0, 0, 0)",
     outline: editing
       ? "1px solid rgb(224, 220, 217)"
       : "1px solid rgb(224, 220, 217,0)",
+  }),
+  hovered: (editing) => ({
+    scale: 1.01,
+    background: editing
+      ? colors.hoveredButtonGradient
+      : colors.buttonGradients[0],
+    boxShadow: editing
+      ? "1px 1px 3px rgba(0,0,0), -1px -1px 3px rgba(0,0,0,.5), inset .3px .3px 1px rgb(202, 255, 159), inset -.3px -.3px 1px rgb(202, 255, 159)"
+      : "1px 1px 0px rgba(0,0,0,0), -1px -1px 1px rgba(0,0,0), inset 0px 0px 1px rgba(0,0,0,.5), inset -1px -1px 3px rgba(0,0,0,.5)",
+    transition: { type: "tween" },
+  }),
+  tapped: (editing) => ({
+    scale: 0.98,
+    background: editing
+      ? colors.hoveredButtonGradient
+      : colors.buttonGradients[0],
+    boxShadow: editing
+      ? "1px 1px 5px rgba(0,0,0), -1px -1px 0px rgba(0,0,0), inset .5px .5px 3px rgb(202, 255, 159), inset -.5px -.5px 3px rgb(202, 255, 159)"
+      : "1px 1px 2px rgba(0,0,0,0), -1px -1px 1px rgba(0,0,0), inset 0px 0px 1px rgba(0,0,0), inset -1px -1px 5px rgba(0,0,0)",
+    transition: { duration: 0.1, type: "tween" },
   }),
 };
 
@@ -40,9 +56,9 @@ const TaskListTaskStatus = ({
   handleEdit,
 }: TaskListTaskStatusPropsType): ReactElement => {
   const buttonStyle = {
-    background: colors.buttonGradient[0],
+    background: colors.buttonGradients[0],
     boxShadow:
-      "inset 3px 3px 3px rgba(255, 255, 255, 0), inset -3px -3px 6px rgba(0, 0, 0, 0)",
+      "1px 1px 5px rgba(0,0,0,.1), -1px -1px 1px rgba(0,0,0,0), inset 1px 1px 1px rgba(0,0,0,.1), inset -1px -1px 1px rgba(0,0,0)",
     outline: "1px solid rgb(224, 220, 217,0)",
   };
 
@@ -62,21 +78,25 @@ const TaskListTaskStatus = ({
       <motion.div
         animate={{
           gap: editing ? "13px" : "8px",
-          maxWidth: editing ? "70px" : "50px",
+          maxWidth: editing ? "70px" : "60px",
         }}
-        className="w-full gap-2 flex max-w-[50px]"
+        className="w-full gap-2 flex max-w-[60px]"
       >
         <Button
           style={buttonStyle}
           variants={buttonVariants}
+          whileHover="hovered"
+          whileTap="tapped"
           custom={editing}
           animate="animate"
           onClick={() => handleEdit()}
           className="cursor-pointer px-1 py-[2px] rounded-lg"
         >
           <SmallIcon
-            style={{ color: "black" }}
-            animate={{ color: editing ? "green" : "black" }}
+            style={{ color: "black", y: 0 }}
+            animate={{
+              color: editing ? "#36cb62" : "black",
+            }}
             size={editing ? 19 : 16}
             icon={`${
               editing ? "fa-solid fa-check" : "fa-regular fa-pen-to-square"
@@ -86,14 +106,17 @@ const TaskListTaskStatus = ({
         <Button
           style={buttonStyle}
           variants={buttonVariants}
+          whileHover="hovered"
+          whileTap="tapped"
           custom={editing}
           animate="animate"
           className="cursor-pointer flex items-center justify-center px-1 py-[2px] rounded-lg"
         >
           <SmallIcon
+            style={{ y: 0 }}
             size={editing ? 22 : 20}
             icon="fa-solid fa-xmark"
-            className="relative text-red-500 top-[1px] text-lg"
+            className="relative text-red-500  text-lg"
           />
         </Button>
       </motion.div>

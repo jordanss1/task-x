@@ -14,7 +14,7 @@ type ButtonPropsType = MotionButton & {
 const Button = forwardRef(
   (
     {
-      label = "",
+      label,
       icon,
       fontSize = 12,
       className,

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { AnimatePresence, Variants, motion, useAnimate } from "framer-motion";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { colors, fonts } from "../../../constants";
 import "../../../styles/mui-overrides/task.css";
 import { TaskType } from "../../../types";
@@ -11,7 +11,7 @@ import TaskListTaskOverlay from "./TaskListTaskOverlay";
 import TaskListTaskStatus from "./TaskListTaskStatus";
 
 type TaskListTaskPropsType = {
-  task: TaskType;
+  taskItem: TaskType;
   index: number;
 };
 
@@ -26,16 +26,25 @@ const toggleVariants: Variants = {
   }),
 };
 
-const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
+const TaskListTask = ({
+  taskItem,
+  index,
+}: TaskListTaskPropsType): ReactElement => {
+  const { task, taskDueEnabled, dueBy, created, onTaskWall } = taskItem;
   const [editing, setEditing] = useState(false);
-  const [publicVisibility, setPublicVisibility] = useState(false);
-  const [dueDate, setDueDate] = useState(dayjs().add(1, "hour"));
+  const [publicVisibility, setPublicVisibility] = useState(onTaskWall);
+  const [dueDate, setDueDate] = useState(
+    dueBy ? dueBy : dayjs().add(1, "hour")
+  );
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const [taskValue, setTaskValue] = useState(task.task);
+  const [taskValue, setTaskValue] = useState(task);
   const [scope, animate] = useAnimate();
 
   useEffect(() => {
-    if (editing) {
+    if (editing && inputRef.current) {
+      const textInput = inputRef.current;
+
       animate(
         scope.current,
         {
@@ -58,11 +67,16 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
         },
         { type: "spring", stiffness: 70 }
       );
+
+      const length = task.length;
+      textInput?.setSelectionRange(length, length);
+      textInput?.focus();
+      inputRef.current.focus();
     }
   }, [editing]);
 
   const handleEdit = async () => {
-    if (!editing) {
+    if (!editing && inputRef.current) {
       await animate(
         scope.current,
         {
@@ -108,7 +122,7 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
       </AnimatePresence>
       <motion.div
         animate={{
-          scale: editing ? 1.2 : 1,
+          scale: editing ? "var(--scale-to)" : 1,
           gap: editing ? "16px" : "32px",
           zIndex: editing ? 10 : "initial",
           transition: { ease: "easeIn" },
@@ -116,7 +130,7 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
         style={{
           scale: 1,
         }}
-        className="relative gap-8 flex flex-col p-4 max-w-[230px] rounded-3xl w-full"
+        className="relative gap-8 sm:[--scale-to:1.2] [--scale-to:1.1]  flex flex-col p-4 max-w-[230px] rounded-3xl w-full"
       >
         {editing && (
           <TaskListTaskOverlay index={index} editing={editing} scope={scope} />
@@ -124,7 +138,7 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
         <TaskListTaskStatus
           editing={editing}
           handleEdit={handleEdit}
-          dueBy={task.dueBy}
+          dueBy={dueBy}
         />
         <motion.div
           animate={{
@@ -143,6 +157,7 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
           )}
           <motion.div layout layoutDependency={editing} className="py-1">
             <textarea
+              ref={inputRef}
               value={taskValue}
               style={{
                 outline: `2px solid rgb(180,180,180)`,
@@ -173,7 +188,7 @@ const TaskListTask = ({ task, index }: TaskListTaskPropsType): ReactElement => {
                 }}
                 className="flex min-h-[45px] relative isolate px-3 gap-3 rounded-xl  items-center"
                 handleDate={setDueDate}
-                taskDueEnabled={task.taskDueEnabled}
+                taskDueEnabled={taskDueEnabled}
               />
             )}
           </AnimatePresence>

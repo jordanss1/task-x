@@ -27,6 +27,7 @@ const Checkbox = ({
             }}
             exit={{ width: "0px", whiteSpace: "nowrap", opacity: 0 }}
             htmlFor="check"
+            className="cursor-pointer"
           >
             {label}
           </motion.label>
@@ -34,7 +35,7 @@ const Checkbox = ({
       </AnimatePresence>
       <input
         onChange={onChange}
-        className="accent-gray-100"
+        className="accent-[#991FF1] cursor-pointer"
         id="check"
         type="checkbox"
         checked={enableDueDate}

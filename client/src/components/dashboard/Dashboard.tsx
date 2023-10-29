@@ -4,6 +4,7 @@ import "../../styles/dashboard.css";
 import Header from "../header/Header";
 import TaskList from "../tasks/task-list/TaskList";
 import DashboardNav from "./DashboardNav";
+import DashboardNewTaskButton from "./DashboardNewTaskButton";
 import DashboardPanel from "./DashboardPanel";
 
 const Dashboard = (): ReactElement => {
@@ -29,6 +30,7 @@ const Dashboard = (): ReactElement => {
           app={app}
         />
         <TaskList />
+        <DashboardNewTaskButton />
       </main>
     </motion.div>
   );

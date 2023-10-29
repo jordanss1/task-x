@@ -1,14 +1,22 @@
 import { Variants } from "framer-motion";
 import { ReactElement } from "react";
+import { colors } from "../../constants";
 import Button from "../Button";
 import { SidebarHeadingsType, contentItems } from "./content";
 
 const buttonVariants: Variants = {
   hovered: {
-    scale: 1.03,
+    scale: 1.02,
+    background: colors.hoveredButtonGradient,
+    boxShadow:
+      "1px 1px 15px rgba(0,0,0), -1px -1px 0px rgba(0,0,0), inset .7px .7px 1px rgb(202, 255, 159), inset -.7px -.7px 1px rgb(202, 255, 159)",
   },
   tapped: {
-    scale: 1,
+    scale: 0.95,
+    background: colors.tappedButtonGradient,
+    boxShadow:
+      "1px 1px 15px rgba(0,0,0), -1px -1px 0px rgba(0,0,0), inset 1px 1px 5px rgb(202, 255, 159), inset -1px -1px 5px rgb(202, 255, 159)",
+    transition: { duration: 0.1, type: "tween" },
   },
 };
 
@@ -26,7 +34,14 @@ const LandingHeroLeft = ({
   const { heading, body, button } = contentItems[index];
 
   const buttonProps = {
-    style: { width: "100%" },
+    style: {
+      width: "100%",
+      background:
+        "linear-gradient(90deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255)20% 80%, rgb(202, 255, 159))",
+      boxShadow:
+        "1px 3px 10px rgba(0,0,0), -1px -1px 1px rgba(0,0,0), inset 0px 1px 1px rgba(0,0,0,0), inset 0px 1px 1px rgba(0,0,0,0)",
+      color: colors.whiteShades[0],
+    },
   };
 
   const renderButton = (
@@ -43,7 +58,7 @@ const LandingHeroLeft = ({
 
   return (
     <div className="hero_left">
-      <h2 className="hero_left_heading text-balance">{heading}</h2>
+      <h2 className="hero_left_heading leading-snug">{heading}</h2>
       <div className="hero_left_body">
         <p>{body}</p>
       </div>
