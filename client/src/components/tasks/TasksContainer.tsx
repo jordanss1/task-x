@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
-import TaskList from "./task-list/TaskList";
-import TaskWall from "./task-wall/TaskWall";
+import TaskWall from "./taskWall/TaskWall";
+import TaskList from "./taskList/TaskList";
 
 interface TasksContainerPropsType {
   app: "home" | "social";

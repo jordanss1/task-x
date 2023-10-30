@@ -6,7 +6,7 @@ import "../../../styles/mui-overrides/task.css";
 import { TaskType } from "../../../types";
 import ModalBackground from "../../ModalBackground";
 import ToggleSwitch from "../../ToggleSwitch";
-import TaskCalender from "../TaskCalender";
+import TasksCalender from "../TasksCalender";
 import TaskListTaskOverlay from "./TaskListTaskOverlay";
 import TaskListTaskStatus from "./TaskListTaskStatus";
 
@@ -172,7 +172,7 @@ const TaskListTask = ({
           </motion.div>
           <AnimatePresence mode="wait">
             {editing && (
-              <TaskCalender
+              <TasksCalender
                 initial={{ position: "absolute", opacity: 0 }}
                 animate={{
                   position: "relative",

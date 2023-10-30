@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 
-type TaskNavPropsType = {
+type TasksNavPropsType = {
   header: string;
 };
 
-const TaskNav = ({ header }: TaskNavPropsType): ReactElement => {
+const TasksNav = ({ header }: TasksNavPropsType): ReactElement => {
   return (
     <section>
       <h2>{header}</h2>
@@ -12,4 +12,4 @@ const TaskNav = ({ header }: TaskNavPropsType): ReactElement => {
   );
 };
 
-export default TaskNav;
+export default TasksNav;

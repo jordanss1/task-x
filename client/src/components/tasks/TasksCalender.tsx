@@ -5,18 +5,18 @@ import { colors, fonts } from "../../constants";
 import Calendar from "../Calendar";
 import Checkbox from "../Checkbox";
 
-interface TaskCalenderPropsType extends MotionProps {
+interface TasksCalenderPropsType extends MotionProps {
   taskDueEnabled: boolean;
   handleDate: React.Dispatch<React.SetStateAction<Dayjs>>;
   className?: string;
 }
 
-const TaskCalender = ({
+const TasksCalender = ({
   taskDueEnabled,
   className,
   handleDate,
   ...props
-}: TaskCalenderPropsType): ReactElement => {
+}: TasksCalenderPropsType): ReactElement => {
   const [enableDueDate, setEnableDueDate] = useState(taskDueEnabled);
 
   return (
@@ -67,4 +67,4 @@ const TaskCalender = ({
   );
 };
 
-export default TaskCalender;
+export default TasksCalender;

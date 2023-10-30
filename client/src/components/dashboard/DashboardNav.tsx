@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { fonts } from "../../constants";
 import ButtonPopout from "../ButtonPopout";
@@ -6,6 +6,30 @@ import MenuPopout from "../MenuPopout";
 import NotificationBell from "../NotificationBell";
 import LightBulb from "../svg/LightBulb";
 import { notifications, settingsList } from "./content";
+
+const menuVariants: Variants = {
+  initial: {
+    scaleX: 0.6,
+    filter: "blur(5px)",
+  },
+  animate: {
+    scaleX: 1,
+    filter: "blur(0px)",
+    opacity: 1,
+    transition: {
+      filter: { delay: 0.1 },
+    },
+  },
+  exit: {
+    scaleX: 0.8,
+    opacity: 0,
+    filter: "blur(2px)",
+    transition: {
+      ease: "easeIn",
+      filter: { delay: 0.1 },
+    },
+  },
+};
 
 const DashboardNav = (): ReactElement => {
   const renderSettings = settingsList.map(({ icon, label }) => (
@@ -80,30 +104,13 @@ const DashboardNav = (): ReactElement => {
             </motion.div>
           </ButtonPopout>
         </li>
-        <MenuPopout className="sm:hidden relative gap-1 flex items-center">
+        <MenuPopout className="sm:hidden min-h-[45px] relative gap-1 flex items-center">
           <motion.div
             key={2}
-            initial={{
-              scaleX: 0.6,
-              filter: "blur(5px)",
-            }}
-            animate={{
-              scaleX: 1,
-              filter: "blur(0px)",
-              opacity: 1,
-              transition: {
-                filter: { delay: 0.1 },
-              },
-            }}
-            exit={{
-              scaleX: 0.8,
-              opacity: 0,
-              filter: "blur(2px)",
-              transition: {
-                ease: "easeIn",
-                filter: { delay: 0.1 },
-              },
-            }}
+            variants={menuVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             className="dashboard_nav origin-right popout_z_index fixed pt-[min(25vh,120px)] w-8/12 right-0 top-0 bottom-0 left-9/12 cursor-default overflow-hidden"
           >
             <div className="relative">

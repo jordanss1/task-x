@@ -1,18 +1,29 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  taskListSelector,
+  toggleForm,
+} from "../../features/taskList/taskListSlice";
 import "../../styles/dashboard.css";
+import ModalBackground from "../ModalBackground";
 import Header from "../header/Header";
-import TaskList from "../tasks/task-list/TaskList";
+import TaskList from "../tasks/taskList/TaskList";
 import DashboardNav from "./DashboardNav";
 import DashboardNewTaskButton from "./DashboardNewTaskButton";
 import DashboardPanel from "./DashboardPanel";
 
 const Dashboard = (): ReactElement => {
+  const dispatch = useDispatch();
   const [app, setApp] = useState<"home" | "social">("home");
+  const { formActive } = useSelector(taskListSelector);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+
+  const dismissForm = formActive ? () => dispatch(toggleForm()) : () => {};
 
   return (
     <motion.div
+      onClick={() => dismissForm()}
       style={{ paddingLeft: "var(--p-left-from)" }}
       animate={{
         paddingLeft: sidebarExpanded
@@ -30,7 +41,7 @@ const Dashboard = (): ReactElement => {
           app={app}
         />
         <TaskList />
-        <DashboardNewTaskButton />
+        <DashboardNewTaskButton formActive={formActive} />
       </main>
     </motion.div>
   );
