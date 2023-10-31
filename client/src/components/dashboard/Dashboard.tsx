@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,7 +6,6 @@ import {
   toggleForm,
 } from "../../features/taskList/taskListSlice";
 import "../../styles/dashboard.css";
-import ModalBackground from "../ModalBackground";
 import Header from "../header/Header";
 import TaskList from "../tasks/taskList/TaskList";
 import DashboardNav from "./DashboardNav";

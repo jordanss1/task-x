@@ -1,41 +1,35 @@
 import { useFormik } from "formik";
-import { motion, Variants } from "framer-motion";
+import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
-import { colors } from "../../constants";
-import { newTaskSchema, NewTaskType } from "../../schemas";
+import { useSelector } from "react-redux";
+import { taskListSelector } from "../../features/taskList/taskListSlice";
+import { NewTaskType, newTaskSchema } from "../../schemas";
+import TaskNewTaskOverlay from "../tasks/TaskNewTaskOverlay";
 
 const formVariants: Variants = {
   initial: {
-    background:
-      "repeating-linear-gradient(320deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255) 60%, rgb(202, 255, 159))",
-    boxShadow:
-      "1px 1px 2px rgba(0, 0, 0, 0.5), -1px -3px 10px rgba(0, 0, 0, 0.6), inset 1px 1px 2px rgba(0, 0, 0, 0.5), inset -1px -3px 10px rgba(0, 0, 0, 0.6)",
-    x: 30,
-    scale: 0.9,
-    opacity: 0,
+    borderRadius: "30%",
   },
   animate: {
-    background: `repeating-linear-gradient(320deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255) 60%, rgb(202, 255, 159))`,
-    boxShadow:
-      "1px 3px 20px rgba(0, 0, 0), -1px -3px 30px rgba(0, 0, 0, 0.6), inset 1px 1px 2px rgba(0, 0, 0, 0.5), inset -0px -0px 1px rgba(0, 0, 0, 0.6)",
-    opacity: 1,
-    scale: 1,
-    x: 0,
-    transition: {
-      ease: "backInOut",
-      type: "tween",
-      duration: 0.8,
-      background: { delay: 0.2, duration: 0.2 },
-      boxShadow: { delay: 0.4 },
-    },
+    borderRadius: "5%",
+    transition: { borderRadius: { delay: 0.4 } },
   },
   exit: {
-    background: `repeating-radial-gradient(circle at bottom right, ${colors.purple} 0% 10%, rebeccapurple 20%)`,
-    width: "auto",
+    background: [
+      null,
+      "repeating-linear-gradient(90deg, rgb(202, 255, 159) 0%, rgb(153, 31, 255) 0% 100%, rgb(202, 255, 159))",
+    ],
+    transition: {
+      duration: 0.4,
+    },
   },
+  tapped: {},
+  hovered: {},
 };
 
 const TasksNewTaskForm = (): ReactElement => {
+  const { formActive } = useSelector(taskListSelector);
+
   const { values, handleChange, handleBlur, handleSubmit, errors } =
     useFormik<NewTaskType>({
       initialValues: { task: "", dueDate: false, visibility: false },
@@ -45,18 +39,13 @@ const TasksNewTaskForm = (): ReactElement => {
 
   return (
     <motion.form
-      variants={formVariants}
-      initial="initial"
-      animate="animate"
+      onClick={(e) => e.stopPropagation()}
       layout
-      onMouseOverCapture={(e) => e.stopPropagation()}
-      onPointerDownCapture={(e) => e.stopPropagation()}
-      style={{
-        borderRadius: "5%",
-      }}
-      className="absolute origin-bottom-right w-[250px] h-[320px] cursor-default mix-blend-multiply bottom-[70px] right-[70px]"
+      className="absolute w-[250px] h-[320px] cursor-default bottom-5 right-7"
       onSubmit={handleSubmit}
-    ></motion.form>
+    >
+      <TaskNewTaskOverlay variants={formVariants} />
+    </motion.form>
   );
 };
 

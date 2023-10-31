@@ -14,7 +14,6 @@ const taskListSlice = createSlice({
   initialState,
   reducers: {
     toggleForm: (state) => {
-      console.log(state.formActive);
       state.formActive = !state.formActive;
     },
   },

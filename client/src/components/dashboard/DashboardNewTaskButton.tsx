@@ -1,11 +1,66 @@
-import { AnimatePresence, Variants, useAnimate } from "framer-motion";
+import { AnimatePresence, Variants } from "framer-motion";
 import { ReactElement, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { colors } from "../../constants";
 import { toggleForm } from "../../features/taskList/taskListSlice";
 import Button from "../Button";
 import SmallIcon from "../SmallIcon";
+import TaskNewTaskOverlay from "../tasks/TaskNewTaskOverlay";
 import TasksNewTaskForm from "../tasks/TasksNewTaskForm";
+
+const iconVariants: Variants = {
+  initial: {
+    x: -20,
+    opacity: 0,
+  },
+  animate: {
+    x: 0,
+    opacity: 1,
+    transition: { delay: 0.8 },
+  },
+  exit: {
+    x: -50,
+    transition: { duration: 0.2 },
+  },
+  hovered: { scale: 1.1 },
+  tapped: {
+    scale: 0.95,
+  },
+};
+
+const buttonVariants: Variants = {
+  initial: {
+    scale: 1,
+  },
+  animate: (active) => ({ cursor: active ? "default" : "pointer" }),
+  exit: { opacity: 1 },
+  tapped: (active) => ({ scale: active ? 1 : 0.96 }),
+  hovered: (active) => ({ scale: active ? 1 : 1.1 }),
+};
+
+const overlayVariants: Variants = {
+  initial: {
+    borderRadius: "5%",
+    background:
+      "repeating-linear-gradient(120deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255) 20% 80%, rgb(202, 255, 159))",
+  },
+  animate: (hovered) => ({
+    borderRadius: "30%",
+    background: hovered
+      ? "repeating-linear-gradient(120deg, rgb(202, 255, 159) 0%, rgb(153, 31, 255) 40% 60%, rgb(202, 255, 159))"
+      : "repeating-linear-gradient(120deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255) 30% 70%, rgb(202, 255, 159))",
+    transition: { borderRadius: { delay: 0.5 } },
+  }),
+  exit: {
+    background: [
+      null,
+      "repeating-linear-gradient(90deg, rgb(202, 255, 159) 0%, rgb(153, 31, 255) 0% 100%, rgb(202, 255, 159))",
+    ],
+    transition: {
+      duration: 0.2,
+    },
+  },
+};
 
 type DashboardNewTaskButtonPropsType = {
   formActive: boolean;
@@ -16,87 +71,66 @@ const DashboardNewTaskButton = ({
 }: DashboardNewTaskButtonPropsType): ReactElement => {
   const dispatch = useDispatch();
   const [hovered, setHovered] = useState(false);
-  const [tapped, setTapped] = useState(false);
 
-  const buttonProps = {
-    style: {
-      background: colors.buttonGradients[1],
-      boxShadow:
-        "1px 3px 10px rgba(0,0,0,.7), -1px -1px 5px rgba(0,0,0), inset 0px 1px 1px rgba(0,0,0,0), inset 0px 1px 1px rgba(0,0,0,0)",
-    },
+  const handleClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!formActive) {
+      dispatch(toggleForm());
+      setHovered(false);
+    }
   };
 
-  const buttonHover = {
-    width: hovered ? "70px" : "64px",
-    height: hovered ? "70px" : "64px",
-    background: hovered
-      ? colors.hoveredButtonGradient
-      : colors.buttonGradients[1],
-    boxShadow: hovered
-      ? "1px 1px 5px rgba(0,0,0), -1px -1px 10px rgba(0,0,0,.5), inset .3px .3px 1px rgb(202, 255, 159), inset -.3px -.3px 1px rgb(202, 255, 159)"
-      : "1px 3px 10px rgba(0,0,0,.7), -1px -1px 5px rgba(0,0,0), inset 0px 1px 1px rgba(0,0,0,0), inset 0px 1px 1px rgba(0,0,0,0)",
+  const handleHover = (hovered: boolean) => {
+    if (!formActive) setHovered(hovered);
   };
-
-  const buttonTap = {
-    width: tapped ? "62px" : "70px",
-    height: tapped ? "62px" : "70px",
-    background: colors.tappedButtonGradient,
-    boxShadow:
-      "1px 1px 10px rgba(0,0,0), -1px -1px 0px rgba(0,0,0), inset 1px 1px 5px rgb(202, 255, 159), inset -1px -1px 5px rgb(202, 255, 159)",
-    transition: { duration: 0.1, type: "tween" },
-  };
-
-  const iconVariants: Variants = {
-    initial: (icon) => ({
-      x: icon === "x" ? -50 : -50,
-    }),
-    animate: {
-      x: 0,
-    },
-    exit: (icon) => ({
-      x: icon === "x" ? -50 : -50,
-    }),
-    hovered: { scale: hovered ? 1.1 : 1 },
-    tapped: {
-      scale: tapped ? 0.95 : 1.1,
-    },
-  };
-
-  const renderIcon = (
-    <SmallIcon
-      key={formActive ? "x" : "plus"}
-      variants={iconVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      custom={formActive ? "x" : "plus"}
-      style={{ color: formActive ? "red" : colors.whiteShades[1], scale: 1 }}
-      size={formActive ? 22 : 25}
-      icon={`fa-${formActive ? "x" : "plus"} fa-solid`}
-    />
-  );
 
   return (
     <Button
+      onClick={(e) => handleClick(e)}
       layout
-      onClick={(e) => {
-        e.stopPropagation();
-        dispatch(toggleForm());
+      layoutRoot
+      variants={buttonVariants}
+      onMouseEnter={(e) => {
+        handleHover(true);
       }}
-      onMouseOver={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onPointerDown={() => setTapped(true)}
-      onPointerUp={() => setTapped(false)}
-      {...buttonProps}
-      whileHover={buttonHover}
-      whileTap={buttonTap}
-      className="fixed flex overflow-x-hidden isolate items-center justify-center rounded-[30%] cursor-pointer sm:bottom-5 bottom-14 right-4 w-16 h-16 bg-black z-[6]"
+      onMouseLeave={(e) => {
+        handleHover(false);
+      }}
+      custom={formActive}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      whileHover="hovered"
+      whileTap="tapped"
+      className="fixed flex isolate items-center overflow-x-hidden justify-center sm:bottom-5 bottom-14 right-4 w-16 h-16 z-[6]"
     >
-      <AnimatePresence mode="wait">
-        {formActive && <TasksNewTaskForm />}
+      <AnimatePresence mode="wait" initial={false}>
+        {formActive ? (
+          <TasksNewTaskForm key="form" />
+        ) : (
+          <TaskNewTaskOverlay
+            hovered={hovered}
+            variants={overlayVariants}
+            key="overlay"
+          />
+        )}
       </AnimatePresence>
       <AnimatePresence mode="wait" initial={false}>
-        {renderIcon}
+        {!formActive && (
+          <SmallIcon
+            key="icon"
+            variants={iconVariants}
+            initial="initial"
+            exit="exit"
+            style={{
+              color: colors.whiteShades[1],
+              scale: 1,
+            }}
+            size={25}
+            icon="fa-plus fa-solid"
+          />
+        )}
       </AnimatePresence>
     </Button>
   );
