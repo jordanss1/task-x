@@ -1,5 +1,5 @@
 import { AnimatePresence, Variants } from "framer-motion";
-import { ReactElement, useRef, useState } from "react";
+import { ReactElement, useState } from "react";
 import { useDispatch } from "react-redux";
 import { colors } from "../../constants";
 import { toggleForm } from "../../features/taskList/taskListSlice";
@@ -16,10 +16,10 @@ const iconVariants: Variants = {
   animate: {
     x: 0,
     opacity: 1,
-    transition: { delay: 0.8 },
+    transition: { delay: 1.2 },
   },
   exit: {
-    x: -50,
+    x: 50,
     transition: { duration: 0.2 },
   },
   hovered: { scale: 1.1 },
@@ -41,23 +41,50 @@ const buttonVariants: Variants = {
 const overlayVariants: Variants = {
   initial: {
     borderRadius: "5%",
-    background:
-      "repeating-linear-gradient(120deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255) 20% 80%, rgb(202, 255, 159))",
+    backgroundImage:
+      "linear-gradient(120deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255) 20% 80%, rgb(202, 255, 159))",
   },
-  animate: (hovered) => ({
-    borderRadius: "30%",
-    background: hovered
-      ? "repeating-linear-gradient(120deg, rgb(202, 255, 159) 0%, rgb(153, 31, 255) 40% 60%, rgb(202, 255, 159))"
-      : "repeating-linear-gradient(120deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255) 30% 70%, rgb(202, 255, 159))",
-    transition: { borderRadius: { delay: 0.5 } },
+  animate: ({ hovered, active }) => ({
+    borderRadius: hovered ? "50%" : "30%",
+    backgroundImage: hovered
+      ? "linear-gradient(120deg, rgb(202, 255, 159) 0%, rgb(153, 31, 255) 40% 60%, rgb(202, 255, 159))"
+      : "linear-gradient(120deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255) 30% 70%, rgb(202, 255, 159))",
+    transition: { borderRadius: { delay: active ? 0.5 : 0 } },
   }),
   exit: {
-    background: [
-      null,
-      "repeating-linear-gradient(90deg, rgb(202, 255, 159) 0%, rgb(153, 31, 255) 0% 100%, rgb(202, 255, 159))",
+    y: [0, -270],
+    x: [0, -220],
+    borderRadius: ["50%", "5%"],
+    width: "250px",
+    height: "320px",
+    filter: "blur(0px)",
+    boxShadow:
+      "1px 3px 10px rgba(0,0,0), -1px -1px 5px rgba(0,0,0), inset 1px 1px 1px rgba(0,0,0), inset 1px 1px 1px rgba(0,0,0)",
+    backgroundColor: "rgb(153, 31, 255,0)",
+    backgroundImage: [
+      `radial-gradient(circle at -10% 50%, transparent 50%, rgb(0,0,0)), radial-gradient(circle at 100% 0%, transparent 50%, rgb(0,0,0)), repeating-conic-gradient(from 0deg at 15% 50%, ${colors.purple} 0deg 10deg, ${colors.purple} 10deg 20deg, ${colors.purple} 28deg 30deg)`,
+      `radial-gradient(circle at 50% 50%, transparent 50%, rgb(0,0,0)), radial-gradient(circle at 100% 0%, transparent 80%, rgb(0,0,0)), repeating-conic-gradient(from 0deg at 10% 50%, ${colors.purple} 0deg 10deg, ${colors.purple} 10deg 20deg, ${colors.yellow} 28deg 30deg)`,
+    ],
+    backgroundSize: [
+      "100% 100%, 0% 0%, 50rem 20rem",
+      "100% 100%, 0% 0%, 50rem 20rem",
     ],
     transition: {
-      duration: 0.2,
+      borderRadius: { duration: 0.2, delay: 0.3 },
+      x: { ease: "easeInOut", duration: 0.5, delay: 0.1 },
+      y: { ease: "easeInOut", duration: 0.5, delay: 0.1 },
+      width: { ease: "easeInOut", duration: 0.4, delay: 0.2 },
+      height: { ease: "easeInOut", duration: 0.4, delay: 0.2 },
+      backgroundImage: {
+        duration: 0.2,
+        delay: 0.4,
+        ease: "easeInOut",
+      },
+      backgroundSize: {
+        duration: 0.1,
+        delay: 0.3,
+        ease: "easeIn",
+      },
     },
   },
 };
