@@ -1,11 +1,15 @@
-import { useFormik } from "formik";
-import { Variants, motion } from "framer-motion";
+import dayjs from "dayjs";
+import { Form, Formik } from "formik";
+import { AnimatePresence, Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { colors, fonts } from "../../constants";
 import { taskListSelector } from "../../features/taskList/taskListSlice";
-import { NewTaskType, newTaskSchema } from "../../schemas";
+import { TaskSchemaType, taskSchema } from "../../schemas";
+import TaskTextArea from "../TaskTextArea";
+import ToggleSwitch from "../ToggleSwitch";
 import TaskNewTaskOverlay from "../tasks/TaskNewTaskOverlay";
+import TasksCalender from "./TasksCalender";
 
 const formVariants: Variants = {
   initial: {
@@ -68,30 +72,76 @@ const formVariants: Variants = {
 const TasksNewTaskForm = (): ReactElement => {
   const { formActive } = useSelector(taskListSelector);
 
-  const { values, handleChange, handleBlur, handleSubmit, errors } =
-    useFormik<NewTaskType>({
-      initialValues: { task: "", dueDate: false, visibility: false },
-      onSubmit: () => console.log("first"),
-      validationSchema: newTaskSchema,
-    });
-
   return (
-    <motion.form
-      onClick={(e) => e.stopPropagation()}
-      layout
-      className="absolute w-[250px] h-[320px] cursor-default bottom-5 right-7"
-      onSubmit={handleSubmit}
+    <Formik<TaskSchemaType>
+      initialValues={{
+        task: "",
+        enabledDueDate: false,
+        dueDate: undefined,
+        onTaskWall: false,
+      }}
+      onSubmit={() => console.log("first")}
+      validationSchema={taskSchema}
     >
-      <TaskNewTaskOverlay variants={formVariants} />
-      <div className="p-3">
-        <h3
-          style={{ fontFamily: fonts.exo, color: colors.whiteShades[1] }}
-          className="text-start text-xl text-white"
-        >
-          New task
-        </h3>
-      </div>
-    </motion.form>
+      {(props) => {
+        const onTaskWall = props.values.onTaskWall;
+
+        const handleToggle = () => {
+          props.setFieldValue("onTaskWall", !onTaskWall);
+        };
+
+        return (
+          <Form
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            className="absolute w-[250px] h-[320px] cursor-default bottom-5 right-7"
+          >
+            <TaskNewTaskOverlay variants={formVariants} />
+            <div className="p-3  flex flex-col gap-2">
+              <h3
+                style={{ fontFamily: fonts.exo, color: colors.whiteShades[1] }}
+                className="text-start text-xl text-white"
+              >
+                New task
+              </h3>
+              <motion.div className="py-1">
+                <TaskTextArea
+                  name="task"
+                  className="paper border-b-0 relative resize-none text-sm px-3 w-full rounded-xl max-w-full"
+                  style={{
+                    outline: `2px solid rgb(180,180,180)`,
+                    fontFamily: fonts.jura,
+                    boxShadow: `inset 1px 1px 10px rgb(80,80,80), inset -1px -1px 10px rgb(80,80,80)`,
+                  }}
+                />
+              </motion.div>
+              <AnimatePresence mode="wait">
+                <TasksCalender
+                  style={{
+                    outline: "rgb(180, 180, 180) solid 1px",
+                    background: colors.blackGradient[1],
+                  }}
+                  className="flex min-h-[45px] relative isolate px-3 gap-3 rounded-xl  items-center"
+                  formikProps={props}
+                />
+              </AnimatePresence>
+              <motion.div
+                style={{
+                  background: colors.blackGradient[1],
+                  outline: "rgb(180, 180, 180) solid 1px",
+                }}
+                className="task-toggle isolate relative w-full p-1 rounded-xl ms-auto"
+              >
+                <ToggleSwitch
+                  label={onTaskWall ? "Public" : "Private"}
+                  handleToggle={handleToggle}
+                  name="onTaskWall"
+                />
+              </motion.div>
+            </div>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 

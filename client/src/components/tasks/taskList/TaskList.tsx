@@ -1,34 +1,34 @@
-import dayjs, { Dayjs } from "dayjs";
-import { ReactElement, useState } from "react";
+import dayjs from "dayjs";
+import { ReactElement } from "react";
 import TaskListTask from "./TaskListTask";
 
 const tasks = [
   {
     task: "Take my last exam of the year for nursing school!",
-    dueBy: dayjs().subtract(2, "week"),
-    taskDueEnabled: true,
-    created: dayjs().subtract(2, "days"),
+    dueDate: dayjs().subtract(2, "week").toDate(),
+    enabledDueDate: true,
+    created: dayjs().subtract(2, "days").toDate(),
     onTaskWall: false,
   },
   {
     task: "Study for my exam",
-    dueBy: undefined,
-    taskDueEnabled: false,
-    created: dayjs().subtract(5, "days"),
+    dueDate: undefined,
+    enabledDueDate: false,
+    created: dayjs().subtract(5, "days").toDate(),
     onTaskWall: true,
   },
   {
     task: "Take dog for walk",
-    dueBy: dayjs().add(3, "weeks"),
-    taskDueEnabled: true,
-    created: dayjs().subtract(2, "days"),
+    dueDate: dayjs().add(3, "weeks").toDate(),
+    enabledDueDate: true,
+    created: dayjs().subtract(2, "days").toDate(),
     onTaskWall: false,
   },
   {
     task: "Take my father to his last golf meeting for the next year!",
-    dueBy: dayjs().add(4, "months"),
-    taskDueEnabled: true,
-    created: dayjs().subtract(5, "days"),
+    dueDate: dayjs().add(4, "months").toDate(),
+    enabledDueDate: true,
+    created: dayjs().subtract(5, "days").toDate(),
     onTaskWall: true,
   },
 ];

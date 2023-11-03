@@ -1,4 +1,3 @@
-import { Dayjs } from "dayjs";
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors } from "../../../constants";
@@ -7,7 +6,7 @@ import SmallIcon from "../../SmallIcon";
 import TaskListTaskStatusPopout from "./TaskListTaskStatusPopout";
 
 type TaskListTaskStatusPropsType = {
-  dueBy: Dayjs | undefined;
+  dueDate: Date | undefined;
   editing: boolean;
   handleEdit: () => void;
 };
@@ -51,7 +50,7 @@ const buttonVariants: Variants = {
 };
 
 const TaskListTaskStatus = ({
-  dueBy,
+  dueDate,
   editing,
   handleEdit,
 }: TaskListTaskStatusPropsType): ReactElement => {
@@ -74,7 +73,7 @@ const TaskListTaskStatus = ({
       animate="animate"
       className="relative flex items-center justify-between min-h-[29px] rounded-xl"
     >
-      <TaskListTaskStatusPopout editing={editing} dueBy={dueBy} />
+      <TaskListTaskStatusPopout editing={editing} dueDate={dueDate} />
       <motion.div
         animate={{
           gap: editing ? "13px" : "8px",

@@ -1,23 +1,55 @@
-import { Dayjs } from "dayjs";
-import { AnimatePresence, MotionProps, motion } from "framer-motion";
-import { ReactElement, useState } from "react";
+import dayjs from "dayjs";
+import { FormikProps } from "formik";
+import { AnimatePresence, MotionProps, Variants, motion } from "framer-motion";
+import { ReactElement, useEffect } from "react";
 import { colors, fonts } from "../../constants";
 import Calendar from "../Calendar";
 import Checkbox from "../Checkbox";
 
+const calendarVariants: Variants = {
+  initial: { flex: 0, opacity: 0, width: "0%" },
+  animate: {
+    flex: 1,
+    opacity: 1,
+    width: "100%",
+    transition: { delay: 0.1 },
+  },
+  exit: {
+    flex: 0,
+    opacity: 0,
+    width: "0%",
+    scale: 0,
+    position: "absolute",
+    transition: {
+      duration: .4,
+      width: { duration: 0.1 },
+      opacity: { duration: 0.1 },
+      position: { delay: 0.2 },
+    },
+  },
+};
+
 interface TasksCalenderPropsType extends MotionProps {
-  taskDueEnabled: boolean;
-  handleDate: React.Dispatch<React.SetStateAction<Dayjs>>;
+  formikProps: FormikProps<any>;
   className?: string;
 }
 
 const TasksCalender = ({
-  taskDueEnabled,
   className,
-  handleDate,
+  formikProps,
   ...props
 }: TasksCalenderPropsType): ReactElement => {
-  const [enableDueDate, setEnableDueDate] = useState(taskDueEnabled);
+  const { enabledDueDate } = formikProps.values;
+
+  useEffect(() => {
+    const { setFieldValue } = formikProps;
+
+    if (enabledDueDate) {
+      setFieldValue("dueDate", dayjs().add(1, "hour"));
+    } else {
+      setFieldValue("dueDate", undefined);
+    }
+  }, [enabledDueDate]);
 
   return (
     <motion.div layout className={className} {...props}>
@@ -26,40 +58,23 @@ const TasksCalender = ({
         style={{
           color: colors.whiteShades[2],
           fontFamily: fonts.orbitron,
-          flex: enableDueDate ? 0 : 2,
+          flex: enabledDueDate ? 0 : 2,
         }}
         className="text-xs cursor-pointer"
       >
-        <Checkbox
-          enableDueDate={enableDueDate}
-          onChange={({ target }) => setEnableDueDate(target.checked)}
-          label={"Enable due date"}
-        />
+        <Checkbox name="enabledDueDate" label={"Enable due date"} />
       </motion.div>
       <AnimatePresence initial={false} mode="sync">
-        {enableDueDate && (
+        {enabledDueDate && (
           <motion.div
+            variants={calendarVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             className="inset-0"
-            initial={{ flex: 0, opacity: 0 }}
-            animate={{
-              flex: 1,
-              opacity: 1,
-              width: "100%",
-              transition: { delay: 0.1 },
-            }}
-            exit={{
-              flex: 0,
-              opacity: 0,
-              width: "0%",
-              scale: 0,
-              position: "absolute",
-              transition: {
-                position: { delay: 0.2 },
-              },
-            }}
             layout
           >
-            <Calendar setDate={handleDate} />
+            <Calendar name="dueDate" />
           </motion.div>
         )}
       </AnimatePresence>

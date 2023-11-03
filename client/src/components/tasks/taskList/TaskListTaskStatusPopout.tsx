@@ -1,4 +1,4 @@
-import { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors, fonts } from "../../../constants";
@@ -8,7 +8,7 @@ import SmallIcon from "../../SmallIcon";
 
 type TaskListTaskStatusPopoutPropsType = {
   editing: boolean;
-  dueBy: Dayjs | undefined;
+  dueDate: Date | undefined;
 };
 
 const popoutVariants: Variants = {
@@ -19,9 +19,11 @@ const popoutVariants: Variants = {
 
 const TaskListTaskStatusPopout = ({
   editing,
-  dueBy,
+  dueDate,
 }: TaskListTaskStatusPopoutPropsType): ReactElement => {
-  const { taskIsOverdue, timeLeft, timeFormat, noDueDate } = taskStatus(dueBy);
+  const { taskIsOverdue, timeLeft, timeFormat, noDueDate } = taskStatus(
+    dayjs(dueDate)
+  );
 
   const renderDueLabel = (
     <span className="underline underline-offset-4 decoration-black">
@@ -128,7 +130,7 @@ const TaskListTaskStatusPopout = ({
           exit="exit"
           className="absolute p-2 w-40 bottom-[38px] cursor-default origin-bottom-right h-fit right-0 border-[1px] rounded-lg overflow-hidden text-sm bg-[#f4f0ed] border-slate-400 "
         >
-          {dueBy?.format("DD/MM/YYYY HH:mm")}
+          {dayjs(dueDate).format("DD/MM/YYYY HH:mm")  }
         </motion.div>
       </ButtonPopout>
     );

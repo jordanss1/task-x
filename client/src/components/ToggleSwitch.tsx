@@ -1,20 +1,23 @@
+import { useField } from "formik";
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors, fonts } from "../constants";
 
 type ToggleSwitchPropsType = {
   label: string;
-  disabled: boolean;
+  disabled?: boolean;
   handleToggle: () => void;
-  toggled: boolean;
+  name: string;
 };
 
 const ToggleSwitch = ({
   label,
-  disabled,
+  disabled = false,
   handleToggle,
-  toggled,
+  ...props
 }: ToggleSwitchPropsType): ReactElement => {
+  const [field, meta] = useField(props);
+
   return (
     <div
       style={{ cursor: disabled ? "default" : "pointer" }}
@@ -32,13 +35,13 @@ const ToggleSwitch = ({
       </span>
       <motion.div
         layout
-        style={{}}
+        style={{
+          justifyContent: field.value ? "flex-end" : "flex-start",
+        }}
         animate={{
-          justifyContent: toggled ? "flex-end" : "flex-start",
-
           boxShadow: disabled
             ? `inset 1px 1px 2px rgb(60, 60, 60, 0), inset -1px -1px 2px rgb(60, 60, 60, 0)`
-            : toggled
+            : field.value
             ? `inset 1px 1px 2px rgb(153, 31, 255,1), inset -1px -1px 0px rgb(153, 31, 255,1)`
             : `inset 1px 1px 2px rgb(60, 60, 60, .5), inset -1px -1px 2px rgb(60, 60, 60, .5)`,
           background: disabled ? "rgb(30,30,30)" : "rgb(35,35,35)",
@@ -48,7 +51,6 @@ const ToggleSwitch = ({
       >
         <motion.div
           layout
-          layoutDependency={toggled}
           style={{
             background: `linear-gradient(120deg, rgb(30,30,30), rgb(153, 31, 255,.5) 60%, rgb(30,30,30))`,
             outline: "1px solid rgb(55,55,55)",
@@ -59,6 +61,7 @@ const ToggleSwitch = ({
               : `linear-gradient(120deg, rgb(30,30,30), ${colors.purple}, rgb(30,30,30))`,
             outline: disabled ? "1px solid rgb(55,55,55)" : "0px solid white",
           }}
+          transition={{ layout: { stiffness: 150, type: "spring" } }}
           className="rounded-full h-7 w-7"
         />
       </motion.div>

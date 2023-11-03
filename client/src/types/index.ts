@@ -1,9 +1,8 @@
-import { Dayjs } from "dayjs";
 
 export type TaskType = {
   task: string;
-  taskDueEnabled: boolean;
-  dueBy: Dayjs | undefined;
-  created: Dayjs;
+  enabledDueDate: boolean;
+  dueDate: Date | undefined;
+  created: Date;
   onTaskWall: boolean;
 };

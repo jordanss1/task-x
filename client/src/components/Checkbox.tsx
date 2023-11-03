@@ -1,25 +1,26 @@
+import { useField } from "formik";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChangeEvent, ReactElement } from "react";
+import { ReactElement } from "react";
 
 type CheckboxPropsType = {
   label: string;
-  enableDueDate: boolean;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  name: string;
 };
 
-const Checkbox = ({
-  label,
-  enableDueDate,
-  onChange,
-}: CheckboxPropsType): ReactElement => {
+const Checkbox = ({ label, ...props }: CheckboxPropsType): ReactElement => {
+  const [field, meta] = useField(props);
+
   return (
-    <div className="flex justify-between gap-1">
+    <motion.div
+      animate={{ justifyContent: field.value ? "normal" : "space-between" }}
+      layout
+      className="flex justify-between gap-1"
+    >
       <AnimatePresence initial={false} mode="wait">
-        {!enableDueDate && (
+        {!field.value && (
           <motion.label
-            initial={{ width: "0px", x: -20, opacity: 0 }}
+            initial={{ x: -20, opacity: 0 }}
             animate={{
-              width: "auto",
               opacity: 1,
               x: 0,
               whiteSpace: "nowrap",
@@ -33,14 +34,15 @@ const Checkbox = ({
           </motion.label>
         )}
       </AnimatePresence>
-      <input
-        onChange={onChange}
+      <motion.input
+        layout
+        transition={{ layout: { duration: 0.4 } }}
         className="accent-[#991FF1] cursor-pointer"
         id="check"
         type="checkbox"
-        checked={enableDueDate}
+        {...field}
       />
-    </div>
+    </motion.div>
   );
 };
 

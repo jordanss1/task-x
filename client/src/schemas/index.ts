@@ -1,9 +1,17 @@
+import dayjs from "dayjs";
 import * as yup from "yup";
 
-export const newTaskSchema = yup.object().shape({
+const minDate = dayjs().add(1, "minute");
+
+export const taskSchema = yup.object().shape({
   task: yup.string().required("Enter task"),
-  dueDate: yup.boolean().required("Required"),
-  visibility: yup.boolean().required("Choose your task's visibility"),
+  enabledDueDate: yup.boolean().required("Required"),
+  dueDate: yup.date().when("enabledDueDate", (value) => {
+    if (value) {
+      return yup.date().min(minDate, "Date must be in the future").required();
+    } else return yup.date().optional();
+  }),
+  onTaskWall: yup.boolean().required("Choose your task's visibility"),
 });
 
-export type NewTaskType = yup.InferType<typeof newTaskSchema>;
+export type TaskSchemaType = yup.InferType<typeof taskSchema>;
