@@ -21,7 +21,7 @@ const calendarVariants: Variants = {
     scale: 0,
     position: "absolute",
     transition: {
-      duration: .4,
+      duration: 0.4,
       width: { duration: 0.1 },
       opacity: { duration: 0.1 },
       position: { delay: 0.2 },
@@ -39,22 +39,21 @@ const TasksCalender = ({
   formikProps,
   ...props
 }: TasksCalenderPropsType): ReactElement => {
-  const { enabledDueDate } = formikProps.values;
+  const { enabledDueDate, dueDate } = formikProps.values;
 
   useEffect(() => {
-    const { setFieldValue } = formikProps;
-
-    if (enabledDueDate) {
-      setFieldValue("dueDate", dayjs().add(1, "hour"));
-    } else {
-      setFieldValue("dueDate", undefined);
+    if (enabledDueDate && !dueDate) {
+      formikProps.setFieldValue("dueDate", dayjs().add(1, "hour").toDate());
+    } else if (!enabledDueDate) {
+      formikProps.setFieldValue("dueDate", undefined);
     }
   }, [enabledDueDate]);
 
   return (
-    <motion.div layout className={className} {...props}>
+    <motion.div className={className} {...props}>
       <motion.div
-        layout
+        layoutDependency={enabledDueDate}
+        layoutId="check"
         style={{
           color: colors.whiteShades[2],
           fontFamily: fonts.orbitron,
@@ -72,7 +71,8 @@ const TasksCalender = ({
             animate="animate"
             exit="exit"
             className="inset-0"
-            layout
+            layoutDependency={enabledDueDate}
+            layoutId="calendar"
           >
             <Calendar name="dueDate" />
           </motion.div>

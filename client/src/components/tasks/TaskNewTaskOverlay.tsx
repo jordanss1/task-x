@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { taskListSelector } from "../../features/taskList/taskListSlice";
 
-const glowVariants: Variants = {
+const buttonVariants: Variants = {
   initial: {
     borderRadius: "5%",
     backgroundImage:
@@ -35,7 +35,7 @@ const glowVariants: Variants = {
   },
 };
 
-const glowVariants2: Variants = {
+const formVariants: Variants = {
   initial: {
     borderRadius: "5%",
     backgroundImage:
@@ -45,12 +45,10 @@ const glowVariants2: Variants = {
   },
   animate: ({ hovered, active }) => ({
     borderRadius: hovered ? "50%" : "30%",
-    backgroundImage: [
-      "radial-gradient(circle at 100% 100%, transparent 15%, rgb(0,0,0)), radial-gradient(circle at 0% 0%, transparent 15%, rgb(0,0,0)), linear-gradient(to left, transparent 4%, rgb(0,0,255))",
-      "radial-gradient(circle at 100% 100%, transparent 45%, rgb(0,0,0)), radial-gradient(circle at 60% 60%, transparent 35%, rgb(0,0,0)), linear-gradient(to left, transparent 45%, rgb(0,0,255))",
-      "radial-gradient(circle at 100% 100%, transparent 10%, rgb(0,0,0)), radial-gradient(circle at 40% 40%, transparent 100%, rgb(0,0,0)), linear-gradient(to left, transparent 45%, rgb(0,0,255))",
-    ],
-    filter: "blur(25px)",
+    backgroundImage:
+      "linear-gradient(to left, rgb(153, 31, 255) 30%, rgb(0, 0, 255) 40%, rgb(153, 31, 255))",
+
+    filter: "blur(30px)",
     transition: { borderRadius: { delay: active ? 0.5 : 0 } },
   }),
   exit: {
@@ -64,12 +62,12 @@ const glowVariants2: Variants = {
     borderRadius: [null, "30%"],
     transition: {
       duration: 0.7,
-      backgroundImage: { duration: 0.3 },
-      borderRadius: { delay: 0.5 },
-      x: { delay: 0.4, duration: 0.5 },
-      y: { delay: 0.4, duration: 0.5 },
-      height: { delay: 0.3 },
-      width: { delay: 0.3 },
+      backgroundImage: { duration: 0.6 },
+      borderRadius: { delay: 0.7 },
+      x: { delay: 0.6, duration: 0.5 },
+      y: { delay: 0.6, duration: 0.5 },
+      height: { delay: 0.5 },
+      width: { delay: 0.5 },
     },
   },
 };
@@ -93,7 +91,7 @@ const TaskNewTaskOverlay = ({
         initial="initial"
         animate="animate"
         exit="exit"
-        className="button_overlay absolute inset-0 -z-10"
+        className="button_overlay overflow-x-hidden absolute inset-0 -z-10"
         style={{
           backgroundImage:
             "linear-gradient(120deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255) 20% 60%, rgb(202, 255, 159))",
@@ -109,8 +107,8 @@ const TaskNewTaskOverlay = ({
         animate="animate"
         exit="exit"
         custom={{ hovered, formActive }}
-        variants={variants.tapped === undefined ? glowVariants : glowVariants2}
-        style={{ borderRadius: "30%", filter: "blur(0px)", y: 15, scale: 0.9 }}
+        variants={variants.tapped === undefined ? buttonVariants : formVariants}
+        style={{ borderRadius: "30%", filter: "blur(0px)", y: 10, scale: 0.9 }}
         className="absolute inset-0 -z-[11]"
       />
     </>

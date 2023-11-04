@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   taskListSelector,
   toggleForm,
 } from "../../features/taskList/taskListSlice";
+import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import "../../styles/dashboard.css";
 import Header from "../header/Header";
 import TaskList from "../tasks/taskList/TaskList";
@@ -16,7 +17,13 @@ const Dashboard = (): ReactElement => {
   const dispatch = useDispatch();
   const [app, setApp] = useState<"home" | "social">("home");
   const { formActive } = useSelector(taskListSelector);
+  const mobile = useMediaQuery(640);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+
+  useEffect(() => {
+    if (formActive && mobile) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "visible";
+  }, [formActive]);
 
   const dismissForm = formActive ? () => dispatch(toggleForm()) : () => {};
 

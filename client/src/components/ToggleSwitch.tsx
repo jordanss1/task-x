@@ -34,7 +34,6 @@ const ToggleSwitch = ({
         {label}
       </span>
       <motion.div
-        layout
         style={{
           justifyContent: field.value ? "flex-end" : "flex-start",
         }}
@@ -51,6 +50,7 @@ const ToggleSwitch = ({
       >
         <motion.div
           layout
+          layoutDependency={field.value}
           style={{
             background: `linear-gradient(120deg, rgb(30,30,30), rgb(153, 31, 255,.5) 60%, rgb(30,30,30))`,
             outline: "1px solid rgb(55,55,55)",

@@ -82,6 +82,7 @@ const TaskListTaskStatus = ({
         className="w-full gap-2 flex max-w-[60px]"
       >
         <Button
+          type={editing ? "submit" : "button"}
           style={buttonStyle}
           variants={buttonVariants}
           whileHover="hovered"

@@ -22,7 +22,7 @@ const TaskListTaskStatusPopout = ({
   dueDate,
 }: TaskListTaskStatusPopoutPropsType): ReactElement => {
   const { taskIsOverdue, timeLeft, timeFormat, noDueDate } = taskStatus(
-    dayjs(dueDate)
+    dueDate ? dayjs(dueDate) : undefined
   );
 
   const renderDueLabel = (
@@ -128,9 +128,9 @@ const TaskListTaskStatusPopout = ({
           initial="initial"
           animate="animate"
           exit="exit"
-          className="absolute p-2 w-40 bottom-[38px] cursor-default origin-bottom-right h-fit right-0 border-[1px] rounded-lg overflow-hidden text-sm bg-[#f4f0ed] border-slate-400 "
+          className="absolute p-2 w-40 bottom-[38px] cursor-default origin-bottom-right h-fit right-0 border-[1px] rounded-lg overflow-hidden text-sm bg-[#f4f0ed] border-slate-400 text-slate-600 opacity-80"
         >
-          {dayjs(dueDate).format("DD/MM/YYYY HH:mm")  }
+          {dayjs(dueDate).format("DD/MM/YYYY HH:mm")}
         </motion.div>
       </ButtonPopout>
     );

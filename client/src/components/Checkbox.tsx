@@ -13,7 +13,6 @@ const Checkbox = ({ label, ...props }: CheckboxPropsType): ReactElement => {
   return (
     <motion.div
       animate={{ justifyContent: field.value ? "normal" : "space-between" }}
-      layout
       className="flex justify-between gap-1"
     >
       <AnimatePresence initial={false} mode="wait">
@@ -29,17 +28,19 @@ const Checkbox = ({ label, ...props }: CheckboxPropsType): ReactElement => {
             exit={{ width: "0px", whiteSpace: "nowrap", opacity: 0 }}
             htmlFor="check"
             className="cursor-pointer"
+            layoutDependency={field.value}
           >
             {label}
           </motion.label>
         )}
       </AnimatePresence>
       <motion.input
-        layout
         transition={{ layout: { duration: 0.4 } }}
         className="accent-[#991FF1] cursor-pointer"
         id="check"
         type="checkbox"
+        layoutDependency={field.value}
+        checked={field.value}
         {...field}
       />
     </motion.div>

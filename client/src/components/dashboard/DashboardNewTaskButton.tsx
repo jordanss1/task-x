@@ -16,7 +16,7 @@ const iconVariants: Variants = {
   animate: {
     x: 0,
     opacity: 1,
-    transition: { delay: 1.2 },
+    transition: { delay: 1 },
   },
   exit: {
     x: 50,
@@ -32,7 +32,10 @@ const buttonVariants: Variants = {
   initial: {
     scale: 1,
   },
-  animate: (active) => ({ cursor: active ? "default" : "pointer" }),
+  animate: (active) => ({
+    cursor: active ? "default" : "pointer",
+    left: active ? "var(--left-active)" : "var(--left-inactive)",
+  }),
   exit: { opacity: 1 },
   tapped: (active) => ({ scale: active ? 1 : 0.96 }),
   hovered: (active) => ({ scale: active ? 1 : 1.1 }),
@@ -115,8 +118,6 @@ const DashboardNewTaskButton = ({
   return (
     <Button
       onClick={(e) => handleClick(e)}
-      layout
-      layoutRoot
       variants={buttonVariants}
       onMouseEnter={(e) => {
         handleHover(true);
@@ -130,7 +131,13 @@ const DashboardNewTaskButton = ({
       exit="exit"
       whileHover="hovered"
       whileTap="tapped"
-      className="fixed flex isolate items-center overflow-x-hidden justify-center sm:bottom-5 bottom-14 right-4 w-16 h-16 z-[6]"
+      style={{
+        left: "var(--left-inactive)",
+        right: formActive ? "var(--right-active)" : "var(--right-inactive)",
+        bottom: formActive ? "var(--bottom-active)" : "var(--bottom-inactive)",
+        marginLeft: formActive ? "var(--ml-active)" : "var(--ml-active)",
+      }}
+      className="fixed flex isolate items-center overflow-x-hidden justify-center sm:bottom-5 bottom-14 w-16 h-16 z-[6] sm:[--right-active:16px] sm:[--right-inactive:16px] sm:[--left-active:unset] sm:[--left-inactive:unset] sm:[--bottom-active:20px] sm:[--bottom-inactive:20px] [--bottom-active:86px] [--bottom-inactive:56px] sm:[--ml-active:0px] sm:[--ml-inactive:0px] [--ml-active:90px] [--ml-inactive:0px] [--right-active:0px] [--right-inactive:16px] [--left-active:50%] [--left-inactive:calc(100%_-_170px)]"
     >
       <AnimatePresence mode="wait" initial={false}>
         {formActive ? (
