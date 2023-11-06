@@ -95,7 +95,6 @@ const DashboardPanel = ({
       animate={{ width: expanded ? "var(--w-from)" : "var(--w-to)" }}
       className="dashboard_panel z-[5] sm:py-7 flex justify-center sm:justify-start gap-8 sm:gap-6 sm:flex-col items-center fixed left-0 sm:top-0 bottom-0 sm:h-full h-11 sm:w-32 w-full sm:[--w-from:155px] sm:[--w-to:70px] [--w-from:100%] [--w-to:100%]"
     >
-      <div className="absolute bg-[linear-gradient(120deg,_rgb(153,_31,_255,_0),_rgb(202,_255,_159_0))] h-[120%] bottom-10 sm:hidden w-full" />
       <div className="sm:flex px-3 py-4 gap-1 w-full justify-center items-center hidden min-h-[60px]">
         <motion.div className="flex justify-center flex-[2]">
           <MenuButton

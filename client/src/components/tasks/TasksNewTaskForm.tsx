@@ -4,6 +4,7 @@ import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { colors, fonts } from "../../constants";
 import { taskListSelector } from "../../features/taskList/taskListSlice";
+import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import { TaskSchemaType, taskSchema } from "../../schemas";
 import SmallIcon from "../SmallIcon";
 import TaskTextArea from "../TaskTextArea";
@@ -109,6 +110,7 @@ const childVariants: Variants = {
 
 const TasksNewTaskForm = (): ReactElement => {
   const { formActive } = useSelector(taskListSelector);
+  const mobile = useMediaQuery(640);
 
   const handleSubmit: FormikConfig<TaskSchemaType>["onSubmit"] = (
     values,
@@ -137,9 +139,16 @@ const TasksNewTaskForm = (): ReactElement => {
         };
 
         return (
-          <Form
+          <motion.form
+            exit={{
+              right: "1.75rem",
+              transition: {
+                delay: 0.1,
+                duration: 1,
+              },
+            }}
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            className="absolute w-[250px] h-[320px] cursor-default bottom-5 right-7"
+            className="absolute w-[250px] h-[320px] cursor-default bottom-5 -right-24 sm:right-7"
           >
             <TaskNewTaskOverlay variants={overlayVariants} />
             <AnimatePresence mode="wait">
@@ -229,7 +238,7 @@ const TasksNewTaskForm = (): ReactElement => {
                 </motion.div>
               )}
             </AnimatePresence>
-          </Form>
+          </motion.form>
         );
       }}
     </Formik>

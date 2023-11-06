@@ -1,0 +1,7 @@
+.profile {
+    background: linear-gradient(to bottom, #f4f0ed 0%, #e0dcd9 30%, #f4f0ed 100%);
+  }
+
+  .profile_header::after, .profile_header::before {
+    
+  }

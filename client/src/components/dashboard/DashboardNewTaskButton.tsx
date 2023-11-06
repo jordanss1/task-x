@@ -1,8 +1,9 @@
-import { AnimatePresence, Variants } from "framer-motion";
+import { AnimatePresence, Variants, motion } from "framer-motion";
 import { ReactElement, useState } from "react";
 import { useDispatch } from "react-redux";
 import { colors } from "../../constants";
 import { toggleForm } from "../../features/taskList/taskListSlice";
+import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import Button from "../Button";
 import SmallIcon from "../SmallIcon";
 import TaskNewTaskOverlay from "../tasks/TaskNewTaskOverlay";
@@ -34,7 +35,6 @@ const buttonVariants: Variants = {
   },
   animate: (active) => ({
     cursor: active ? "default" : "pointer",
-    left: active ? "var(--left-active)" : "var(--left-inactive)",
   }),
   exit: { opacity: 1 },
   tapped: (active) => ({ scale: active ? 1 : 0.96 }),
@@ -54,9 +54,9 @@ const overlayVariants: Variants = {
       : "linear-gradient(120deg, rgb(153, 31, 255) 0%, rgb(153, 31, 255) 30% 70%, rgb(202, 255, 159))",
     transition: { borderRadius: { delay: active ? 0.5 : 0 } },
   }),
-  exit: {
+  exit: ({ hovered, active, mobile }) => ({
     y: [0, -270],
-    x: [0, -220],
+    x: mobile ? [0, -100] : [0, -220],
     borderRadius: ["50%", "5%"],
     width: "250px",
     height: "320px",
@@ -89,7 +89,7 @@ const overlayVariants: Variants = {
         ease: "easeIn",
       },
     },
-  },
+  }),
 };
 
 type DashboardNewTaskButtonPropsType = {
@@ -116,57 +116,60 @@ const DashboardNewTaskButton = ({
   };
 
   return (
-    <Button
-      onClick={(e) => handleClick(e)}
-      variants={buttonVariants}
-      onMouseEnter={(e) => {
-        handleHover(true);
-      }}
-      onMouseLeave={(e) => {
-        handleHover(false);
-      }}
-      custom={formActive}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      whileHover="hovered"
-      whileTap="tapped"
+    <motion.div
       style={{
-        left: "var(--left-inactive)",
-        right: formActive ? "var(--right-active)" : "var(--right-inactive)",
-        bottom: formActive ? "var(--bottom-active)" : "var(--bottom-inactive)",
-        marginLeft: formActive ? "var(--ml-active)" : "var(--ml-active)",
+        justifyContent: formActive
+          ? "var(--active-justify)"
+          : "var(--inactive-justify)",
       }}
-      className="fixed flex isolate items-center overflow-x-hidden justify-center sm:bottom-5 bottom-14 w-16 h-16 z-[6] sm:[--right-active:16px] sm:[--right-inactive:16px] sm:[--left-active:unset] sm:[--left-inactive:unset] sm:[--bottom-active:20px] sm:[--bottom-inactive:20px] [--bottom-active:86px] [--bottom-inactive:56px] sm:[--ml-active:0px] sm:[--ml-inactive:0px] [--ml-active:90px] [--ml-inactive:0px] [--right-active:0px] [--right-inactive:16px] [--left-active:50%] [--left-inactive:calc(100%_-_170px)]"
+      className="w-full pr-3 fixed right-0 flex isolate items-center justify-end sm:bottom-5 bottom-14 sm:[--active-justify:flex-end] sm:[--inactive-justify:flex-end] [--active-justify:center] [--inactive-justify:flex-end]"
     >
-      <AnimatePresence mode="wait" initial={false}>
-        {formActive ? (
-          <TasksNewTaskForm key="form" />
-        ) : (
-          <TaskNewTaskOverlay
-            hovered={hovered}
-            variants={overlayVariants}
-            key="overlay"
-          />
-        )}
-      </AnimatePresence>
-      <AnimatePresence mode="wait" initial={false}>
-        {!formActive && (
-          <SmallIcon
-            key="icon"
-            variants={iconVariants}
-            initial="initial"
-            exit="exit"
-            style={{
-              color: colors.whiteShades[1],
-              scale: 1,
-            }}
-            size={25}
-            icon="fa-plus fa-solid"
-          />
-        )}
-      </AnimatePresence>
-    </Button>
+      <Button
+        onClick={(e) => handleClick(e)}
+        variants={buttonVariants}
+        onMouseEnter={(e) => {
+          handleHover(true);
+        }}
+        onMouseLeave={(e) => {
+          handleHover(false);
+        }}
+        custom={formActive}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        whileHover="hovered"
+        whileTap="tapped"
+        className="flex relative isolate items-center overflow-x-hidden justify-center w-16 h-16 z-[6] sm:[--right-active:16px] sm:[--right-inactive:16px] sm:[--left-active:unset] sm:[--left-inactive:unset] sm:[--bottom-active:20px] sm:[--bottom-inactive:20px] [--bottom-active:86px] [--bottom-inactive:56px] sm:[--ml-active:0px] sm:[--ml-inactive:0px] [--ml-active:90px] [--ml-inactive:0px] [--right-active:0px] [--right-inactive:16px] [--left-active:calc(100%_-_50%)] [--left-inactive:calc(100%_-_32%)]"
+      >
+        <AnimatePresence mode="wait" initial={false}>
+          {formActive ? (
+            <TasksNewTaskForm key="form" />
+          ) : (
+            <TaskNewTaskOverlay
+              hovered={hovered}
+              variants={overlayVariants}
+              key="overlay"
+            />
+          )}
+        </AnimatePresence>
+        <AnimatePresence mode="wait" initial={false}>
+          {!formActive && (
+            <SmallIcon
+              key="icon"
+              variants={iconVariants}
+              initial="initial"
+              exit="exit"
+              style={{
+                color: colors.whiteShades[1],
+                scale: 1,
+              }}
+              size={25}
+              icon="fa-plus fa-solid"
+            />
+          )}
+        </AnimatePresence>
+      </Button>
+    </motion.div>
   );
 };
 

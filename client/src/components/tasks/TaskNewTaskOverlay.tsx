@@ -2,6 +2,7 @@ import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { taskListSelector } from "../../features/taskList/taskListSlice";
+import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 
 const buttonVariants: Variants = {
   initial: {
@@ -80,6 +81,7 @@ const TaskNewTaskOverlay = ({
   variants: Variants;
 }): ReactElement => {
   const { formActive } = useSelector(taskListSelector);
+  const mobile = useMediaQuery(640);
 
   return (
     <>
@@ -87,7 +89,7 @@ const TaskNewTaskOverlay = ({
         layoutId="overlay"
         layoutDependency={formActive}
         variants={variants}
-        custom={{ hovered, formActive }}
+        custom={{ hovered, formActive, mobile }}
         initial="initial"
         animate="animate"
         exit="exit"

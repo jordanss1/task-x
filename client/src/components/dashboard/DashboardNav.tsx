@@ -31,7 +31,7 @@ const menuVariants: Variants = {
   },
 };
 
-const DashboardNav = (): ReactElement => {
+const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
   const renderSettings = settingsList.map(({ icon, label }) => (
     <motion.div
       key={label}
@@ -78,14 +78,16 @@ const DashboardNav = (): ReactElement => {
         style={{ fontFamily: fonts.jura }}
         className="text-sl items-center list-none flex gap-6 sm:gap-5 z-3"
       >
-        <li>
-          <ButtonPopout
-            icon={<NotificationBell notifications={[]} />}
-            action="click"
-          >
-            {renderNotifications()}
-          </ButtonPopout>
-        </li>
+        {!profile && (
+          <li>
+            <ButtonPopout
+              icon={<NotificationBell notifications={[]} />}
+              action="click"
+            >
+              {renderNotifications()}
+            </ButtonPopout>
+          </li>
+        )}
         <li className="sm:flex hidden items-center">
           <ButtonPopout
             iconSize={10}

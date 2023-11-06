@@ -60,7 +60,7 @@ const LandingHeroRight = ({
           }}
           transition={{
             type: "spring",
-            duration: speed.current === "slow" ? 0.6 : 0.2,
+            duration: speed.current === "slow" ? 1 : 0.4,
           }}
         />
       )}

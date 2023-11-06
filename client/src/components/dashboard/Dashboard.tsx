@@ -38,7 +38,11 @@ const Dashboard = (): ReactElement => {
       }}
       className="dashboard isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
     >
-      <Header containerClass="dashboard_header" nav={<DashboardNav />} />
+      <Header
+        link="/dashboard"
+        containerClass="dashboard_header"
+        nav={<DashboardNav />}
+      />
       <main>
         <DashboardPanel
           expanded={sidebarExpanded}
