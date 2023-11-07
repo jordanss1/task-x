@@ -8,7 +8,13 @@ const ProfileSetupContent = ({ step }: { step: number }): ReactElement => {
     switch (step) {
       case 0:
         return (
-          <TransformUnderline addedDelay={1}>
+          <TransformUnderline
+            backgroundColors={[
+              "linear-gradient(90deg, rgb(153, 31, 255, 0), rgb(153, 31, 255) 0% 100%, rgb(202, 255, 159, 0)),",
+              "linear-gradient(90deg, rgb(202, 255, 159), rgb(153, 31, 255) 20% 80%, rgb(202, 255, 159))",
+            ]}
+            addedDelay={1}
+          >
             <motion.h3
               animate={{
                 opacity: [0, 1],
@@ -19,9 +25,9 @@ const ProfileSetupContent = ({ step }: { step: number }): ReactElement => {
               }}
               style={{
                 fontFamily: fonts.jura,
-                color: colors.whiteShades[0],
+                textShadow: `1px 1px .5px ${colors.purple}`,
               }}
-              className="w-fit text-2xl p-1 leading-none font-bold select-none tracking-tighter flex gap-1 items-center relative mix-blend-exclusion z-10"
+              className="w-fit text-slate-800 text-xl p-1 leading-none font-bold select-none tracking-tight flex gap-1 items-center relative z-10"
             >
               Let's get you setup...
             </motion.h3>
@@ -31,9 +37,12 @@ const ProfileSetupContent = ({ step }: { step: number }): ReactElement => {
   };
 
   return (
-    <div className="w-full flex justify-center min-h-[150px]">
+    <motion.div
+      style={{ padding: step === 0 ? "50px 0 0 0" : "" }}
+      className="w-full flex justify-center min-h-[150px]"
+    >
       {renderContent()}
-    </div>
+    </motion.div>
   );
 };
 
