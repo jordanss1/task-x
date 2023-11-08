@@ -47,7 +47,7 @@ const ProfileSetupControls = ({
             textShadow: `1px 1px 2px ${colors.purple}`,
           }}
           onClick={() => handleStep(true)}
-          className="p-2  text-slate-900 gap-[1px] rounded-xl"
+          className="p-2 text-slate-900 gap-[1px] rounded-xl"
           icon={
             <SmallIcon
               style={{ color: colors.purple }}

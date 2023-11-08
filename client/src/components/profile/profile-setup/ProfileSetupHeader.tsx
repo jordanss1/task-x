@@ -1,57 +1,102 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors, fonts } from "../../../constants";
 import TransformBackground from "../../TransformBackground";
 import HeaderLogoText from "../../header/HeaderLogoText";
 
-const ProfileSetupHeader = ({ step }: { step: number }): ReactElement => {
+const firstHeader: Variants = {
+  initialAnimation: {
+    opacity: [0, 1],
+    transition: {
+      opacity: { delay: 1.2, duration: 1 },
+    },
+  },
+  backAnimation: {
+    x: ["-100%", "0%"],
+    transition: {
+      x: { delay: 0.7, duration: 1 },
+      ease: "easeOut",
+      type: "tween",
+    },
+  },
+  exit: {
+    position: "absolute",
+    x: "-100%",
+
+    transition: { duration: 1, ease: "easeInOut", type: "tween" },
+  },
+};
+
+type ProfileSetupHeaderPropsType = {
+  step: number;
+  headerCycle: string;
+};
+
+const ProfileSetupHeader = ({
+  step,
+  headerCycle,
+}: ProfileSetupHeaderPropsType): ReactElement => {
   const renderHeader = () => {
     switch (step) {
       case 0:
         return (
-          <TransformBackground>
-            <motion.h2
-              animate={{
-                opacity: [0, 1],
-                transition: {
-                  opacity: { delay: 1.2, duration: 1 },
-                  ease: "easeInOut",
-                },
-              }}
-              style={{
-                fontFamily: fonts.jura,
-                color: colors.whiteShades[0],
-              }}
-              className="w-fit text-3xl p-2 leading-none font-bold select-none tracking-tighter flex gap-1 items-center relative mix-blend-exclusion z-10"
-            >
-              Welcome to <HeaderLogoText fontSize={30} />
-            </motion.h2>
-          </TransformBackground>
+          <motion.h2
+            key="first"
+            variants={firstHeader}
+            animate={headerCycle}
+            exit="exit"
+            style={{
+              fontFamily: fonts.jura,
+              color: colors.whiteShades[0],
+            }}
+            className="w-fit whitespace-nowrap inset-0 text-2xl p-2 leading-none font-bold select-none tracking-tighter flex gap-1 items-center relative z-10"
+          >
+            Welcome to <HeaderLogoText fontSize={24} />
+          </motion.h2>
         );
-      case 1:
+      default:
         return (
-          <TransformBackground>
-            <motion.h2
-              layout
-              animate={{
-                opacity: [0, 1],
-                transition: {
-                  opacity: { delay: 1, duration: 1 },
-                  letterSpacing: { delay: 1, duration: 1 },
-                  ease: "easeInOut",
-                },
-              }}
-              style={{ letterSpacing: "-1px", fontFamily: fonts.jura }}
-              className="text-white w-fit font-extrabold relative mix-blend-exclusion z-10"
-            >
-              Profile setup
-            </motion.h2>
-          </TransformBackground>
+          <motion.h2
+            key="second"
+            initial={{ x: "100%" }}
+            animate={{
+              x: "0%",
+              transition: {
+                delay: 0.7,
+                duration: 1,
+                ease: "easeOut",
+                type: "tween",
+              },
+            }}
+            exit={{
+              x: "150%",
+              position: "absolute",
+              transition: { duration: 1, ease: "easeInOut", type: "tween" },
+            }}
+            style={{
+              letterSpacing: "-1px",
+              fontFamily: fonts.jura,
+              color: colors.whiteShades[0],
+            }}
+            className="text-2xl inset-0 p-2 w-fit font-extrabold relative z-10"
+          >
+            Profile setup
+          </motion.h2>
         );
     }
   };
 
-  return <div className="w-full flex justify-center">{renderHeader()}</div>;
+  return (
+    <div className="w-full flex justify-center">
+      <TransformBackground
+        background={colors.hoveredButtonGradient}
+        minHeight="56px"
+        mixBlendMode="multiply"
+      >
+        <AnimatePresence mode="sync">{renderHeader()}</AnimatePresence>
+      </TransformBackground>
+    </div>
+  );
 };
 
 export default ProfileSetupHeader;

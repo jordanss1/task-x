@@ -2,9 +2,10 @@ import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors, fonts } from "../../../constants";
 import TransformUnderline from "../../TransformUnderline";
+import ProfileSetupBackground from "./ProfileSetupBackground";
 
 const ProfileSetupContent = ({ step }: { step: number }): ReactElement => {
-  const renderContent = () => {
+  const renderInstructions = () => {
     switch (step) {
       case 0:
         return (
@@ -25,9 +26,9 @@ const ProfileSetupContent = ({ step }: { step: number }): ReactElement => {
               }}
               style={{
                 fontFamily: fonts.jura,
-                textShadow: `1px 1px .5px ${colors.purple}`,
+                textShadow: `1px 1px 10px ${colors.purple}`,
               }}
-              className="w-fit text-slate-800 text-xl p-1 leading-none font-bold select-none tracking-tight flex gap-1 items-center relative z-10"
+              className="w-fit text-slate-500 text-xl p-1 leading-none font-bold select-none tracking-tight flex gap-1 items-center relative z-10"
             >
               Let's get you setup...
             </motion.h3>
@@ -36,12 +37,18 @@ const ProfileSetupContent = ({ step }: { step: number }): ReactElement => {
     }
   };
 
+  const renderSetup = () => {
+    switch (step) {
+      case 0:
+        return <></>;
+    }
+  };
+
   return (
-    <motion.div
-      style={{ padding: step === 0 ? "50px 0 0 0" : "" }}
-      className="w-full flex justify-center min-h-[150px]"
-    >
-      {renderContent()}
+    <motion.div className="content_wrapper overflow-hidden relative w-full pb-5 h-full flex justify-center items-center">
+      <ProfileSetupBackground />
+      {renderInstructions()}
+      <div className="content_setup">{renderSetup()}</div>
     </motion.div>
   );
 };

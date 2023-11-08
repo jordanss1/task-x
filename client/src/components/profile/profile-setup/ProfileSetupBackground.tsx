@@ -4,7 +4,7 @@ import { ReactElement } from "react";
 const ProfileSetupBackground = (): ReactElement => {
   return (
     <motion.div className="absolute h-full w-full right-0 top-0">
-      <motion.div className="absolute right-10 top-0 bottom-10 mb-auto mt-auto w-32 h-32 bg-black rounded-full" />
+      {/* <motion.div style={{skew: 30}} className="absolute -right-14 -top-14 w-40 h-40 outline outline-[15px] outline-slate-400 bg-transparent rounded-full" /> */}
     </motion.div>
   );
 };
