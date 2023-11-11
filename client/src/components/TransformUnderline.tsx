@@ -14,28 +14,25 @@ const TransformUnderline = ({
   children,
 }: TransformUnderlinePropsType): ReactElement => {
   return (
-    <motion.div className="relative h-fit overflow-hidden w-fit p-1 text-xl">
+    <motion.div className="relative h-fit w-fit p-1 text-xl">
       <motion.div
         style={{
           background: backgroundColors[0],
           height: "5%",
-          x: "100%",
         }}
         animate={{
-          height: ["3%", "100%", "3%"],
+          height: ["3%", "60%", "3%"],
           background: [...backgroundColors],
           top: "97%",
-          x: ["100%", "0%"],
           borderRadius: ["0px", "10px", "0px"],
           transition: {
-            x: { delay: 0 + addedDelay, duration: 1 },
-            top: { delay: 1 + addedDelay, duration: .5 },
+            top: { delay: 1 + addedDelay, duration: 0.5 },
             background: {
               delay: 0 + addedDelay,
-              duration: 3,
+              duration: 0.5,
             },
-            borderRadius: { delay: 1 + addedDelay, duration: 1 },
-            height: { delay: 1 + addedDelay, duration: 1 },
+            borderRadius: { delay: 0.5 + addedDelay, duration: 0.5 },
+            height: { delay: 0.5 + addedDelay, duration: 1 },
             ease: "easeInOut",
           },
         }}

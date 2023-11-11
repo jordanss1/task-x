@@ -29,12 +29,12 @@ const firstHeader: Variants = {
 
 type ProfileSetupHeaderPropsType = {
   step: number;
-  headerCycle: string;
+  firstCycle: string;
 };
 
 const ProfileSetupHeader = ({
   step,
-  headerCycle,
+  firstCycle,
 }: ProfileSetupHeaderPropsType): ReactElement => {
   const renderHeader = () => {
     switch (step) {
@@ -43,7 +43,7 @@ const ProfileSetupHeader = ({
           <motion.h2
             key="first"
             variants={firstHeader}
-            animate={headerCycle}
+            animate={firstCycle}
             exit="exit"
             style={{
               fontFamily: fonts.jura,

@@ -69,7 +69,7 @@ const ProgressBar = ({ step }: { step: number }): ReactElement => {
     step === 0 ? "0%" : step === 1 ? "33%" : step === 2 ? "66%" : "100%";
 
   return (
-    <motion.div className="relative flex max-w-[210px] w-full h-[5px] rounded-full border-1 border-black mr-auto ml-auto">
+    <motion.div className="relative flex max-w-[210px] w-full h-[10px] rounded-full border-1 border-black mr-auto ml-auto">
       <motion.div
         style={{
           background: colors.buttonGradients[1],
