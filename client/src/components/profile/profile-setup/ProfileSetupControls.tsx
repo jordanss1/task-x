@@ -1,11 +1,13 @@
+import { useField } from "formik";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import { ReactElement, useEffect } from "react";
 import { colors, fonts } from "../../../constants";
 import Button from "../../Button";
 import SmallIcon from "../../SmallIcon";
+import { HandleStepType } from "./ProfileSetup";
 
 type ProfileSetupControlsPropTypes = {
-  handleStep: (increment: boolean) => void;
+  handleStep: HandleStepType;
   step: number;
 };
 
@@ -17,20 +19,19 @@ const ProfileSetupControls = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0, transition: { duration: 1, delay: 2 } }}
-      className="w-full flex flex-col gap-3"
+      className="w-full flex flex-col gap-4"
     >
       <div className="max-w-[300px] flex justify-between w-full mr-auto ml-auto">
         <Button
           style={{
             fontFamily: fonts.jura,
-            textShadow: `1px 1px 2px ${colors.purple}`,
           }}
           animate={{
             opacity: step === 0 ? 0.6 : 1,
           }}
-          onClick={() => handleStep(false)}
-          disabled={step === 0}
-          className="p-2 text-slate-900 flex-row-reverse rounded-xl gap-[1px]"
+          onClick={(e) => handleStep(e, false)}
+          disabled={step === 0 || step > 2}
+          className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd970]  flex-row-reverse rounded-xl gap-[1px]"
           icon={
             <SmallIcon
               style={{ color: colors.purple }}
@@ -44,10 +45,12 @@ const ProfileSetupControls = ({
         <Button
           style={{
             fontFamily: fonts.jura,
-            textShadow: `1px 1px 2px ${colors.purple}`,
           }}
-          onClick={() => handleStep(true)}
-          className="p-2 text-slate-900 gap-[1px] rounded-xl"
+          onClick={(e) => {
+            handleStep(e, true);
+          }}
+          disabled={step > 2}
+          className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd970] gap-[1px] rounded-xl"
           icon={
             <SmallIcon
               style={{ color: colors.purple }}

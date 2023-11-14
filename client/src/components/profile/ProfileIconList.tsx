@@ -1,14 +1,24 @@
+import { MotionProps, motion } from "framer-motion";
 import { ReactElement } from "react";
 import profilePhotos from "../../assets/profile-photos/profilePhotos";
 import ProfileIcon from "../ProfileIcon";
 
-const ProfileIconList = (): ReactElement => {
+interface ProfileIconListPropsType extends MotionProps {
+  iconSize: number;
+  className?: string;
+}
+
+const ProfileIconList = ({
+  iconSize,
+  className,
+  ...props
+}: ProfileIconListPropsType): ReactElement => {
   return (
-    <div className="grid">
+    <motion.div {...props} className={className}>
       {profilePhotos.map((profilePhoto) => (
-        <ProfileIcon />
+        <ProfileIcon size={iconSize} key={profilePhoto} img={profilePhoto} />
       ))}
-    </div>
+    </motion.div>
   );
 };
 

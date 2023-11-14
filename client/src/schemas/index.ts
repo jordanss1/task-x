@@ -14,3 +14,14 @@ export const taskSchema = yup.object().shape({
 });
 
 export type TaskSchemaType = yup.InferType<typeof taskSchema>;
+
+export const profileSchema = yup.object().shape({
+  profilePhoto: yup.string().required("Choose a profile photo"),
+  userName: yup
+    .string()
+    .min(3, "Username must be more than 2 characters")
+    .max(14, "Username must be less than 15 characters")
+    .required("You must enter a username"),
+});
+
+export type ProfileSchemaType = yup.InferType<typeof profileSchema>;

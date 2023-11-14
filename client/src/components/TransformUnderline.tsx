@@ -14,7 +14,10 @@ const TransformUnderline = ({
   children,
 }: TransformUnderlinePropsType): ReactElement => {
   return (
-    <motion.div className="relative h-fit w-fit p-1 text-xl">
+    <motion.div
+      exit={{ opacity: 0 }}
+      className="relative h-fit w-fit p-1 text-xl"
+    >
       <motion.div
         style={{
           background: backgroundColors[0],
