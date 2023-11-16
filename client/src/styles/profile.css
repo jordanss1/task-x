@@ -13,11 +13,17 @@
   background-position: 100% 100%, 5.25rem 5.25rem, 2.5rem 2.5rem, 2.5rem 2.5rem;
 }
 
+.profile_setup_picture {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+}
+
 .profile_setup_iconlist {
-  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
   overflow: overlay;
   padding: 20px;
   row-gap: 30px;
+  column-gap: 15px;
   align-items: center;
   justify-content: center;
   max-height: 320px;
@@ -52,5 +58,20 @@
   background-color: rgb(100, 100, 100);
   border-radius: 20px;
 }
-.profile_setup_iconlist::-webkit-scrollbar-track-piece {
+
+@media screen and (max-width: 448px) {
+  .profile_setup_picture {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .profile_setup_chosen_icon {
+    width: 80px;
+    padding: 5px;
+  }
+
+  .profile_setup_iconlist {
+    grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
+  }
 }

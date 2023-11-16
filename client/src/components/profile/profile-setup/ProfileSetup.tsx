@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import { motion, useCycle } from "framer-motion";
 import { ReactElement, useEffect, useState } from "react";
-import { ProfileSchemaType } from "../../../schemas";
+import { ProfileSchemaType, profileSchema } from "../../../schemas";
 import "../../../styles/header.css";
 import "../../../styles/profile.css";
 import ProfileSetupControls from "./ProfileSetupControls";
@@ -22,6 +22,8 @@ const ProfileSetup = (): ReactElement => {
     "userPicture",
     "userName"
   );
+
+  const userNames = ["love", "five", "test"];
 
   useEffect(() => {
     if (step === 0) {
@@ -57,6 +59,7 @@ const ProfileSetup = (): ReactElement => {
         onSubmit={(values, actions) => {
           console.log(values);
         }}
+        validationSchema={profileSchema}
       >
         {(props) => {
           const handleStep: HandleStepType = async (e, increment) => {
@@ -80,7 +83,11 @@ const ProfileSetup = (): ReactElement => {
                 firstCycle={firstCycle}
                 step={step}
               />
-              <ProfileSetupControls step={step} handleStep={handleStep} />
+              <ProfileSetupControls
+                step={step}
+                handleStep={handleStep}
+                {...props}
+              />
             </form>
           );
         }}

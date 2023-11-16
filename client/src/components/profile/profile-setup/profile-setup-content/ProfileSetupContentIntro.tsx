@@ -22,7 +22,7 @@ const ProfileSetupContentIntro = ({
           "linear-gradient(90deg, rgb(153, 31, 255, 0), rgb(153, 31, 255) 0% 100%, rgb(202, 255, 159, 0)),",
           "linear-gradient(90deg, rgb(202, 255, 159,0), rgb(153, 31, 255) 20% 80%, rgb(202, 255, 159,0))",
         ]}
-        addedDelay={firstCycle === "initialAnimation" ? 1.5 : 0.5}
+        addedDelay={firstCycle === "initialAnimation" ? 1.5 : 0}
       >
         <motion.h3
           key="head"
@@ -30,17 +30,17 @@ const ProfileSetupContentIntro = ({
             opacity: [0, 1],
             transition: {
               opacity: {
-                delay: firstCycle === "initialAnimation" ? 2.5 : 1.5,
-                duration: 1,
+                delay: firstCycle === "initialAnimation" ? 2.5 : 1,
+                duration: firstCycle === "initialAnimation" ? 1 : 0.6,
               },
               ease: "easeInOut",
             },
           }}
           exit={{
             opacity: 0,
-            x: mobile ? 0 : -30,
-            y: mobile ? -30 : 0,
-            transition: { duration: 0.8 },
+            x: mobile ? 0 : -20,
+            y: mobile ? -20 : 0,
+            transition: { duration: 0.4 },
           }}
           style={{
             fontFamily: fonts.jura,
@@ -55,19 +55,19 @@ const ProfileSetupContentIntro = ({
       </TransformUnderline>
       <motion.div
         key="div"
-        initial={{ x: 30, opacity: 0 }}
+        initial={{ x: 20, opacity: 0 }}
         animate={{
           x: 0,
           opacity: 1,
           transition: {
-            delay: firstCycle === "initialAnimation" ? 2.5 : 1,
+            delay: firstCycle === "initialAnimation" ? 2.5 : 0.8,
           },
         }}
         exit={{
           opacity: 0,
-          x: mobile ? -30 : 0,
-          y: mobile ? 0 : -30,
-          transition: { duration: 0.8 },
+          x: mobile ? -20 : 0,
+          y: mobile ? 0 : -20,
+          transition: { duration: 0.4 },
         }}
       >
         <div className="flex justify-center items-center w-full">

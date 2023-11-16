@@ -129,7 +129,6 @@ const TaskListTask = ({
             await enterAnimation();
             setEditing(true);
           } else if (!Object.keys(errors).length && editing) {
-            console.log("first");
             await props.submitForm();
             props.setTouched({ dueDate: undefined });
             setEditing(false);

@@ -1,20 +1,26 @@
-import { useField } from "formik";
+import { FormikProps, useField } from "formik";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import { ReactElement, useEffect } from "react";
 import { colors, fonts } from "../../../constants";
+import { ProfileSchemaType } from "../../../schemas";
 import Button from "../../Button";
 import SmallIcon from "../../SmallIcon";
 import { HandleStepType } from "./ProfileSetup";
 
-type ProfileSetupControlsPropTypes = {
+interface ProfileSetupControlsPropTypes extends FormikProps<ProfileSchemaType> {
   handleStep: HandleStepType;
   step: number;
-};
+}
 
 const ProfileSetupControls = ({
   handleStep,
   step,
+  ...props
 }: ProfileSetupControlsPropTypes): ReactElement => {
+  const userNameErrors =
+    step === 2 &&
+    (!props.values.userName || props.errors.userName !== undefined);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -31,7 +37,7 @@ const ProfileSetupControls = ({
           }}
           onClick={(e) => handleStep(e, false)}
           disabled={step === 0 || step > 2}
-          className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd970]  flex-row-reverse rounded-xl gap-[1px]"
+          className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990]  flex-row-reverse rounded-xl gap-[1px]"
           icon={
             <SmallIcon
               style={{ color: colors.purple }}
@@ -49,8 +55,9 @@ const ProfileSetupControls = ({
           onClick={(e) => {
             handleStep(e, true);
           }}
-          disabled={step > 2}
-          className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd970] gap-[1px] rounded-xl"
+          type={step === 2 ? "submit" : "button"}
+          disabled={step > 2 || userNameErrors || props.isValidating}
+          className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990] gap-[1px] rounded-xl"
           icon={
             <SmallIcon
               style={{ color: colors.purple }}

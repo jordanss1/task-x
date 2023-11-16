@@ -10,6 +10,7 @@ import ProfileChosenIcon from "../../ProfileChosenIcon";
 import ProfileIconList from "../../ProfileIconList";
 import ProfileSetupContentIntro from "./ProfileSetupContentIntro";
 import ProfileSetupContentPicture from "./ProfileSetupContentPicture";
+import ProfileSetupContentUsername from "./ProfileSetupContentUsername";
 
 type ProfileSetupContentPropsType = {
   step: number;
@@ -35,6 +36,14 @@ const backgroundVariants: Variants = {
       type: "tween",
     },
   }),
+  userName: ({ mobile }) => ({
+    opacity: 1,
+    borderRadius: "50px 50px 50px 50px",
+    height: "156px",
+    transition: {
+      type: "tween",
+    },
+  }),
 };
 
 const ProfileSetupContent = ({
@@ -49,24 +58,31 @@ const ProfileSetupContent = ({
       return mobile ? "350px" : "491px";
     } else if (contentCycle === "userPicture") {
       return "550px";
+    } else {
+      return "450px";
     }
   };
 
   const renderBackground = (
     <motion.div
-      layoutId="background"
+      layoutDependency={step}
+      layoutId="background3"
       custom={{ mobile, initial: firstCycle === "initialAnimation" }}
       variants={backgroundVariants}
       style={{
         background:
           "linear-gradient(110deg, rgb(0,0,255), rgb(153, 31, 255,.8)",
-        borderRadius: "100px 200px 200px 100px",
+        borderRadius: "100px 100px 100px 100px",
         height: contentCycle === "intro" ? "285px" : "350px",
         maxWidth: maxWidth(),
       }}
       animate={contentCycle}
       transition={{
-        layout: { duration: 1, type: "tween" },
+        borderRadius: { duration: 0.1, type: "tween" },
+        layout: {
+          duration: 0.3,
+          type: "spring",
+        },
       }}
       className="absolute w-full h-full m-auto inset-0 mix-blend-difference -z-[10]"
     />
@@ -78,6 +94,9 @@ const ProfileSetupContent = ({
         return (
           <motion.div
             key="container1"
+            style={{
+              maxWidth: maxWidth(),
+            }}
             className="relative p-5 w-full h-full flex sm:gap-0 gap-3 sm:flex-row flex-col justify-center items-center"
           >
             {renderBackground}
@@ -88,14 +107,28 @@ const ProfileSetupContent = ({
         return (
           <motion.div
             key="container2"
+            layout
             style={{
               maxWidth: maxWidth(),
-              gridTemplateColumns: "100px 1fr",
             }}
-            className="relative p-7 w-full h-full justify-center items-center gap-3 grid"
+            className="profile_setup_picture relative p-7 w-full h-full justify-center items-center gap-3"
           >
             {renderBackground}
             <ProfileSetupContentPicture mobile={mobile} />
+          </motion.div>
+        );
+      default:
+        return (
+          <motion.div
+            layout
+            style={{
+              maxWidth: maxWidth(),
+            }}
+            key="container3"
+            className="relative w-full h-full flex sm:flex-row flex-col gap-5 justify-center items-center"
+          >
+            {renderBackground}
+            <ProfileSetupContentUsername mobile={mobile} />
           </motion.div>
         );
     }

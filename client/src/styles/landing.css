@@ -134,7 +134,7 @@
   content: "";
   position: absolute;
   z-index: -9;
-  inset: 20% 0 0 0;
+  inset: 15% 0 15% 0;
   filter: blur(100px);
   background: linear-gradient(
     to right,

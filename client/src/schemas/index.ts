@@ -15,13 +15,31 @@ export const taskSchema = yup.object().shape({
 
 export type TaskSchemaType = yup.InferType<typeof taskSchema>;
 
+const userNames = ["love", "five", "test"];
+
+const fakePromise = (value: string): Promise<string[]> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const matches = userNames.filter((userName) => userName === value);
+      resolve(matches);
+    }, 2000);
+  });
+};
+
 export const profileSchema = yup.object().shape({
   profilePhoto: yup.string().required("Choose a profile photo"),
   userName: yup
     .string()
-    .min(3, "Username must be more than 2 characters")
-    .max(14, "Username must be less than 15 characters")
-    .required("You must enter a username"),
+    .min(3, "Must be more than 2 characters")
+    .max(14, "Must be less than 15 characters")
+    .matches(/^[a-zA-Z0-9_]+$/, "No special characters allowed")
+    .required("You must enter a username")
+    .test("userList", "Username is taken", async (value) => {
+      if (value.length < 3) return false;
+
+      const matches = await fakePromise(value);
+      return !matches.length;
+    }),
 });
 
 export type ProfileSchemaType = yup.InferType<typeof profileSchema>;
