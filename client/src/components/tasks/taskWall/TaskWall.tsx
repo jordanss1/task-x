@@ -1,7 +1,85 @@
+import dayjs from "dayjs";
 import { ReactElement } from "react";
+import { TaskWallTaskType } from "../../../types";
+import TaskWallTask from "./TaskWallTask";
+
+const taskWallTasks: TaskWallTaskType[] = [
+  {
+    task: "Going to take my final driving test! I'm so nervous",
+    userId: "43",
+    dueDate: dayjs().subtract(2, "week").toDate(),
+    enabledDueDate: true,
+    created: dayjs().subtract(2, "days").toDate(),
+    likes: 55,
+    awards: ["supported", "superSupported"],
+    comments: [
+      { userId: "1943", comment: "Mine is next week also!", likes: 2 },
+      {
+        userId: "309",
+        comment:
+          "I'm looking for a good teacher, anyone know one in the Bradford area?",
+        likes: 0,
+      },
+    ],
+  },
+  {
+    task: "Find two more chairs for my first day of work at the salon",
+    userId: "309",
+    dueDate: undefined,
+    enabledDueDate: false,
+    created: dayjs().subtract(5, "days").toDate(),
+    likes: 100,
+    awards: ["supported", "superSupported", "communityLegend"],
+    comments: [
+      {
+        userId: "43",
+        comment: "Good luck I'm sure you will find them :)",
+        likes: 10,
+      },
+      {
+        userId: "2003",
+        comment: "Where is your salon?",
+        likes: 0,
+      },
+    ],
+  },
+  {
+    task: "Take dog to vets",
+    userId: "2003",
+    dueDate: dayjs().add(3, "weeks").toDate(),
+    enabledDueDate: true,
+    created: dayjs().subtract(2, "days").toDate(),
+    likes: 2,
+    awards: [],
+    comments: [],
+  },
+  {
+    task: "My final exam of the year. Time to study study study!",
+    userId: "1943",
+    dueDate: dayjs().add(2, "months").toDate(),
+    enabledDueDate: true,
+    created: dayjs().subtract(5, "days").toDate(),
+    likes: 20,
+    awards: ["supported"],
+    comments: [
+      {
+        userId: "43",
+        comment:
+          "Let the stress begin to mount haha this year has been crazy. What is your major?",
+        likes: 2,
+      },
+    ],
+  },
+];
 
 const TaskWall = (): ReactElement => {
-  return <div>TaskWall</div>;
+  return (
+    <section className="flex flex-col gap-8 items-center py-20">
+      {taskWallTasks.map((task, i) => (
+        <TaskWallTask key={i} task={task} />
+      ))}
+    </section>
+  );
 };
 
 export default TaskWall;

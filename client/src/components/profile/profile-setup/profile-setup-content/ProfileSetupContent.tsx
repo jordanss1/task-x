@@ -1,16 +1,9 @@
-import { useField } from "formik";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
-import { colors, fonts } from "../../../../constants";
 import { useMediaQuery } from "../../../../hooks/MediaQueryHooks";
-import TransformUnderline from "../../../TransformUnderline";
-import Faces from "../../../svg/Faces";
-import NeonClipboard from "../../../svg/NeonClipboard";
-import ProfileChosenIcon from "../../ProfileChosenIcon";
-import ProfileIconList from "../../ProfileIconList";
+import ProfilePicture from "../../ProfilePicture";
+import ProfileUsername from "../../ProfileUsername";
 import ProfileSetupContentIntro from "./ProfileSetupContentIntro";
-import ProfileSetupContentPicture from "./ProfileSetupContentPicture";
-import ProfileSetupContentUsername from "./ProfileSetupContentUsername";
 
 type ProfileSetupContentPropsType = {
   step: number;
@@ -114,7 +107,7 @@ const ProfileSetupContent = ({
             className="profile_setup_picture relative p-7 w-full h-full justify-center items-center gap-3"
           >
             {renderBackground}
-            <ProfileSetupContentPicture mobile={mobile} />
+            <ProfilePicture mobile={mobile} />
           </motion.div>
         );
       default:
@@ -128,7 +121,7 @@ const ProfileSetupContent = ({
             className="relative w-full h-full flex sm:flex-row flex-col gap-5 justify-center items-center"
           >
             {renderBackground}
-            <ProfileSetupContentUsername mobile={mobile} />
+            <ProfileUsername mobile={mobile} />
           </motion.div>
         );
     }

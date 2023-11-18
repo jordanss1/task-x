@@ -1,12 +1,16 @@
-import { ReactElement } from "react";
-import ProfileChosenIcon from "../../ProfileChosenIcon";
-import ProfileIconList from "../../ProfileIconList";
+import { CSSProperties, ReactElement } from "react";
+import ProfileChosenIcon from "./ProfileChosenIcon";
+import ProfileIconList from "./ProfileIconList";
 
-const ProfileSetupContentPicture = ({
-  mobile,
-}: {
-  mobile: boolean;
-}): ReactElement => {
+type ProfilePicturePropsType = {
+  mobile?: boolean;
+  listBackground?: CSSProperties["background"];
+};
+
+const ProfilePicture = ({
+  mobile = false,
+  listBackground = "initial",
+}: ProfilePicturePropsType): ReactElement => {
   return (
     <>
       <ProfileChosenIcon
@@ -28,10 +32,11 @@ const ProfileSetupContentPicture = ({
         className="profile_setup_iconlist grid"
         style={{
           maxWidth: "400px",
+          background: listBackground,
         }}
       />
     </>
   );
 };
 
-export default ProfileSetupContentPicture;
+export default ProfilePicture;

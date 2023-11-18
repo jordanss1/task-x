@@ -73,7 +73,7 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
   };
 
   return (
-    <nav>
+    <nav className="h-10 flex justify-center">
       <motion.ul
         style={{ fontFamily: fonts.jura }}
         className="text-sl items-center list-none flex gap-6 sm:gap-5 z-3"

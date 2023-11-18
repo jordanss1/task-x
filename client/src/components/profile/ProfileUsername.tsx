@@ -1,15 +1,19 @@
 import { useField, useFormikContext } from "formik";
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement } from "react";
-import { colors, fonts } from "../../../../constants";
-import TransformUnderline from "../../../TransformUnderline";
-import ValidateIcons from "../../../ValidateIcons";
+import { colors, fonts } from "../../constants";
+import TransformUnderline from "../TransformUnderline";
+import ValidateIcons from "../ValidateIcons";
 
-const ProfileSetupContentUsername = ({
-  mobile,
-}: {
-  mobile: boolean;
-}): ReactElement => {
+type ProfileUsernamePropsType = {
+  mobile?: boolean;
+  inputWidth?: string;
+};
+
+const ProfileUsername = ({
+  mobile = false,
+  inputWidth = "175px",
+}: ProfileUsernamePropsType): ReactElement => {
   const [field, meta, helpers] = useField("userName");
   const { isValidating } = useFormikContext();
 
@@ -51,9 +55,10 @@ const ProfileSetupContentUsername = ({
           Username:
         </motion.h3>
       </TransformUnderline>
-      <div className="relative isolate">
+      <div style={{ maxWidth: inputWidth }} className="relative w-full isolate">
         <AnimatePresence mode="wait">
-          {meta.error && meta.touched && (
+          {((meta.error && meta.touched) ||
+            meta.error === "Username is taken") && (
             <motion.span
               initial={{ y: 0 }}
               animate={{ y: -22 }}
@@ -82,12 +87,13 @@ const ProfileSetupContentUsername = ({
             y: mobile ? 0 : -20,
             transition: { duration: 0.4 },
           }}
+          style={{ maxWidth: inputWidth }}
           {...field}
-          className="rounded-lg max-w-[175px] font-[jura] focus:outline-slate-500 focus:outline-offset-0 p-1 focus:outline-none border-4 border-solid border-[blue]"
+          className="rounded-lg max-w-[175px] w-full font-[jura] focus:outline-slate-500 focus:outline-offset-0 p-1 focus:outline-none border-4 border-solid border-[blue]"
           type="text"
         />
         <div className="absolute -right-8 top-2">
-          {field.value && meta.touched && (
+          {field.value.length > 2 && (
             <ValidateIcons
               error={meta.error === undefined ? false : true}
               isValidating={isValidating}
@@ -99,4 +105,4 @@ const ProfileSetupContentUsername = ({
   );
 };
 
-export default ProfileSetupContentUsername;
+export default ProfileUsername;

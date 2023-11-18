@@ -1,7 +1,10 @@
 import * as yup from "yup";
 
 export const taskSchema = yup.object().shape({
-  task: yup.string().required("You must enter a task"),
+  task: yup
+    .string()
+    .max(140, "Must be less than 140 characters")
+    .required("You must enter a task"),
   enabledDueDate: yup.boolean().required("Required"),
   dueDate: yup.date().when("enabledDueDate", (value) => {
     if (value[0]) {
@@ -31,10 +34,10 @@ export const profileSchema = yup.object().shape({
   userName: yup
     .string()
     .min(3, "Must be more than 2 characters")
-    .max(14, "Must be less than 15 characters")
+    .max(24, "Must be less than 25 characters")
     .matches(/^[a-zA-Z0-9_]+$/, "No special characters allowed")
     .required("You must enter a username")
-    .test("userList", "Username is taken", async (value) => {
+    .test("userList", "Username is taken", async (value, context) => {
       if (value.length < 3) return false;
 
       const matches = await fakePromise(value);

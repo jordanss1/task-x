@@ -12,6 +12,7 @@ import TaskList from "../tasks/taskList/TaskList";
 import DashboardNav from "./DashboardNav";
 import DashboardNewTaskButton from "./DashboardNewTaskButton";
 import DashboardPanel from "./DashboardPanel";
+import DashboardTaskContainer from "./DashboardTaskContainer";
 
 const Dashboard = (): ReactElement => {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const Dashboard = (): ReactElement => {
           setApp={setApp}
           app={app}
         />
-        <TaskList />
+        <DashboardTaskContainer app={app} />
         <DashboardNewTaskButton formActive={formActive} />
       </main>
     </motion.div>

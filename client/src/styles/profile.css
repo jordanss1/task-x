@@ -59,6 +59,10 @@
   border-radius: 20px;
 }
 
+.profile_edit {
+  background: linear-gradient(60deg, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
+}
+
 @media screen and (max-width: 448px) {
   .profile_setup_picture {
     display: flex;

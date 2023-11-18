@@ -1,7 +1,6 @@
 import { useField } from "formik";
 import { MotionProps, motion } from "framer-motion";
 import { ReactElement } from "react";
-import photos from "../../assets/profile-photos/profilePhotos";
 
 interface ProfileChosenIconPropsType extends MotionProps {
   className: string;
