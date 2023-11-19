@@ -1,3 +1,5 @@
+import { Variants } from "framer-motion";
+
 export const colors = {
   whiteShades: ["#f4f0ed", "#e0dcd9", "rgb(224, 220, 217)"],
   purple: "rgb(153, 31, 255)",
@@ -22,4 +24,10 @@ export const fonts = {
   jura: "'Jura', sans-serif",
   orbitron: "'Orbitron', sans-serif",
   exo: "'Exo 2', sans-serif",
+};
+
+export const popoutVariants: Variants = {
+  initial: { opacity: 0, scale: 0.85 },
+  animate: { opacity: 1, scale: 1, transition: { ease: "easeIn" } },
+  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.1 } },
 };

@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
-import { colors, fonts } from "../../../constants";
+import { colors, fonts, popoutVariants } from "../../../constants";
 import { taskStatus } from "../../../functions/taskStatus";
 import ButtonPopout from "../../ButtonPopout";
 import SmallIcon from "../../SmallIcon";
@@ -9,12 +9,6 @@ import SmallIcon from "../../SmallIcon";
 type TaskListTaskStatusPopoutPropsType = {
   editing: boolean;
   dueDate: Date | undefined;
-};
-
-const popoutVariants: Variants = {
-  initial: { opacity: 0, scale: 0.85 },
-  animate: { opacity: 0.8, scale: 1, transition: { ease: "easeIn" } },
-  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.1 } },
 };
 
 const TaskListTaskStatusPopout = ({

@@ -1,17 +1,23 @@
 import { ReactElement } from "react";
 import { fonts } from "../../../constants";
-import { UserType } from "../../../types";
+import { AwardType, UserType } from "../../../types";
 import ProfileIcon from "../../ProfileIcon";
+import TaskWallTaskStatusAwards from "./TaskWallTaskStatusAwards";
+import TaskWallTaskStatusDue from "./TaskWallTaskStatusDue";
 
 type TaskWallTaskStatusPropsType = {
   user: UserType;
+  awards: AwardType[];
+  dueDate: Date | undefined;
 };
 
 const TaskWallTaskStatus = ({
   user,
+  awards,
+  dueDate,
 }: TaskWallTaskStatusPropsType): ReactElement => {
   return (
-    <div className="flex">
+    <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">
         <ProfileIcon
           className="rounded-full shadow-purple-600 shadow-md bg-slate-400 p-1"
@@ -25,8 +31,9 @@ const TaskWallTaskStatus = ({
           {user.userName}
         </span>
       </div>
-      <div>
-        
+      <div className="flex items-center gap-5">
+        {awards.length > 0 && <TaskWallTaskStatusAwards awards={awards} />}
+        <TaskWallTaskStatusDue dueDate={dueDate} />
       </div>
     </div>
   );

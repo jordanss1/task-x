@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import { TaskWallTaskType, UserType } from "../../../types";
-import TaskListTaskStatus from "../taskList/TaskListTaskStatus";
 import TaskWallTaskStatus from "./TaskWallTaskStatus";
 
 const users: UserType[] = [
@@ -39,7 +38,11 @@ const TaskWallTask = ({ task }: TaskWallTaskPropsType): ReactElement => {
       style={{ boxShadow: "1px 1px 2px black, -1px -1px 2px black" }}
       className="h-52 w-full max-w-3xl flex flex-col p-3 rounded-2xl"
     >
-      <TaskWallTaskStatus user={user[0]} />
+      <TaskWallTaskStatus
+        awards={task.awards}
+        dueDate={task.dueDate}
+        user={user[0]}
+      />
     </motion.div>
   );
 };

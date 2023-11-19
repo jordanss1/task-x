@@ -18,7 +18,7 @@ export type TaskWallTaskType = {
   comments: CommentType[] | [];
 };
 
-type AwardType = "supported" | "superSupported" | "communityLegend";
+export type AwardType = "supported" | "superSupported" | "communityLegend";
 
 type CommentType = {
   userId: string;
