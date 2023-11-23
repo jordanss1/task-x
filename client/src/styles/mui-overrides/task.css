@@ -1,6 +1,6 @@
 .MuiInputBase-input {
-  padding: 15px 10px !important;
-  font-size: 10px !important;
+  padding: 15px 0px 15px 4px !important;
+  font-size: 9px !important;
   font-family: "Orbitron", sans-serif !important;
   position: relative !important;
   color: rgb(224, 220, 217) !important;
@@ -34,5 +34,9 @@
   border-radius: 10px !important;
   padding: 0 5px !important;
   left: -5px !important;
-  border: .1px solid rgb(224, 220, 217);
+  border: 0.1px solid rgb(224, 220, 217);
+}
+
+.MuiButtonBase-root {
+  padding: 2px !important;
 }

@@ -15,7 +15,6 @@ const Calendar = ({ name }: CalenderPropTypes): ReactElement => {
 
   const utcDate = field.value?.toISOString();
 
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker

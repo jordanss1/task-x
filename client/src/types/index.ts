@@ -9,6 +9,7 @@ export type TaskType = {
 
 export type TaskWallTaskType = {
   task: string;
+  id: string;
   userId: string;
   dueDate: Date | undefined;
   enabledDueDate: boolean;
@@ -20,7 +21,9 @@ export type TaskWallTaskType = {
 
 export type AwardType = "supported" | "superSupported" | "communityLegend";
 
-type CommentType = {
+export type LikesType = Pick<UserType, "userId">[];
+
+export type CommentType = {
   userId: string;
   comment: string;
   likes: number;

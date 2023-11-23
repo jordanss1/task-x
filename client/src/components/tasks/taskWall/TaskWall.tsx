@@ -7,6 +7,7 @@ const taskWallTasks: TaskWallTaskType[] = [
   {
     task: "Going to take my final driving test! I'm so nervous",
     userId: "43",
+    id: "123",
     dueDate: dayjs().subtract(2, "week").toDate(),
     enabledDueDate: true,
     created: dayjs().subtract(2, "days").toDate(),
@@ -25,6 +26,8 @@ const taskWallTasks: TaskWallTaskType[] = [
   {
     task: "Find two more chairs for my first day of work at the salon",
     userId: "309",
+    id: "121",
+
     dueDate: undefined,
     enabledDueDate: false,
     created: dayjs().subtract(5, "days").toDate(),
@@ -45,6 +48,8 @@ const taskWallTasks: TaskWallTaskType[] = [
   },
   {
     task: "Take dog to vets",
+    id: "120",
+
     userId: "2003",
     dueDate: dayjs().add(3, "weeks").toDate(),
     enabledDueDate: true,
@@ -56,6 +61,7 @@ const taskWallTasks: TaskWallTaskType[] = [
   {
     task: "My final exam of the year. Time to study study study!",
     userId: "1943",
+    id: "10",
     dueDate: dayjs().add(2, "months").toDate(),
     enabledDueDate: true,
     created: dayjs().subtract(5, "days").toDate(),

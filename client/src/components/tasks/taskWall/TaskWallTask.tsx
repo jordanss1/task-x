@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { TaskWallTaskType, UserType } from "../../../types";
+import TaskWallTaskInteraction from "./TaskWallTaskInteraction";
 import TaskWallTaskStatus from "./TaskWallTaskStatus";
+import TaskWallTaskTask from "./TaskWallTaskTask";
+import TaskWallTaskCommentContainer from "./taskWallComments/TaskWallTaskCommentContainer";
 
 const users: UserType[] = [
   {
@@ -32,17 +35,27 @@ type TaskWallTaskPropsType = {
 
 const TaskWallTask = ({ task }: TaskWallTaskPropsType): ReactElement => {
   const user = users.filter((user) => user.userId === task.userId);
+  const [openComments, setOpenComments] = useState(false);
 
   return (
     <motion.div
       style={{ boxShadow: "1px 1px 2px black, -1px -1px 2px black" }}
-      className="h-52 w-full max-w-3xl flex flex-col p-3 rounded-2xl"
+      className="min-h-[15rem] w-full max-w-3xl flex flex-col gap-5 p-3 rounded-2xl"
     >
       <TaskWallTaskStatus
         awards={task.awards}
         dueDate={task.dueDate}
+        created={task.created}
         user={user[0]}
       />
+      <TaskWallTaskTask task={task.task} />
+      <TaskWallTaskInteraction
+        likes={task.likes}
+        openComments={openComments}
+        handleComments={setOpenComments}
+        commentAmount={task.comments.length}
+      />
+      {openComments && <TaskWallTaskCommentContainer comments={task.comments} />}
     </motion.div>
   );
 };
