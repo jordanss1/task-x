@@ -12,10 +12,10 @@ const TaskWallTaskStatusAwards = ({
   awards,
 }: TaskWallTaskStatusAwardsPropsType): ReactElement => {
   return (
-    <div className="flex relative items-start isolate gap-2">
+    <div className="flex absolute sm:w-fit w-32 justify-end sm:-right-0 -right-[45%] sm:-top-12 -top-10 md:relative md:top-0 items-center sm:items-start isolate sm:gap-2">
       <div
         style={{ background: colors.hoveredButtonGradient }}
-        className="absolute w-[140%] -z-10 top-4 -right-[20%] h-1 rounded-full"
+        className="hidden md:block w-[120%] absolute -z-10 top-4 -right-[10%] h-1 rounded-full"
       />
       {awards.map((award) => (
         <Award key={award} award={award} />
@@ -25,7 +25,7 @@ const TaskWallTaskStatusAwards = ({
 };
 
 const buttonVariants: Variants = {
-  hovered: (award: AwardType) => ({
+  hovered: {
     scale: 1.1,
     y: -5,
     backgroundColor: "#e0dcd910",
@@ -34,7 +34,7 @@ const buttonVariants: Variants = {
       type: "tween",
       backgroundColor: { delay: 0.3 },
     },
-  }),
+  },
 };
 
 const svgVariants: Variants = {
@@ -85,8 +85,9 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
           action="hover"
           style={{
             backgroundColor: "#e0dcd9",
+            scale: "var(--scale)",
           }}
-          className="shadow-sm shadow-black rounded-full"
+          className="shadow-sm sm:[--scale:1.2] [scale:.8] shadow-black relative z-10 rounded-full"
           icon={
             <motion.img
               variants={svgVariants}
@@ -109,7 +110,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             animate="animate"
             exit="exit"
             style={{ fontFamily: fonts.jura }}
-            className="absolute z-[5] whitespace-nowrap bottom-[45px] cursor-default origin-top-right -left-[160%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+            className="absolute z-[10] whitespace-nowrap bottom-[45px] cursor-default origin-bottom -left-[160%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
           >
             Supported: 25 likes
           </motion.div>
@@ -124,8 +125,9 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
           action="hover"
           style={{
             backgroundColor: "#e0dcd9",
+            scale: "var(--scale)",
           }}
-          className="shadow-md shadow-cyan-800 rounded-full border-2 border-solid border-slate-400"
+          className="shadow-md shadow-cyan-800 sm:[--scale:1.2] [scale:.8] rounded-full border-2 border-solid border-slate-400"
           icon={
             <motion.img
               variants={svgVariants}
@@ -148,7 +150,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             animate="animate"
             exit="exit"
             style={{ fontFamily: fonts.jura }}
-            className="absolute z-[5] whitespace-nowrap bottom-[45px] cursor-default origin-top-right -left-[250%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+            className="absolute z-[5] whitespace-nowrap bottom-[45px] cursor-default origin-bottom -left-[250%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
           >
             Super Supported: 50 likes
           </motion.div>
@@ -164,6 +166,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
           style={{
             backgroundColor: "#e0dcd9",
             y: -3,
+            scale: "var(--scale)",
           }}
           icon={
             <>
@@ -196,7 +199,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
               />
             </>
           }
-          className="relative shadow-lg shadow-[#991ff1] p-[2px] rounded-full border-[3px] border-solid border-[#daa520] isolate"
+          className="relative shadow-lg shadow-[#991ff1] sm:[--scale:1.2] [scale:.8] p-[2px] rounded-full border-[3px] border-solid border-[#daa520] isolate"
         >
           <motion.div
             variants={popoutVariants}
@@ -204,7 +207,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             animate="animate"
             exit="exit"
             style={{ fontFamily: fonts.jura }}
-            className="absolute z-[5] whitespace-nowrap bottom-[47px] cursor-default origin-top-right -left-[110%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+            className="absolute z-[5] whitespace-nowrap bottom-[47px] cursor-default origin-bottom -left-[110%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
           >
             Legend: 100 likes
           </motion.div>

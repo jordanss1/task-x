@@ -4,11 +4,14 @@ import { ReactElement } from "react";
 import { fonts, popoutVariants } from "../../../constants";
 import { taskStatus } from "../../../functions/taskStatus";
 import ButtonPopout from "../../ButtonPopout";
+import SmallIcon from "../../SmallIcon";
 
 const TaskWallTaskStatusDue = ({
   dueDate,
+  mobile,
 }: {
   dueDate: Date | undefined;
+  mobile: boolean;
 }): ReactElement => {
   const { noDueDate, taskIsOverdue } = taskStatus(dayjs(dueDate));
 
@@ -28,16 +31,23 @@ const TaskWallTaskStatusDue = ({
     ? "In the clear"
     : "";
 
+  const icon = noDueDate ? (
+    <SmallIcon icon="fa-solid fa-check" />
+  ) : (
+    <SmallIcon icon="fa-solid fa-clock" />
+  );
+
   return (
     <ButtonPopout
-      icon=""
+      icon={mobile ? icon : ""}
       style={{
         background: taskIsOverdue ? "red" : "green",
         fontFamily: fonts.orbitron,
       }}
-      className="rounded-xl p-2 text-xs text-slate-200"
+      fontSize={mobile ? 10 : 12}
+      className="rounded-xl p-2 sm:h-auto h-7  flex justify-center items-center text-slate-200"
       action="hover"
-      label={label}
+      label={mobile ? "" : label}
     >
       <motion.div
         variants={popoutVariants}
@@ -45,7 +55,7 @@ const TaskWallTaskStatusDue = ({
         animate="animate"
         exit="exit"
         style={{ fontFamily: fonts.orbitron }}
-        className="absolute z-[5] whitespace-nowrap bottom-[40px] cursor-default origin-bottom -left-[50%] p-1 border-[1px] text-xs  rounded-lg overflow-hidden bg-[#f4f0ed] text-black border-slate-400"
+        className="absolute z-[5] whitespace-nowrap bottom-[40px] cursor-default origin-bottom -left-[325%] sm:-left-[50%] p-1 border-[1px] text-[10px] sm:text-xs rounded-lg overflow-hidden bg-[#f4f0ed] text-black border-slate-400"
       >
         {renderPopout}
       </motion.div>

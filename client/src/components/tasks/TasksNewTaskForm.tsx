@@ -148,7 +148,7 @@ const TasksNewTaskForm = (): ReactElement => {
               },
             }}
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            className="absolute w-[250px] h-[320px] cursor-default bottom-5 -right-24 sm:right-7"
+            className="absolute w-[250px] h-[320px] cursor-default bottom-10 sm:bottom-5 -right-[106px] sm:right-7"
           >
             <TaskNewTaskOverlay variants={overlayVariants} />
             <AnimatePresence mode="wait">

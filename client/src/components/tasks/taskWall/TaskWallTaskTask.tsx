@@ -10,10 +10,10 @@ const TaskWallTaskTask = ({
   task,
 }: TaskWallTaskTaskPropsType): ReactElement => {
   return (
-    <div className="px-7 min-h-[56px] flex flex-col items-center gap-3">
+    <div className="sm:px-10 px-1 min-h-[56px] flex items-center gap-3">
       <p
         style={{ fontFamily: fonts.jura }}
-        className="text-lg max-w-[580px] w-full font-light"
+        className="text-sm sm:text-lg max-w-[580px] w-full font-light"
       >
         {task}
       </p>

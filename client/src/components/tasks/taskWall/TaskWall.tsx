@@ -6,17 +6,33 @@ import TaskWallTask from "./TaskWallTask";
 const taskWallTasks: TaskWallTaskType[] = [
   {
     task: "Going to take my final driving test! I'm so nervous",
-    userId: "43",
+    user: {
+      userId: "43",
+      userName: "sallyg1997",
+      picture: "/src/assets/profile-photos/person-5.svg",
+    },
     id: "123",
     dueDate: dayjs().subtract(2, "week").toDate(),
     enabledDueDate: true,
-    created: dayjs().subtract(2, "days").toDate(),
+    created: dayjs().subtract(2, "days").subtract(12, "hours").toDate(),
     likes: 55,
     awards: ["supported", "superSupported"],
     comments: [
-      { userId: "1943", comment: "Mine is next week also!", likes: 2 },
       {
-        userId: "309",
+        user: {
+          userId: "1943",
+          userName: "johnnyappleseed",
+          picture: "/src/assets/profile-photos/person-4.svg",
+        },
+        comment: "Mine is next week also!",
+        likes: 2,
+      },
+      {
+        user: {
+          userId: "309",
+          userName: "jonjones22",
+          picture: "/src/assets/profile-photos/person-9.svg",
+        },
         comment:
           "I'm looking for a good teacher, anyone know one in the Bradford area?",
         likes: 0,
@@ -25,22 +41,33 @@ const taskWallTasks: TaskWallTaskType[] = [
   },
   {
     task: "Find two more chairs for my first day of work at the salon",
-    userId: "309",
+    user: {
+      userId: "309",
+      userName: "jonjones22",
+      picture: "/src/assets/profile-photos/person-9.svg",
+    },
     id: "121",
-
     dueDate: undefined,
     enabledDueDate: false,
-    created: dayjs().subtract(5, "days").toDate(),
+    created: dayjs().subtract(5, "days").subtract(3, "hours").toDate(),
     likes: 100,
     awards: ["supported", "superSupported", "communityLegend"],
     comments: [
       {
-        userId: "43",
+        user: {
+          userId: "43",
+          userName: "sallyg1997",
+          picture: "/src/assets/profile-photos/person-5.svg",
+        },
         comment: "Good luck I'm sure you will find them :)",
         likes: 10,
       },
       {
-        userId: "2003",
+        user: {
+          userId: "2003",
+          userName: "fisher5000",
+          picture: "/src/assets/profile-photos/person-17.svg",
+        },
         comment: "Where is your salon?",
         likes: 0,
       },
@@ -50,17 +77,25 @@ const taskWallTasks: TaskWallTaskType[] = [
     task: "Take dog to vets",
     id: "120",
 
-    userId: "2003",
+    user: {
+      userId: "2003",
+      userName: "fisher5000",
+      picture: "/src/assets/profile-photos/person-17.svg",
+    },
     dueDate: dayjs().add(3, "weeks").toDate(),
     enabledDueDate: true,
-    created: dayjs().subtract(2, "days").toDate(),
+    created: dayjs().subtract(2, "days").add(6, "hours").toDate(),
     likes: 2,
     awards: [],
     comments: [],
   },
   {
     task: "My final exam of the year. Time to study study study!",
-    userId: "1943",
+    user: {
+      userId: "2003",
+      userName: "fisher5000",
+      picture: "/src/assets/profile-photos/person-17.svg",
+    },
     id: "10",
     dueDate: dayjs().add(2, "months").toDate(),
     enabledDueDate: true,
@@ -69,7 +104,11 @@ const taskWallTasks: TaskWallTaskType[] = [
     awards: ["supported"],
     comments: [
       {
-        userId: "43",
+        user: {
+          userId: "43",
+          userName: "sallyg1997",
+          picture: "/src/assets/profile-photos/person-5.svg",
+        },
         comment:
           "Let the stress begin to mount haha this year has been crazy. What is your major?",
         likes: 2,

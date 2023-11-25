@@ -139,7 +139,7 @@ const DashboardNewTaskButton = ({
         exit="exit"
         whileHover="hovered"
         whileTap="tapped"
-        className="flex relative isolate items-center overflow-x-hidden justify-center w-16 h-16 z-[6] sm:[--right-active:16px] sm:[--right-inactive:16px] sm:[--left-active:unset] sm:[--left-inactive:unset] sm:[--bottom-active:20px] sm:[--bottom-inactive:20px] [--bottom-active:86px] [--bottom-inactive:56px] sm:[--ml-active:0px] sm:[--ml-inactive:0px] [--ml-active:90px] [--ml-inactive:0px] [--right-active:0px] [--right-inactive:16px] [--left-active:calc(100%_-_50%)] [--left-inactive:calc(100%_-_32%)]"
+        className="flex relative isolate items-center overflow-x-hidden justify-center sm:w-16 sm:h-16 h-14 w-14 z-[6] sm:[--right-active:16px] sm:[--right-inactive:16px] sm:[--left-active:unset] sm:[--left-inactive:unset] sm:[--bottom-active:20px] sm:[--bottom-inactive:25px] [--bottom-active:86px] [--bottom-inactive:56px] sm:[--ml-active:0px] sm:[--ml-inactive:0px] [--ml-active:90px] [--ml-inactive:0px] [--right-active:0px] [--right-inactive:16px] [--left-active:calc(100%_-_50%)] [--left-inactive:calc(100%_-_32%)]"
       >
         <AnimatePresence mode="wait" initial={false}>
           {formActive ? (

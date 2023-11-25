@@ -1,61 +1,87 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion, Variants } from "framer-motion";
 import { ReactElement, useState } from "react";
-import { TaskWallTaskType, UserType } from "../../../types";
+import useMeasure from "react-use-measure";
+import { TaskWallTaskType } from "../../../types";
+import TaskWallTaskCommentList from "./taskWallComments/TaskWallTaskCommentList";
 import TaskWallTaskInteraction from "./TaskWallTaskInteraction";
 import TaskWallTaskStatus from "./TaskWallTaskStatus";
 import TaskWallTaskTask from "./TaskWallTaskTask";
-import TaskWallTaskCommentContainer from "./taskWallComments/TaskWallTaskCommentContainer";
-
-const users: UserType[] = [
-  {
-    userId: "1943",
-    userName: "johnnyappleseed",
-    picture: "/src/assets/profile-photos/person-4.svg",
-  },
-  {
-    userId: "309",
-    userName: "jonjones22",
-    picture: "/src/assets/profile-photos/person-9.svg",
-  },
-  {
-    userId: "43",
-    userName: "sallyg1997",
-    picture: "/src/assets/profile-photos/person-5.svg",
-  },
-  {
-    userId: "2003",
-    userName: "fisher5000",
-    picture: "/src/assets/profile-photos/person-17.svg",
-  },
-];
 
 type TaskWallTaskPropsType = {
   task: TaskWallTaskType;
 };
 
+const listVariants: Variants = {
+  initial: { opacity: 1 },
+  animate: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      staggerDirection: 1,
+    },
+  },
+  exit: {
+    opacity: 1,
+    height: "0",
+    padding: "0px",
+    transition: {
+      orchestrate: "afterChildren",
+      staggerChildren: 0.1,
+      staggerDirection: -1,
+    },
+  },
+};
+
 const TaskWallTask = ({ task }: TaskWallTaskPropsType): ReactElement => {
-  const user = users.filter((user) => user.userId === task.userId);
   const [openComments, setOpenComments] = useState(false);
+  const [ref, { height }] = useMeasure();
 
   return (
     <motion.div
       style={{ boxShadow: "1px 1px 2px black, -1px -1px 2px black" }}
-      className="min-h-[15rem] w-full max-w-3xl flex flex-col gap-5 p-3 rounded-2xl"
+      className="sm:min-h-[15rem] w-full max-w-3xl flex flex-col gap-5 p-3 rounded-2xl"
     >
       <TaskWallTaskStatus
         awards={task.awards}
         dueDate={task.dueDate}
         created={task.created}
-        user={user[0]}
+        user={task.user}
       />
       <TaskWallTaskTask task={task.task} />
       <TaskWallTaskInteraction
         likes={task.likes}
+        created={task.created}
         openComments={openComments}
         handleComments={setOpenComments}
         commentAmount={task.comments.length}
       />
-      {openComments && <TaskWallTaskCommentContainer comments={task.comments} />}
+      <motion.section
+        animate={{
+          height,
+          transition: {
+            duration: openComments ? 0.6 : 0.2,
+            type: "tween",
+            ease: openComments ? "easeInOut" : "linear",
+          },
+        }}
+        className="overflow-hidden"
+      >
+        <AnimatePresence mode="wait">
+          {openComments && (
+            <motion.div
+              variants={listVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              key="comments"
+              ref={ref}
+              className="p-2 rounded-2xl overflow-hidden h-auto bg-slate-300 flex flex-col gap-2"
+            >
+              <TaskWallTaskCommentList comments={task.comments} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.section>
     </motion.div>
   );
 };
