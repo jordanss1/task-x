@@ -2,6 +2,14 @@
   background: linear-gradient(60deg, #f4f0ed 0%, #e0dcd9, #f4f0ed 100%);
 }
 
+.header {
+  max-width: 100%;
+  height: 12vh;
+  padding: 0 90px;
+  position: relative;
+  z-index: 10;
+}
+
 .hero {
   height: 88vh;
   display: grid;
@@ -214,6 +222,14 @@
     padding: 0 20px;
   }
 
+  .header {
+    max-width: 100%;
+    height: 12vh;
+    padding: 0 0px;
+    position: relative;
+    z-index: 10;
+  }
+
   .hero_center::after {
     inset: 0 0 0 20px;
     background-size: cover;
@@ -324,6 +340,10 @@
 @media screen and (max-width: 424px) {
   .hero {
     grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  }
+
+  .landing {
+    padding: 0 10px;
   }
 
   .hero_left_heading {

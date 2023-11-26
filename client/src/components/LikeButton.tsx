@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
-import { colors } from "../../../constants";
-import Button from "../../Button";
-import SmallIcon from "../../SmallIcon";
+import { colors } from "../constants";
+import Button from "./Button";
+import SmallIcon from "./SmallIcon";
 
 type LikeButtonPropsType = {
   likes: number;

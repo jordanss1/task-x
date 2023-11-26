@@ -3,7 +3,7 @@ import * as yup from "yup";
 export const taskSchema = yup.object().shape({
   task: yup
     .string()
-    .max(140, "Must be less than 140 characters")
+    .max(80, "Must be less than 80 characters")
     .required("You must enter a task"),
   enabledDueDate: yup.boolean().required("Required"),
   dueDate: yup.date().when("enabledDueDate", (value) => {

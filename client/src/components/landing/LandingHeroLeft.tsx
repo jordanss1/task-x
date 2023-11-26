@@ -52,7 +52,7 @@ const LandingHeroLeft = ({
       whileHover="hovered"
       whileTap="tapped"
       fontSize={18}
-      label="Login with Google"
+      label="Sign in with Google"
     />
   );
 

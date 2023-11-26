@@ -2,7 +2,7 @@ import { Variants, motion } from "framer-motion";
 import { ReactElement, useState } from "react";
 import { fonts } from "../../../../constants";
 import { CommentType } from "../../../../types";
-import LikeButton from "../LikeButton";
+import LikeButton from "../../../LikeButton";
 import TaskWallCommentUser from "./TaskWallCommentUser";
 
 type TaskWallTaskCommentPropsType = {

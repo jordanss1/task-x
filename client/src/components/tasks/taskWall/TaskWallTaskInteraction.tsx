@@ -2,8 +2,8 @@ import { ReactElement, useState } from "react";
 import { fonts } from "../../../constants";
 import { useMediaQuery } from "../../../hooks/MediaQueryHooks";
 import Button from "../../Button";
+import LikeButton from "../../LikeButton";
 import SmallIcon from "../../SmallIcon";
-import LikeButton from "./LikeButton";
 import TaskWallTaskTimeStamp from "./TaskWallTaskTimeStamp";
 
 type TaskWallTaskInteractionPropsType = {

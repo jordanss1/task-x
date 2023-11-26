@@ -1,4 +1,3 @@
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ReactElement } from "react";
 import { Route, Routes } from "react-router-dom";
 import "../index.css";
@@ -10,16 +9,12 @@ import ProfileSetup from "./profile/profile-setup/ProfileSetup";
 
 const App = (): ReactElement => {
   return (
-    <GoogleOAuthProvider
-      clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID as string}
-    >
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/setup" element={<ProfileSetup />} />
-        <Route path="profile/edit" element={<ProfileEdit />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </GoogleOAuthProvider>
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/setup" element={<ProfileSetup />} />
+      <Route path="profile/edit" element={<ProfileEdit />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+    </Routes>
   );
 };
 

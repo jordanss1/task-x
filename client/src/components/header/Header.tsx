@@ -3,7 +3,7 @@ import { boolean } from "yup";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import "../../styles/header.css";
 import LightBulb from "../svg/LightBulb";
-import HeaderGoogleAuth from "./HeaderGoogleAuth";
+import HeaderAuth from "./HeaderAuth";
 import HeaderLogo from "./HeaderLogo";
 
 type HeaderPropsType = {
@@ -27,11 +27,7 @@ const Header = ({
       return nav;
     }
 
-    return (
-      <div className="header_sign_in flex justify-center">
-        <HeaderGoogleAuth />
-      </div>
-    );
+    return <HeaderAuth signedIn={false} />;
   };
 
   return (

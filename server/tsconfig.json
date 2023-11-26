@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    // "types": ["node"],
+    /* Bundler mode */
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "outDir": "./src/dist",
+    /* Linting */
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["./src/*.ts", "src/index.ts"],
+  "exclude": ["./src/dist", "./client", "./src/types.ts"]
+}
