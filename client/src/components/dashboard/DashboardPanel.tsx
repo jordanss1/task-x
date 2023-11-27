@@ -103,7 +103,7 @@ const DashboardPanel = ({
             className="cursor-pointer"
           />
         </motion.div>
-        {expanded && <HeaderLogo fontSize={15} />}
+        {expanded && <HeaderLogo link="/" fontSize={15} />}
       </div>
       {renderButtons}
     </motion.section>

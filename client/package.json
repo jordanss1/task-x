@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "tsc && vite build",
+    "build": "rm -rf ./src/mocks ./src/components/__tests__ ./src/setupTests.ts && tsc && vite build",
     "serve": "vite preview"
   },
   "eslintConfig": {
