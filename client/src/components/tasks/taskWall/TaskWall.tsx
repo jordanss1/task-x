@@ -9,7 +9,7 @@ const taskWallTasks: TaskWallTaskType[] = [
     user: {
       userId: "43",
       userName: "sallyg1997",
-      picture: "/src/assets/profile-photos/person-5.svg",
+      picture: "/person-5.svg",
     },
     id: "123",
     dueDate: dayjs().subtract(2, "week").toDate(),
@@ -22,7 +22,7 @@ const taskWallTasks: TaskWallTaskType[] = [
         user: {
           userId: "1943",
           userName: "johnnyappleseed",
-          picture: "/src/assets/profile-photos/person-4.svg",
+          picture: "/person-4.svg",
         },
         comment: "Mine is next week also!",
         likes: 2,
@@ -31,7 +31,7 @@ const taskWallTasks: TaskWallTaskType[] = [
         user: {
           userId: "309",
           userName: "jonjones22",
-          picture: "/src/assets/profile-photos/person-9.svg",
+          picture: "/person-9.svg",
         },
         comment:
           "I'm looking for a good teacher, anyone know one in the Bradford area?",
@@ -44,7 +44,7 @@ const taskWallTasks: TaskWallTaskType[] = [
     user: {
       userId: "309",
       userName: "jonjones22",
-      picture: "/src/assets/profile-photos/person-9.svg",
+      picture: "/person-9.svg",
     },
     id: "121",
     dueDate: undefined,
@@ -57,7 +57,7 @@ const taskWallTasks: TaskWallTaskType[] = [
         user: {
           userId: "43",
           userName: "sallyg1997",
-          picture: "/src/assets/profile-photos/person-5.svg",
+          picture: "/person-5.svg",
         },
         comment: "Good luck I'm sure you will find them :)",
         likes: 10,
@@ -66,7 +66,7 @@ const taskWallTasks: TaskWallTaskType[] = [
         user: {
           userId: "2003",
           userName: "fisher5000",
-          picture: "/src/assets/profile-photos/person-17.svg",
+          picture: "/person-17.svg",
         },
         comment: "Where is your salon?",
         likes: 0,
@@ -80,7 +80,7 @@ const taskWallTasks: TaskWallTaskType[] = [
     user: {
       userId: "2003",
       userName: "fisher5000",
-      picture: "/src/assets/profile-photos/person-17.svg",
+      picture: "/person-17.svg",
     },
     dueDate: dayjs().add(3, "weeks").toDate(),
     enabledDueDate: true,
@@ -94,7 +94,7 @@ const taskWallTasks: TaskWallTaskType[] = [
     user: {
       userId: "2003",
       userName: "fisher5000",
-      picture: "/src/assets/profile-photos/person-17.svg",
+      picture: "/person-17.svg",
     },
     id: "10",
     dueDate: dayjs().add(2, "months").toDate(),
@@ -107,7 +107,7 @@ const taskWallTasks: TaskWallTaskType[] = [
         user: {
           userId: "43",
           userName: "sallyg1997",
-          picture: "/src/assets/profile-photos/person-5.svg",
+          picture: "/person-5.svg",
         },
         comment:
           "Let the stress begin to mount haha this year has been crazy. What is your major?",
