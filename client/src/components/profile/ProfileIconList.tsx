@@ -1,7 +1,7 @@
 import { useField } from "formik";
 import { MotionProps, motion } from "framer-motion";
 import { ReactElement } from "react";
-import profilePhotos from "../../assets/profile-photos/profilePhotos";
+import profilePhotos from "../../../public/profilePhotos";
 import { colors } from "../../constants";
 import ProfileIcon from "../ProfileIcon";
 
