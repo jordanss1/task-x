@@ -3,13 +3,14 @@
 
 <h3><b>Features</b></h3>
 
-<ul>
-    <li>Sign up with Google and create a profile with username picture</li>
-    <li>Create tasks and set deadlines</li>
-    <li>Add tasks to the Task Wall where users can motivate you to get the job done and give others the likes and motivation they need to complete tasks!</li>
-</ul>
+<b>Sign up with Google and create a profile with username picture.
+
+Create tasks and set deadlines.
+
+Add tasks to Task Wall where users can motivate you to get the job done and give others the likes and motivation they need to complete tasks! Get updates on who has liked and commented on your tasks.</b>
 
 <h3><b>Technologies Used</b></h3>
+
 <ul>
 <li>Reactjs</li>
 <li>Expressjs</li>
