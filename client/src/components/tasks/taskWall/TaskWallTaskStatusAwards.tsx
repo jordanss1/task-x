@@ -1,5 +1,6 @@
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
+import keys from "../../../config/keys";
 import { colors, fonts, popoutVariants } from "../../../constants";
 import { AwardType } from "../../../types";
 import ButtonPopout from "../../ButtonPopout";
@@ -94,7 +95,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
               custom={award}
               height={30}
               width={30}
-              src={"/heart-award.svg"}
+              src={`${keys.server}/api/awards/heart-award.svg`}
               style={{
                 background:
                   "linear-gradient(120deg, rgb(255,215,0,0), rgb(230,0,38,0))",
@@ -134,7 +135,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
               custom={award}
               height={30}
               width={30}
-              src={"/medal-silver.svg"}
+              src={`${keys.server}/api/awards/medal-silver.svg`}
               style={{
                 background:
                   "linear-gradient(120deg, rgb(255,215,0,0), rgb(230,0,38,0))",
@@ -175,21 +176,21 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
                 custom={false}
                 variants={sparkleVariants}
                 style={{ opacity: 0, scale: 0.3 }}
-                src={"/sparkles-svgrepo-com.svg"}
+                src={`${keys.server}/api/awards/sparkles.svg`}
               />
               <motion.img
                 className="absolute mix-blend-multiply z-10"
                 custom={true}
                 variants={sparkleVariants}
                 style={{ opacity: 0, scale: 0.3 }}
-                src={"/sparkles-svgrepo-com.svg"}
+                src={`${keys.server}/api/awards/sparkles.svg`}
               />
               <motion.img
                 variants={svgVariants}
                 custom={award}
                 height={30}
                 width={30}
-                src={"/gold-medal.svg"}
+                src={`${keys.server}/api/awards/gold-medal.svg`}
                 style={{
                   background:
                     "linear-gradient(120deg, rgb(255,215,0,0), rgb(230,0,38,0))",

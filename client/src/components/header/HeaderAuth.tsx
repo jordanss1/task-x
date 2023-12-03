@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { AppThunkDispatch } from "../../app/store";
+import keys from "../../config/keys";
 import { colors, fonts } from "../../constants";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import Button from "../Button";
@@ -54,18 +55,20 @@ const HeaderAuth = ({ signedIn }: HeaderAuthPropsType) => {
       </Button>
     </>
   ) : (
-    <Button
-      style={{
-        background: colors.whiteShades[0],
-        fontFamily: fonts.orbitron,
-        letterSpacing: "1px",
-      }}
-      fontSize={mobile ? 10 : 12}
-      label={mobile ? "Sign in" : "Sign in with Google"}
-      className="flex flex-row-reverse items-center text-slate-800 font-normal p-2 px-3 rounded-full gap-1 sm:gap-2 justify-center"
-    >
-      <Google size={mobile ? 17 : 20} />
-    </Button>
+    <Link to={`${keys.server}/auth/google`}>
+      <Button
+        style={{
+          background: colors.whiteShades[0],
+          fontFamily: fonts.orbitron,
+          letterSpacing: "1px",
+        }}
+        fontSize={mobile ? 10 : 12}
+        label={mobile ? "Sign in" : "Sign in with Google"}
+        className="flex flex-row-reverse items-center text-slate-800 font-normal p-2 px-3 rounded-full gap-1 sm:gap-2 justify-center"
+      >
+        <Google size={mobile ? 17 : 20} />
+      </Button>
+    </Link>
   );
 
   return (

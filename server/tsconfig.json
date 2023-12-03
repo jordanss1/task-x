@@ -8,14 +8,15 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    // "types": ["node"],
+    "types": ["node"],
     /* Bundler mode */
     "resolveJsonModule": true,
     "isolatedModules": true,
     "outDir": "./src/dist",
+    "typeRoots": ["./node_modules/@types"],
     /* Linting */
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["./src/*.ts", "src/index.ts"],
-  "exclude": ["./src/dist", "./client", "./src/types.ts"]
+  "include": ["./src/**/*.ts"],
+  "exclude": ["./src/dist", "./src/types.ts"]
 }

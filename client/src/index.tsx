@@ -8,8 +8,6 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLDivElement
 );
 
-console.log("first")
-
 root.render(
   <Router>
     <Provider store={store}>

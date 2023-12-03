@@ -1,8 +1,13 @@
 import { useField } from "formik";
 import { MotionProps, motion } from "framer-motion";
-import { ReactElement } from "react";
-import profilePhotos from "../../../public/profilePhotos";
+import { ReactElement, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppThunkDispatch } from "../../app/store";
 import { colors } from "../../constants";
+import {
+  assetsSelector,
+  getProfileIcons,
+} from "../../features/assets/assetsSlice";
 import ProfileIcon from "../ProfileIcon";
 
 interface ProfileIconListPropsType extends MotionProps {
@@ -15,11 +20,18 @@ const ProfileIconList = ({
   className,
   ...props
 }: ProfileIconListPropsType): ReactElement => {
+  const dispatch = useDispatch<AppThunkDispatch>();
+  const { profileIcons } = useSelector(assetsSelector);
+
+  useEffect(() => {
+    dispatch(getProfileIcons());
+  }, []);
+
   const [field, meta, helpers] = useField("profilePhoto");
 
   return (
     <motion.div {...props} className={className}>
-      {profilePhotos.map((profilePhoto) => {
+      {profileIcons?.map((profilePhoto) => {
         const chosenPhoto = profilePhoto === field.value;
 
         return (
