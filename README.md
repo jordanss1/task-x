@@ -1,13 +1,13 @@
-<h1><b>Task Manager with Social integration</b></h1>
+<h1>Task-X: Task Manager with Social integration</h1>
 
 
 <h3><b>Features</b></h3>
 
-<b>Sign up with Google and create a profile with username picture.
+<b>:ballot_box_with_check: Sign up with Google and create a profile with a username and picture.
 
-Create tasks and set deadlines.
+:ballot_box_with_check: Create tasks and set deadlines.
 
-Add tasks to Task Wall where users can motivate you to get the job done and give others the likes and motivation they need to complete tasks! Get updates on who has liked and commented on your tasks.</b>
+:ballot_box_with_check: Add your tasks to Task Wall! Users can motivate you to get the job done. You can also provide them with fuel to complete their tasks :gem: </b>
 
 <h3><b>Technologies Used</b></h3>
 
