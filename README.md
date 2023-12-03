@@ -7,7 +7,7 @@
 
 :ballot_box_with_check: Create tasks and set deadlines.
 
-:ballot_box_with_check: Add your tasks to Task Wall! Users can motivate you to get the job done. You can also provide them with fuel to complete their tasks :gem: </b>
+ :ballot_box_with_check: Add your tasks to Task Wall! Users can motivate you to get the job done. You can also provide them with fuel to complete their tasks :gem:</b>
 
 <h3><b>Technologies Used</b></h3>
 
