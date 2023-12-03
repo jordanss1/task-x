@@ -1,4 +1,9 @@
 {
+  "name": "task-x-server",
+  "engines": {
+    "npm": "9.6.7",
+    "node": "18.17.1"
+  },
   "scripts": {
     "build": "npx tsc",
     "start": "ts-node ./src/index.ts",
