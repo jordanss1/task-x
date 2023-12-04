@@ -1,5 +1,7 @@
 import { Variants } from "framer-motion";
 import { ReactElement } from "react";
+import { Link } from "react-router-dom";
+import keys from "../../config/keys";
 import { colors } from "../../constants";
 import Button from "../Button";
 import { SidebarHeadingsType, contentItems } from "./content";
@@ -45,15 +47,17 @@ const LandingHeroLeft = ({
   };
 
   const renderButton = (
-    <Button
-      {...buttonProps}
-      className="hero_button p-2"
-      variants={buttonVariants}
-      whileHover="hovered"
-      whileTap="tapped"
-      fontSize={18}
-      label="Sign in with Google"
-    />
+    <Link to={`${keys.server}/auth/google`}>
+      <Button
+        {...buttonProps}
+        className="hero_button p-2"
+        variants={buttonVariants}
+        whileHover="hovered"
+        whileTap="tapped"
+        fontSize={18}
+        label="Sign in with Google"
+      />
+    </Link>
   );
 
   return (

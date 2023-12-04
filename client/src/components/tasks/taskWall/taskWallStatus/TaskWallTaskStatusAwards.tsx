@@ -1,9 +1,9 @@
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
-import keys from "../../../config/keys";
-import { colors, fonts, popoutVariants } from "../../../constants";
-import { AwardType } from "../../../types";
-import ButtonPopout from "../../ButtonPopout";
+import keys from "../../../../config/keys";
+import { colors, fonts, popoutVariants } from "../../../../constants";
+import { AwardType } from "../../../../types";
+import ButtonPopout from "../../../ButtonPopout";
 
 type TaskWallTaskStatusAwardsPropsType = {
   awards: AwardType[];
@@ -16,7 +16,7 @@ const TaskWallTaskStatusAwards = ({
     <div className="flex absolute sm:w-fit w-32 justify-end sm:-right-0 -right-[45%] sm:-top-12 -top-10 md:relative md:top-0 items-center sm:items-start isolate sm:gap-2">
       <div
         style={{ background: colors.hoveredButtonGradient }}
-        className="hidden md:block w-[120%] absolute -z-10 top-4 -right-[10%] h-1 rounded-full"
+        className="hidden md:block w-[135%] absolute -z-10 top-4 -right-[20%] h-1 rounded-full"
       />
       {awards.map((award) => (
         <Award key={award} award={award} />

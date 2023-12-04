@@ -3,8 +3,8 @@ import { ReactElement, useState } from "react";
 import useMeasure from "react-use-measure";
 import { TaskWallTaskType } from "../../../types";
 import TaskWallTaskCommentList from "./taskWallComments/TaskWallTaskCommentList";
+import TaskWallTaskStatus from "./taskWallStatus/TaskWallTaskStatus";
 import TaskWallTaskInteraction from "./TaskWallTaskInteraction";
-import TaskWallTaskStatus from "./TaskWallTaskStatus";
 import TaskWallTaskTask from "./TaskWallTaskTask";
 
 type TaskWallTaskPropsType = {
@@ -39,7 +39,7 @@ const TaskWallTask = ({ task }: TaskWallTaskPropsType): ReactElement => {
   return (
     <motion.div
       style={{ boxShadow: "1px 1px 2px black, -1px -1px 2px black" }}
-      className="sm:min-h-[15rem] w-full max-w-3xl flex flex-col gap-5 p-3 rounded-2xl"
+      className="sm:min-h-[15rem] w-full flex flex-col gap-5 p-3 rounded-2xl"
     >
       <TaskWallTaskStatus
         awards={task.awards}

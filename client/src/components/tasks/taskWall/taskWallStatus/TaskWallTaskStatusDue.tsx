@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
-import { fonts, popoutVariants } from "../../../constants";
-import { taskStatus } from "../../../functions/taskStatus";
-import ButtonPopout from "../../ButtonPopout";
-import SmallIcon from "../../SmallIcon";
+import { fonts, popoutVariants } from "../../../../constants";
+import { taskStatus } from "../../../../functions/taskStatus";
+import ButtonPopout from "../../../ButtonPopout";
+import SmallIcon from "../../../SmallIcon";
 
 const TaskWallTaskStatusDue = ({
   dueDate,

@@ -5,10 +5,10 @@ import {
   taskListSelector,
   toggleForm,
 } from "../../features/taskList/taskListSlice";
+import { changeSort } from "../../features/taskWall/taskWallSlice";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import "../../styles/dashboard.css";
 import Header from "../header/Header";
-import TaskList from "../tasks/taskList/TaskList";
 import DashboardNav from "./DashboardNav";
 import DashboardNewTaskButton from "./DashboardNewTaskButton";
 import DashboardPanel from "./DashboardPanel";
@@ -16,15 +16,21 @@ import DashboardTaskContainer from "./DashboardTaskContainer";
 
 const Dashboard = (): ReactElement => {
   const dispatch = useDispatch();
-  const [app, setApp] = useState<"home" | "social">("home");
-  const { formActive } = useSelector(taskListSelector);
-  const mobile = useMediaQuery(640);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [app, setApp] = useState<"home" | "social">("home");
+
+  const { formActive } = useSelector(taskListSelector);
+
+  const mobile = useMediaQuery(640);
 
   useEffect(() => {
     if (formActive && mobile) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "visible";
   }, [formActive]);
+
+  useEffect(() => {
+    dispatch(changeSort("popular"));
+  }, []);
 
   const dismissForm = formActive ? () => dispatch(toggleForm()) : () => {};
 
