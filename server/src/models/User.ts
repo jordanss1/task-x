@@ -3,7 +3,7 @@ import { userDetailsSchema } from "./UserDetails";
 
 export const userSchema = new Schema({
   googleId: { type: String, required: true },
-  userDetails: userDetailsSchema,
+  userDetails: { type: userDetailsSchema, default: null, required: false },
 });
 
 model("users", userSchema);
