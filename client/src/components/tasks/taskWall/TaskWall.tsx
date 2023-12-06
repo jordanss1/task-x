@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { taskWallSelector } from "../../../features/taskWall/taskWallSlice";
-import TaskWallNav from "./TaskWallNav";
+import TaskWallNav from "./taskWallNav/TaskWallNav";
 import TaskWallTask from "./TaskWallTask";
 
 const TaskWall = (): ReactElement => {

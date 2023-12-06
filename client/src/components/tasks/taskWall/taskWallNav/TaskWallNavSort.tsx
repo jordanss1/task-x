@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fonts } from "../../../constants";
+import { fonts } from "../../../../constants";
 import {
   changeSort,
   taskWallSelector,
-} from "../../../features/taskWall/taskWallSlice";
-import ButtonPopout from "../../ButtonPopout";
+} from "../../../../features/taskWall/taskWallSlice";
+import ButtonPopout from "../../../ButtonPopout";
 
 const TaskWallNavSort = (): ReactElement => {
   const dispatch = useDispatch();

@@ -1,8 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 import { StateType } from "../../app/store";
 import { taskWallTasks } from "../../constants";
 import { TaskWallTaskType } from "../../types";
+
+const getUserTaskWallTasks = createAsyncThunk(
+  "taskwall/userTasks",
+  (empty: undefined, thunkApi) => {
+    
+  }
+);
 
 type SortType = "popular" | "recent";
 
