@@ -12,3 +12,9 @@ export const axiosGetAwardIcons = async (): Promise<string[]> => {
 
   return data;
 };
+
+export const axiosFetchUser = async () => {
+  const { data } = await axios.get(`${keys.server}/api/current_user`);
+
+  return data;
+};

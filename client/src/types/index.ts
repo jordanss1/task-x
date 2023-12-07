@@ -21,7 +21,7 @@ export type TaskWallTaskType = {
 
 export type AwardType = "supported" | "superSupported" | "communityLegend";
 
-export type LikesType = Pick<UserType, "userId">[];
+export type LikesType = Pick<UserType, "googleId">[];
 
 export type CommentType = {
   user: UserType;
@@ -30,7 +30,11 @@ export type CommentType = {
 };
 
 export type UserType = {
-  userId: string;
-  userName: string;
-  picture: string;
-};
+  _id: string;
+  googleId: string;
+  __v: number;
+  userDetails: {
+    userName: string;
+    picture: string;
+  };
+} 

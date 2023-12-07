@@ -7,6 +7,7 @@ declare global {
     export interface User extends HydratedDocument<UserType> {
       id?: string;
     }
+
     export interface Response {
       user?: Express.User;
     }

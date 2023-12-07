@@ -1,5 +1,7 @@
 import { ReactElement } from "react";
+import { useSelector } from "react-redux";
 import { boolean } from "yup";
+import { authSelector } from "../../features/auth/authSlice";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import "../../styles/header.css";
 import LightBulb from "../svg/LightBulb";
@@ -19,7 +21,10 @@ const Header = ({
   nav,
   profile,
 }: HeaderPropsType): ReactElement => {
-  containerClass = containerClass ? containerClass : "";
+  const { user } = useSelector(authSelector);
+
+  console.log(user);
+
   const mobile = useMediaQuery(640);
 
   const renderContent = () => {
@@ -29,6 +34,8 @@ const Header = ({
 
     return <HeaderAuth signedIn={false} />;
   };
+
+  containerClass = containerClass ? containerClass : "";
 
   return (
     <header className={`${containerClass} flex justify-center items-center`}>

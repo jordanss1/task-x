@@ -1,21 +1,17 @@
 import { Express } from "express";
 import jwt from "jsonwebtoken";
-import { model } from "mongoose";
 import passport from "passport";
 import keys from "../config/keys";
-import { UserType } from "../models/User";
+import requireJwt from "../middlewares/requireJwt";
 import { assertRequestWithUser } from "../types";
 
 const { clientUrl, jwtSecret } = keys;
-
-const User = model<UserType>("users");
 
 const googleAuthRoutes = (app: Express) => {
   app.get(
     `/auth/google`,
     passport.authenticate("google", {
       scope: ["profile", "email"],
-      session: false,
     })
   );
 
@@ -27,13 +23,17 @@ const googleAuthRoutes = (app: Express) => {
       failureMessage: "Login error, try again",
     }),
     (req, res) => {
+      assertRequestWithUser(req);
+
       const { user } = req;
 
-      const token = jwt.sign({ ...user }, jwtSecret, {
-        expiresIn: "1h",
+      const token = jwt.sign({ user }, jwtSecret, {
+        expiresIn: "2h",
       });
 
-      res.cookie("token", token);
+      res.cookie("token", token, { httpOnly: true });
+
+      req.user = user;
 
       if (user?.userDetails) {
         res.redirect(`${clientUrl}/dashboard`);
@@ -48,8 +48,7 @@ const googleAuthRoutes = (app: Express) => {
     res.redirect("/");
   });
 
-  app.get("/api/current_user", (req, res) => {
-    console.log(req.user);
+  app.get("/api/current_user", requireJwt, (req, res) => {
     res.send(req.user);
   });
 };

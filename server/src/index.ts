@@ -3,12 +3,13 @@ import cors from "cors";
 import express, { Express } from "express";
 import helmet from "helmet";
 import { connect } from "mongoose";
-import passport from "passport";
 import keys from "./config/keys";
+import getCookies from "./middlewares/getCookies";
 import "./models/User";
 import assetsRoutes from "./routes/assetsRoutes";
 import googleAuthRoutes from "./routes/authRoutes";
 import "./services/passport";
+import types from "./types/express";
 
 const { mongoURI, clientUrl } = keys;
 
@@ -24,7 +25,9 @@ app.use(cors({ origin: clientUrl }));
 
 app.use(bodyParser.json());
 
-  googleAuthRoutes(app);
+app.use(getCookies);
+
+googleAuthRoutes(app);
 
 assetsRoutes(app);
 

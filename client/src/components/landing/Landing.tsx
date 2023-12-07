@@ -4,9 +4,6 @@ import "../../styles/landing.css";
 import Header from "../header/Header";
 import LandingHero from "./LandingHero";
 
-//
-//
-
 const Landing = (): ReactElement => {
   return (
     <motion.main className="landing h-screen">
