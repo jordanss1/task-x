@@ -74,7 +74,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           googleId: "309",
           userDetails: {
             userName: "jonjones22",
-            picture: `${keys.server}/api/profileIcons/person-9.svg`,
+            profilePicture: `${keys.server}/api/profileIcons/person-9.svg`,
           },
         },
         comment:
