@@ -18,7 +18,7 @@ const { mongoURI, clientUrl } = keys_1.default;
 (0, mongoose_1.connect)(mongoURI);
 const app = (0, express_1.default)();
 app.use("/api", express_1.default.static("src/public"));
-app.use((0, helmet_1.default)());
+app.use((0, helmet_1.default)({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 app.use((0, cors_1.default)({ origin: clientUrl, credentials: true }));
 app.use(body_parser_1.default.json());
 app.use(getCookies_1.default);

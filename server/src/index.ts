@@ -20,7 +20,7 @@ const app: Express = express();
 
 app.use("/api", express.static("src/public"));
 
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
 app.use(cors({ origin: clientUrl, credentials: true }));
 
