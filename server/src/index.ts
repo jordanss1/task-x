@@ -1,3 +1,4 @@
+import { tr } from "@faker-js/faker";
 import bodyParser from "body-parser";
 import cors from "cors";
 import express, { Express } from "express";
@@ -21,7 +22,7 @@ app.use("/api", express.static("src/public"));
 
 app.use(helmet());
 
-app.use(cors({ origin: clientUrl }));
+app.use(cors({ origin: clientUrl, credentials: true }));
 
 app.use(bodyParser.json());
 
