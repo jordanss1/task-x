@@ -35,6 +35,6 @@ export type UserType = {
   __v: number;
   userDetails: {
     userName: string;
-    picture: string;
+    profilePicture: string;
   };
-} 
+};

@@ -21,6 +21,7 @@ const TaskWallTaskStatus = ({
   dueDate,
 }: TaskWallTaskStatusPropsType): ReactElement => {
   const mobile = useMediaQuery(640);
+  const { profilePicture, userName } = user.userDetails;
 
   return (
     <div className="flex justify-between items-center">
@@ -28,13 +29,13 @@ const TaskWallTaskStatus = ({
         <ProfileIcon
           className="rounded-full shadow-purple-600 shadow-md bg-slate-400 p-1"
           size={mobile ? 30 : 60}
-          img={user.picture}
+          img={profilePicture}
         />
         <span
           style={{ fontFamily: fonts.exo }}
           className="text-sm sm:text-xl shadow-sm rounded-xl py-1 px-2 select-none shadow-purple-800"
         >
-          {user.userName}
+          {userName}
         </span>
         {!mobile && <TaskWallTaskTimeStamp time={created} />}
       </div>

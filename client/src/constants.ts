@@ -39,9 +39,13 @@ export const taskWallTasks: TaskWallTaskType[] = [
   {
     task: "Going to take my final driving test! I'm so nervous",
     user: {
-      userId: "43",
-      userName: "sallyg1997",
-      picture: `${keys.server}/api/profileIcons/person-5.svg`,
+      userDetails: {
+        userName: "sallyg1997",
+        profilePicture: `${keys.server}/api/profileIcons/person-5.svg`,
+      },
+      googleId: "43",
+      __v: 233,
+      _id: "keji9",
     },
     id: "123",
     dueDate: dayjs().subtract(2, "week").toDate(),
@@ -52,18 +56,26 @@ export const taskWallTasks: TaskWallTaskType[] = [
     comments: [
       {
         user: {
-          userId: "1943",
-          userName: "johnnyappleseed",
-          picture: `${keys.server}/api/profileIcons/person-4.svg`,
+          __v: 233,
+          _id: "keji9",
+          googleId: "1943",
+          userDetails: {
+            userName: "johnnyappleseed",
+            profilePicture: `${keys.server}/api/profileIcons/person-4.svg`,
+          },
         },
         comment: "Mine is next week also!",
         likes: 2,
       },
       {
         user: {
-          userId: "309",
-          userName: "jonjones22",
-          picture: `${keys.server}/api/profileIcons/person-9.svg`,
+          __v: 233,
+          _id: "keji9",
+          googleId: "309",
+          userDetails: {
+            userName: "jonjones22",
+            picture: `${keys.server}/api/profileIcons/person-9.svg`,
+          },
         },
         comment:
           "I'm looking for a good teacher, anyone know one in the Bradford area?",
@@ -74,9 +86,13 @@ export const taskWallTasks: TaskWallTaskType[] = [
   {
     task: "Find two more chairs for my first day of work at the salon",
     user: {
-      userId: "309",
-      userName: "jonjones22",
-      picture: `${keys.server}/api/profileIcons/person-9.svg`,
+      __v: 233,
+      _id: "keji9",
+      googleId: "309",
+      userDetails: {
+        userName: "jonjones22",
+        profilePicture: `${keys.server}/api/profileIcons/person-9.svg`,
+      },
     },
     id: "121",
     dueDate: undefined,
@@ -87,18 +103,26 @@ export const taskWallTasks: TaskWallTaskType[] = [
     comments: [
       {
         user: {
-          userId: "43",
-          userName: "sallyg1997",
-          picture: `${keys.server}/api/profileIcons/person-5.svg`,
+          __v: 233,
+          _id: "keji9",
+          googleId: "43",
+          userDetails: {
+            userName: "sallyg1997",
+            profilePicture: `${keys.server}/api/profileIcons/person-5.svg`,
+          },
         },
         comment: "Good luck I'm sure you will find them :)",
         likes: 10,
       },
       {
         user: {
-          userId: "2003",
-          userName: "fisher5000",
-          picture: `${keys.server}/api/profileIcons/person-16.svg`,
+          __v: 233,
+          _id: "keji9",
+          googleId: "2003",
+          userDetails: {
+            userName: "fisher5000",
+            profilePicture: `${keys.server}/api/profileIcons/person-16.svg`,
+          },
         },
         comment: "Where is your salon?",
         likes: 0,
@@ -110,9 +134,13 @@ export const taskWallTasks: TaskWallTaskType[] = [
     id: "120",
 
     user: {
-      userId: "2003",
-      userName: "fisher5000",
-      picture: `${keys.server}/api/profileIcons/person-16.svg`,
+      __v: 233,
+      _id: "keji9",
+      googleId: "2003",
+      userDetails: {
+        userName: "fisher5000",
+        profilePicture: `${keys.server}/api/profileIcons/person-16.svg`,
+      },
     },
     dueDate: dayjs().add(3, "weeks").toDate(),
     enabledDueDate: true,
@@ -124,9 +152,13 @@ export const taskWallTasks: TaskWallTaskType[] = [
   {
     task: "My final exam of the year. Time to study study study!",
     user: {
-      userId: "2003",
-      userName: "fisher5000",
-      picture: `${keys.server}/api/profileIcons/person-16.svg`,
+      __v: 233,
+      _id: "keji9",
+      googleId: "2003",
+      userDetails: {
+        userName: "fisher5000",
+        profilePicture: `${keys.server}/api/profileIcons/person-16.svg`,
+      },
     },
     id: "10",
     dueDate: dayjs().add(2, "months").toDate(),
@@ -137,9 +169,13 @@ export const taskWallTasks: TaskWallTaskType[] = [
     comments: [
       {
         user: {
-          userId: "43",
-          userName: "sallyg1997",
-          picture: `${keys.server}/api/profileIcons/person-5.svg`,
+          googleId: "43",
+          __v: 233,
+          _id: "keji9",
+          userDetails: {
+            userName: "sallyg1997",
+            profilePicture: `${keys.server}/api/profileIcons/person-5.svg`,
+          },
         },
         comment:
           "Let the stress begin to mount haha this year has been crazy. What is your major?",

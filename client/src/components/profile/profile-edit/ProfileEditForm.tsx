@@ -9,18 +9,23 @@ import ProfilePicture from "../ProfilePicture";
 import ProfileUsername from "../ProfileUsername";
 
 const user: UserType = {
-  userId: "33",
-  userName: "johnnyappleseed",
-  picture: "/src/assets/profile-photos/person-4.svg",
+  googleId: "33",
+  _id: "34",
+  __v: 3322,
+  userDetails: {
+    userName: "johnnyappleseed",
+    profilePicture: "/src/assets/profile-photos/person-4.svg",
+  },
 };
 
 const ProfileEditForm = (): ReactElement => {
+  const { profilePicture, userName } = user.userDetails;
   return (
     <section className="py-14 sm:py-14 h-full flex-1">
       <Formik<ProfileSchemaType>
         initialValues={{
-          profilePhoto: user.picture,
-          userName: user.userName,
+          profilePhoto: profilePicture,
+          userName: userName,
         }}
         onSubmit={() => {}}
         validationSchema={profileSchema}
