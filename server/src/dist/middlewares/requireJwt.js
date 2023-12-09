@@ -11,12 +11,12 @@ const requireJwt = (req, res, next) => {
     const { jwtSecret, clientUrl } = keys_1.default;
     try {
         const { user } = jsonwebtoken_1.default.verify(token, jwtSecret);
-        console.log(user);
         req.user = user;
         next();
     }
     catch (err) {
         res.clearCookie("token");
+        res.status(401).send({ error: "You must be logged in" });
         res.redirect(clientUrl);
     }
 };

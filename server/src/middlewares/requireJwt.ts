@@ -10,11 +10,11 @@ export const requireJwt = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const { user } = jwt.verify(token, jwtSecret) as JwtPayload;
-    console.log(user);
     req.user = user;
     next();
   } catch (err) {
     res.clearCookie("token");
+    res.status(401).send({ error: "You must be logged in" });
     res.redirect(clientUrl);
   }
 };

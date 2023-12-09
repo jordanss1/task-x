@@ -11,8 +11,6 @@ const getCookies = (req: Request, res: Response, next: NextFunction) => {
     }, {});
 
     req.cookies = values;
-  } else {
-    req.cookies = {};
   }
 
   next();

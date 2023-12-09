@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { axiosCheckUsername } from "../api";
 
 export const taskSchema = yup.object().shape({
   task: yup
@@ -18,16 +19,7 @@ export const taskSchema = yup.object().shape({
 
 export type TaskSchemaType = yup.InferType<typeof taskSchema>;
 
-const userNames = ["love", "five", "test"];
-
-const fakePromise = (value: string): Promise<string[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const matches = userNames.filter((userName) => userName === value);
-      resolve(matches);
-    }, 2000);
-  });
-};
+let timer: NodeJS.Timeout;
 
 export const profileSchema = yup.object().shape({
   profilePhoto: yup.string().required("Choose a profile photo"),
@@ -35,13 +27,16 @@ export const profileSchema = yup.object().shape({
     .string()
     .min(3, "Must be more than 2 characters")
     .max(24, "Must be less than 25 characters")
-    .matches(/^[a-zA-Z0-9_]+$/, "No special characters allowed")
+    .matches(/^[a-zA-Z0-9_]+$/, "No special characters or space")
     .required("You must enter a username")
     .test("userList", "Username is taken", async (value, context) => {
       if (value.length < 3) return false;
 
-      const matches = await fakePromise(value);
-      return !matches.length;
+      if (timer) clearTimeout(timer);
+
+      await new Promise((resolve) => (timer = setTimeout(resolve, 2000)));
+
+      return !(await axiosCheckUsername(value));
     }),
 });
 

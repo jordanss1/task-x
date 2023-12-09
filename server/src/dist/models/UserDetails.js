@@ -5,5 +5,4 @@ const mongoose_1 = require("mongoose");
 exports.userDetailsSchema = new mongoose_1.Schema({
     userName: { type: String, required: true },
     profilePicture: { type: String, required: true },
-    _user: { type: mongoose_1.Schema.ObjectId, ref: "User", required: true },
 });

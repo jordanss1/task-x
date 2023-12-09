@@ -9,9 +9,6 @@ const getCookies = (req, res, next) => {
         }, {});
         req.cookies = values;
     }
-    else {
-        req.cookies = {};
-    }
     next();
 };
 exports.default = getCookies;

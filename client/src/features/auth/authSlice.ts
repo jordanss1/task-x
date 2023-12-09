@@ -4,13 +4,13 @@ import {
   createAsyncThunk,
   createSlice,
 } from "@reduxjs/toolkit";
-import { axiosFetchUser } from "../../api";
+import { axiosCheckUsername, axiosFetchUser } from "../../api";
 import { StateType } from "../../app/store";
 import { UserType } from "../../types";
 
-export const getUser = createAsyncThunk(
+export const getUser = createAsyncThunk<UserType | undefined>(
   "auth/user",
-  async (): Promise<UserType | undefined> => {
+  async () => {
     return await axiosFetchUser();
   }
 );
