@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import { Variants } from "framer-motion";
-import keys from "./config/keys";
 import { TaskWallTaskType } from "./types";
 
 export const colors = {

@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { AppThunkDispatch } from "../../app/store";
-import keys from "../../config/keys";
 import { colors, fonts } from "../../constants";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import Button from "../Button";

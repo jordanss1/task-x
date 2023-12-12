@@ -1,7 +1,6 @@
 import { Formik } from "formik";
 import { motion, useCycle } from "framer-motion";
 import { ReactElement, useEffect, useState } from "react";
-import keys from "../../../config/keys";
 import { ProfileSchemaType, profileSchema } from "../../../schemas";
 import "../../../styles/header.css";
 import "../../../styles/profile.css";

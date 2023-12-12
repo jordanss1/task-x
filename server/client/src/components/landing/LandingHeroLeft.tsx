@@ -1,7 +1,5 @@
 import { Variants } from "framer-motion";
 import { ReactElement } from "react";
-import { Link } from "react-router-dom";
-import keys from "../../config/keys";
 import { colors } from "../../constants";
 import Button from "../Button";
 import { SidebarHeadingsType, contentItems } from "./content";

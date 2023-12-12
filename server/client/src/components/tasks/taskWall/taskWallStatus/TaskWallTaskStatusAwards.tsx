@@ -1,6 +1,5 @@
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
-import keys from "../../../../config/keys";
 import { colors, fonts, popoutVariants } from "../../../../constants";
 import { AwardType } from "../../../../types";
 import ButtonPopout from "../../../ButtonPopout";
