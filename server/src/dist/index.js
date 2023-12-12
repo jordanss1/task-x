@@ -19,7 +19,16 @@ const { mongoURI } = keys_1.default;
 (0, mongoose_1.connect)(mongoURI);
 const app = (0, express_1.default)();
 app.use("/api", express_1.default.static("src/public"));
-app.use((0, helmet_1.default)());
+app.use((0, helmet_1.default)({
+    contentSecurityPolicy: {
+        directives: {
+            "script-src-elem": [
+                "https://kit.fontawesome.com/b3cd848b13.js",
+                "https://accounts.google.com/gsi/client",
+            ],
+        },
+    },
+}));
 app.use(body_parser_1.default.json());
 app.use(getCookies_1.default);
 if (process.env.NODE_ENV !== "production") {

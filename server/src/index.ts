@@ -20,7 +20,18 @@ const app: Express = express();
 
 app.use("/api", express.static("src/public"));
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "script-src-elem": [
+          "https://kit.fontawesome.com/b3cd848b13.js",
+          "https://accounts.google.com/gsi/client",
+        ],
+      },
+    },
+  })
+);
 
 app.use(bodyParser.json());
 
