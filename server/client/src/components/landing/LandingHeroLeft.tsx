@@ -1,7 +1,13 @@
 import { Variants } from "framer-motion";
 import { ReactElement } from "react";
+import { useSelector } from "react-redux";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { colors } from "../../constants";
+import { authSelector } from "../../features/auth/authSlice";
+import artificialDelay from "../../functions/artificialDelay";
+import { UserStateType, UserType } from "../../types";
 import Button from "../Button";
+
 import { SidebarHeadingsType, contentItems } from "./content";
 
 const buttonVariants: Variants = {
@@ -25,6 +31,9 @@ const LandingHeroLeft = ({
 }: {
   hero: SidebarHeadingsType;
 }): ReactElement => {
+  const { user } = useSelector(authSelector);
+  const navigate = useNavigate();
+
   let index = 0;
 
   if (hero === "Welcome") index = 0;
@@ -32,6 +41,15 @@ const LandingHeroLeft = ({
   if (hero === "Popular") index = 2;
 
   const { heading, body, button } = contentItems[index];
+
+  const routeChange = async (
+    navigate: NavigateFunction,
+    userDetails: UserType["userDetails"]
+  ) => {
+    //api call will be added to delay later
+    await artificialDelay();
+    navigate(userDetails ? "/dashboard" : "/setup");
+  };
 
   const buttonProps = {
     style: {
@@ -45,10 +63,13 @@ const LandingHeroLeft = ({
   };
 
   const renderButton = (
-    <a href="/api/auth/google">
+    <a href={user ? undefined : "/api/auth/google"}>
       <Button
         {...buttonProps}
         className="hero_button p-2"
+        onClick={() =>
+          user ? routeChange(navigate, user.userDetails) : undefined
+        }
         variants={buttonVariants}
         whileHover="hovered"
         whileTap="tapped"

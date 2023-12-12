@@ -23,8 +23,6 @@ const Header = ({
 }: HeaderPropsType): ReactElement => {
   const { user } = useSelector(authSelector);
 
-  console.log(user);
-
   const mobile = useMediaQuery(640);
 
   const renderContent = () => {
@@ -32,7 +30,7 @@ const Header = ({
       return nav;
     }
 
-    return <HeaderAuth signedIn={false} />;
+    return <HeaderAuth user={user} />;
   };
 
   containerClass = containerClass ? containerClass : "";

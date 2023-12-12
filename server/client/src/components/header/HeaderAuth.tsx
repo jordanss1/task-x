@@ -1,57 +1,66 @@
-import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { AppThunkDispatch } from "../../app/store";
 import { colors, fonts } from "../../constants";
+import artificialDelay from "../../functions/artificialDelay";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
+import { UserStateType, UserType } from "../../types";
 import Button from "../Button";
 import SmallIcon from "../SmallIcon";
 import Google from "../svg/Google";
 
 type HeaderAuthPropsType = {
-  signedIn: boolean;
+  user: UserStateType;
 };
 
-const HeaderAuth = ({ signedIn }: HeaderAuthPropsType) => {
+const HeaderAuth = ({ user }: HeaderAuthPropsType) => {
   const dispatch = useDispatch<AppThunkDispatch>();
   const navigate = useNavigate();
   const mobile = useMediaQuery(640);
+  const timer = useRef<number | NodeJS.Timeout>(0);
 
-  useEffect(() => {
-    // On page load, checks if the user is still logged in
-  }, []);
+  const routeChange = async (
+    navigate: NavigateFunction,
+    userDetails: UserType["userDetails"]
+  ) => {
+    //api call will be added to delay later
+    await artificialDelay();
+    navigate(userDetails ? "/dashboard" : "/setup");
+  };
 
-  const renderContent = signedIn ? (
+  const renderContent = user ? (
     <>
-      <Link to="/dashboard">
-        <Button
-          style={{
-            background: colors.whiteShades[0],
-            fontFamily: fonts.orbitron,
-            letterSpacing: "2px",
-          }}
-          className="flex h-9 flex-row-reverse text-slate-800 font-normal p-2 sm:px-3 rounded-full gap-2 justify-center"
-          label={mobile ? null : "Dashboard"}
-        >
-          <SmallIcon
-            size={17}
-            className="text-[#991ff1]"
-            icon="fa-solid fa-house"
-          />
-        </Button>
-      </Link>
       <Button
         style={{
           background: colors.whiteShades[0],
           fontFamily: fonts.orbitron,
-          letterSpacing: "1px",
+          letterSpacing: "2px",
         }}
-        label="Sign out"
-        fontSize={mobile ? 10 : 12}
-        className="flex h-9 flex-row-reverse text-slate-800 font-normal p-2 px-3 rounded-full gap-2 justify-center items-center"
+        onClick={() => routeChange(navigate, user.userDetails)}
+        className="flex h-9 flex-row-reverse text-slate-800 font-normal p-2 sm:px-3 rounded-full gap-2 justify-center"
+        label={mobile ? null : "Dashboard"}
       >
-        <Google size={mobile ? 17 : 20} />
+        <SmallIcon
+          size={17}
+          className="text-[#991ff1]"
+          icon="fa-solid fa-house"
+        />
       </Button>
+      <a href="/api/logout">
+        <Button
+          style={{
+            background: colors.whiteShades[0],
+            fontFamily: fonts.orbitron,
+            letterSpacing: "1px",
+          }}
+          label="Sign out"
+          fontSize={mobile ? 10 : 12}
+          className="flex h-9 flex-row-reverse text-slate-800 font-normal p-2 px-3 rounded-full gap-2 justify-center items-center"
+        >
+          <Google size={mobile ? 17 : 20} />
+        </Button>
+      </a>
     </>
   ) : (
     <a href="/api/auth/google">

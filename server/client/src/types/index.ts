@@ -38,3 +38,5 @@ export type UserType = {
     profilePicture: string;
   };
 };
+
+export type UserStateType = UserType | false | null;

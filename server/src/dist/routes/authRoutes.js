@@ -25,12 +25,13 @@ const googleAuthRoutes = (app) => {
         (0, types_1.assertRequestWithUser)(req);
         const { user } = req;
         const token = jsonwebtoken_1.default.sign({ user }, jwtSecret, {
-            expiresIn: "1d",
+            expiresIn: "4h",
         });
         res.cookie("token", token, {
             secure: process.env.NODE_ENV !== "development",
             httpOnly: true,
-            expires: (0, dayjs_1.default)().add(1, "day").toDate(),
+            sameSite: "strict",
+            expires: (0, dayjs_1.default)().add(4, "hours").toDate(),
         });
         if (user?.userDetails) {
             res.redirect("/dashboard");
@@ -42,7 +43,7 @@ const googleAuthRoutes = (app) => {
         res.clearCookie("token");
         res.redirect("/");
     });
-    app.get("/api/current_user", (req, res) => {
+    app.get("/api/current_user", requireJwt_1.default, (req, res) => {
         res.send(req.user);
     });
     app.post("/api/username_check", requireJwt_1.default, async (req, res) => {

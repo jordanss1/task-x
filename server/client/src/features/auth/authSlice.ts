@@ -4,9 +4,9 @@ import {
   createAsyncThunk,
   createSlice,
 } from "@reduxjs/toolkit";
-import { axiosCheckUsername, axiosFetchUser } from "../../api";
+import { axiosFetchUser } from "../../api";
 import { StateType } from "../../app/store";
-import { UserType } from "../../types";
+import { UserStateType, UserType } from "../../types";
 
 export const getUser = createAsyncThunk<UserType | undefined>(
   "auth/user",
@@ -16,7 +16,7 @@ export const getUser = createAsyncThunk<UserType | undefined>(
 );
 
 type AuthStateType = {
-  user: UserType | false | null;
+  user: UserStateType;
 };
 
 const initialState: AuthStateType = {
@@ -43,7 +43,7 @@ const authSlice = createSlice({
     builder
       .addMatcher(
         (action) => action.type.includes("auth/user"),
-        (state, action: PayloadAction<UserType>) =>
+        (state, action: PayloadAction<UserType | undefined>) =>
           reducerMatcherFunction(action, () => {
             state.user = action.payload || false;
           })

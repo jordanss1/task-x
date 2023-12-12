@@ -34,13 +34,14 @@ const googleAuthRoutes = (app: Express) => {
       const { user } = req;
 
       const token = jwt.sign({ user }, jwtSecret, {
-        expiresIn: "1d",
+        expiresIn: "4h",
       });
 
       res.cookie("token", token, {
         secure: process.env.NODE_ENV !== "development",
         httpOnly: true,
-        expires: dayjs().add(1, "day").toDate(),
+        sameSite: "strict",
+        expires: dayjs().add(4, "hours").toDate(),
       });
 
       if (user?.userDetails) {
@@ -57,7 +58,7 @@ const googleAuthRoutes = (app: Express) => {
     res.redirect("/");
   });
 
-  app.get("/api/current_user", (req, res) => {
+  app.get("/api/current_user", requireJwt, (req, res) => {
     res.send(req.user);
   });
 

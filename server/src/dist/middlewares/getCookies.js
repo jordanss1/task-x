@@ -8,7 +8,9 @@ const getCookies = (req, res, next) => {
             return { ...res, [data[0]]: data[1] };
         }, {});
         req.cookies = values;
+        return next();
     }
+    req.cookies = {};
     next();
 };
 exports.default = getCookies;
