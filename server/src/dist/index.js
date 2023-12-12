@@ -30,11 +30,11 @@ if (process.env.NODE_ENV !== "production") {
 if (process.env.NODE_ENV === "production") {
     // express will serve client assets such as
     // main.js or main.css files
-    app.use(express_1.default.static("client/build"));
+    app.use(express_1.default.static("client/dist"));
     // express will serve up index.html if it
     // doesn't recognize the route
     app.get("*", (req, res) => {
-        res.sendFile(path_1.default.resolve(__dirname, "../../client", "build", "index.html"));
+        res.sendFile(path_1.default.resolve(__dirname, "../../client", "dist", "index.html"));
     });
 }
 const PORT = process.env.PORT || 5000;
