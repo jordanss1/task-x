@@ -35,12 +35,8 @@ googleAuthRoutes(app);
 assetsRoutes(app);
 
 if (process.env.NODE_ENV === "production") {
-  // express will serve client assets such as
-  // main.js or main.css files
   app.use(express.static("client/dist"));
 
-  // express will serve up index.html if it
-  // doesn't recognize the route
   app.get("*", (req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, "../../client", "dist", "index.html"));
   });

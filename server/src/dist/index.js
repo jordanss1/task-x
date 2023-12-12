@@ -28,11 +28,7 @@ if (process.env.NODE_ENV !== "production") {
 (0, authRoutes_1.default)(app);
 (0, assetsRoutes_1.default)(app);
 if (process.env.NODE_ENV === "production") {
-    // express will serve client assets such as
-    // main.js or main.css files
     app.use(express_1.default.static("client/dist"));
-    // express will serve up index.html if it
-    // doesn't recognize the route
     app.get("*", (req, res) => {
         res.sendFile(path_1.default.resolve(__dirname, "../../client", "dist", "index.html"));
     });
