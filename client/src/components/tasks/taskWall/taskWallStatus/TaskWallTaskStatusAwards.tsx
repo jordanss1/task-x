@@ -95,7 +95,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
               custom={award}
               height={30}
               width={30}
-              src={`${keys.server}/api/awards/heart-award.svg`}
+              src={`/api/awards/heart-award.svg`}
               style={{
                 background:
                   "linear-gradient(120deg, rgb(255,215,0,0), rgb(230,0,38,0))",
@@ -135,7 +135,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
               custom={award}
               height={30}
               width={30}
-              src={`${keys.server}/api/awards/medal-silver.svg`}
+              src={`/api/awards/medal-silver.svg`}
               style={{
                 background:
                   "linear-gradient(120deg, rgb(255,215,0,0), rgb(230,0,38,0))",
@@ -176,21 +176,21 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
                 custom={false}
                 variants={sparkleVariants}
                 style={{ opacity: 0, scale: 0.3 }}
-                src={`${keys.server}/api/awards/sparkles.svg`}
+                src={`/api/awards/sparkles.svg`}
               />
               <motion.img
                 className="absolute mix-blend-multiply z-10"
                 custom={true}
                 variants={sparkleVariants}
                 style={{ opacity: 0, scale: 0.3 }}
-                src={`${keys.server}/api/awards/sparkles.svg`}
+                src={`/api/awards/sparkles.svg`}
               />
               <motion.img
                 variants={svgVariants}
                 custom={award}
                 height={30}
                 width={30}
-                src={`${keys.server}/api/awards/gold-medal.svg`}
+                src={`/api/awards/gold-medal.svg`}
                 style={{
                   background:
                     "linear-gradient(120deg, rgb(255,215,0,0), rgb(230,0,38,0))",

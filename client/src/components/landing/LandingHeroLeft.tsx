@@ -47,7 +47,7 @@ const LandingHeroLeft = ({
   };
 
   const renderButton = (
-    <Link to={`${keys.server}/auth/google`}>
+    <a href="/api/auth/google">
       <Button
         {...buttonProps}
         className="hero_button p-2"
@@ -57,7 +57,7 @@ const LandingHeroLeft = ({
         fontSize={18}
         label="Sign in with Google"
       />
-    </Link>
+    </a>
   );
 
   return (

@@ -55,7 +55,7 @@ const HeaderAuth = ({ signedIn }: HeaderAuthPropsType) => {
       </Button>
     </>
   ) : (
-    <Link to={`${keys.server}/auth/google`}>
+    <a href="/api/auth/google">
       <Button
         style={{
           background: colors.whiteShades[0],
@@ -68,7 +68,7 @@ const HeaderAuth = ({ signedIn }: HeaderAuthPropsType) => {
       >
         <Google size={mobile ? 17 : 20} />
       </Button>
-    </Link>
+    </a>
   );
 
   return (

@@ -4,7 +4,7 @@ import { Strategy } from "passport-google-oauth20";
 import keys from "../config/keys";
 import { UserType } from "../models/User";
 
-const { googleClientId, googleSecret, serverUrl } = keys;
+const { googleClientId, googleSecret } = keys;
 
 const GoogleStrategy = Strategy;
 
@@ -15,7 +15,7 @@ passport.use(
     {
       clientID: googleClientId,
       clientSecret: googleSecret,
-      callbackURL: `${serverUrl}/auth/google/callback`,
+      callbackURL: "/api/auth/google/callback",
     },
     async (token, refreshToken, profile, done) => {
       const existingUser = await User.findOne({ googleId: profile.id });

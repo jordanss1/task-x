@@ -1,24 +1,31 @@
 import axios, { AxiosRequestConfig } from "axios";
-import keys from "../config/keys";
 
-axios.defaults.baseURL = keys.server;
+const createAxios = (cookies: boolean) =>
+  axios.create({
+    baseURL: "/api",
+    withCredentials: cookies,
+  });
 
 export const axiosGetProfileIcons = async (): Promise<string[]> => {
-  const { data } = await axios.get(`/assets/profileIcons`);
+  const api = createAxios(false);
+
+  const { data } = await api.get(`/assets/profileIcons`);
 
   return data;
 };
 
 export const axiosGetAwardIcons = async (): Promise<string[]> => {
-  const { data } = await axios.get(`/assets/awardIcons`);
+  const api = createAxios(false);
+
+  const { data } = await api.get(`/assets/awardIcons`);
 
   return data;
 };
 
 export const axiosFetchUser = async () => {
-  const { data } = await axios.get(`/api/current_user`, {
-    withCredentials: true,
-  });
+  const api = createAxios(false);
+
+  const { data } = await api.get(`/current_user`);
 
   return data;
 };
@@ -26,13 +33,9 @@ export const axiosFetchUser = async () => {
 export const axiosCheckUsername = async (
   username: string
 ): Promise<boolean> => {
-  const { data } = await axios.post(
-    `/api/username_check`,
-    { username },
-    {
-      withCredentials: true,
-    }
-  );
+  const api = createAxios(true);
+
+  const { data } = await api.post(`/username_check`, { username });
 
   return data;
 };

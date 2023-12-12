@@ -6,10 +6,6 @@ const keys = {
   jwtSecret: process.env.JWT_SECRET,
 
   mongoURI: process.env.MONGO_URI,
-
-  serverUrl: process.env.SERVER_URL,
-
-  clientUrl: process.env.CLIENT_URL,
 };
 
 export default keys;

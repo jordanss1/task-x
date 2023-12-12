@@ -54,7 +54,7 @@ const ProfileSetup = (): ReactElement => {
     >
       <Formik<ProfileSchemaType>
         initialValues={{
-          profilePhoto: `${keys.server}/api/profileIcons/default-profile.svg`,
+          profilePhoto: `/api/profileIcons/default-profile.svg`,
           userName: "",
         }}
         onSubmit={(values, actions) => {

@@ -41,7 +41,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
     user: {
       userDetails: {
         userName: "sallyg1997",
-        profilePicture: `${keys.server}/api/profileIcons/person-5.svg`,
+        profilePicture: `/api/profileIcons/person-5.svg`,
       },
       googleId: "43",
       __v: 233,
@@ -61,7 +61,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           googleId: "1943",
           userDetails: {
             userName: "johnnyappleseed",
-            profilePicture: `${keys.server}/api/profileIcons/person-4.svg`,
+            profilePicture: `/api/profileIcons/person-4.svg`,
           },
         },
         comment: "Mine is next week also!",
@@ -74,7 +74,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           googleId: "309",
           userDetails: {
             userName: "jonjones22",
-            profilePicture: `${keys.server}/api/profileIcons/person-9.svg`,
+            profilePicture: `/api/profileIcons/person-9.svg`,
           },
         },
         comment:
@@ -91,7 +91,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
       googleId: "309",
       userDetails: {
         userName: "jonjones22",
-        profilePicture: `${keys.server}/api/profileIcons/person-9.svg`,
+        profilePicture: `/api/profileIcons/person-9.svg`,
       },
     },
     id: "121",
@@ -108,7 +108,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           googleId: "43",
           userDetails: {
             userName: "sallyg1997",
-            profilePicture: `${keys.server}/api/profileIcons/person-5.svg`,
+            profilePicture: `/api/profileIcons/person-5.svg`,
           },
         },
         comment: "Good luck I'm sure you will find them :)",
@@ -121,7 +121,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           googleId: "2003",
           userDetails: {
             userName: "fisher5000",
-            profilePicture: `${keys.server}/api/profileIcons/person-16.svg`,
+            profilePicture: `/api/profileIcons/person-16.svg`,
           },
         },
         comment: "Where is your salon?",
@@ -139,7 +139,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
       googleId: "2003",
       userDetails: {
         userName: "fisher5000",
-        profilePicture: `${keys.server}/api/profileIcons/person-16.svg`,
+        profilePicture: `/api/profileIcons/person-16.svg`,
       },
     },
     dueDate: dayjs().add(3, "weeks").toDate(),
@@ -157,7 +157,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
       googleId: "2003",
       userDetails: {
         userName: "fisher5000",
-        profilePicture: `${keys.server}/api/profileIcons/person-16.svg`,
+        profilePicture: `/api/profileIcons/person-16.svg`,
       },
     },
     id: "10",
@@ -174,7 +174,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           _id: "keji9",
           userDetails: {
             userName: "sallyg1997",
-            profilePicture: `${keys.server}/api/profileIcons/person-5.svg`,
+            profilePicture: `/api/profileIcons/person-5.svg`,
           },
         },
         comment:

@@ -8,13 +8,13 @@ import requireJwt from "../middlewares/requireJwt";
 import { UserType } from "../models/User";
 import { assertRequestWithUser } from "../types";
 
-const { clientUrl, jwtSecret } = keys;
+const { jwtSecret } = keys;
 
 const User = model<UserType>("users");
 
 const googleAuthRoutes = (app: Express) => {
   app.get(
-    `/auth/google`,
+    `/api/auth/google`,
     passport.authenticate("google", {
       scope: ["profile", "email"],
       session: false,
@@ -22,10 +22,10 @@ const googleAuthRoutes = (app: Express) => {
   );
 
   app.get(
-    "/auth/google/callback",
+    "/api/auth/google/callback",
     passport.authenticate("google", {
       session: false,
-      failureRedirect: clientUrl,
+      failureRedirect: "/",
       failureMessage: "Login error, try again",
     }),
     (req, res) => {
@@ -44,20 +44,20 @@ const googleAuthRoutes = (app: Express) => {
       });
 
       if (user?.userDetails) {
-        res.redirect(`${clientUrl}/dashboard`);
+        res.redirect("/dashboard");
       }
 
-      res.redirect(`${clientUrl}/setup`);
+      res.redirect("/setup");
     }
   );
 
   app.get("/api/logout", requireJwt, (req, res) => {
     req.user = undefined;
     res.clearCookie("token");
-    res.redirect(clientUrl);
+    res.redirect("/");
   });
 
-  app.get("/api/current_user", requireJwt, (req, res) => {
+  app.get("/api/current_user", (req, res) => {
     res.send(req.user);
   });
 
