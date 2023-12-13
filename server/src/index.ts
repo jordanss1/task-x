@@ -25,8 +25,10 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         "script-src-elem": [
-          "https://kit.fontawesome.com/b3cd848b13.js",
-          "https://accounts.google.com/gsi/client",
+          "fontawesome.com",
+          "google.com",
+          "task-x.onrender.com",
+          "g-static.com",
         ],
       },
     },
