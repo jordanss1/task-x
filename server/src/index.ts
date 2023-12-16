@@ -25,16 +25,14 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         "script-src-elem": [
-          "self",
           "https://task-x.onrender.com",
-          "https://fontawesome.com",
-          "https://google.com",
+          "https://*/fontawesome/*.com",
+          "https://*/google.com/*",
         ],
         "default-src": [
-          "self",
           "https://task-x.onrender.com",
-          "https://fontawesome.com",
-          "https://google.com",
+          "https://*/fontawesome/*.com",
+          "https://*/google.com/*",
         ],
       },
     },
