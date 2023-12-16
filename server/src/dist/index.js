@@ -24,13 +24,15 @@ app.use((0, helmet_1.default)({
         directives: {
             "script-src-elem": [
                 "self",
-                "https://kit.fontawesome.com",
-                "https://accounts.google.com",
+                "https://task-x.onrender.com",
+                "https://fontawesome.com",
+                "https://google.com",
             ],
             "default-src": [
                 "self",
-                "https://kit.fontawesome.com",
-                "https://accounts.google.com",
+                "https://task-x.onrender.com",
+                "https://fontawesome.com",
+                "https://google.com",
             ],
         },
     },

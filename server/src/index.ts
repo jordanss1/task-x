@@ -26,13 +26,15 @@ app.use(
       directives: {
         "script-src-elem": [
           "self",
-          "https://kit.fontawesome.com",
-          "https://accounts.google.com",
+          "https://task-x.onrender.com",
+          "https://fontawesome.com",
+          "https://google.com",
         ],
         "default-src": [
           "self",
-          "https://kit.fontawesome.com",
-          "https://accounts.google.com",
+          "https://task-x.onrender.com",
+          "https://fontawesome.com",
+          "https://google.com",
         ],
       },
     },
