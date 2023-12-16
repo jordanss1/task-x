@@ -26,13 +26,17 @@ app.use(
       directives: {
         "script-src-elem": [
           "https://task-x.onrender.com",
-          "https://*/fontawesome/*.com",
-          "https://*/google.com/*",
+          "https://fontawesome.com",
+          "https://kit.fontawesome.com/b3cd848b13.js",
+          "https://*.google.com",
+          "https://accounts.google.com/gsi/client",
         ],
         "default-src": [
           "https://task-x.onrender.com",
-          "https://*/fontawesome/*.com",
-          "https://*/google.com/*",
+          "https://fontawesome.com",
+          "https://kit.fontawesome.com/b3cd848b13.js",
+          "https://*.google.com",
+          "https://accounts.google.com/gsi/client",
         ],
       },
     },
