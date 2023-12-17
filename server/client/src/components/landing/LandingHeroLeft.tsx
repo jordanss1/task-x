@@ -6,7 +6,7 @@ import { colors } from "../../constants";
 import { authSelector } from "../../features/auth/authSlice";
 import artificialDelay from "../../functions/artificialDelay";
 import { UserStateType, UserType } from "../../types";
-import Button from "../Button";
+import Button from "../__reusable/Button";
 
 import { SidebarHeadingsType, contentItems } from "./content";
 

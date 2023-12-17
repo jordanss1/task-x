@@ -4,7 +4,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import dayjs from "dayjs";
 import { useField } from "formik";
-import { ReactElement, useState } from "react";
+import { ReactElement } from "react";
 
 type CalenderPropTypes = {
   name: string;

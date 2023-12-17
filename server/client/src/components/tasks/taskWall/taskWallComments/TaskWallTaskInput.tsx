@@ -1,7 +1,7 @@
 import { ReactElement, useState } from "react";
-import {  fonts } from "../../../../constants";
-import Button from "../../../Button";
-import SmallIcon from "../../../SmallIcon";
+import { fonts } from "../../../../constants";
+import Button from "../../../__reusable/Button";
+import SmallIcon from "../../../__reusable/SmallIcon";
 
 const TaskWallTaskInput = (): ReactElement => {
   const [value, setValue] = useState("");

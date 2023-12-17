@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { fonts } from "../constants";
+import { fonts } from "../../constants";
 
 const NotificationBell = ({
   notifications,

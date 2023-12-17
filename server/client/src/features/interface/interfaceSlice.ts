@@ -3,12 +3,12 @@ import { StateType } from "../../app/store";
 
 type InterfaceStateType = {
   isFetching: boolean;
-  progress: number | null;
+  progress: number;
 };
 
 const initialState: InterfaceStateType = {
   isFetching: false,
-  progress: null,
+  progress: 0,
 };
 
 const interfaceSlice = createSlice({
@@ -19,6 +19,16 @@ const interfaceSlice = createSlice({
       state.isFetching = !state.isFetching;
     },
     updateProgress: (state, action) => {
+      if (!action.payload) {
+        state.progress = 0;
+        return;
+      }
+
+      if (action.payload === 100) {
+        state.progress = 100;
+        return;
+      }
+
       state.progress += action.payload;
     },
   },
@@ -26,7 +36,8 @@ const interfaceSlice = createSlice({
 
 type InterfaceSelectorType = (state: StateType) => InterfaceStateType;
 
-const interfaceSelector: InterfaceSelectorType = (state) => state.interface;
+export const interfaceSelector: InterfaceSelectorType = (state) =>
+  state.interface;
 
 export const { setFetching, updateProgress } = interfaceSlice.actions;
 

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { CSSProperties, ReactElement, ReactNode } from "react";
-import { colors } from "../constants";
+import { colors } from "../../constants";
 
 type TransformUnderlinePropsType = {
   backgroundColors?: CSSProperties["background"][];

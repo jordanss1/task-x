@@ -3,8 +3,8 @@ import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import { ReactElement, useEffect } from "react";
 import { colors, fonts } from "../../../constants";
 import { ProfileSchemaType } from "../../../schemas";
-import Button from "../../Button";
-import SmallIcon from "../../SmallIcon";
+import Button from "../../__reusable/Button";
+import SmallIcon from "../../__reusable/SmallIcon";
 import { HandleStepType } from "./ProfileSetup";
 
 interface ProfileSetupControlsPropTypes extends FormikProps<ProfileSchemaType> {

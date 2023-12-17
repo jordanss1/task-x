@@ -6,7 +6,7 @@ import {
   changeSort,
   taskWallSelector,
 } from "../../../../features/taskWall/taskWallSlice";
-import ButtonPopout from "../../../ButtonPopout";
+import ButtonPopout from "../../../__reusable/ButtonPopout";
 
 const TaskWallNavSort = (): ReactElement => {
   const dispatch = useDispatch();

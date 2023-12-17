@@ -1,9 +1,9 @@
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { fonts } from "../../constants";
-import ButtonPopout from "../ButtonPopout";
-import MenuPopout from "../MenuPopout";
-import NotificationBell from "../NotificationBell";
+import ButtonPopout from "../__reusable/ButtonPopout";
+import MenuPopout from "../__reusable/MenuPopout";
+import NotificationBell from "../__reusable/NotificationBell";
 import LightBulb from "../svg/LightBulb";
 import { notifications, settingsList } from "./content";
 

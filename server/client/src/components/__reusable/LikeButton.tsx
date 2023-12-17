@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { colors } from "../constants";
+import { colors } from "../../constants";
 import Button from "./Button";
 import SmallIcon from "./SmallIcon";
 

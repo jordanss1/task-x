@@ -3,7 +3,7 @@ import { capitalize } from "lodash";
 import { ReactElement } from "react";
 import { colors, fonts } from "../../constants";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
-import Button from "../Button";
+import Button from "../__reusable/Button";
 import HeaderLogo from "../header/HeaderLogo";
 import MenuButton from "../svg/MenuButton";
 import { panelButtons, PanelButtonType } from "./content";

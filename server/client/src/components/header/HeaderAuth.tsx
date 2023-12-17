@@ -1,13 +1,12 @@
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
-import { NavigateFunction, useNavigate } from "react-router-dom";
-import { AppThunkDispatch } from "../../app/store";
+import { useNavigate } from "react-router-dom";
 import { colors, fonts } from "../../constants";
 import artificialDelay from "../../functions/artificialDelay";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
+import useArtificialProgress from "../../hooks/useArtificialProgress";
 import { UserStateType, UserType } from "../../types";
-import Button from "../Button";
-import SmallIcon from "../SmallIcon";
+import Button from "../__reusable/Button";
+import SmallIcon from "../__reusable/SmallIcon";
 import Google from "../svg/Google";
 
 type HeaderAuthPropsType = {
@@ -15,19 +14,18 @@ type HeaderAuthPropsType = {
 };
 
 const HeaderAuth = ({ user }: HeaderAuthPropsType) => {
-  const dispatch = useDispatch<AppThunkDispatch>();
   const navigate = useNavigate();
   const mobile = useMediaQuery(640);
-  const timer = useRef<number | NodeJS.Timeout>(0);
 
-  const routeChange = async (
-    navigate: NavigateFunction,
-    userDetails: UserType["userDetails"]
-  ) => {
-    //api call will be added to delay later
-    await artificialDelay();
-    navigate(userDetails ? "/dashboard" : "/setup");
-  };
+  const { beginProgress, stopProgress } = useArtificialProgress({
+    onFullProgress: () =>
+      setTimeout(
+        () => navigate(user && user.userDetails ? "/dashboard" : "/setup"),
+        300
+      ),
+  });
+
+  const timer = useRef<number | NodeJS.Timeout>(0);
 
   const renderContent = user ? (
     <>
@@ -37,7 +35,12 @@ const HeaderAuth = ({ user }: HeaderAuthPropsType) => {
           fontFamily: fonts.orbitron,
           letterSpacing: "2px",
         }}
-        onClick={() => routeChange(navigate, user.userDetails)}
+        onClick={async () => {
+          //api call will be added to delay later once I have eastablished the database
+
+          // if user.userDetails ? make api call for tasks and taskwall with action argument : () => {}
+          await artificialDelay(timer, undefined, beginProgress, stopProgress);
+        }}
         className="flex h-9 flex-row-reverse text-slate-800 font-normal p-2 sm:px-3 rounded-full gap-2 justify-center"
         label={mobile ? null : "Dashboard"}
       >

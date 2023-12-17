@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
-import Button from "../../../Button";
-import SmallIcon from "../../../SmallIcon";
+import Button from "../../../__reusable/Button";
+import SmallIcon from "../../../__reusable/SmallIcon";
 import Social from "../../../svg/Social";
 
 const TaskWallNavCategory = (): ReactElement => {

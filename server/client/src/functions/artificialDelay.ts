@@ -3,32 +3,35 @@ import { MutableRefObject } from "react";
 import { AppThunkDispatch } from "../app/store";
 
 type ArtificialDelayType = (
+  timer: MutableRefObject<number | NodeJS.Timeout>,
   action?: Promise<any> | AppThunkDispatch,
-  setProgress?: () => void,
-  progress?: null | number,
-  timer?: MutableRefObject<number | NodeJS.Timeout>
+  beginProgress?: () => void,
+  stopProgress?: () => void
 ) => Promise<any> | void;
 
 const artificialDelay: ArtificialDelayType = async (
+  timer,
   action,
-  setProgress,
-  progress,
-  timer
+  beginProgress,
+  stopProgress
 ) => {
-  clearInterval(timer?.current);
+  clearTimeout(timer.current);
 
-  if (setProgress && progress && progress < 70 && timer?.current) {
-    timer.current = setInterval(() => {});
-  }
+  if (beginProgress) beginProgress();
 
   const [res] = await axios.all([
     action ? action : () => {},
-    new Promise((resolve) => setTimeout(resolve, 1000)),
+
+    new Promise(
+      (resolve) =>
+        (timer.current = setTimeout(
+          () => resolve(stopProgress && stopProgress()),
+          1200
+        ))
+    ),
   ]);
 
-  clearInterval(timer?.current);
-
-  if (res) return res;
+  return res;
 };
 
 export default artificialDelay;

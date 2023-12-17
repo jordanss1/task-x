@@ -1,8 +1,8 @@
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors } from "../../../constants";
-import Button from "../../Button";
-import SmallIcon from "../../SmallIcon";
+import Button from "../../__reusable/Button";
+import SmallIcon from "../../__reusable/SmallIcon";
 import TaskListTaskStatusPopout from "./TaskListTaskStatusPopout";
 
 type TaskListTaskStatusPropsType = {

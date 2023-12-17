@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import { fonts, popoutVariants } from "../../../../constants";
 import { taskStatus } from "../../../../functions/taskStatus";
-import ButtonPopout from "../../../ButtonPopout";
-import SmallIcon from "../../../SmallIcon";
+import ButtonPopout from "../../../__reusable/ButtonPopout";
+import SmallIcon from "../../../__reusable/SmallIcon";
 
 const TaskWallTaskStatusDue = ({
   dueDate,

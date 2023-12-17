@@ -1,7 +1,7 @@
 import { useField } from "formik";
 import { AnimatePresence, motion } from "framer-motion";
 import { ForwardedRef, ReactElement, forwardRef } from "react";
-import { colors } from "../constants";
+import { colors } from "../../constants";
 
 interface TaskTextAreaPropTypes {
   name: string;

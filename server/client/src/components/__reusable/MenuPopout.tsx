@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement, ReactNode, useEffect, useRef, useState } from "react";
+import MenuButton from "../svg/MenuButton";
 import Button from "./Button";
 import ModalBackground from "./ModalBackground";
-import MenuButton from "./svg/MenuButton";
 
 type MenuPopoutPropsType = {
   children: ReactNode;

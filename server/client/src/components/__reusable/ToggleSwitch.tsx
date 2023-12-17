@@ -1,7 +1,7 @@
 import { useField } from "formik";
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
-import { colors, fonts } from "../constants";
+import { colors, fonts } from "../../constants";
 
 type ToggleSwitchPropsType = {
   label: string;

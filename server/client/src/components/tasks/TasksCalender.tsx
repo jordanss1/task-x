@@ -3,8 +3,8 @@ import { FormikProps } from "formik";
 import { AnimatePresence, MotionProps, Variants, motion } from "framer-motion";
 import { ReactElement, useEffect } from "react";
 import { colors, fonts } from "../../constants";
-import Calendar from "../Calendar";
-import Checkbox from "../Checkbox";
+import Calendar from "../__reusable/Calendar";
+import Checkbox from "../__reusable/Checkbox";
 
 const calendarVariants: Variants = {
   initial: { flex: 0, opacity: 0, width: "0%" },

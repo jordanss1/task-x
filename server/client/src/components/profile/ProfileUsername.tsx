@@ -2,8 +2,8 @@ import { useField, useFormikContext } from "formik";
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors, fonts } from "../../constants";
-import TransformUnderline from "../TransformUnderline";
-import ValidateIcons from "../ValidateIcons";
+import TransformUnderline from "../__reusable/TransformUnderline";
+import ValidateIcons from "../__reusable/ValidateIcons";
 
 type ProfileUsernamePropsType = {
   mobile?: boolean;

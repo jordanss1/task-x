@@ -3,8 +3,8 @@ import { ReactElement } from "react";
 import { colors, fonts } from "../../../constants";
 import { ProfileSchemaType, profileSchema } from "../../../schemas";
 import { UserType } from "../../../types";
-import Button from "../../Button";
-import SmallIcon from "../../SmallIcon";
+import Button from "../../__reusable/Button";
+import SmallIcon from "../../__reusable/SmallIcon";
 import ProfilePicture from "../ProfilePicture";
 import ProfileUsername from "../ProfileUsername";
 

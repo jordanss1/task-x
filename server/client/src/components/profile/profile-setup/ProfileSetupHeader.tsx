@@ -2,7 +2,7 @@ import { AnimatePresence, Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors, fonts } from "../../../constants";
 import { useMediaQuery } from "../../../hooks/MediaQueryHooks";
-import TransformBackground from "../../TransformBackground";
+import TransformBackground from "../../__reusable/TransformBackground";
 import HeaderLogoText from "../../header/HeaderLogoText";
 
 const firstHeader: Variants = {

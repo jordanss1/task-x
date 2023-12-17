@@ -6,9 +6,9 @@ import { colors, fonts } from "../../constants";
 import { taskListSelector } from "../../features/taskList/taskListSlice";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import { TaskSchemaType, taskSchema } from "../../schemas";
-import SmallIcon from "../SmallIcon";
-import TaskTextArea from "../TaskTextArea";
-import ToggleSwitch from "../ToggleSwitch";
+import SmallIcon from "../__reusable/SmallIcon";
+import TaskTextArea from "../__reusable/TaskTextArea";
+import ToggleSwitch from "../__reusable/ToggleSwitch";
 import TaskNewTaskOverlay from "../tasks/TaskNewTaskOverlay";
 import TasksCalender from "./TasksCalender";
 

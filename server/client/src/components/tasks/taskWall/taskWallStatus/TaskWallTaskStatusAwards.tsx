@@ -2,7 +2,7 @@ import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors, fonts, popoutVariants } from "../../../../constants";
 import { AwardType } from "../../../../types";
-import ButtonPopout from "../../../ButtonPopout";
+import ButtonPopout from "../../../__reusable/ButtonPopout";
 
 type TaskWallTaskStatusAwardsPropsType = {
   awards: AwardType[];

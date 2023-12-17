@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
-import { colors } from "../constants";
+import { colors } from "../../constants";
 import SmallIcon from "./SmallIcon";
 
 type ValidateIconsPropsType = {
@@ -12,7 +12,6 @@ const ValidateIcons = ({
   isValidating,
   error,
 }: ValidateIconsPropsType): ReactElement => {
-
   const renderIcon = () => {
     switch (error) {
       case true:

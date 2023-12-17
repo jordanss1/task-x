@@ -2,7 +2,7 @@ import { useField } from "formik";
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors, fonts } from "../../../../constants";
-import TransformUnderline from "../../../TransformUnderline";
+import TransformUnderline from "../../../__reusable/TransformUnderline";
 import Faces from "../../../svg/Faces";
 
 type ProfileSetupContentIntroPropsType = {

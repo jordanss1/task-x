@@ -8,7 +8,7 @@ import {
   assetsSelector,
   getProfileIcons,
 } from "../../features/assets/assetsSlice";
-import ProfileIcon from "../ProfileIcon";
+import ProfileIcon from "../__reusable/ProfileIcon";
 
 interface ProfileIconListPropsType extends MotionProps {
   iconSize: number;
