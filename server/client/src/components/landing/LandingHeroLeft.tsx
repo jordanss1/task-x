@@ -47,7 +47,7 @@ const LandingHeroLeft = ({
     userDetails: UserType["userDetails"]
   ) => {
     //api call will be added to delay later
-    await artificialDelay();
+    // await artificialDelay();
     navigate(userDetails ? "/dashboard" : "/setup");
   };
 

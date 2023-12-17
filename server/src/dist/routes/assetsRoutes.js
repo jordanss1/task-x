@@ -6,10 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const awardUrls_1 = __importDefault(require("../public/awards/awardUrls"));
 const profileUrls_1 = __importDefault(require("../public/profileIcons/profileUrls"));
 const assetsRoutes = (app) => {
-    app.get("/assets/profileIcons", (req, res) => {
+    app.get("/api/assets/profileIcons", (req, res) => {
         res.send(profileUrls_1.default);
     });
-    app.get("/assets/awards", (req, res) => {
+    app.get("/api/assets/awards", (req, res) => {
         res.send(awardUrls_1.default);
     });
 };
