@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { StateType } from "../../app/store";
 
 type InterfaceStateType = {
@@ -15,10 +15,10 @@ const interfaceSlice = createSlice({
   name: "interface",
   initialState,
   reducers: {
-    setFetching: (state) => {
-      state.isFetching = !state.isFetching;
+    setFetching: (state, action: PayloadAction<boolean>) => {
+      state.isFetching = action.payload;
     },
-    updateProgress: (state, action) => {
+    updateProgress: (state, action: PayloadAction<number>) => {
       if (!action.payload) {
         state.progress = 0;
         return;

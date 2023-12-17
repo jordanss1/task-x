@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import setRandomInterval from "set-random-interval";
 import { AppThunkDispatch } from "../app/store";
 import {
   interfaceSelector,
+  setFetching,
   updateProgress,
 } from "../features/interface/interfaceSlice";
 
@@ -15,6 +16,7 @@ type UseArtificialProgressType = (options: ArtificialProgressOptions) => {
   beginProgress: () => void;
   stopProgress: () => void;
   progress: number;
+  complete: boolean;
 };
 
 const randomProgressNumber = (): number => {
@@ -22,18 +24,16 @@ const randomProgressNumber = (): number => {
 };
 
 const useArtificialProgress: UseArtificialProgressType = (options) => {
-  const [execution, setExecution] = useState(false);
-
   const dispatch = useDispatch<AppThunkDispatch>();
-  const { progress } = useSelector(interfaceSelector);
+  const { progress, isFetching } = useSelector(interfaceSelector);
 
   const { onFullProgress } = options;
 
   const timer = useRef<{ clear: () => void }>({ clear: () => {} });
 
   useEffect(() => {
-    if (progress >= 70 && execution) {
-      setExecution(false);
+    if (progress >= 70 && isFetching) {
+      dispatch(setFetching(false));
     }
 
     if (progress === 100 && onFullProgress) {
@@ -42,7 +42,7 @@ const useArtificialProgress: UseArtificialProgressType = (options) => {
   }, [progress]);
 
   useEffect(() => {
-    if (execution) {
+    if (isFetching) {
       const { clear } = setRandomInterval(
         () => {
           dispatch(updateProgress(randomProgressNumber()));
@@ -57,17 +57,19 @@ const useArtificialProgress: UseArtificialProgressType = (options) => {
     }
 
     return () => timer.current.clear();
-  }, [execution]);
+  }, [isFetching]);
 
-  const beginProgress = () => setExecution(true);
+  const beginProgress = () => dispatch(setFetching(true));
 
   const stopProgress = () => {
-    if (execution) setExecution(false);
+    if (isFetching) dispatch(setFetching(false));
 
     dispatch(updateProgress(100));
   };
 
-  return { beginProgress, stopProgress, progress };
+  const complete = progress === 100;
+
+  return { beginProgress, stopProgress, progress, complete };
 };
 
 export default useArtificialProgress;
