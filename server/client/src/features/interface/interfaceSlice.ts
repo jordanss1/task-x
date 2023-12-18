@@ -19,7 +19,7 @@ const interfaceSlice = createSlice({
       state.isFetching = action.payload;
     },
     updateProgress: (state, action: PayloadAction<number>) => {
-      if (!action.payload) {
+      if (action.payload === 0) {
         state.progress = 0;
         return;
       }

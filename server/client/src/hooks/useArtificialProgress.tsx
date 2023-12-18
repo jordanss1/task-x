@@ -29,7 +29,15 @@ const useArtificialProgress: UseArtificialProgressType = (options) => {
 
   const { onFullProgress } = options;
 
-  const timer = useRef<{ clear: () => void }>({ clear: () => {} });
+  const timer = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    return () => {
+      dispatch(updateProgress(0));
+      dispatch(setFetching(false));
+      timer.current && timer.current();
+    };
+  }, []);
 
   useEffect(() => {
     if (progress >= 70 && isFetching) {
@@ -51,12 +59,8 @@ const useArtificialProgress: UseArtificialProgressType = (options) => {
         600
       );
 
-      timer.current.clear = clear;
-    } else {
-      timer.current.clear();
-    }
-
-    return () => timer.current.clear();
+      timer.current = clear;
+    } 
   }, [isFetching]);
 
   const beginProgress = () => dispatch(setFetching(true));

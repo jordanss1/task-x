@@ -14,7 +14,10 @@ const HeaderAuthSignOut = ({
 }: HeaderAuthSignOutPropsType): ReactElement => {
   const { beginProgress, stopProgress } = useArtificialProgress({
     onFullProgress: () =>
-      setTimeout(() => (window.location.href = "/api/logout"), 300),
+      setTimeout(() => {
+        console.log("href");
+        window.location.href = "/api/logout";
+      }, 300),
   });
 
   const timer = useRef<number | NodeJS.Timeout>(0);

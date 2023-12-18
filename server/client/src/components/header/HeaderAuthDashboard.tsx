@@ -19,8 +19,10 @@ const HeaderAuthDashboard = ({
   const navigate = useNavigate();
 
   const { beginProgress, stopProgress } = useArtificialProgress({
-    onFullProgress: () =>
-      setTimeout(() => navigate(userDetails ? "/dashboard" : "/setup"), 300),
+    onFullProgress: () => {
+      console.log("nav");
+      setTimeout(() => navigate(userDetails ? "/dashboard" : "/setup"), 300);
+    },
   });
 
   const timer = useRef<number | NodeJS.Timeout>(0);

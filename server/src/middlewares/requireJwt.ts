@@ -28,6 +28,7 @@ export const requireJwt = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const { user } = jwt.verify(token, jwtSecret) as JwtPayload;
+    console.log(user);
     req.user = user;
     next();
   } catch (err) {
