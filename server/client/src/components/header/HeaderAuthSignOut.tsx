@@ -12,15 +12,21 @@ type HeaderAuthSignOutPropsType = {
 const HeaderAuthSignOut = ({
   mobile,
 }: HeaderAuthSignOutPropsType): ReactElement => {
+  const timer = useRef<number | NodeJS.Timeout>(0);
+
+  const timer2 = useRef<number | NodeJS.Timeout>(0);
+
   const { beginProgress, stopProgress } = useArtificialProgress({
-    onFullProgress: () =>
-      setTimeout(() => {
-        console.log("href");
-        window.location.href = "/api/logout";
-      }, 300),
+    onFullProgress: () => handleFullProgress(),
   });
 
-  const timer = useRef<number | NodeJS.Timeout>(0);
+  const handleFullProgress = () => {
+    clearTimeout(timer2.current);
+
+    timer2.current = setTimeout(() => {
+      window.location.href = "/api/logout";
+    }, 300);
+  };
 
   return (
     <Button

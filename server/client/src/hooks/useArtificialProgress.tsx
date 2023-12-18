@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import setRandomInterval from "set-random-interval";
 import { AppThunkDispatch } from "../app/store";
@@ -24,8 +24,10 @@ const randomProgressNumber = (): number => {
 };
 
 const useArtificialProgress: UseArtificialProgressType = (options) => {
-  const dispatch = useDispatch<AppThunkDispatch>();
-  const { progress, isFetching } = useSelector(interfaceSelector);
+  const [progress, setProgress] = useState(0);
+  const [isFetching, setIsFetching] = useState(false);
+
+  const dispatch = useDispatch();
 
   const { onFullProgress } = options;
 
@@ -33,15 +35,18 @@ const useArtificialProgress: UseArtificialProgressType = (options) => {
 
   useEffect(() => {
     return () => {
+      setProgress(0);
+      setIsFetching(false);
       dispatch(updateProgress(0));
-      dispatch(setFetching(false));
       timer.current && timer.current();
     };
   }, []);
 
   useEffect(() => {
+    if (progress) dispatch(updateProgress(progress));
+
     if (progress >= 70 && isFetching) {
-      dispatch(setFetching(false));
+      setIsFetching(false);
     }
 
     if (progress === 100 && onFullProgress) {
@@ -53,22 +58,24 @@ const useArtificialProgress: UseArtificialProgressType = (options) => {
     if (isFetching) {
       const { clear } = setRandomInterval(
         () => {
-          dispatch(updateProgress(randomProgressNumber()));
+          setProgress(randomProgressNumber);
         },
         200,
         600
       );
 
       timer.current = clear;
-    } 
+    }
   }, [isFetching]);
 
-  const beginProgress = () => dispatch(setFetching(true));
+  const beginProgress = () => setIsFetching(true);
 
   const stopProgress = () => {
-    if (isFetching) dispatch(setFetching(false));
+    if (isFetching) setIsFetching(false);
 
-    dispatch(updateProgress(100));
+    timer.current && timer.current();
+
+    setProgress(100);
   };
 
   const complete = progress === 100;

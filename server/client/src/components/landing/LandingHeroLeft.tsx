@@ -1,10 +1,11 @@
 import { Variants } from "framer-motion";
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { colors } from "../../constants";
 import { authSelector } from "../../features/auth/authSlice";
 import artificialDelay from "../../functions/artificialDelay";
+import useArtificialProgress from "../../hooks/useArtificialProgress";
 import { UserStateType, UserType } from "../../types";
 import Button from "../__reusable/Button";
 
@@ -31,8 +32,25 @@ const LandingHeroLeft = ({
 }: {
   hero: SidebarHeadingsType;
 }): ReactElement => {
+  const { beginProgress, stopProgress, complete } = useArtificialProgress({});
+
   const { user } = useSelector(authSelector);
   const navigate = useNavigate();
+
+  const timer = useRef<number | NodeJS.Timeout>(0);
+  const timer2 = useRef<number | NodeJS.Timeout>(0);
+
+  useEffect(() => {
+    clearTimeout(timer2.current);
+
+    timer2.current = setTimeout(() => {
+      if (complete && user) {
+        navigate(user.userDetails ? "/dashboard" : "/setup");
+      } else if (complete && !user) {
+        window.location.href = "/api/auth/google";
+      }
+    }, 300);
+  }, [complete]);
 
   let index = 0;
 
@@ -41,15 +59,6 @@ const LandingHeroLeft = ({
   if (hero === "Popular") index = 2;
 
   const { heading, body, button } = contentItems[index];
-
-  const routeChange = async (
-    navigate: NavigateFunction,
-    userDetails: UserType["userDetails"]
-  ) => {
-    //api call will be added to delay later
-    // await artificialDelay();
-    navigate(userDetails ? "/dashboard" : "/setup");
-  };
 
   const buttonProps = {
     style: {
@@ -67,8 +76,8 @@ const LandingHeroLeft = ({
       <Button
         {...buttonProps}
         className="hero_button p-2"
-        onClick={() =>
-          user ? routeChange(navigate, user.userDetails) : undefined
+        onClick={async () =>
+          await artificialDelay(timer, undefined, beginProgress, stopProgress)
         }
         variants={buttonVariants}
         whileHover="hovered"

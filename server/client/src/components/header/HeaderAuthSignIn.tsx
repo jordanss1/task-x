@@ -12,12 +12,21 @@ type HeaderAuthSignInPropsType = {
 const HeaderAuthSignIn = ({
   mobile,
 }: HeaderAuthSignInPropsType): ReactElement => {
+  const timer = useRef<number | NodeJS.Timeout>(0);
+
+  const timer2 = useRef<number | NodeJS.Timeout>(0);
+
   const { beginProgress, stopProgress } = useArtificialProgress({
-    onFullProgress: () =>
-      setTimeout(() => (window.location.href = "/api/auth/google"), 300),
+    onFullProgress: () => handleFullProgress(),
   });
 
-  const timer = useRef<number | NodeJS.Timeout>(0);
+  const handleFullProgress = () => {
+    clearTimeout(timer2.current);
+
+    timer2.current = setTimeout(() => {
+      window.location.href = "/api/auth/google";
+    }, 300);
+  };
 
   return (
     <Button

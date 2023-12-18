@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { interfaceSelector } from "../../features/interface/interfaceSlice";
 import "../../styles/landing.css";
@@ -9,7 +9,6 @@ import LandingHero from "./LandingHero";
 
 const Landing = (): ReactElement => {
   const { progress } = useSelector(interfaceSelector);
-
 
   return (
     <motion.main className="landing h-screen">
