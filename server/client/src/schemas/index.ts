@@ -22,7 +22,7 @@ export type TaskSchemaType = yup.InferType<typeof taskSchema>;
 let timer: NodeJS.Timeout;
 
 export const profileSchema = yup.object().shape({
-  profilePhoto: yup.string().required("Choose a profile photo"),
+  profilePicture: yup.string().required("Choose a profile photo"),
   userName: yup
     .string()
     .min(3, "Must be more than 2 characters")

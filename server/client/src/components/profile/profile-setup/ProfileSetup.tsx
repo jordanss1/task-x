@@ -1,10 +1,14 @@
-import { Formik } from "formik";
+import { Formik, FormikConfig, FormikState, FormikValues } from "formik";
 import { motion, useCycle } from "framer-motion";
 import { ReactElement, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppThunkDispatch } from "../../../app/store";
+import { updateProfile } from "../../../features/auth/authSlice";
 import { useMediaQuery } from "../../../hooks/MediaQueryHooks";
 import { ProfileSchemaType, profileSchema } from "../../../schemas";
 import "../../../styles/header.css";
 import "../../../styles/profile.css";
+import { UserType } from "../../../types";
 import ProfileSetupControls from "./ProfileSetupControls";
 import ProfileSetupHeader from "./ProfileSetupHeader";
 import ProfileSetupContent from "./profile-setup-content/ProfileSetupContent";
@@ -13,6 +17,8 @@ export type HandleStepType = (e: React.MouseEvent, increment: boolean) => void;
 
 const ProfileSetup = (): ReactElement => {
   const [step, setStep] = useState(0);
+  const dispatch = useDispatch<AppThunkDispatch>();
+
   const mobile = useMediaQuery(640);
   const [firstCycle, cycleFirst] = useCycle(
     "initialAnimation",
@@ -34,6 +40,13 @@ const ProfileSetup = (): ReactElement => {
       cycleContent(2);
     }
   }, [step]);
+
+  const handleSubmit: FormikConfig<UserType["profile"]>["onSubmit"] = async (
+    values,
+    actions
+  ) => {
+    await dispatch(updateProfile(values));
+  };
 
   return (
     <motion.main
@@ -87,12 +100,10 @@ const ProfileSetup = (): ReactElement => {
 
       <Formik<ProfileSchemaType>
         initialValues={{
-          profilePhoto: `/api/profileIcons/default-profile.svg`,
+          profilePicture: `/api/profileIcons/default-profile.svg`,
           userName: "",
         }}
-        onSubmit={(values, actions) => {
-          console.log(values);
-        }}
+        onSubmit={(values, actions) => handleSubmit(values, actions)}
         validationSchema={profileSchema}
       >
         {(props) => {
@@ -101,7 +112,7 @@ const ProfileSetup = (): ReactElement => {
 
             setStep((prev) => {
               if (increment) {
-                return prev + 1;
+                return prev < 2 ? prev + 1 : prev;
               } else {
                 cycleFirst(prev === 1 ? 1 : 0);
                 return prev - 1;

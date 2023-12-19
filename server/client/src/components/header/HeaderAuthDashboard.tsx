@@ -11,12 +11,12 @@ import SmallIcon from "../__reusable/SmallIcon";
 
 type HeaderAuthDashboardPropsType = {
   mobile?: boolean;
-  userDetails: UserType["userDetails"];
+  profile: UserType["profile"];
 };
 
 const HeaderAuthDashboard = ({
   mobile,
-  userDetails,
+  profile,
 }: HeaderAuthDashboardPropsType): ReactElement => {
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const HeaderAuthDashboard = ({
     clearTimeout(timer2.current);
 
     timer2.current = setTimeout(() => {
-      navigate(userDetails ? "/dashboard" : "/setup");
+      navigate(profile ? "/dashboard" : "/setup");
     }, 300);
   };
 

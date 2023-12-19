@@ -19,7 +19,7 @@ const fakerUser = async (uri) => {
     for (let i = 0; i < 100; i += 1) {
         let user = {
             googleId: faker.string.numeric(20),
-            userDetails: {
+            profile: {
                 userName: faker.internet.userName(),
                 profilePicture: faker.helpers.arrayElement(profileUrls_1.default),
             },

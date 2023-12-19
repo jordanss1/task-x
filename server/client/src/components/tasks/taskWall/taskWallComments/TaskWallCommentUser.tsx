@@ -12,7 +12,7 @@ const TaskWallCommentUser = ({
   user,
 }: TaskWallCommentUserPropsType): ReactElement => {
   const mobile = useMediaQuery(640);
-  const { profilePicture, userName } = user.userDetails;
+  const { profilePicture, userName } = user.profile;
 
   return (
     <div className="flex items-center">

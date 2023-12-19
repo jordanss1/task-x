@@ -5,6 +5,7 @@ import { model } from "mongoose";
 import passport from "passport";
 import keys from "../config/keys";
 import requireJwt from "../middlewares/requireJwt";
+import { ProfileType } from "../models/Profile";
 import { UserType } from "../models/User";
 import { assertRequestWithUser } from "../types";
 
@@ -28,7 +29,7 @@ const googleAuthRoutes = (app: Express) => {
       failureRedirect: "/",
       failureMessage: "Login error, try again",
     }),
-    (req, res) => {
+    (req: Request, res: Response) => {
       assertRequestWithUser(req);
 
       const { user } = req;
@@ -44,7 +45,7 @@ const googleAuthRoutes = (app: Express) => {
         expires: dayjs().add(4, "hours").toDate(),
       });
 
-      if (user?.userDetails) {
+      if (user?.profile) {
         res.redirect("/dashboard");
       }
 
@@ -52,13 +53,13 @@ const googleAuthRoutes = (app: Express) => {
     }
   );
 
-  app.get("/api/logout", requireJwt, (req, res) => {
+  app.get("/api/logout", requireJwt, (req: Request, res: Response) => {
     req.user = undefined;
     res.clearCookie("token");
     res.redirect("/");
   });
 
-  app.get("/api/current_user", requireJwt, (req, res) => {
+  app.get("/api/current_user", requireJwt, (req: Request, res: Response) => {
     res.send(req.user);
   });
 
@@ -67,12 +68,25 @@ const googleAuthRoutes = (app: Express) => {
     requireJwt,
     async (req: Request, res: Response) => {
       const match = await User.findOne<UserType>({
-        "userDetails.userName": req.body.username,
+        "profile.userName": req.body.username,
       })
-        .select("userDetails.userName")
+        .select("profile.userName")
         .exec();
 
       res.send(match ? true : false);
+    }
+  );
+
+  app.post(
+    "/api/profileUpdate",
+    requireJwt,
+    async (req: Request, res: Response<ProfileType>) => {
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: req.user?._id },
+        {}
+      );
+
+      console.log(updatedUser);
     }
   );
 };

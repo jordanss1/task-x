@@ -12,29 +12,29 @@ const user: UserType = {
   googleId: "33",
   _id: "34",
   __v: 3322,
-  userDetails: {
+  profile: {
     userName: "johnnyappleseed",
     profilePicture: "/src/assets/profile-photos/person-4.svg",
   },
 };
 
 const ProfileEditForm = (): ReactElement => {
-  const { profilePicture, userName } = user.userDetails;
+  const { profilePicture, userName } = user.profile;
   return (
     <section className="py-14 sm:py-14 h-full flex-1">
       <Formik<ProfileSchemaType>
         initialValues={{
-          profilePhoto: profilePicture,
+          profilePicture: profilePicture,
           userName: userName,
         }}
         onSubmit={() => {}}
         validationSchema={profileSchema}
       >
         {(props) => {
-          const { profilePhoto, userName } = props.values;
+          const { profilePicture, userName } = props.values;
 
           const sameValues =
-            profilePhoto === props.initialValues.profilePhoto &&
+            profilePicture === props.initialValues.profilePicture &&
             userName === props.initialValues.userName;
 
           return (

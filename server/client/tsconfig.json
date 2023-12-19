@@ -18,11 +18,5 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src",
-    "tailwind.config.ts",
-    "postcss.config.ts",
-    "public/profile-photos",
-    "public/profilePhotos.ts"
-  ]
+  "include": ["src", "tailwind.config.ts", "postcss.config.ts"]
 }

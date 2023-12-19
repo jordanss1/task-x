@@ -12,7 +12,7 @@ const ProfileChosenIcon = ({
   size,
   ...props
 }: ProfileChosenIconPropsType): ReactElement => {
-  const [field, meta, helpers] = useField("profilePhoto");
+  const [field, meta, helpers] = useField("profilePicture");
   size = size ?? 40;
 
   return (

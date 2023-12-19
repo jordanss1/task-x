@@ -21,7 +21,7 @@ const TaskWallTaskStatus = ({
   dueDate,
 }: TaskWallTaskStatusPropsType): ReactElement => {
   const mobile = useMediaQuery(640);
-  const { profilePicture, userName } = user.userDetails;
+  const { profilePicture, userName } = user.profile;
 
   return (
     <div className="flex justify-between items-center">

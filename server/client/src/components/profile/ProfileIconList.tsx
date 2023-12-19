@@ -27,17 +27,17 @@ const ProfileIconList = ({
     dispatch(getProfileIcons());
   }, []);
 
-  const [field, meta, helpers] = useField("profilePhoto");
+  const [field, meta, helpers] = useField("profilePicture");
 
   return (
     <motion.div {...props} className={className}>
-      {profileIcons?.map((profilePhoto) => {
-        const chosenPhoto = profilePhoto === field.value;
+      {profileIcons?.map((profilePicture) => {
+        const chosenPhoto = profilePicture === field.value;
 
         return (
           <ProfileIcon
             className="flex justify-center rounded-[30px] p-[3px] cursor-pointer"
-            onClick={() => helpers.setValue(profilePhoto)}
+            onClick={() => helpers.setValue(profilePicture)}
             whileHover={{
               scale: chosenPhoto ? 1.1 : 1.2,
               boxShadow: chosenPhoto
@@ -56,8 +56,8 @@ const ProfileIconList = ({
               background: chosenPhoto ? "rgb(220,220,220)" : "none",
             }}
             size={iconSize}
-            key={profilePhoto}
-            img={profilePhoto}
+            key={profilePicture}
+            img={profilePicture}
           />
         );
       })}

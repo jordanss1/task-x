@@ -13,7 +13,7 @@ const HeaderAuth = ({ user }: HeaderAuthPropsType) => {
 
   const renderButtons = user ? (
     <>
-      <HeaderAuthDashboard userDetails={user.userDetails} mobile={mobile} />
+      <HeaderAuthDashboard profile={user.profile} mobile={mobile} />
       <HeaderAuthSignOut mobile={mobile} />
     </>
   ) : (

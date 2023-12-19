@@ -38,7 +38,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
   {
     task: "Going to take my final driving test! I'm so nervous",
     user: {
-      userDetails: {
+      profile: {
         userName: "sallyg1997",
         profilePicture: `/api/profileIcons/person-5.svg`,
       },
@@ -58,7 +58,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           __v: 233,
           _id: "keji9",
           googleId: "1943",
-          userDetails: {
+          profile: {
             userName: "johnnyappleseed",
             profilePicture: `/api/profileIcons/person-4.svg`,
           },
@@ -71,7 +71,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           __v: 233,
           _id: "keji9",
           googleId: "309",
-          userDetails: {
+          profile: {
             userName: "jonjones22",
             profilePicture: `/api/profileIcons/person-9.svg`,
           },
@@ -88,7 +88,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
       __v: 233,
       _id: "keji9",
       googleId: "309",
-      userDetails: {
+      profile: {
         userName: "jonjones22",
         profilePicture: `/api/profileIcons/person-9.svg`,
       },
@@ -105,7 +105,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           __v: 233,
           _id: "keji9",
           googleId: "43",
-          userDetails: {
+          profile: {
             userName: "sallyg1997",
             profilePicture: `/api/profileIcons/person-5.svg`,
           },
@@ -118,7 +118,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           __v: 233,
           _id: "keji9",
           googleId: "2003",
-          userDetails: {
+          profile: {
             userName: "fisher5000",
             profilePicture: `/api/profileIcons/person-16.svg`,
           },
@@ -136,7 +136,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
       __v: 233,
       _id: "keji9",
       googleId: "2003",
-      userDetails: {
+      profile: {
         userName: "fisher5000",
         profilePicture: `/api/profileIcons/person-16.svg`,
       },
@@ -154,7 +154,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
       __v: 233,
       _id: "keji9",
       googleId: "2003",
-      userDetails: {
+      profile: {
         userName: "fisher5000",
         profilePicture: `/api/profileIcons/person-16.svg`,
       },
@@ -171,7 +171,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
           googleId: "43",
           __v: 233,
           _id: "keji9",
-          userDetails: {
+          profile: {
             userName: "sallyg1997",
             profilePicture: `/api/profileIcons/person-5.svg`,
           },

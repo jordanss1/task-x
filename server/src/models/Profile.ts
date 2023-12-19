@@ -1,8 +1,8 @@
 import { InferSchemaType, Schema } from "mongoose";
 
-export const userDetailsSchema = new Schema({
+export const profileSchema = new Schema({
   userName: { type: String, required: true },
   profilePicture: { type: String, required: true },
 });
 
-export type UserDetailsType = InferSchemaType<typeof userDetailsSchema>;
+export type ProfileType = InferSchemaType<typeof profileSchema>;

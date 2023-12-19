@@ -33,7 +33,7 @@ const googleAuthRoutes = (app) => {
             sameSite: "strict",
             expires: (0, dayjs_1.default)().add(4, "hours").toDate(),
         });
-        if (user?.userDetails) {
+        if (user?.profile) {
             res.redirect("/dashboard");
         }
         res.redirect("/setup");
@@ -48,11 +48,15 @@ const googleAuthRoutes = (app) => {
     });
     app.post("/api/username_check", requireJwt_1.default, async (req, res) => {
         const match = await User.findOne({
-            "userDetails.userName": req.body.username,
+            "profile.userName": req.body.username,
         })
-            .select("userDetails.userName")
+            .select("profile.userName")
             .exec();
         res.send(match ? true : false);
+    });
+    app.post("/api/profileUpdate", requireJwt_1.default, async (req, res) => {
+        const updatedUser = await User.findOneAndUpdate({ _id: req.user?._id }, {});
+        console.log(updatedUser);
     });
 };
 exports.default = googleAuthRoutes;

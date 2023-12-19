@@ -33,7 +33,7 @@ export type UserType = {
   _id: string;
   googleId: string;
   __v: number;
-  userDetails: {
+  profile: {
     userName: string;
     profilePicture: string;
   };
