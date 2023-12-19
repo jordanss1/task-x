@@ -88,7 +88,7 @@ const ProfileSetupHeader = ({
   };
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full performance flex justify-center">
       <TransformBackground
         background={colors.hoveredButtonGradient}
         minHeight={mobile ? "40px" : "50px"}

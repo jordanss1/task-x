@@ -86,6 +86,7 @@ const ProfileSetupContent = ({
       case 0:
         return (
           <motion.div
+            layout
             key="container1"
             style={{
               maxWidth: maxWidth(),
@@ -129,9 +130,10 @@ const ProfileSetupContent = ({
 
   return (
     <motion.div
+      layout
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { delay: 0.8 } }}
-      className="isolate flex justify-center items-center relative w-full min-h-[383px] h-full"
+      className="profile_setup_content isolate flex justify-center items-center relative w-full min-h-[383px] h-full"
     >
       <AnimatePresence mode="wait">{renderContent()}</AnimatePresence>
     </motion.div>
