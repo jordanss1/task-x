@@ -36,7 +36,8 @@ export type UserType = {
   profile: {
     userName: string;
     profilePicture: string;
-  };
+  } | null;
 };
 
 export type UserStateType = UserType | false | null;
+

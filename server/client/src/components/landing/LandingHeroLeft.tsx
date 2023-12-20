@@ -37,6 +37,8 @@ const LandingHeroLeft = ({
   const { user } = useSelector(authSelector);
   const navigate = useNavigate();
 
+  console.log(user);
+
   const timer = useRef<number | NodeJS.Timeout>(0);
   const timer2 = useRef<number | NodeJS.Timeout>(0);
 

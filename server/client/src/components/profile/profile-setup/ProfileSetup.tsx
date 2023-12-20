@@ -46,6 +46,7 @@ const ProfileSetup = (): ReactElement => {
     actions
   ) => {
     await dispatch(updateProfile(values));
+    setStep(3);
   };
 
   return (
@@ -95,7 +96,7 @@ const ProfileSetup = (): ReactElement => {
             duration: 1,
           },
         }}
-        className="performance sm:[--width:90%] [--width:100%] mix-blend-color-burn absolute rounded-[100px] inset-0 m-auto h-[95%] -z-[10]"
+        className="sm:[--width:90%] [--width:100%] mix-blend-color-burn absolute rounded-[100px] inset-0 m-auto h-[95%] -z-[10]"
       />
 
       <Formik<ProfileSchemaType>
@@ -112,7 +113,7 @@ const ProfileSetup = (): ReactElement => {
 
             setStep((prev) => {
               if (increment) {
-                return prev < 2 ? prev + 1 : prev;
+                return prev + 1;
               } else {
                 cycleFirst(prev === 1 ? 1 : 0);
                 return prev - 1;
@@ -121,7 +122,7 @@ const ProfileSetup = (): ReactElement => {
           };
 
           return (
-            <form className="performance relative justify-evenly items-center flex flex-col gap-10 h-full">
+            <form className="relative justify-evenly items-center flex flex-col gap-10 h-full">
               <ProfileSetupHeader firstCycle={firstCycle} step={step} />
               <ProfileSetupContent
                 contentCycle={contentCycle}

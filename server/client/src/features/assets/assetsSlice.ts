@@ -4,13 +4,13 @@ import { StateType } from "../../app/store";
 
 export const getProfileIcons = createAsyncThunk(
   "assets/profileIcons",
-  async () => {
+  async (): Promise<string[]> => {
     return await axiosGetProfileIcons();
   }
 );
 
 type AssetsStateType = {
-  profileIcons: null | string[];
+  profileIcons: null | false | string[];
 };
 
 const initialState: AssetsStateType = {
@@ -25,7 +25,7 @@ const assetsSlice = createSlice({
     builder.addMatcher(
       (action) => action.type.includes("assets/profileIcons"),
       (state, action: PayloadAction<string[]>) => {
-        state.profileIcons = action.payload;
+        state.profileIcons = action.payload?.length > 0 ? action.payload : false;
       }
     );
   },

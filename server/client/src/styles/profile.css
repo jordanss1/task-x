@@ -15,17 +15,6 @@
   grid-template-columns: 100px 1fr;
 }
 
-.performance,
-.profile_setup_content,
-.profile_setup_content * {
-  -webkit-backface-visibility: hidden !important;
-  -webkit-perspective: 1000 !important;
-  -webkit-transform: translate3d(0, 0, 0) translateZ(0) !important;
-  backface-visibility: hidden !important;
-  perspective: 1000 !important;
-  transform: translateZ(0) translate3d(0, 0, 0) !important;
-}
-
 .profile_setup_iconlist {
   grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
   overflow: overlay;

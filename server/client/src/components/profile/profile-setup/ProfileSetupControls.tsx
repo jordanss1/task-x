@@ -1,10 +1,11 @@
-import { FormikProps, useField } from "formik";
-import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
-import { ReactElement, useEffect } from "react";
+import { FormikProps } from "formik";
+import { motion } from "framer-motion";
+import { ReactElement } from "react";
 import { colors, fonts } from "../../../constants";
 import { ProfileSchemaType } from "../../../schemas";
 import Button from "../../__reusable/Button";
 import SmallIcon from "../../__reusable/SmallIcon";
+import Spinner from "../../__reusable/Spinner";
 import { HandleStepType } from "./ProfileSetup";
 
 interface ProfileSetupControlsPropTypes extends FormikProps<ProfileSchemaType> {
@@ -17,9 +18,17 @@ const ProfileSetupControls = ({
   step,
   ...props
 }: ProfileSetupControlsPropTypes): ReactElement => {
-  const userNameErrors =
-    step === 2 &&
-    (!props.values.userName || props.errors.userName !== undefined);
+  const handleNext = (e: React.MouseEvent) => {
+    if (step < 2) {
+      return handleStep(e, true);
+    }
+
+    props.submitForm();
+  };
+
+  const handleBack = (e: React.MouseEvent) => {
+    handleStep(e, false);
+  };
 
   return (
     <motion.div
@@ -28,49 +37,91 @@ const ProfileSetupControls = ({
       className="w-full flex flex-col gap-4"
     >
       <div className="max-w-[300px] flex justify-between w-full mr-auto ml-auto">
-        <Button
-          style={{
-            fontFamily: fonts.jura,
-          }}
-          animate={{
-            opacity: step === 0 ? 0.6 : 1,
-          }}
-          onClick={(e) => handleStep(e, false)}
-          disabled={step === 0 || step > 2}
-          className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990]  flex-row-reverse rounded-xl gap-[1px]"
-          icon={
-            <SmallIcon
-              style={{ color: colors.purple }}
-              size={13}
-              icon="fa-solid fa-caret-left"
-            />
-          }
-          fontSize={15}
-          label="Back"
-        />
-        <Button
-          style={{
-            fontFamily: fonts.jura,
-          }}
-          onClick={(e) => {
-            handleStep(e, true);
-          }}
-          type={step === 2 ? "submit" : "button"}
-          disabled={step > 2 || userNameErrors || props.isValidating}
-          className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990] gap-[1px] rounded-xl"
-          icon={
-            <SmallIcon
-              style={{ color: colors.purple }}
-              size={13}
-              icon="fa-solid fa-caret-right"
-            />
-          }
-          fontSize={15}
-          label={step < 2 ? "Next" : "Finish"}
-        />
+        <BackButton step={step} handleClick={handleBack} {...props} />
+        <NextButton step={step} handleClick={handleNext} {...props} />
       </div>
       <ProgressBar step={step} />
     </motion.div>
+  );
+};
+
+interface ProfileSetupButtonPropTypes extends FormikProps<ProfileSchemaType> {
+  handleClick: (e: React.MouseEvent) => void;
+  step: number;
+}
+
+const NextButton = ({
+  step,
+  handleClick,
+  ...props
+}: ProfileSetupButtonPropTypes): ReactElement => {
+  const { isSubmitting, isValidating } = props;
+
+  const errors =
+    step === 2 &&
+    (!props.values.userName || props.errors.userName !== undefined);
+
+  const label = isSubmitting ? null : step < 2 ? "Next" : "Finish";
+
+  const disabled = errors || isValidating || isSubmitting;
+
+  return (
+    <Button
+      style={{
+        fontFamily: fonts.jura,
+      }}
+      onClick={(e) => handleClick(e)}
+      type="button"
+      disabled={disabled}
+      className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990] gap-[1px] rounded-xl"
+      icon={
+        isSubmitting ? (
+          <Spinner />
+        ) : (
+          <SmallIcon
+            style={{ color: colors.purple }}
+            size={13}
+            icon="fa-solid fa-caret-right"
+          />
+        )
+      }
+      fontSize={15}
+      label={label}
+    />
+  );
+};
+
+const BackButton = ({
+  step,
+  handleClick,
+  ...props
+}: ProfileSetupButtonPropTypes): ReactElement => {
+  const { isSubmitting, isValidating } = props;
+
+  const disabled = step === 0 || step > 2 || isSubmitting;
+
+  return (
+    <Button
+      style={{
+        fontFamily: fonts.jura,
+      }}
+      animate={{
+        opacity: step === 0 ? 0.6 : 1,
+      }}
+      type="button"
+      onClick={(e) => handleClick(e)}
+      disabled={disabled}
+      className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990]  flex-row-reverse rounded-xl gap-[1px]"
+      icon={
+        <SmallIcon
+          style={{ color: colors.purple }}
+          size={13}
+          icon="fa-solid fa-caret-left"
+        />
+      }
+      fontSize={15}
+      label="Back"
+    />
   );
 };
 

@@ -33,7 +33,7 @@ export const requireJwt = (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     req.user = undefined;
     res.clearCookie("token");
-    res.status(401).send({ error: "Token not valid; please login" });
+    res.status(401).send("Error authenticating user, please login again");
     res.redirect("/");
   }
 };

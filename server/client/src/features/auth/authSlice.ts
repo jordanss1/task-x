@@ -4,9 +4,11 @@ import {
   createAsyncThunk,
   createSlice,
 } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { axiosFetchUser, axiosUpdateProfile } from "../../api";
 import { StateType } from "../../app/store";
 import { UserStateType, UserType } from "../../types";
+import { setError } from "../error/errorSlice";
 
 export const getUser = createAsyncThunk<UserType | undefined>(
   "auth/user",
@@ -15,12 +17,23 @@ export const getUser = createAsyncThunk<UserType | undefined>(
   }
 );
 
-export const updateProfile = createAsyncThunk<UserType, UserType["profile"]>(
-  "auth/profile",
-  async (profile) => {
+export const updateProfile = createAsyncThunk<
+  UserType,
+  NonNullable<UserType["profile"]>,
+  { state: StateType }
+>("auth/profile", async (profile, { getState, dispatch }) => {
+  const { user } = getState().auth;
+
+  try {
     return await axiosUpdateProfile(profile);
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
+
+    return user as UserType;
   }
-);
+});
 
 type AuthStateType = {
   user: UserStateType;
@@ -57,12 +70,6 @@ const authSlice = createSlice({
           reducerMatcherFunction(action, () => {
             state.user = action.payload || false;
           })
-      )
-      .addMatcher(
-        (action) => action.type.includes("auth/profile"),
-        (state, action: PayloadAction<UserType>) => {
-          state.user;
-        }
       )
 
       .addDefaultCase((state, action) => state);

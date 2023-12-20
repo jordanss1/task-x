@@ -4,11 +4,13 @@ import { StateType } from "../../app/store";
 type InterfaceStateType = {
   isFetching: boolean;
   progress: number;
+  popup: boolean;
 };
 
 const initialState: InterfaceStateType = {
   isFetching: false,
   progress: 0,
+  popup: false,
 };
 
 const interfaceSlice = createSlice({
@@ -30,6 +32,9 @@ const interfaceSlice = createSlice({
       }
 
       state.progress += action.payload;
+    },
+    renderPopup: (state, action) => {
+      state.popup = action.payload;
     },
   },
 });

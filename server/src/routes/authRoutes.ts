@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { Express, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { model } from "mongoose";
+import { Error, model } from "mongoose";
 import passport from "passport";
 import keys from "../config/keys";
 import requireJwt from "../middlewares/requireJwt";
@@ -39,7 +39,7 @@ const googleAuthRoutes = (app: Express) => {
       });
 
       res.cookie("token", token, {
-        secure: process.env.NODE_ENV !== "development",
+        secure: true,
         httpOnly: true,
         sameSite: "strict",
         expires: dayjs().add(4, "hours").toDate(),
@@ -80,13 +80,19 @@ const googleAuthRoutes = (app: Express) => {
   app.post(
     "/api/profileUpdate",
     requireJwt,
-    async (req: Request, res: Response<ProfileType>) => {
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: req.user?._id },
-        {}
-      );
+    async (req: Request, res: Response) => {
+      try {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: req.user?.googleId },
+          {
+            profile: req.body,
+          }
+        );
 
-      console.log(updatedUser);
+        res.send(req.user);
+      } catch (err) {
+        res.status(500).send("Server error please try again");
+      }
     }
   );
 };

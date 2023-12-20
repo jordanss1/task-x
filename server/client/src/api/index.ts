@@ -42,11 +42,9 @@ export const axiosCheckUsername = async (
 };
 
 export const axiosUpdateProfile = async (
-  profile: UserType["profile"]
+  profile: NonNullable<UserType["profile"]>
 ): Promise<UserType> => {
   const api = createAxios(true);
-
-  console.log(profile);
 
   const { data } = await api.post("/profileUpdate", { ...profile });
 
