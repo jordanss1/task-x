@@ -44,7 +44,6 @@ export type UserType = {
   _id: string;
   googleId: string;
   __v: number;
-  profile: UserProfile;
-};
+} & UserProfile;
 
 export type UserStateType = UserType | ValidUserType | false | null;
