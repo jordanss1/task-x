@@ -10,7 +10,7 @@ export type TaskType = {
 export type TaskWallTaskType = {
   task: string;
   id: string;
-  user: UserType;
+  user: ValidUserType;
   dueDate: Date | undefined;
   enabledDueDate: boolean;
   created: Date;
@@ -21,23 +21,30 @@ export type TaskWallTaskType = {
 
 export type AwardType = "supported" | "superSupported" | "communityLegend";
 
-export type LikesType = Pick<UserType, "googleId">[];
+export type LikesType = Pick<NonNullable<UserType>, "googleId">[];
 
 export type CommentType = {
-  user: UserType;
+  user: ValidUserType;
   comment: string;
   likes: number;
 };
 
-export type UserType = {
-  _id: string;
-  googleId: string;
-  __v: number;
+export type ValidUserType = Omit<UserType, "profile"> & {
+  profile: NonNullable<UserProfile["profile"]>;
+};
+
+export type UserProfile = {
   profile: {
     userName: string;
     profilePicture: string;
   } | null;
 };
 
-export type UserStateType = UserType | false | null;
+export type UserType = {
+  _id: string;
+  googleId: string;
+  __v: number;
+  profile: UserProfile;
+};
 
+export type UserStateType = UserType | false | null;

@@ -1,18 +1,18 @@
 import { ReactElement } from "react";
 import { fonts } from "../../../../constants";
 import { useMediaQuery } from "../../../../hooks/MediaQueryHooks";
-import { UserType } from "../../../../types";
+import { UserType, ValidUserType } from "../../../../types";
 import ProfileIcon from "../../../__reusable/ProfileIcon";
 
 type TaskWallCommentUserPropsType = {
-  user: UserType;
+  user: ValidUserType["profile"];
 };
 
 const TaskWallCommentUser = ({
   user,
 }: TaskWallCommentUserPropsType): ReactElement => {
   const mobile = useMediaQuery(640);
-  const { profilePicture, userName } = user.profile;
+  const { profilePicture, userName } = user;
 
   return (
     <div className="flex items-center">

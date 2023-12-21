@@ -33,7 +33,7 @@ const TaskWallTaskComment = ({
       variants={commentVariants}
       className="flex flex-col gap-1 justify-center"
     >
-      <TaskWallCommentUser user={comment.user} />
+      <TaskWallCommentUser user={comment.user.profile} />
       <span
         className="font-light text-sm sm:text-[16px] ps-9 sm:ps-12 pe-3"
         style={{ fontFamily: fonts.jura }}
