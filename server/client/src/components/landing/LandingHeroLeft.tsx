@@ -1,12 +1,11 @@
 import { Variants } from "framer-motion";
 import { ReactElement, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { colors } from "../../constants";
 import { authSelector } from "../../features/auth/authSlice";
 import artificialDelay from "../../functions/artificialDelay";
 import useArtificialProgress from "../../hooks/useArtificialProgress";
-import { UserStateType, UserType } from "../../types";
 import Button from "../__reusable/Button";
 
 import { SidebarHeadingsType, contentItems } from "./content";
@@ -36,8 +35,6 @@ const LandingHeroLeft = ({
 
   const { user } = useSelector(authSelector);
   const navigate = useNavigate();
-
-  console.log(user);
 
   const timer = useRef<number | NodeJS.Timeout>(0);
   const timer2 = useRef<number | NodeJS.Timeout>(0);

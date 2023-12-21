@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { UserType } from "../types";
+import { UserType, ValidUserType } from "../types";
 
 const createAxios = (cookies: boolean) =>
   axios.create({
@@ -42,7 +42,7 @@ export const axiosCheckUsername = async (
 };
 
 export const axiosUpdateProfile = async (
-  profile: NonNullable<UserType["profile"]>
+  profile: ValidUserType["profile"]
 ): Promise<UserType> => {
   const api = createAxios(true);
 

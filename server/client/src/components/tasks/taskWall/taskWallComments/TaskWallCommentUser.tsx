@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { fonts } from "../../../../constants";
 import { useMediaQuery } from "../../../../hooks/MediaQueryHooks";
-import { UserType, ValidUserType } from "../../../../types";
+import { ValidUserType } from "../../../../types";
 import ProfileIcon from "../../../__reusable/ProfileIcon";
 
 type TaskWallCommentUserPropsType = {

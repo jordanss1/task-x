@@ -47,4 +47,4 @@ export type UserType = {
   profile: UserProfile;
 };
 
-export type UserStateType = UserType | false | null;
+export type UserStateType = UserType | ValidUserType | false | null;

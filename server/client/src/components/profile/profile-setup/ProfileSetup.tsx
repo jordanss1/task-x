@@ -8,7 +8,7 @@ import { useMediaQuery } from "../../../hooks/MediaQueryHooks";
 import { ProfileSchemaType, profileSchema } from "../../../schemas";
 import "../../../styles/header.css";
 import "../../../styles/profile.css";
-import { UserType } from "../../../types";
+import { ValidUserType } from "../../../types";
 import ProfileSetupControls from "./ProfileSetupControls";
 import ProfileSetupHeader from "./ProfileSetupHeader";
 import ProfileSetupContent from "./profile-setup-content/ProfileSetupContent";
@@ -41,7 +41,7 @@ const ProfileSetup = (): ReactElement => {
     }
   }, [step]);
 
-  const handleSubmit: FormikConfig<UserType["profile"]>["onSubmit"] = async (
+  const handleSubmit: FormikConfig<ValidUserType["profile"]>["onSubmit"] = async (
     values,
     actions
   ) => {

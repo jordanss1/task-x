@@ -2,13 +2,13 @@ import { Formik } from "formik";
 import { ReactElement } from "react";
 import { colors, fonts } from "../../../constants";
 import { ProfileSchemaType, profileSchema } from "../../../schemas";
-import { UserType } from "../../../types";
+import { ValidUserType } from "../../../types";
 import Button from "../../__reusable/Button";
 import SmallIcon from "../../__reusable/SmallIcon";
 import ProfilePicture from "../ProfilePicture";
 import ProfileUsername from "../ProfileUsername";
 
-const user: UserType = {
+const user: ValidUserType = {
   googleId: "33",
   _id: "34",
   __v: 3322,

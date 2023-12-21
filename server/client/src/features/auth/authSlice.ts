@@ -7,7 +7,7 @@ import {
 import { AxiosError } from "axios";
 import { axiosFetchUser, axiosUpdateProfile } from "../../api";
 import { StateType } from "../../app/store";
-import { UserStateType, UserType } from "../../types";
+import { UserStateType, UserType, ValidUserType } from "../../types";
 import { setError } from "../error/errorSlice";
 
 export const getUser = createAsyncThunk<UserType | undefined>(
@@ -18,8 +18,8 @@ export const getUser = createAsyncThunk<UserType | undefined>(
 );
 
 export const updateProfile = createAsyncThunk<
-  UserType,
-  NonNullable<UserType["profile"]>,
+  UserType | ValidUserType,
+  ValidUserType["profile"],
   { state: StateType }
 >("auth/profile", async (profile, { getState, dispatch }) => {
   const { user } = getState().auth;
@@ -62,13 +62,17 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
-        (action) =>
-          ["auth/user", "auth/profile"].some((value) =>
-            action.type.includes(value)
-          ),
+        (action) => action.type.includes("auth/user"),
         (state, action: PayloadAction<UserType | undefined>) =>
           reducerMatcherFunction(action, () => {
             state.user = action.payload || false;
+          })
+      )
+      .addMatcher(
+        (action) => action.type.includes("auth/profile"),
+        (state, action: PayloadAction<ValidUserType | UserType>) =>
+          reducerMatcherFunction(action, () => {
+            state.user = action.payload;
           })
       )
 

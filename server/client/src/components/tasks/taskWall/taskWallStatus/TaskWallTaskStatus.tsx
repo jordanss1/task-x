@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { fonts } from "../../../../constants";
 import { useMediaQuery } from "../../../../hooks/MediaQueryHooks";
-import { AwardType, UserType, ValidUserType } from "../../../../types";
+import { AwardType, ValidUserType } from "../../../../types";
 import ProfileIcon from "../../../__reusable/ProfileIcon";
 import TaskWallTaskTimeStamp from "../TaskWallTaskTimeStamp";
 import TaskWallTaskStatusAwards from "./TaskWallTaskStatusAwards";
