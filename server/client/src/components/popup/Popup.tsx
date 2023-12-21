@@ -1,26 +1,40 @@
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import { colors, fonts } from "../../constants";
+import Error from "../svg/Error";
 
 type PopupPropsType = { error: string };
 
 const Popup = ({ error }: PopupPropsType): ReactElement => {
+  const renderSVG = error ? (
+    <div className="rounded-xl p-1">
+      <Error size={60} />
+    </div>
+  ) : (
+    <div></div>
+  );
+
   return (
     <motion.div
       initial={{ y: "-100%" }}
-      animate={{ y: "2%", transition: { type: "tween", ease: "easeInOut" } }}
+      animate={{ y: "10%", transition: { type: "tween", ease: "easeInOut" } }}
       exit={{ y: "-100%" }}
       className="absolute px-2 z-30 justify-center w-full flex top-0"
     >
       <div
         style={{
-          background: colors.whiteShades[0],
-          // border: "3px solid red"
+          background: colors.purpleGradients[1],
+          outline: error ? "5px double red" : "5px solid green",
+          outlineOffset: "3px",
+          outlineStyle: "double",
         }}
-        className="h-32 flex overflow-visible rounded-xl justify-center items-center max-w-xs w-full"
+        className="h-32 flex gap-1 overflow-visible rounded-xl justify-center items-center max-w-xs w-full"
       >
-        <motion.div></motion.div>
-        <span className="text-sm" style={{ fontFamily: fonts.jura }}>
+        {renderSVG}
+        <span
+          className="text-sm"
+          style={{ fontFamily: fonts.jura, color: colors.whiteShades[1] }}
+        >
           {error}
         </span>
       </div>

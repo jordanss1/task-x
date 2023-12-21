@@ -15,7 +15,10 @@ export const colors = {
     "linear-gradient(120deg, rgb(202, 255, 159) 0%, rgb(153, 31, 255) 30% 70%, rgb(202, 255, 159))",
   tappedButtonGradient:
     "linear-gradient(90deg, rgb(202, 255, 159) 0%, rgb(153, 31, 255) 0% 100%, rgb(202, 255, 159))",
-
+  purpleGradients: [
+    "linear-gradient(110deg, rgb(0,0,255), rgb(153, 31, 255,.8)",
+    "linear-gradient(110deg, rgb(0,0,255), rgb(153, 31, 255,1)",
+  ],
   blackGradient: [
     "linear-gradient(to right, rgb(30, 30, 30,0), rgb(10, 10, 10,0), rgb(30, 30, 30,0))",
     "linear-gradient(to right, rgb(30, 30, 30), rgb(10, 10, 10), rgb(30, 30, 30))",

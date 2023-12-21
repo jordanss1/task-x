@@ -1,5 +1,6 @@
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
+import { colors } from "../../../../constants";
 import { useMediaQuery } from "../../../../hooks/MediaQueryHooks";
 import ProfilePicture from "../../ProfilePicture";
 import ProfileUsername from "../../ProfileUsername";
@@ -63,8 +64,7 @@ const ProfileSetupContent = ({
       custom={{ mobile, initial: firstCycle === "initialAnimation" }}
       variants={backgroundVariants}
       style={{
-        background:
-          "linear-gradient(110deg, rgb(0,0,255), rgb(153, 31, 255,.8)",
+        background: colors.purpleGradients[0],
         borderRadius: "100px 100px 100px 100px",
         height: contentCycle === "intro" ? "285px" : "350px",
         maxWidth: maxWidth(),

@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import { AppThunkDispatch } from "../app/store";
 import { getUser } from "../features/auth/authSlice";
 import { errorsSelector, setError } from "../features/error/errorSlice";
+import useRedirect from "../hooks/useRedirect";
 import "../index.css";
 import "../styles/all.css";
 import Dashboard from "./dashboard/Dashboard";
@@ -14,6 +15,7 @@ import ProfileEdit from "./profile/profile-edit/ProfileEdit";
 import ProfileSetup from "./profile/profile-setup/ProfileSetup";
 
 const App = (): ReactElement => {
+  useRedirect();
   const dispatch = useDispatch<AppThunkDispatch>();
   const { error } = useSelector(errorsSelector);
   const timer = useRef<NodeJS.Timeout>();
