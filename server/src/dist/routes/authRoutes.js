@@ -3,11 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const dayjs_1 = __importDefault(require("dayjs"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const mongoose_1 = require("mongoose");
 const passport_1 = __importDefault(require("passport"));
 const keys_1 = __importDefault(require("../config/keys"));
+const createTokenAndCookie_1 = __importDefault(require("../functions/createTokenAndCookie"));
 const requireJwt_1 = __importDefault(require("../middlewares/requireJwt"));
 const types_1 = require("../types");
 const { jwtSecret } = keys_1.default;
@@ -24,19 +23,11 @@ const googleAuthRoutes = (app) => {
     }), (req, res) => {
         (0, types_1.assertRequestWithUser)(req);
         const { user } = req;
-        const token = jsonwebtoken_1.default.sign({ user }, jwtSecret, {
-            expiresIn: "4h",
-        });
-        res.cookie("token", token, {
-            secure: process.env.NODE_ENV !== "development",
-            httpOnly: true,
-            sameSite: "strict",
-            expires: (0, dayjs_1.default)().add(4, "hours").toDate(),
-        });
+        const response = (0, createTokenAndCookie_1.default)(user, res);
         if (user?.profile) {
-            res.redirect("/dashboard");
+            response.redirect("/dashboard");
         }
-        res.redirect("/setup");
+        response.redirect("/setup");
     });
     app.get("/api/logout", requireJwt_1.default, (req, res) => {
         req.user = undefined;
@@ -55,8 +46,17 @@ const googleAuthRoutes = (app) => {
         res.send(match ? true : false);
     });
     app.post("/api/profileUpdate", requireJwt_1.default, async (req, res) => {
-        const updatedUser = await User.findOneAndUpdate({ _id: req.user?._id }, {});
-        console.log(updatedUser);
+        try {
+            const updatedUser = await User.findOneAndUpdate({ _id: req.user?._id }, {
+                profile: req.body,
+            }, { new: true });
+            const response = (0, createTokenAndCookie_1.default)(updatedUser, res);
+            req.user = updatedUser;
+            response.send(updatedUser);
+        }
+        catch (err) {
+            res.status(500).send("Server error please try again");
+        }
     });
 };
 exports.default = googleAuthRoutes;

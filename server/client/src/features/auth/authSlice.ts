@@ -23,6 +23,7 @@ export const updateProfile = createAsyncThunk<
   { state: StateType }
 >("auth/profile", async (profile, { getState, dispatch }) => {
   const { user } = getState().auth;
+  dispatch(setUpdatedProfile(true));
 
   try {
     return await axiosUpdateProfile(profile);
@@ -37,10 +38,12 @@ export const updateProfile = createAsyncThunk<
 
 type AuthStateType = {
   user: UserStateType;
+  updatedProfile: boolean;
 };
 
 const initialState: AuthStateType = {
   user: null,
+  updatedProfile: false,
 };
 
 type ReducerMatcherType = (
@@ -58,7 +61,11 @@ export const reducerMatcherFunction: ReducerMatcherType = (
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setUpdatedProfile: (state, action) => {
+      state.updatedProfile = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(
@@ -81,6 +88,8 @@ const authSlice = createSlice({
 });
 
 type AuthSelectorType = (state: StateType) => AuthStateType;
+
+export const { setUpdatedProfile } = authSlice.actions;
 
 export const authSelector: AuthSelectorType = (state) => state.auth;
 

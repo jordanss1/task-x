@@ -28,7 +28,7 @@ const artificialDelay: ArtificialDelayType = async (
           () => resolve(stopProgress && stopProgress()),
           1200
         ))
-    ),
+    ),  
   ]);
 
   return res;

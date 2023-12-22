@@ -14,7 +14,7 @@ const ProgressBar = ({ progress }: ProgressBarType): ReactElement => {
       <motion.div
         className="relative h-full bg-[#991ff1]"
         style={{
-          border: "1px solid white",
+          border: progress ? "1px solid white" : "0px solid white",
         }}
         initial={{ width: "0%" }}
         animate={{

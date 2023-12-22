@@ -18,7 +18,7 @@ const Popup = ({ error }: PopupPropsType): ReactElement => {
     <motion.div
       initial={{ y: "-100%" }}
       animate={{ y: "10%", transition: { type: "tween", ease: "easeInOut" } }}
-      exit={{ y: "-100%" }}
+      exit={{ y: "-100%", transition: { type: "tween", ease: "easeInOut" } }}
       className="absolute px-2 z-30 justify-center w-full flex top-0"
     >
       <div

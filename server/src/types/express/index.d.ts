@@ -1,10 +1,12 @@
 import { Express } from "express";
 import { Document, HydratedDocument } from "mongoose";
-import { UserType } from "../../models/User";
+import { UserType, ValidUserType } from "../../models/User";
 
 declare global {
   export namespace Express {
-    export interface User extends HydratedDocument<UserType> {
+    export interface User
+      extends HydratedDocument<UserType>,
+        HydratedDocument<ValidUserType> {
       id?: string;
     }
 

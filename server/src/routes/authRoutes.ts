@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
 import { Express, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { Error, model } from "mongoose";
+import { HydratedDocument, model } from "mongoose";
 import passport from "passport";
 import keys from "../config/keys";
+import createTokenAndCookie from "../functions/createTokenAndCookie";
 import requireJwt from "../middlewares/requireJwt";
-import { ProfileType } from "../models/Profile";
-import { UserType } from "../models/User";
+import { UserType, ValidUserType } from "../models/User";
 import { assertRequestWithUser } from "../types";
 
 const { jwtSecret } = keys;
@@ -34,22 +34,13 @@ const googleAuthRoutes = (app: Express) => {
 
       const { user } = req;
 
-      const token = jwt.sign({ user }, jwtSecret, {
-        expiresIn: "4h",
-      });
-
-      res.cookie("token", token, {
-        secure: true,
-        httpOnly: true,
-        sameSite: "strict",
-        expires: dayjs().add(4, "hours").toDate(),
-      });
+      const response = createTokenAndCookie(user, res);
 
       if (user?.profile) {
-        res.redirect("/dashboard");
+        response.redirect("/dashboard");
       }
 
-      res.redirect("/setup");
+      response.redirect("/setup");
     }
   );
 
@@ -83,13 +74,20 @@ const googleAuthRoutes = (app: Express) => {
     async (req: Request, res: Response) => {
       try {
         const updatedUser = await User.findOneAndUpdate(
-          { _id: req.user?.googleId },
+          { _id: req.user?._id },
           {
             profile: req.body,
-          }
+          },
+          { new: true }
         );
 
-        res.send(req.user);
+        const response = createTokenAndCookie(
+          updatedUser as HydratedDocument<ValidUserType>,
+          res
+        );
+
+        req.user = updatedUser as HydratedDocument<ValidUserType>;
+        response.send(updatedUser);
       } catch (err) {
         res.status(500).send("Server error please try again");
       }

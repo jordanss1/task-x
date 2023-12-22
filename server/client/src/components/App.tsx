@@ -18,6 +18,7 @@ const App = (): ReactElement => {
   useRedirect();
   const dispatch = useDispatch<AppThunkDispatch>();
   const { error } = useSelector(errorsSelector);
+
   const timer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const App = (): ReactElement => {
     clearTimeout(timer.current);
 
     if (error) {
-      timer.current = setTimeout(() => dispatch(setError(null)), 200000);
+      timer.current = setTimeout(() => dispatch(setError(null)), 3000);
     }
   }, [error]);
 

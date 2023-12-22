@@ -6,18 +6,21 @@ import { authSelector } from "../features/auth/authSlice";
 const useRedirect = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useSelector(authSelector);
+  const { user, updatedProfile } = useSelector(authSelector);
 
   useEffect(() => {
     const pathname = location.pathname;
 
+    console.log(updatedProfile);
+
     if (user === null) return;
 
-    if (pathname === "/setup") renderSetupProfile();
+    if (pathname === "/setup" && !updatedProfile) renderSetupProfile();
 
     if (pathname === "/dashboard") renderProtected("/dashboard");
 
-    if (pathname === "/profile/edit") renderProtected("/profile/edit");
+    if (pathname === "/profile/edit" && !updatedProfile)
+      renderProtected("/profile/edit");
   }, [user, location.pathname]);
 
   const renderSetupProfile = () => {

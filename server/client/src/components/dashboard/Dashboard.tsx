@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { authSelector } from "../../features/auth/authSlice";
 import {
   taskListSelector,
   toggleForm,
@@ -20,6 +21,9 @@ const Dashboard = (): ReactElement => {
   const [app, setApp] = useState<"home" | "social">("home");
 
   const { formActive } = useSelector(taskListSelector);
+  const { updatedProfile } = useSelector(authSelector);
+
+  console.log(updatedProfile);
 
   const mobile = useMediaQuery(640);
 

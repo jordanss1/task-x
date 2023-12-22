@@ -63,7 +63,7 @@ const NextButton = ({
 
   const label = isSubmitting ? null : step < 2 ? "Next" : "Finish";
 
-  const disabled = errors || isValidating || isSubmitting;
+  const disabled = errors || isValidating || isSubmitting || step === 3;
 
   return (
     <Button
@@ -96,9 +96,9 @@ const BackButton = ({
   handleClick,
   ...props
 }: ProfileSetupButtonPropTypes): ReactElement => {
-  const { isSubmitting, isValidating } = props;
+  const { isSubmitting } = props;
 
-  const disabled = step === 0 || step > 2 || isSubmitting;
+  const disabled = step === 0 || step === 3 || isSubmitting;
 
   return (
     <Button

@@ -1,14 +1,23 @@
-import { Formik, FormikConfig, FormikState, FormikValues } from "formik";
+import { Formik } from "formik";
 import { motion, useCycle } from "framer-motion";
-import { ReactElement, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { ReactElement, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { AppThunkDispatch } from "../../../app/store";
-import { updateProfile } from "../../../features/auth/authSlice";
+import {
+  authSelector,
+  setUpdatedProfile,
+  updateProfile,
+} from "../../../features/auth/authSlice";
+import { errorsSelector } from "../../../features/error/errorSlice";
+import { interfaceSelector } from "../../../features/interface/interfaceSlice";
+import artificialDelay from "../../../functions/artificialDelay";
 import { useMediaQuery } from "../../../hooks/MediaQueryHooks";
+import useArtificialProgress from "../../../hooks/useArtificialProgress";
 import { ProfileSchemaType, profileSchema } from "../../../schemas";
 import "../../../styles/header.css";
 import "../../../styles/profile.css";
-import { ValidUserType } from "../../../types";
+import ProgressBar from "../../__reusable/ProgressBar";
 import ProfileSetupControls from "./ProfileSetupControls";
 import ProfileSetupHeader from "./ProfileSetupHeader";
 import ProfileSetupContent from "./profile-setup-content/ProfileSetupContent";
@@ -18,6 +27,15 @@ export type HandleStepType = (e: React.MouseEvent, increment: boolean) => void;
 const ProfileSetup = (): ReactElement => {
   const [step, setStep] = useState(0);
   const dispatch = useDispatch<AppThunkDispatch>();
+  const navigate = useNavigate();
+  const { error } = useSelector(errorsSelector);
+  const { user } = useSelector(authSelector);
+  const { progress } = useSelector(interfaceSelector);
+  const { beginProgress, stopProgress } = useArtificialProgress({
+    onFullProgress: () => setTimeout(() => navigate("/dashboard"), 300),
+  });
+
+  const timer = useRef<NodeJS.Timeout | number>(0);
 
   const mobile = useMediaQuery(640);
   const [firstCycle, cycleFirst] = useCycle(
@@ -32,22 +50,38 @@ const ProfileSetup = (): ReactElement => {
   );
 
   useEffect(() => {
+    return () => {
+      dispatch(setUpdatedProfile(false));
+    };
+  }, []);
+
+  useEffect(() => {
     if (step === 0) {
       cycleContent(0);
     } else if (step === 1) {
       cycleContent(1);
-    } else {
+    } else if (step === 2) {
       cycleContent(2);
     }
   }, [step]);
 
-  const handleSubmit: FormikConfig<ValidUserType["profile"]>["onSubmit"] = async (
-    values,
-    actions
-  ) => {
-    await dispatch(updateProfile(values));
-    setStep(3);
-  };
+  useEffect(() => {
+    if (step === 2 && !error) {
+      clearTimeout(timer.current);
+
+      const delay = async () => {
+        timer.current = await artificialDelay(
+          timer,
+          undefined,
+          beginProgress,
+          stopProgress
+        );
+      };
+
+      setStep(3);
+      delay();
+    }
+  }, [user]);
 
   return (
     <motion.main
@@ -83,6 +117,7 @@ const ProfileSetup = (): ReactElement => {
       }}
       className="profile relative isolate py-20 px-2 sm:px-10 h-screen"
     >
+      <ProgressBar progress={progress} />
       <motion.div
         style={{
           opacity: 0,
@@ -104,7 +139,7 @@ const ProfileSetup = (): ReactElement => {
           profilePicture: `/api/profileIcons/default-profile.svg`,
           userName: "",
         }}
-        onSubmit={(values, actions) => handleSubmit(values, actions)}
+        onSubmit={async (values) => await dispatch(updateProfile(values))}
         validationSchema={profileSchema}
       >
         {(props) => {
