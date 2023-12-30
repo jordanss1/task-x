@@ -15,7 +15,9 @@ const useRedirect = () => {
 
     if (pathname === "/setup" && !updatedProfile) renderSetupProfile();
 
-    if (pathname.includes("/dashboard")) renderProtected("/dashboard/home");
+    if (pathname === "/dashboard/home") renderProtected("/dashboard/home");
+
+    if (pathname === "/dashboard/social") renderProtected("/dashboard/social");
 
     if (pathname === "/profile/edit" && !updatedProfile)
       renderProtected("/profile/edit");
