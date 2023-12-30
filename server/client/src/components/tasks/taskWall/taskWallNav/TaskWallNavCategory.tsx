@@ -7,23 +7,23 @@ const TaskWallNavCategory = (): ReactElement => {
   return (
     <div className="flex max-h-[28px]">
       <Button
-        className="min-w-[43px] border-r-0 justify-center"
+        className="min-w-[43px] py-4  border-r-0 justify-center"
         style={{
           alignItems: "center",
           border: "1px solid black",
           borderRight: "none",
           borderRadius: "200px 0px 0px 200px",
         }}
-        icon={<Social size={25} />}
+        icon={<Social size={30} />}
       />
       <Button
-        className="min-w-[43px] overflow-hidden border-l-0 justify-center"
+        className="min-w-[43px] py-4 overflow-hidden border-l-0 justify-center"
         style={{
           alignItems: "center",
           border: "1px solid black",
           borderRadius: "0px 200px 200px 0px",
         }}
-        icon={<SmallIcon size={16} icon="fa-regular fa-user" />}
+        icon={<SmallIcon size={20} icon="fa-regular fa-user" />}
       />
     </div>
   );

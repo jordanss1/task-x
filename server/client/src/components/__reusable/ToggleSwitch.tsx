@@ -12,7 +12,7 @@ type ToggleSwitchPropsType = {
 
 const ToggleSwitch = ({
   label,
-  disabled = false,
+  disabled,
   handleToggle,
   ...props
 }: ToggleSwitchPropsType): ReactElement => {
@@ -38,11 +38,9 @@ const ToggleSwitch = ({
           justifyContent: field.value ? "flex-end" : "flex-start",
         }}
         animate={{
-          boxShadow: disabled
-            ? `inset 1px 1px 2px rgb(60, 60, 60, 0), inset -1px -1px 2px rgb(60, 60, 60, 0)`
-            : field.value
-            ? `inset 1px 1px 2px rgb(153, 31, 255,1), inset -1px -1px 0px rgb(153, 31, 255,1)`
-            : `inset 1px 1px 2px rgb(60, 60, 60, .5), inset -1px -1px 2px rgb(60, 60, 60, .5)`,
+          boxShadow: field.value
+            ? `inset 1px 0px 7px rgb(153, 31, 255,1), inset -1px 0px 0px rgb(153, 31, 255,1)`
+            : `inset 1px 0px 7px rgb(60, 60, 60, .5), inset -1px 0px 0px rgb(60, 60, 60, .5)`,
           background: disabled ? "rgb(30,30,30)" : "rgb(35,35,35)",
           transition: { type: "spring" },
         }}
@@ -56,6 +54,9 @@ const ToggleSwitch = ({
             outline: "1px solid rgb(55,55,55)",
           }}
           animate={{
+            boxShadow: field.value
+              ? `1px 1px 7px rgb(153, 31, 255,1), -1px -1px 7px rgb(153, 31, 255,1)`
+              : `1px 1px 1px rgb(60, 60, 60, .5), -1px -1px 2px rgb(60, 60, 60, .5)`,
             background: disabled
               ? `linear-gradient(120deg, rgb(30,30,30), rgb(153, 31, 255,.5) 60%, rgb(30,30,30))`
               : `linear-gradient(120deg, rgb(30,30,30), ${colors.purple}, rgb(30,30,30))`,

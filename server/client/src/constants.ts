@@ -45,11 +45,11 @@ export const taskWallTasks: TaskWallTaskType[] = [
         userName: "sallyg1997",
         profilePicture: `/api/profileIcons/person-5.svg`,
       },
-      googleId: "43",
+      userId: "43",
       __v: 233,
       _id: "keji9",
     },
-    id: "123",
+    taskId: "123",
     dueDate: dayjs().subtract(2, "week").toDate(),
     enabledDueDate: true,
     created: dayjs().subtract(2, "days").subtract(12, "hours").toDate(),
@@ -60,7 +60,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
         user: {
           __v: 233,
           _id: "keji9",
-          googleId: "1943",
+          userId: "1943",
           profile: {
             userName: "johnnyappleseed",
             profilePicture: `/api/profileIcons/person-4.svg`,
@@ -73,7 +73,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
         user: {
           __v: 233,
           _id: "keji9",
-          googleId: "309",
+          userId: "309",
           profile: {
             userName: "jonjones22",
             profilePicture: `/api/profileIcons/person-9.svg`,
@@ -90,13 +90,13 @@ export const taskWallTasks: TaskWallTaskType[] = [
     user: {
       __v: 233,
       _id: "keji9",
-      googleId: "309",
+      userId: "309",
       profile: {
         userName: "jonjones22",
         profilePicture: `/api/profileIcons/person-9.svg`,
       },
     },
-    id: "121",
+    taskId: "121",
     dueDate: undefined,
     enabledDueDate: false,
     created: dayjs().subtract(5, "days").subtract(3, "hours").toDate(),
@@ -107,7 +107,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
         user: {
           __v: 233,
           _id: "keji9",
-          googleId: "43",
+          userId: "43",
           profile: {
             userName: "sallyg1997",
             profilePicture: `/api/profileIcons/person-5.svg`,
@@ -120,7 +120,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
         user: {
           __v: 233,
           _id: "keji9",
-          googleId: "2003",
+          userId: "2003",
           profile: {
             userName: "fisher5000",
             profilePicture: `/api/profileIcons/person-16.svg`,
@@ -133,12 +133,11 @@ export const taskWallTasks: TaskWallTaskType[] = [
   },
   {
     task: "Take dog to vets",
-    id: "120",
-
+    taskId: "120",
     user: {
       __v: 233,
       _id: "keji9",
-      googleId: "2003",
+      userId: "2003",
       profile: {
         userName: "fisher5000",
         profilePicture: `/api/profileIcons/person-16.svg`,
@@ -156,13 +155,13 @@ export const taskWallTasks: TaskWallTaskType[] = [
     user: {
       __v: 233,
       _id: "keji9",
-      googleId: "2003",
+      userId: "2003",
       profile: {
         userName: "fisher5000",
         profilePicture: `/api/profileIcons/person-16.svg`,
       },
     },
-    id: "10",
+    taskId: "10",
     dueDate: dayjs().add(2, "months").toDate(),
     enabledDueDate: true,
     created: dayjs().subtract(5, "days").toDate(),
@@ -171,7 +170,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
     comments: [
       {
         user: {
-          googleId: "43",
+          userId: "43",
           __v: 233,
           _id: "keji9",
           profile: {

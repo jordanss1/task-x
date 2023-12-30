@@ -32,7 +32,7 @@ const ProfileSetup = (): ReactElement => {
   const { user } = useSelector(authSelector);
   const { progress } = useSelector(interfaceSelector);
   const { beginProgress, stopProgress } = useArtificialProgress({
-    onFullProgress: () => setTimeout(() => navigate("/dashboard"), 300),
+    onFullProgress: () => setTimeout(() => navigate("/dashboard/home"), 300),
   });
 
   const timer = useRef<NodeJS.Timeout | number>(0);

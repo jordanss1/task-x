@@ -10,7 +10,7 @@ const ProfileEdit = (): ReactElement => {
     <main className="profile_edit flex flex-col px-5 sm:px-[50px] sm:h-screen">
       <Header
         profile
-        link="/dashboard"
+        link="/dashboard/home"
         containerClass="dashboard_header items-center sm:pt-0 pt-5"
         nav={<DashboardNav profile />}
       />

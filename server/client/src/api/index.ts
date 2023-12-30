@@ -50,3 +50,9 @@ export const axiosUpdateProfile = async (
 
   return data;
 };
+
+export const axiosGetUserWallTasks = async () => {
+  const api = createAxios(true);
+
+  const { data } = await api.get("");
+};

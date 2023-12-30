@@ -1,6 +1,6 @@
 export type TaskType = {
   task: string;
-  userId: string;
+  taskId: string;
   enabledDueDate: boolean;
   dueDate: Date | undefined;
   created: Date;
@@ -9,7 +9,7 @@ export type TaskType = {
 
 export type TaskWallTaskType = {
   task: string;
-  id: string;
+  taskId: string;
   user: ValidUserType;
   dueDate: Date | undefined;
   enabledDueDate: boolean;
@@ -21,7 +21,7 @@ export type TaskWallTaskType = {
 
 export type AwardType = "supported" | "superSupported" | "communityLegend";
 
-export type LikesType = Pick<NonNullable<UserType>, "googleId">[];
+export type LikesType = Pick<NonNullable<UserType>, "userId">[];
 
 export type CommentType = {
   user: ValidUserType;
@@ -42,7 +42,7 @@ export type UserProfile = {
 
 export type UserType = {
   _id: string;
-  googleId: string;
+  userId: string;
   __v: number;
 } & UserProfile;
 

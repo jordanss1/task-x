@@ -1,6 +1,7 @@
 import { motion, Variants } from "framer-motion";
 import { capitalize } from "lodash";
 import { ReactElement } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { colors, fonts } from "../../constants";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import Button from "../__reusable/Button";
@@ -9,8 +10,6 @@ import MenuButton from "../svg/MenuButton";
 import { panelButtons, PanelButtonType } from "./content";
 
 type DashboardPanelPropsType = {
-  setApp: React.Dispatch<React.SetStateAction<"home" | "social">>;
-  app: "home" | "social";
   expanded: boolean;
   setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -31,15 +30,15 @@ const buttonVariants: Variants = {
 };
 
 const DashboardPanel = ({
-  app,
-  setApp,
   expanded,
   setExpanded,
 }: DashboardPanelPropsType): ReactElement => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const mobile = useMediaQuery(640);
 
   const renderButtons = panelButtons.map(
-    ({ Element, label }: PanelButtonType) => (
+    ({ Element, label, path }: PanelButtonType) => (
       <div
         key={label}
         className="min-w-[50px] items-center sm:min-w-0 sm:w-full flex justify-center"
@@ -52,21 +51,21 @@ const DashboardPanel = ({
           }}
           variants={buttonVariants}
           animate="animate"
-          whileHover={app === label ? "hovered" : ""}
-          custom={app === label}
-          onClick={() => setApp(label)}
+          whileHover={path === location.pathname ? "hovered" : ""}
+          custom={path === location.pathname}
+          onClick={() => navigate(path)}
           className="group min-h-[50px] sm:min-h-0 sm:[--border-active:1px_solid_#991FFF] sm:[--border-inactive:1px_solid_#991FFF00] [--border-active:3px_solid_rgb(242,_238,_235)] [--border-inactive:3px_solid_rgb(242,_238,_235,0)] scale-[1.10] sm:scale-[.9]  transition-all relative rounded-[30%] [--p-from:1rem] [--p-to:.5rem_.8rem] sm:[--p-from:1rem] sm:[--p-to:1rem] p-4 sm:bottom-0 bottom-[32px]"
         >
           <Element
             animate={
               mobile
                 ? {
-                    y: app === label ? 0 : 20,
-                    scale: app === label ? 1.3 : 0.8,
+                    y: path === location.pathname ? 0 : 20,
+                    scale: path === location.pathname ? 1.3 : 0.8,
                   }
                 : {}
             }
-            active={app === label ? true : false}
+            active={path === location.pathname ? true : false}
           />
           {!expanded && (
             <motion.span

@@ -10,7 +10,7 @@ config({ path: "../../../.env" });
 
 const faker = fakerEN;
 
-const fakerUser = async (uri: string) => {
+const fakerUsers = async (uri: string) => {
   const db = createConnection(uri);
   const User = db.model("users", userSchema);
 
@@ -18,7 +18,7 @@ const fakerUser = async (uri: string) => {
 
   for (let i = 0; i < 100; i += 1) {
     let user: UserType = {
-      googleId: faker.string.numeric(20),
+      userId: faker.string.numeric(20),
       profile: {
         userName: faker.internet.userName(),
         profilePicture: faker.helpers.arrayElement(profileUrls),
@@ -31,5 +31,5 @@ const fakerUser = async (uri: string) => {
   await User.insertMany(users);
 };
 
-fakerUser(process.env.MONGO_URI as string);
-fakerUser(keys.mongoURI);
+fakerUsers(process.env.MONGO_URI as string);
+fakerUsers(keys.mongoURI);

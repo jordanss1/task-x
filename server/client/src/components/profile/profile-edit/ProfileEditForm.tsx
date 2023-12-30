@@ -9,7 +9,7 @@ import ProfilePicture from "../ProfilePicture";
 import ProfileUsername from "../ProfileUsername";
 
 const user: ValidUserType = {
-  googleId: "33",
+  userId: "33",
   _id: "34",
   __v: 3322,
   profile: {

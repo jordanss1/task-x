@@ -11,13 +11,11 @@ const useRedirect = () => {
   useEffect(() => {
     const pathname = location.pathname;
 
-    console.log(updatedProfile);
-
     if (user === null) return;
 
     if (pathname === "/setup" && !updatedProfile) renderSetupProfile();
 
-    if (pathname === "/dashboard") renderProtected("/dashboard");
+    if (pathname.includes("/dashboard")) renderProtected("/dashboard/home");
 
     if (pathname === "/profile/edit" && !updatedProfile)
       renderProtected("/profile/edit");
@@ -25,7 +23,7 @@ const useRedirect = () => {
 
   const renderSetupProfile = () => {
     if (user && !user.profile) navigate("/setup");
-    else if (user && user.profile) navigate("/dashboard");
+    else if (user && user.profile) navigate("/dashboard/home");
     else navigate("/");
   };
 

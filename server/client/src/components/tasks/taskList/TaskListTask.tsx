@@ -120,7 +120,7 @@ const TaskListTask = ({
         const { errors, values } = props;
 
         const handleToggle = () => {
-          props.setFieldValue("onTaskWall", !values.onTaskWall);
+          if (editing) props.setFieldValue("onTaskWall", !values.onTaskWall);
         };
 
         const handleEdit = async () => {
@@ -234,7 +234,7 @@ const TaskListTask = ({
                   >
                     <ToggleSwitch
                       disabled={!editing}
-                      label={onTaskWall ? "Public" : "Private"}
+                      label="Task Wall"
                       handleToggle={handleToggle}
                       name="onTaskWall"
                     />

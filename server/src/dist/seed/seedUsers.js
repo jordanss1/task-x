@@ -12,13 +12,13 @@ const User_1 = require("../models/User");
 const profileUrls_1 = __importDefault(require("../public/profileIcons/profileUrls"));
 (0, dotenv_1.config)({ path: "../../../.env" });
 const faker = faker_1.fakerEN;
-const fakerUser = async (uri) => {
+const fakerUsers = async (uri) => {
     const db = (0, mongoose_1.createConnection)(uri);
     const User = db.model("users", User_1.userSchema);
     let users = [];
     for (let i = 0; i < 100; i += 1) {
         let user = {
-            googleId: faker.string.numeric(20),
+            userId: faker.string.numeric(20),
             profile: {
                 userName: faker.internet.userName(),
                 profilePicture: faker.helpers.arrayElement(profileUrls_1.default),
@@ -28,5 +28,5 @@ const fakerUser = async (uri) => {
     }
     await User.insertMany(users);
 };
-fakerUser(process.env.MONGO_URI);
-fakerUser(keys_1.default.mongoURI);
+fakerUsers(process.env.MONGO_URI);
+fakerUsers(keys_1.default.mongoURI);

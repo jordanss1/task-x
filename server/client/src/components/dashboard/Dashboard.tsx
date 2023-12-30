@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { authSelector } from "../../features/auth/authSlice";
 import {
   taskListSelector,
   toggleForm,
@@ -21,9 +20,6 @@ const Dashboard = (): ReactElement => {
   const [app, setApp] = useState<"home" | "social">("home");
 
   const { formActive } = useSelector(taskListSelector);
-  const { updatedProfile } = useSelector(authSelector);
-
-  console.log(updatedProfile);
 
   const mobile = useMediaQuery(640);
 
@@ -50,7 +46,7 @@ const Dashboard = (): ReactElement => {
       className="dashboard isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
     >
       <Header
-        link="/dashboard"
+        link="/dashboard/home"
         containerClass="dashboard_header"
         nav={<DashboardNav />}
       />
@@ -58,8 +54,6 @@ const Dashboard = (): ReactElement => {
         <DashboardPanel
           expanded={sidebarExpanded}
           setExpanded={setSidebarExpanded}
-          setApp={setApp}
-          app={app}
         />
         <DashboardTaskContainer app={app} />
         <DashboardNewTaskButton formActive={formActive} />

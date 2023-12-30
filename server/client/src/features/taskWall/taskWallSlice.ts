@@ -5,8 +5,8 @@ import { taskWallTasks } from "../../constants";
 import { TaskWallTaskType } from "../../types";
 
 const getUserTaskWallTasks = createAsyncThunk(
-  "taskwall/userTasks",
-  (empty: undefined, thunkApi) => {
+  "taskWall/userTasks",
+  (undefined, thunkApi) => {
     
   }
 );

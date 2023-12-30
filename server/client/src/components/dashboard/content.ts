@@ -13,13 +13,15 @@ export const settingsList = [
 export const panelButtons = [
   {
     label: "home",
+    path: "/dashboard/home",
     Element: Home,
   },
-  { label: "social", Element: World },
+  { label: "social", path: "/dashboard/social", Element: World },
 ] as const;
 
 export type PanelButtonType = {
   label: (typeof panelButtons)[number]["label"];
+  path: string;
   Element: ({ active, ...props }: DashButtonPropsType) => ReactElement;
 };
 

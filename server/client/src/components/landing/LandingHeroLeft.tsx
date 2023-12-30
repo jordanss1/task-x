@@ -44,7 +44,7 @@ const LandingHeroLeft = ({
 
     timer2.current = setTimeout(() => {
       if (complete && user) {
-        navigate(user.profile ? "/dashboard" : "/setup");
+        navigate(user.profile ? "/dashboard/home" : "/setup");
       } else if (complete && !user) {
         window.location.href = "/api/auth/google";
       }

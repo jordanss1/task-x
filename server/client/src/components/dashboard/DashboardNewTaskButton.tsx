@@ -3,7 +3,6 @@ import { ReactElement, useState } from "react";
 import { useDispatch } from "react-redux";
 import { colors } from "../../constants";
 import { toggleForm } from "../../features/taskList/taskListSlice";
-import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import Button from "../__reusable/Button";
 import SmallIcon from "../__reusable/SmallIcon";
 import TaskNewTaskOverlay from "../tasks/TaskNewTaskOverlay";

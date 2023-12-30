@@ -31,7 +31,7 @@ const HeaderAuthDashboard = ({
     clearTimeout(timer2.current);
 
     timer2.current = setTimeout(() => {
-      navigate(profile ? "/dashboard" : "/setup");
+      navigate(profile ? "/dashboard/home" : "/setup");
     }, 300);
   };
 

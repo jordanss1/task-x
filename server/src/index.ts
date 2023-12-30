@@ -6,6 +6,8 @@ import path from "path";
 import keys from "./config/keys";
 import getCookies from "./middlewares/getCookies";
 import redirectToClient from "./middlewares/redirectToClient";
+import "./models/PublicTask";
+import "./models/Task";
 import "./models/User";
 import assetsRoutes from "./routes/assetsRoutes";
 import googleAuthRoutes from "./routes/authRoutes";

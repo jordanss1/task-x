@@ -2,7 +2,7 @@ import { InferSchemaType, Schema, model } from "mongoose";
 import { ProfileType, profileSchema } from "./Profile";
 
 export const userSchema = new Schema({
-  googleId: { type: String, required: true },
+  userId: { type: String, required: true },
   profile: { type: profileSchema, default: null, required: false },
 });
 

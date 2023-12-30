@@ -11,6 +11,8 @@ const path_1 = __importDefault(require("path"));
 const keys_1 = __importDefault(require("./config/keys"));
 const getCookies_1 = __importDefault(require("./middlewares/getCookies"));
 const redirectToClient_1 = __importDefault(require("./middlewares/redirectToClient"));
+require("./models/PublicTask");
+require("./models/Task");
 require("./models/User");
 const assetsRoutes_1 = __importDefault(require("./routes/assetsRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));

@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { ReactElement } from "react";
 import { fonts } from "../../../constants";
 
