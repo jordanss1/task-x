@@ -10,7 +10,7 @@ type TaskWallTaskInteractionPropsType = {
   likes: number;
   commentAmount: number;
   openComments: boolean;
-  created: Date;
+  created: string;
   handleComments: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

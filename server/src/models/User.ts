@@ -6,8 +6,6 @@ export const userSchema = new Schema({
   profile: { type: profileSchema, default: null, required: false },
 });
 
-model("users", userSchema);
-
 export type UserType = InferSchemaType<typeof userSchema>;
 
 type UserTypeWithoutProfile = Omit<UserType, "profile">;
@@ -15,3 +13,5 @@ type UserTypeWithoutProfile = Omit<UserType, "profile">;
 export type ValidUserType = UserTypeWithoutProfile & {
   profile: ProfileType;
 };
+
+model<UserType>("users", userSchema);

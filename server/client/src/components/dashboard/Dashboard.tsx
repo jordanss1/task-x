@@ -8,6 +8,7 @@ import {
 import { changeSort } from "../../features/taskWall/taskWallSlice";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import "../../styles/dashboard.css";
+import ModalBackground from "../__reusable/ModalBackground";
 import Header from "../header/Header";
 import DashboardNav from "./DashboardNav";
 import DashboardNewTaskButton from "./DashboardNewTaskButton";
@@ -45,6 +46,7 @@ const Dashboard = (): ReactElement => {
       }}
       className="dashboard isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
     >
+      {formActive && <ModalBackground blur background="rgba(0,0,0,.2)" />}
       <Header
         link="/dashboard/home"
         containerClass="dashboard_header"

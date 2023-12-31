@@ -2,18 +2,20 @@ export type TaskType = {
   task: string;
   taskId: string;
   enabledDueDate: boolean;
-  dueDate: Date | undefined;
-  created: Date;
+  dueDate?: string;
+  created: string;
   onTaskWall: boolean;
 };
+
+export type TaskTypeSent = Omit<TaskType, "created" | "taskId">;
 
 export type TaskWallTaskType = {
   task: string;
   taskId: string;
   user: ValidUserType;
-  dueDate: Date | undefined;
+  dueDate?: string;
   enabledDueDate: boolean;
-  created: Date;
+  created: string;
   awards: AwardType[];
   likes: number;
   comments: CommentType[] | [];
@@ -27,6 +29,7 @@ export type CommentType = {
   user: ValidUserType;
   comment: string;
   likes: number;
+  created: string;
 };
 
 export type ValidUserType = Omit<UserType, "profile"> & {

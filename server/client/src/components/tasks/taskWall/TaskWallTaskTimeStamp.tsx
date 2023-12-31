@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import { fonts } from "../../../constants";
 
 type TaskWallTaskTimeStampPropsType = {
-  time: Date;
+  time: string;
 };
 
 const TaskWallTaskTimeStamp = ({

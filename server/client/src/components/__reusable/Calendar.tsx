@@ -13,8 +13,6 @@ type CalenderPropTypes = {
 const Calendar = ({ name }: CalenderPropTypes): ReactElement => {
   const [field, meta, helpers] = useField(name);
 
-  const utcDate = field.value?.toISOString();
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker
@@ -28,9 +26,9 @@ const Calendar = ({ name }: CalenderPropTypes): ReactElement => {
         views={["month", "day", "hours", "minutes"]}
         label="Choose due date"
         {...field}
-        onChange={(value) => {
-          helpers.setValue(dayjs(value).toDate());
-        }}
+        onOpen={() => helpers.setValue(dayjs(field.value).toISOString())}
+        onChange={(value) => helpers.setValue(dayjs(value).toISOString())}
+        onAccept={(value) => helpers.setValue(dayjs(value).toISOString())}
         value={field.value ? dayjs(field.value) : dayjs().add(1, "hour")}
       />
     </LocalizationProvider>

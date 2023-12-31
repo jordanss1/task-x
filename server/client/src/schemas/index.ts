@@ -7,11 +7,11 @@ export const taskSchema = yup.object().shape({
     .max(80, "Must be less than 80 characters")
     .required("You must enter a task"),
   enabledDueDate: yup.boolean().required("Required"),
-  dueDate: yup.date().when("enabledDueDate", (value) => {
+  dueDate: yup.string().when("enabledDueDate", (value) => {
     if (value[0]) {
-      return yup.date().required();
+      return yup.string().required();
     } else {
-      return yup.date().optional();
+      return yup.string().optional();
     }
   }),
   onTaskWall: yup.boolean().required("Choose your task's visibility"),
@@ -31,10 +31,6 @@ export const profileSchema = yup.object().shape({
     .required("You must enter a username")
     .test("userList", "Username is taken", async (value, context) => {
       if (value.length < 3) return false;
-
-      if (timer) clearTimeout(timer);
-
-      await new Promise((resolve) => (timer = setTimeout(resolve, 2000)));
 
       return !(await axiosCheckUsername(value));
     }),

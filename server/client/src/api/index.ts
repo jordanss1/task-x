@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { UserType, ValidUserType } from "../types";
+import { TaskType, TaskTypeSent, UserType, ValidUserType } from "../types";
 
 const createAxios = (cookies: boolean) =>
   axios.create({
@@ -47,6 +47,14 @@ export const axiosUpdateProfile = async (
   const api = createAxios(true);
 
   const { data } = await api.post("/profileUpdate", { ...profile });
+
+  return data;
+};
+
+export const axiosSubmitTask = async (task: TaskTypeSent): Promise<TaskType[]> => {
+  const api = createAxios(true);
+
+  const { data } = await api.post("/new_task", { ...task });
 
   return data;
 };

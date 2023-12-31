@@ -6,11 +6,12 @@ import path from "path";
 import keys from "./config/keys";
 import getCookies from "./middlewares/getCookies";
 import redirectToClient from "./middlewares/redirectToClient";
-import "./models/PublicTask";
-import "./models/Task";
+import "./models/PublicTaskList";
+import "./models/TaskList";
 import "./models/User";
 import assetsRoutes from "./routes/assetsRoutes";
 import googleAuthRoutes from "./routes/authRoutes";
+import taskRoutes from "./routes/taskRoutes";
 import "./services/passport";
 import types from "./types/express";
 
@@ -58,6 +59,8 @@ if (process.env.NODE_ENV !== "production") {
 googleAuthRoutes(app);
 
 assetsRoutes(app);
+
+taskRoutes(app);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/dist"));

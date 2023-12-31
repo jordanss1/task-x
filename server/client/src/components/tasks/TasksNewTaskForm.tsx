@@ -1,9 +1,13 @@
 import { Form, Formik, FormikConfig } from "formik";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AppThunkDispatch } from "../../app/store";
 import { colors, fonts } from "../../constants";
-import { taskListSelector } from "../../features/taskList/taskListSlice";
+import {
+  submitTask,
+  taskListSelector,
+} from "../../features/taskList/taskListSlice";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import { TaskSchemaType, taskSchema } from "../../schemas";
 import SmallIcon from "../__reusable/SmallIcon";
@@ -110,13 +114,14 @@ const childVariants: Variants = {
 
 const TasksNewTaskForm = (): ReactElement => {
   const { formActive } = useSelector(taskListSelector);
+  const dispatch = useDispatch<AppThunkDispatch>();
   const mobile = useMediaQuery(640);
 
   const handleSubmit: FormikConfig<TaskSchemaType>["onSubmit"] = (
     values,
     actions
   ) => {
-    console.log(values);
+    dispatch(submitTask(values));
   };
 
   return (

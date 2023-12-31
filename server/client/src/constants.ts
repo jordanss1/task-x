@@ -50,9 +50,13 @@ export const taskWallTasks: TaskWallTaskType[] = [
       _id: "keji9",
     },
     taskId: "123",
-    dueDate: dayjs().subtract(2, "week").toDate(),
+    dueDate: dayjs().subtract(2, "week").toDate().toISOString(),
     enabledDueDate: true,
-    created: dayjs().subtract(2, "days").subtract(12, "hours").toDate(),
+    created: dayjs()
+      .subtract(2, "days")
+      .subtract(12, "hours")
+      .toDate()
+      .toISOString(),
     likes: 55,
     awards: ["supported", "superSupported"],
     comments: [
@@ -68,6 +72,11 @@ export const taskWallTasks: TaskWallTaskType[] = [
         },
         comment: "Mine is next week also!",
         likes: 2,
+        created: dayjs()
+          .subtract(1, "days")
+          .subtract(12, "hours")
+          .toDate()
+          .toISOString(),
       },
       {
         user: {
@@ -82,6 +91,11 @@ export const taskWallTasks: TaskWallTaskType[] = [
         comment:
           "I'm looking for a good teacher, anyone know one in the Bradford area?",
         likes: 0,
+        created: dayjs()
+          .subtract(1, "days")
+          .subtract(1, "hours")
+          .toDate()
+          .toISOString(),
       },
     ],
   },
@@ -99,7 +113,11 @@ export const taskWallTasks: TaskWallTaskType[] = [
     taskId: "121",
     dueDate: undefined,
     enabledDueDate: false,
-    created: dayjs().subtract(5, "days").subtract(3, "hours").toDate(),
+    created: dayjs()
+      .subtract(5, "days")
+      .subtract(3, "hours")
+      .toDate()
+      .toISOString(),
     likes: 100,
     awards: ["supported", "superSupported", "communityLegend"],
     comments: [
@@ -115,6 +133,11 @@ export const taskWallTasks: TaskWallTaskType[] = [
         },
         comment: "Good luck I'm sure you will find them :)",
         likes: 10,
+        created: dayjs()
+          .subtract(3, "days")
+          .subtract(3, "hours")
+          .toDate()
+          .toISOString(),
       },
       {
         user: {
@@ -128,6 +151,11 @@ export const taskWallTasks: TaskWallTaskType[] = [
         },
         comment: "Where is your salon?",
         likes: 0,
+        created: dayjs()
+          .subtract(1, "days")
+          .subtract(3, "hours")
+          .toDate()
+          .toISOString(),
       },
     ],
   },
@@ -143,9 +171,9 @@ export const taskWallTasks: TaskWallTaskType[] = [
         profilePicture: `/api/profileIcons/person-16.svg`,
       },
     },
-    dueDate: dayjs().add(3, "weeks").toDate(),
+    dueDate: dayjs().add(3, "weeks").toDate().toISOString(),
     enabledDueDate: true,
-    created: dayjs().subtract(2, "days").add(6, "hours").toDate(),
+    created: dayjs().subtract(2, "days").add(6, "hours").toDate().toISOString(),
     likes: 2,
     awards: [],
     comments: [],
@@ -162,9 +190,9 @@ export const taskWallTasks: TaskWallTaskType[] = [
       },
     },
     taskId: "10",
-    dueDate: dayjs().add(2, "months").toDate(),
+    dueDate: dayjs().add(2, "months").toDate().toISOString(),
     enabledDueDate: true,
-    created: dayjs().subtract(5, "days").toDate(),
+    created: dayjs().subtract(5, "days").toDate().toISOString(),
     likes: 20,
     awards: ["supported"],
     comments: [
@@ -181,6 +209,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
         comment:
           "Let the stress begin to mount haha this year has been crazy. What is your major?",
         likes: 2,
+        created: dayjs().subtract(2, "days").toDate().toISOString(),
       },
     ],
   },

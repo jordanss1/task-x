@@ -10,8 +10,8 @@ import TaskWallTaskStatusDue from "./TaskWallTaskStatusDue";
 type TaskWallTaskStatusPropsType = {
   user: ValidUserType;
   awards: AwardType[];
-  created: Date;
-  dueDate: Date | undefined;
+  created: string;
+  dueDate?: string;
 };
 
 const TaskWallTaskStatus = ({

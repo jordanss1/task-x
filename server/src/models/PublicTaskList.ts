@@ -1,4 +1,4 @@
-import { InferSchemaType, Schema } from "mongoose";
+import { InferSchemaType, Schema, Types, model } from "mongoose";
 import { commentSchema } from "./Comment";
 import { userSchema } from "./User";
 
@@ -17,4 +17,13 @@ export const publicTaskSchema = new Schema({
   comments: { type: [commentSchema], required: false, default: null },
 });
 
+export const publicTaskListSchema = new Schema({
+  _user: { required: true, type: Types.ObjectId, ref: "User" },
+  tasks: { required: true, type: [publicTaskSchema], default: null },
+});
+
 export type PublicTaskType = InferSchemaType<typeof publicTaskSchema>;
+
+export type PublicTaskListType = InferSchemaType<typeof publicTaskListSchema>;
+
+model<PublicTaskListType>("publicTaskList", publicTaskListSchema);

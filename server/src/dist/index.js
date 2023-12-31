@@ -11,11 +11,12 @@ const path_1 = __importDefault(require("path"));
 const keys_1 = __importDefault(require("./config/keys"));
 const getCookies_1 = __importDefault(require("./middlewares/getCookies"));
 const redirectToClient_1 = __importDefault(require("./middlewares/redirectToClient"));
-require("./models/PublicTask");
-require("./models/Task");
+require("./models/PublicTaskList");
+require("./models/TaskList");
 require("./models/User");
 const assetsRoutes_1 = __importDefault(require("./routes/assetsRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const taskRoutes_1 = __importDefault(require("./routes/taskRoutes"));
 require("./services/passport");
 const { mongoURI } = keys_1.default;
 (0, mongoose_1.connect)(mongoURI);
@@ -50,6 +51,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 (0, authRoutes_1.default)(app);
 (0, assetsRoutes_1.default)(app);
+(0, taskRoutes_1.default)(app);
 if (process.env.NODE_ENV === "production") {
     app.use(express_1.default.static("client/dist"));
     app.get("*", (req, res) => {

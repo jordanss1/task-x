@@ -7,4 +7,5 @@ exports.commentSchema = new mongoose_1.Schema({
     user: { required: true, type: User_1.userSchema },
     comment: { required: true, type: String },
     likes: { required: true, type: Number },
+    created: { required: true, type: String },
 });

@@ -10,7 +10,7 @@ const TaskWallTaskStatusDue = ({
   dueDate,
   mobile,
 }: {
-  dueDate: Date | undefined;
+  dueDate?: string;
   mobile: boolean;
 }): ReactElement => {
   const { noDueDate, taskIsOverdue } = taskStatus(dayjs(dueDate));

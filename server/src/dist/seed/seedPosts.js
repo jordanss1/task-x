@@ -8,8 +8,8 @@ const dayjs_1 = __importDefault(require("dayjs"));
 const dotenv_1 = require("dotenv");
 const mongoose_1 = require("mongoose");
 const keys_1 = __importDefault(require("../config/keys"));
-require("../models/PublicTask");
-const PublicTask_1 = require("../models/PublicTask");
+require("../models/PublicTaskList");
+const PublicTaskList_1 = require("../models/PublicTaskList");
 require("../models/User");
 const User_1 = require("../models/User");
 (0, dotenv_1.config)({ path: "../../../.env" });
@@ -192,7 +192,7 @@ const todoTasks = [
 const fakerPosts = async (uri) => {
     const db = (0, mongoose_1.createConnection)(uri);
     const User = db.model("users", User_1.userSchema);
-    const PublicTask = db.model("publicTasks", PublicTask_1.publicTaskSchema);
+    const PublicTask = db.model("publicTasks", PublicTaskList_1.publicTaskSchema);
     const posts = await Promise.all(todoTasks.map(async ({ task, comments }) => {
         const count = await User.countDocuments().exec();
         const random = Math.floor(Math.random() * count);
