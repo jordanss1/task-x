@@ -2,7 +2,7 @@ import { InferSchemaType, Schema, Types, model } from "mongoose";
 
 export const taskSchema = new Schema({
   task: { required: true, type: String },
-  taskId: { required: true, type: String, default: null },
+  taskId: { required: true, type: String },
   enabledDueDate: { required: true, type: Boolean },
   dueDate: { required: false, type: String, default: undefined },
   created: { required: true, type: String },
@@ -21,3 +21,4 @@ export type TaskTypeIncoming = Omit<TaskType, "taskId" | "created">;
 export type TaskListType = InferSchemaType<typeof taskListSchema>;
 
 model<TaskListType>("taskList", taskListSchema);
+model<TaskType>("task", taskSchema);

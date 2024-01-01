@@ -7,6 +7,7 @@ import { colors, fonts } from "../../constants";
 import {
   submitTask,
   taskListSelector,
+  toggleForm,
 } from "../../features/taskList/taskListSlice";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import { TaskSchemaType, taskSchema } from "../../schemas";
@@ -155,6 +156,30 @@ const TasksNewTaskForm = (): ReactElement => {
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
             className="absolute w-[250px] h-[320px] cursor-default bottom-10 sm:bottom-5 -right-[106px] sm:right-7"
           >
+            <motion.div
+              onClick={() => dispatch(toggleForm())}
+              initial={{ x: 30, opacity: 0 }}
+              animate={{ x: 0, opacity: 1, transition: { delay: 0.3 } }}
+              exit={{
+                opacity: 0,
+              }}
+              whileTap={{
+                boxShadow:
+                  "1px 1px 2px rgba(0,0,0, 0), -1px -1px 2px rgba(0,0,0,0), inset 1px 1px 3px rgba(255,255,255, 0), inset -1px -1px 3px rgba(0,0,0)",
+                scale: 0.9,
+              }}
+              style={{
+                boxShadow:
+                  "1px 1px 2px rgba(0,0,0), -1px -1px 2px rgba(0,0,0), inset 1px 1px 3px rgba(255,255,255), inset -1px -1px 3px rgba(0,0,0)",
+              }}
+              className="flex cursor-pointer justify-center items-center absolute w-8 h-8 rounded-3xl bg-red-500 -right-6 -top-9"
+            >
+              <SmallIcon
+                style={{ color: colors.whiteShades[1] }}
+                size={20}
+                icon="fa-solid fa-xmark"
+              />
+            </motion.div>
             <TaskNewTaskOverlay variants={overlayVariants} />
             <AnimatePresence mode="wait">
               {formActive && (
@@ -215,7 +240,7 @@ const TasksNewTaskForm = (): ReactElement => {
                     className="task-toggle isolate relative w-full p-1 rounded-xl ms-auto"
                   >
                     <ToggleSwitch
-                      label={onTaskWall ? "Public" : "Private"}
+                      label="Task Wall"
                       handleToggle={handleToggle}
                       name="onTaskWall"
                     />

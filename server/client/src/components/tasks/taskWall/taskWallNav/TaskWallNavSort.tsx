@@ -19,6 +19,7 @@ const TaskWallNavSort = (): ReactElement => {
 
   const renderOptions = options.map(({ option, label }) => (
     <div
+      key={label}
       className="text-right w-full gap-2 items-center p-2 ps-2 hover:bg-[#991ff1] text-slate-700 hover:text-white rounded-sm text-xs relative flex cursor-pointer"
       onClick={() => dispatch(changeSort(option))}
     >

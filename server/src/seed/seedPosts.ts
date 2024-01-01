@@ -1,14 +1,17 @@
 import { fakerEN } from "@faker-js/faker";
 import dayjs from "dayjs";
 import { config } from "dotenv";
-import { createConnection, Types } from "mongoose";
+import { createConnection } from "mongoose";
 import keys from "../config/keys";
-import { CommentType } from "../models/Comment";
 import "../models/PublicTaskList";
-import { publicTaskSchema, PublicTaskType } from "../models/PublicTaskList";
+import {
+  publicTaskListSchema,
+  PublicTaskListType,
+  publicTaskSchema,
+  PublicTaskType,
+} from "../models/PublicTaskList";
 import "../models/User";
 import { userSchema, UserType } from "../models/User";
-import profileUrls from "../public/profileIcons/profileUrls";
 
 config({ path: "../../../.env" });
 
@@ -193,26 +196,48 @@ const todoTasks = [
 const fakerPosts = async (uri: string) => {
   const db = createConnection(uri);
   const User = db.model("users", userSchema);
-  const PublicTask = db.model("publicTasks", publicTaskSchema);
+  const PublicTaskList = db.model("publicTaskList", publicTaskListSchema);
+  const PublicTask = db.model("publicTask", publicTaskSchema);
 
-  const posts = await Promise.all(
+  await Promise.all(
     todoTasks.map(async ({ task, comments }) => {
       const count = await User.countDocuments().exec();
       const random = Math.floor(Math.random() * count);
 
       const user = await User.findOne().skip(random).exec();
 
+      const enabledDueDate = faker.datatype.boolean();
+
+      const dueDate = enabledDueDate
+        ? faker.date
+            .between({
+              from: dayjs().subtract(2, "weeks").toDate(),
+              to: dayjs().add(2, "weeks").toDate(),
+            })
+            .toISOString()
+        : null;
+
       const commentArray = await Promise.all(
         comments.map(async (comment) => {
           const count = await User.countDocuments().exec();
           const random = Math.floor(Math.random() * count);
 
-          const user = (await User.findOne().skip(random).exec()) as UserType;
+          const user = await User.findOne().skip(random).exec();
 
           return {
             comment,
             user,
             likes: faker.number.int({ max: 15, min: 0 }),
+            created: faker.date
+              .between({
+                from: dayjs(dueDate || undefined)
+                  .subtract(3, "weeks")
+                  .toDate(),
+                to: dayjs(dueDate || undefined)
+                  .subtract(2, "days")
+                  .toDate(),
+              })
+              .toISOString(),
           };
         })
       );
@@ -228,17 +253,6 @@ const fakerPosts = async (uri: string) => {
           ? ["supported", "superSupported", "communityLegend"]
           : [];
 
-      const enabledDueDate = faker.datatype.boolean();
-
-      const dueDate = enabledDueDate
-        ? faker.date
-            .between({
-              from: dayjs().subtract(2, "weeks").toDate(),
-              to: dayjs().add(2, "weeks").toDate(),
-            })
-            .toISOString()
-        : null;
-
       const created = enabledDueDate
         ? faker.date
             .between({
@@ -253,7 +267,7 @@ const fakerPosts = async (uri: string) => {
             })
             .toISOString();
 
-      return {
+      const publicTask = new PublicTask<PublicTaskType>({
         task: task,
         taskId: faker.string.uuid(),
         user: user as UserType,
@@ -263,11 +277,25 @@ const fakerPosts = async (uri: string) => {
         awards,
         likes,
         comments: commentArray as any,
-      };
+      });
+
+      const publicTaskList = await PublicTaskList.findOne<PublicTaskListType>({
+        _user: user?._id,
+      }).exec();
+
+      if (publicTaskList) {
+        return await PublicTaskList.findOneAndUpdate(
+          { _user: user?._id },
+          { $push: { tasks: publicTask } }
+        ).exec();
+      }
+
+      return await new PublicTaskList({
+        _user: user?._id,
+        tasks: [publicTask],
+      }).save();
     })
   );
-
-  await PublicTask.insertMany(posts);
 };
 
 fakerPosts(process.env.MONGO_URI as string);

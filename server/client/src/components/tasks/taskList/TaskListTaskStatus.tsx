@@ -6,7 +6,7 @@ import SmallIcon from "../../__reusable/SmallIcon";
 import TaskListTaskStatusPopout from "./TaskListTaskStatusPopout";
 
 type TaskListTaskStatusPropsType = {
-  dueDate: Date | undefined;
+  dueDate: string | undefined;
   editing: boolean;
   handleEdit: () => void;
 };

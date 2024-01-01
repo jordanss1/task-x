@@ -6,6 +6,6 @@ const User_1 = require("./User");
 exports.commentSchema = new mongoose_1.Schema({
     user: { required: true, type: User_1.userSchema },
     comment: { required: true, type: String },
-    likes: { required: true, type: Number },
+    likes: { required: true, type: Number, default: 0 },
     created: { required: true, type: String },
 });

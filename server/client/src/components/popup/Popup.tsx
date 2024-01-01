@@ -3,16 +3,22 @@ import { ReactElement } from "react";
 import { colors, fonts } from "../../constants";
 import Error from "../svg/Error";
 
-type PopupPropsType = { error: string };
+type PopupPropsType = { error: string | null; success: string | null };
 
-const Popup = ({ error }: PopupPropsType): ReactElement => {
-  const renderSVG = error ? (
-    <div className="rounded-xl p-1">
-      <Error size={60} />
-    </div>
-  ) : (
-    <div></div>
-  );
+const Popup = ({ error, success }: PopupPropsType): ReactElement => {
+  const renderSVG = () => {
+    if (error) {
+      return (
+        <div className="rounded-xl p-1">
+          <Error size={60} />
+        </div>
+      );
+    }
+
+    if (success) {
+      return <div></div>;
+    }
+  };
 
   return (
     <motion.div
@@ -30,12 +36,12 @@ const Popup = ({ error }: PopupPropsType): ReactElement => {
         }}
         className="h-32 flex gap-1 overflow-visible rounded-xl justify-center items-center max-w-xs w-full"
       >
-        {renderSVG}
+        {renderSVG()}
         <span
           className="text-sm"
           style={{ fontFamily: fonts.jura, color: colors.whiteShades[1] }}
         >
-          {error}
+          {error || success}
         </span>
       </div>
     </motion.div>

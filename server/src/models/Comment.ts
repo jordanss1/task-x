@@ -4,7 +4,7 @@ import { userSchema } from "./User";
 export const commentSchema = new Schema({
   user: { required: true, type: userSchema },
   comment: { required: true, type: String },
-  likes: { required: true, type: Number },
+  likes: { required: true, type: Number, default: 0 },
   created: { required: true, type: String },
 });
 

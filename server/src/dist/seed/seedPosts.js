@@ -192,19 +192,39 @@ const todoTasks = [
 const fakerPosts = async (uri) => {
     const db = (0, mongoose_1.createConnection)(uri);
     const User = db.model("users", User_1.userSchema);
-    const PublicTask = db.model("publicTasks", PublicTaskList_1.publicTaskSchema);
-    const posts = await Promise.all(todoTasks.map(async ({ task, comments }) => {
+    const PublicTaskList = db.model("publicTaskList", PublicTaskList_1.publicTaskListSchema);
+    const PublicTask = db.model("publicTask", PublicTaskList_1.publicTaskSchema);
+    await Promise.all(todoTasks.map(async ({ task, comments }) => {
         const count = await User.countDocuments().exec();
         const random = Math.floor(Math.random() * count);
         const user = await User.findOne().skip(random).exec();
+        const enabledDueDate = faker.datatype.boolean();
+        const dueDate = enabledDueDate
+            ? faker.date
+                .between({
+                from: (0, dayjs_1.default)().subtract(2, "weeks").toDate(),
+                to: (0, dayjs_1.default)().add(2, "weeks").toDate(),
+            })
+                .toISOString()
+            : null;
         const commentArray = await Promise.all(comments.map(async (comment) => {
             const count = await User.countDocuments().exec();
             const random = Math.floor(Math.random() * count);
-            const user = (await User.findOne().skip(random).exec());
+            const user = await User.findOne().skip(random).exec();
             return {
                 comment,
                 user,
                 likes: faker.number.int({ max: 15, min: 0 }),
+                created: faker.date
+                    .between({
+                    from: (0, dayjs_1.default)(dueDate || undefined)
+                        .subtract(3, "weeks")
+                        .toDate(),
+                    to: (0, dayjs_1.default)(dueDate || undefined)
+                        .subtract(2, "days")
+                        .toDate(),
+                })
+                    .toISOString(),
             };
         }));
         const likes = faker.number.int({ max: 120, min: 0 });
@@ -215,15 +235,6 @@ const fakerPosts = async (uri) => {
                 : likes >= 100
                     ? ["supported", "superSupported", "communityLegend"]
                     : [];
-        const enabledDueDate = faker.datatype.boolean();
-        const dueDate = enabledDueDate
-            ? faker.date
-                .between({
-                from: (0, dayjs_1.default)().subtract(2, "weeks").toDate(),
-                to: (0, dayjs_1.default)().add(2, "weeks").toDate(),
-            })
-                .toISOString()
-            : null;
         const created = enabledDueDate
             ? faker.date
                 .between({
@@ -237,7 +248,7 @@ const fakerPosts = async (uri) => {
                 to: (0, dayjs_1.default)().subtract(2, "weeks").toDate(),
             })
                 .toISOString();
-        return {
+        const publicTask = new PublicTask({
             task: task,
             taskId: faker.string.uuid(),
             user: user,
@@ -247,9 +258,18 @@ const fakerPosts = async (uri) => {
             awards,
             likes,
             comments: commentArray,
-        };
+        });
+        const publicTaskList = await PublicTaskList.findOne({
+            _user: user?._id,
+        }).exec();
+        if (publicTaskList) {
+            return await PublicTaskList.findOneAndUpdate({ _user: user?._id }, { $push: { tasks: publicTask } }).exec();
+        }
+        return await new PublicTaskList({
+            _user: user?._id,
+            tasks: [publicTask],
+        }).save();
     }));
-    await PublicTask.insertMany(posts);
 };
 fakerPosts(process.env.MONGO_URI);
 fakerPosts(keys_1.default.mongoURI);

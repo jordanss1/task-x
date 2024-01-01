@@ -4,7 +4,7 @@ import { axiosSubmitTask } from "../../api";
 import { StateType } from "../../app/store";
 import { TaskType, TaskTypeSent } from "../../types";
 import { reducerMatcherFunction } from "../auth/authSlice";
-import { setError } from "../error/errorSlice";
+import { setError } from "../notification/notificationSlice";
 
 export const submitTask = createAsyncThunk<TaskType[] | false, TaskTypeSent>(
   "taskList/submitTask",

@@ -9,8 +9,8 @@ import {
   setUpdatedProfile,
   updateProfile,
 } from "../../../features/auth/authSlice";
-import { errorsSelector } from "../../../features/error/errorSlice";
 import { interfaceSelector } from "../../../features/interface/interfaceSlice";
+import { notificationSelector } from "../../../features/notification/notificationSlice";
 import artificialDelay from "../../../functions/artificialDelay";
 import { useMediaQuery } from "../../../hooks/MediaQueryHooks";
 import useArtificialProgress from "../../../hooks/useArtificialProgress";
@@ -28,7 +28,7 @@ const ProfileSetup = (): ReactElement => {
   const [step, setStep] = useState(0);
   const dispatch = useDispatch<AppThunkDispatch>();
   const navigate = useNavigate();
-  const { error } = useSelector(errorsSelector);
+  const { error } = useSelector(notificationSelector);
   const { user } = useSelector(authSelector);
   const { progress } = useSelector(interfaceSelector);
   const { beginProgress, stopProgress } = useArtificialProgress({

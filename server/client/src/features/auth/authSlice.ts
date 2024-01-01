@@ -8,7 +8,7 @@ import { AxiosError } from "axios";
 import { axiosFetchUser, axiosUpdateProfile } from "../../api";
 import { StateType } from "../../app/store";
 import { UserStateType, UserType, ValidUserType } from "../../types";
-import { setError } from "../error/errorSlice";
+import { setError } from "../notification/notificationSlice";
 
 export const getUser = createAsyncThunk<UserType | undefined>(
   "auth/user",

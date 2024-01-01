@@ -8,7 +8,7 @@ import SmallIcon from "../../__reusable/SmallIcon";
 
 type TaskListTaskStatusPopoutPropsType = {
   editing: boolean;
-  dueDate: Date | undefined;
+  dueDate: string | undefined;
 };
 
 const TaskListTaskStatusPopout = ({
