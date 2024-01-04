@@ -50,3 +50,4 @@ export type UserType = {
 } & UserProfile;
 
 export type UserStateType = UserType | ValidUserType | false | null;
+

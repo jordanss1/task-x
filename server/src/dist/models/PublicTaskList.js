@@ -22,6 +22,7 @@ exports.publicTaskSchema = new mongoose_1.Schema({
 exports.publicTaskListSchema = new mongoose_1.Schema({
     _user: { required: true, type: mongoose_1.Types.ObjectId, ref: "User" },
     tasks: { required: true, type: [exports.publicTaskSchema], default: null },
+    totalTasks: { required: true, type: Number, default: 0 },
 });
 (0, mongoose_1.model)("publicTaskList", exports.publicTaskListSchema);
 (0, mongoose_1.model)("publicTask", exports.publicTaskSchema);

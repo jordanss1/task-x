@@ -1,12 +1,16 @@
 import { motion } from "framer-motion";
-import { ReactElement } from "react";
+import { CSSProperties, ReactElement } from "react";
 import { colors } from "../../constants";
 
 type SpinnerPropsType = {
   size?: "small" | "medium" | "large";
+  color?: CSSProperties["color"];
 };
 
-const Spinner = ({ size = "small" }: SpinnerPropsType): ReactElement => {
+const Spinner = ({
+  size = "small",
+  color = colors.whiteShades[1],
+}: SpinnerPropsType): ReactElement => {
   const padding =
     size === "small" ? "8px" : size === "medium" ? "16px" : "24px";
 
@@ -17,7 +21,7 @@ const Spinner = ({ size = "small" }: SpinnerPropsType): ReactElement => {
       className="rounded-full z-10"
       style={{
         border: `${borderSize} solid rgb(150,150,150)`,
-        borderTop: `${borderSize} solid ${colors.whiteShades[1]}`,
+        borderTop: `${borderSize} solid ${color}`,
         padding,
         maxHeight: "fit-content",
         maxWidth: "fit-content",

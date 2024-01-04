@@ -57,7 +57,7 @@ const Dashboard = (): ReactElement => {
           expanded={sidebarExpanded}
           setExpanded={setSidebarExpanded}
         />
-        <DashboardTaskContainer app={app} />
+        <DashboardTaskContainer />
         <DashboardNewTaskButton formActive={formActive} />
       </main>
     </motion.div>

@@ -7,11 +7,13 @@ const TaskListPlaceholder = (): ReactElement => {
   return (
     <div
       style={{
+        background:
+          "linear-gradient(to bottom, #f4f0ed 0%, #e0dcd9 30%, #f4f0ed 100%)",
         boxShadow:
-          "-1px -1px 10px rgb(100,100,100), 10px 20px 30px purple, inset 0px 0px 20px rgb(100,100,100), inset -1px -1px 10px rgb(100,100,100)",
-        outline: "6px solid rgb(0,0,0)",
+          "-1px -1px 10px rgb(100,100,100), 0px 0px 0px purple, inset 0px 0px 20px rgb(100,100,100), inset -1px -1px 10px rgb(100,100,100)",
+        outline: "2px solid rgb(0,0,0)",
       }}
-      className="flex sm:ps-8 flex-col gap-10 items-center justify-center py-10 p-4 h-3/4 sm:w-4/5 sm:max-w-[366px] rounded-3xl"
+      className="flex sm:ps-8 flex-col items-center justify-center py-10 p-4 h-3/4 sm:w-4/5 sm:max-w-[366px] rounded-3xl"
     >
       <div className="flex max-w-[300px] w-full sm:max-w-none gap-5 sm:gap-6 justify-center h-full items-center">
         <NeonClipboard style={{ minWidth: "200px" }} size={200} />
@@ -19,12 +21,10 @@ const TaskListPlaceholder = (): ReactElement => {
           style={{ fontFamily: fonts.orbitron }}
           className="h-full flex items-center py-6"
         >
-          <span className="text-2xl font-medium w-3/4">
-            No tasks yet
-          </span>
+          <span className="text-2xl font-medium w-3/4">No tasks yet</span>
         </div>
       </div>
-      <div className="h-full w-full max-w-[300px]">
+      <div className="flex h-full w-full max-w-[300px]">
         <div className="flex sm:justify-normal items-center justify-center sm:gap-2 gap-3">
           <p
             style={{ fontFamily: fonts.orbitron }}

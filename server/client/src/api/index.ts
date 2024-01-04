@@ -1,5 +1,11 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { TaskType, TaskTypeSent, UserType, ValidUserType } from "../types";
+import axios from "axios";
+import {
+  TaskType,
+  TaskTypeSent,
+  TaskWallTaskType,
+  UserType,
+  ValidUserType,
+} from "../types";
 
 const createAxios = (cookies: boolean) =>
   axios.create({
@@ -51,7 +57,15 @@ export const axiosUpdateProfile = async (
   return data;
 };
 
-export const axiosSubmitTask = async (task: TaskTypeSent): Promise<TaskType[]> => {
+export type SubmitTaskReturnType = [
+  TaskType[] | false,
+  TaskWallTaskType[] | false,
+  TaskWallTaskType[] | false
+];
+
+export const axiosSubmitTask = async (
+  task: TaskTypeSent
+): Promise<SubmitTaskReturnType> => {
   const api = createAxios(true);
 
   const { data } = await api.post("/new_task", { ...task });
@@ -59,8 +73,30 @@ export const axiosSubmitTask = async (task: TaskTypeSent): Promise<TaskType[]> =
   return data;
 };
 
-export const axiosGetUserWallTasks = async () => {
+export const axiosGetUserTasks = async (): Promise<TaskType[] | false> => {
   const api = createAxios(true);
 
-  const { data } = await api.get("");
+  const { data } = await api.get("/user_tasks");
+
+  return data;
+};
+
+export const axiosGetUserWallTasks = async (): Promise<
+  TaskWallTaskType[] | false
+> => {
+  const api = createAxios(true);
+
+  const { data } = await api.get("/user_wall_tasks");
+
+  return data;
+};
+
+export const axiosGetAllTaskWallTasks = async (): Promise<
+  TaskWallTaskType[] | false
+> => {
+  const api = createAxios(true);
+
+  const { data } = await api.get("/wall_tasks");
+
+  return data;
 };

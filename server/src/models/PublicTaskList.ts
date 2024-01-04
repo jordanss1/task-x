@@ -21,6 +21,7 @@ export const publicTaskSchema = new Schema({
 export const publicTaskListSchema = new Schema({
   _user: { required: true, type: Types.ObjectId, ref: "User" },
   tasks: { required: true, type: [publicTaskSchema], default: null },
+  totalTasks: { required: true, type: Number, default: 0 },
 });
 
 export type PublicTaskType = InferSchemaType<typeof publicTaskSchema>;

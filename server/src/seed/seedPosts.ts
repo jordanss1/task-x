@@ -194,6 +194,7 @@ const todoTasks = [
 ];
 
 const fakerPosts = async (uri: string) => {
+  console.log(uri);
   const db = createConnection(uri);
   const User = db.model("users", userSchema);
   const PublicTaskList = db.model("publicTaskList", publicTaskListSchema);
@@ -286,13 +287,14 @@ const fakerPosts = async (uri: string) => {
       if (publicTaskList) {
         return await PublicTaskList.findOneAndUpdate(
           { _user: user?._id },
-          { $push: { tasks: publicTask } }
+          { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }
         ).exec();
       }
 
       return await new PublicTaskList({
         _user: user?._id,
         tasks: [publicTask],
+        totalTasks: 1,
       }).save();
     })
   );

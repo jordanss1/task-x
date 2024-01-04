@@ -190,6 +190,7 @@ const todoTasks = [
     },
 ];
 const fakerPosts = async (uri) => {
+    console.log(uri);
     const db = (0, mongoose_1.createConnection)(uri);
     const User = db.model("users", User_1.userSchema);
     const PublicTaskList = db.model("publicTaskList", PublicTaskList_1.publicTaskListSchema);
@@ -263,11 +264,12 @@ const fakerPosts = async (uri) => {
             _user: user?._id,
         }).exec();
         if (publicTaskList) {
-            return await PublicTaskList.findOneAndUpdate({ _user: user?._id }, { $push: { tasks: publicTask } }).exec();
+            return await PublicTaskList.findOneAndUpdate({ _user: user?._id }, { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }).exec();
         }
         return await new PublicTaskList({
             _user: user?._id,
             tasks: [publicTask],
+            totalTasks: 1,
         }).save();
     }));
 };

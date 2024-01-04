@@ -48,8 +48,8 @@ const overlayVariants: Variants = {
     },
   },
   exit: {
-    x: 213,
-    y: 273,
+    x: 220,
+    y: 280,
     width: "64px",
     height: "64px",
     backgroundImage: [
@@ -65,8 +65,8 @@ const overlayVariants: Variants = {
       boxShadow: { duration: 0.3 },
       backgroundImage: { duration: 0.3, delay: 0.2 },
       borderRadius: { delay: 0.6 },
-      x: { delay: 0.5, duration: 0.5 },
-      y: { delay: 0.5, duration: 0.5 },
+      x: { delay: 0.5, duration: 0.6 },
+      y: { delay: 0.5, duration: 0.6 },
       height: { delay: 0.4 },
       width: { delay: 0.4 },
     },
@@ -149,12 +149,12 @@ const TasksNewTaskForm = (): ReactElement => {
             exit={{
               right: "1.75rem",
               transition: {
-                delay: 0.1,
+                delay: 0.3,
                 duration: 1,
               },
             }}
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            className="absolute w-[250px] h-[320px] cursor-default bottom-10 sm:bottom-5 -right-[106px] sm:right-7"
+            className="absolute z-20 w-[250px] h-[320px] cursor-default bottom-5 -right-[106px] sm:right-7"
           >
             <motion.div
               onClick={() => dispatch(toggleForm())}

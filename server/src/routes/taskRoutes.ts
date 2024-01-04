@@ -12,6 +12,52 @@ const PublicTask = model<PublicTaskType>("publicTask");
 const PublicTaskList = model<PublicTaskListType>("publicTaskList");
 
 const taskRoutes = (app: Express) => {
+  app.get("/api/user_tasks", requireJwt, async (req, res) => {
+    try {
+      const data = await TaskList.findOne({ _user: req.user?._id })
+        .select("tasks")
+        .exec();
+
+      return res.send(data ? data.tasks.map((task) => task) : false);
+    } catch (err) {
+      return res.status(500).send("Issue retrieving task list, server error");
+    }
+  });
+
+  app.get("/api/user_wall_tasks", requireJwt, async (req, res) => {
+    try {
+      const data = await PublicTaskList.findOne({ _user: req.user?._id })
+        .select("tasks")
+        .exec();
+
+      return res.send(data ? data.tasks.map((task) => task) : false);
+    } catch (err) {
+      return res
+        .status(500)
+        .send("Issue retrieving task wall tasks, server error");
+    }
+  });
+
+  app.get("/api/wall_tasks", requireJwt, async (req, res) => {
+    try {
+      const publicTasks = await PublicTaskList.find({
+        totalTasks: { $gt: 0 },
+      })
+        .select("tasks")
+        .exec();
+
+      const allPublicTasks = publicTasks.map(({ tasks }) => {
+        return tasks.reduce((task) => task);
+      });
+
+      return res.send(allPublicTasks || false);
+    } catch (err) {
+      return res
+        .status(500)
+        .send("Issue retrieving all wall tasks, server error");
+    }
+  });
+
   app.post(
     "/api/new_task",
     requireJwt,
@@ -24,21 +70,25 @@ const taskRoutes = (app: Express) => {
 
       const taskList = await TaskList.findOne({ _user: req.user?._id }).exec();
 
-      let updatedTaskList;
-      let updatedPublicTaskList;
+      let updatedUserTasks;
+      let updatedUserPublicTasks;
 
       if (taskList) {
         try {
-          updatedTaskList = await TaskList.findOneAndUpdate(
+          let tasks = await TaskList.findOneAndUpdate(
             { _user: req.user?._id },
             { $push: { tasks: newTask } }
-          ).exec();
+          )
+            .select("tasks")
+            .exec();
+
+          updatedUserTasks = tasks?.tasks.map((task) => task);
         } catch (err) {
           return res.status(500).send("Unable to update task list, try again");
         }
       } else {
         try {
-          updatedTaskList = await new TaskList({
+          await new TaskList({
             _user: req.user?._id,
             tasks: [newTask],
           }).save();
@@ -67,31 +117,59 @@ const taskRoutes = (app: Express) => {
 
         if (publicTaskList) {
           try {
-            updatedPublicTaskList =
-              await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
-                { _user: req.user?._id },
-                { $push: { tasks: publicTask } }
-              ).exec();
+            await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
+              { _user: req.user?._id },
+              { $push: { tasks: publicTask, $inc: { totalTasks: 1 } } }
+            ).exec();
           } catch (err) {
             return res
               .status(500)
               .send("Unable to add your first task to task wall, try again");
+          } finally {
+            const tasks = await PublicTaskList.findOne({
+              _user: req.user?._id,
+            })
+              .select("tasks")
+              .exec();
+
+            updatedUserPublicTasks = tasks?.tasks.map((task) => task);
           }
         } else {
           try {
-            updatedPublicTaskList = await new PublicTaskList({
+            await new PublicTaskList({
               _user: req.user?._id,
               tasks: [publicTask],
+              $inc: { totalTasks: 1 },
             }).save();
           } catch (err) {
             return res
               .status(500)
               .send("Unable to add your task to task wall, try again");
+          } finally {
+            updatedUserPublicTasks = await PublicTaskList.findOne({
+              _user: req.user?._id,
+            })
+              .select("tasks")
+              .exec();
           }
         }
       }
 
-      res.send([updatedTaskList, updatedPublicTaskList || false]);
+      const publicTasks = await PublicTaskList.find({
+        totalTasks: { $gt: 0 },
+      })
+        .select("tasks")
+        .exec();
+
+      const allPublicTasks = publicTasks.map(({ tasks }) => {
+        return tasks.reduce((task) => task);
+      });
+
+      res.send([
+        updatedUserTasks || false,
+        updatedUserPublicTasks || false,
+        allPublicTasks || false,
+      ]);
     }
   );
 };

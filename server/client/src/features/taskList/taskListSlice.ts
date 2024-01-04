@@ -1,16 +1,43 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { axiosSubmitTask } from "../../api";
+import { axiosGetUserTasks, axiosSubmitTask } from "../../api";
 import { StateType } from "../../app/store";
 import { TaskType, TaskTypeSent } from "../../types";
 import { reducerMatcherFunction } from "../auth/authSlice";
 import { setError } from "../notification/notificationSlice";
+import {
+  assignAllWallTasks,
+  assignUserWallTasks,
+  updateTaskState,
+} from "../taskWall/taskWallSlice";
 
-export const submitTask = createAsyncThunk<TaskType[] | false, TaskTypeSent>(
-  "taskList/submitTask",
-  async (task, { dispatch }) => {
+export const submitTask = createAsyncThunk<
+  TaskType[] | false,
+  TaskTypeSent,
+  { state: StateType }
+>("taskList/submitTask", async (task, { dispatch }) => {
+  try {
+    const [userTasks, userTaskWallTasks, allTaskWallTasks] =
+      await axiosSubmitTask(task);
+
+    dispatch(assignAllWallTasks(allTaskWallTasks));
+    dispatch(assignUserWallTasks(userTaskWallTasks));
+
+    return userTasks;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
+
+    return false;
+  }
+});
+
+export const getUserTasks = createAsyncThunk<TaskType[] | false>(
+  "taskList/getUserTasks",
+  async (undefined, { dispatch }) => {
     try {
-      return await axiosSubmitTask(task);
+      return await axiosGetUserTasks();
     } catch (err) {
       if (err instanceof AxiosError) {
         dispatch(setError(err.response?.data));
@@ -41,12 +68,20 @@ const taskListSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      (action) => action.type.includes("taskList/submitTask"),
-      (state, action: PayloadAction<TaskType[]>) =>
+      (action) =>
+        action.type.includes("taskList/submitTask") ||
+        action.type.includes("taskList/getUserTasks"),
+      (state, action: PayloadAction<TaskType[]>) => {
         reducerMatcherFunction(action, () => {
-          console.log(action.payload);
-          state.tasks = action.payload || state.tasks;
-        })
+          updateTaskState(state, action, "tasks");
+          // if (action.payload) {
+          //   state.tasks = action.payload;
+          //   return;
+          // }
+
+          // state.tasks = state.tasks ? state.tasks : false;
+        });
+      }
     );
   },
 });
