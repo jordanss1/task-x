@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { authSelector } from "../../features/auth/authSlice";
 import {
   taskListSelector,
   toggleForm,
@@ -17,6 +18,7 @@ import DashboardTaskContainer from "./DashboardTaskContainer";
 
 const Dashboard = (): ReactElement => {
   const dispatch = useDispatch();
+  const { user } = useSelector(authSelector);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [app, setApp] = useState<"home" | "social">("home");
 
@@ -46,20 +48,26 @@ const Dashboard = (): ReactElement => {
       }}
       className="dashboard isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
     >
-      {formActive && <ModalBackground blur background="rgba(0,0,0,.2)" />}
-      <Header
-        link="/dashboard/home"
-        containerClass="dashboard_header"
-        nav={<DashboardNav />}
-      />
-      <main>
-        <DashboardPanel
-          expanded={sidebarExpanded}
-          setExpanded={setSidebarExpanded}
-        />
-        <DashboardTaskContainer />
-        <DashboardNewTaskButton formActive={formActive} />
-      </main>
+      {formActive && (
+        <ModalBackground mixBlendMode="normal" background="rgba(0,0,0,.2)" />
+      )}
+      {user && user.profile && (
+        <>
+          <Header
+            link="/dashboard/home"
+            containerClass="dashboard_header"
+            nav={<DashboardNav />}
+          />
+          <main>
+            <DashboardPanel
+              expanded={sidebarExpanded}
+              setExpanded={setSidebarExpanded}
+            />
+            <DashboardTaskContainer />
+            <DashboardNewTaskButton formActive={formActive} />
+          </main>
+        </>
+      )}
     </motion.div>
   );
 };

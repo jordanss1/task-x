@@ -100,3 +100,13 @@ export const axiosGetAllTaskWallTasks = async (): Promise<
 
   return data;
 };
+
+export const axiosDeleteTask = async (
+  task: TaskType
+): Promise<SubmitTaskReturnType> => {
+  const api = createAxios(true);
+
+  const { data } = await api.delete("/delete_task", { data: { ...task } });
+
+  return data;
+};

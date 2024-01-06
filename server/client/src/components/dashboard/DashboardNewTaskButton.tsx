@@ -16,7 +16,7 @@ const iconVariants: Variants = {
   animate: {
     x: 0,
     opacity: 1,
-    transition: { delay: 1 },
+    transition: { delay: 1.3, duration: 0.4 },
   },
   exit: {
     x: 50,

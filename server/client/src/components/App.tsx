@@ -44,7 +44,9 @@ const App = (): ReactElement => {
   return (
     <>
       <AnimatePresence mode="wait">
-        {(error || success) && <Popup success={success} error={error} />}
+        {(error || success) && (
+          <Popup key="popup" success={success} error={error} />
+        )}
       </AnimatePresence>
       <Routes>
         <Route path="/" element={<Landing />} />

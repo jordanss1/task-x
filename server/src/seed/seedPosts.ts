@@ -290,7 +290,6 @@ const fakerPosts = async (uri: string) => {
           { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }
         ).exec();
       }
-
       return await new PublicTaskList({
         _user: user?._id,
         tasks: [publicTask],

@@ -86,15 +86,17 @@ const TaskListTaskStatusPopout = ({
           />
         }
       >
-        <motion.div
-          variants={popoutVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="absolute p-1 w-32 bottom-[35px] cursor-default origin-bottom-right h-fit right-0  border-[1px] font-[jura] rounded-lg overflow-hidden text-xs bg-[#f4f0ed] border-slate-400 text-slate-600 opacity-80"
-        >
-          You can set due date using the edit button
-        </motion.div>
+        {!editing && (
+          <motion.div
+            variants={popoutVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="absolute p-1 w-32 bottom-[35px] cursor-default origin-bottom-right h-fit right-0  border-[1px] font-[jura] rounded-lg overflow-hidden text-xs bg-[#f4f0ed] border-slate-400 text-slate-600 opacity-80"
+          >
+            You can set due date using the edit button
+          </motion.div>
+        )}
       </ButtonPopout>
     );
   } else {

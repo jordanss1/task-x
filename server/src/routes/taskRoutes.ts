@@ -75,23 +75,29 @@ const taskRoutes = (app: Express) => {
 
       if (taskList) {
         try {
-          let tasks = await TaskList.findOneAndUpdate(
+          await TaskList.findOneAndUpdate(
             { _user: req.user?._id },
             { $push: { tasks: newTask } }
-          )
+          ).exec();
+        } catch (err) {
+          return res.status(500).send("Unable to update task list, try again");
+        } finally {
+          const tasks = await TaskList.findOne({
+            _user: req.user?._id,
+          })
             .select("tasks")
             .exec();
 
           updatedUserTasks = tasks?.tasks.map((task) => task);
-        } catch (err) {
-          return res.status(500).send("Unable to update task list, try again");
         }
       } else {
         try {
-          await new TaskList({
+          const tasks = await new TaskList({
             _user: req.user?._id,
             tasks: [newTask],
           }).save();
+
+          updatedUserTasks = tasks?.tasks.map((task) => task);
         } catch (err) {
           return res.status(500).send("Unable to create new task, try again");
         }
@@ -170,6 +176,32 @@ const taskRoutes = (app: Express) => {
         updatedUserPublicTasks || false,
         allPublicTasks || false,
       ]);
+    }
+  );
+
+  app.delete(
+    "/api/delete_task",
+    requireJwt,
+    async (req: Request<{}, any, TaskType>, res) => {
+      let updatedUserTasks;
+      let updatedUserPublicTasks;
+
+      // try {
+      //   await TaskList.findOneAndDelete<TaskListType>(
+      //     { _user: req.user?._id },
+      //     { $pull: { tasks: { taskId: req.body.taskId } } }
+      //   ).exec();
+
+      //   const tasks = await TaskList.findById(req.user?._id).select("tasks");
+
+      //   updatedUserTasks = tasks?.tasks.map((task) => task);
+      // } catch (err) {
+      //   return res.status(500).send("Unable to delete task, try again");
+      // }
+
+      // console.log(updatedUserTasks);
+
+      res.send([updatedUserTasks, updatedUserPublicTasks || false, false]);
     }
   );
 };

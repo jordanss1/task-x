@@ -29,7 +29,8 @@ export const updateProfile = createAsyncThunk<
     return await axiosUpdateProfile(profile);
   } catch (err) {
     if (err instanceof AxiosError) {
-      dispatch(setError(err.response?.data));
+      console.log(err.response?.data);
+      dispatch(setError("hi"));
     }
 
     return user as UserType;

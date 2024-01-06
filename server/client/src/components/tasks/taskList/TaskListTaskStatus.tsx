@@ -1,6 +1,6 @@
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
-import { colors } from "../../../constants";
+import { colors, fonts } from "../../../constants";
 import Button from "../../__reusable/Button";
 import SmallIcon from "../../__reusable/SmallIcon";
 import TaskListTaskStatusPopout from "./TaskListTaskStatusPopout";
@@ -9,6 +9,7 @@ type TaskListTaskStatusPropsType = {
   dueDate: string | undefined;
   editing: boolean;
   handleEdit: () => void;
+  handleDelete: () => void;
 };
 
 const containerVariants: Variants = {
@@ -53,12 +54,15 @@ const TaskListTaskStatus = ({
   dueDate,
   editing,
   handleEdit,
+  handleDelete,
 }: TaskListTaskStatusPropsType): ReactElement => {
   const buttonStyle = {
     background: colors.buttonGradients[0],
     boxShadow:
       "1px 1px 5px rgba(0,0,0,.1), -1px -1px 1px rgba(0,0,0,0), inset 1px 1px 1px rgba(0,0,0,.1), inset -1px -1px 1px rgba(0,0,0)",
     outline: "1px solid rgb(224, 220, 217,0)",
+    fontFamily: fonts.jura,
+    letterSpacing: ".5px",
   };
 
   return (
@@ -76,49 +80,84 @@ const TaskListTaskStatus = ({
       <TaskListTaskStatusPopout editing={editing} dueDate={dueDate} />
       <motion.div
         animate={{
-          gap: editing ? "13px" : "8px",
-          maxWidth: editing ? "70px" : "60px",
+          gap: "8px",
+          maxWidth: editing ? "55px" : "87px",
         }}
-        className="w-full gap-2 flex max-w-[60px]"
+        className="w-full gap-2 flex max-w-[87px]"
       >
-        <Button
-          type={editing ? "submit" : "button"}
-          style={buttonStyle}
-          variants={buttonVariants}
-          whileHover="hovered"
-          whileTap="tapped"
-          custom={editing}
-          animate="animate"
-          onClick={() => handleEdit()}
-          className="cursor-pointer px-1 py-[2px] rounded-lg"
-        >
-          <SmallIcon
-            style={{ color: "black", y: 0 }}
-            animate={{
-              color: editing ? "#36cb62" : "black",
-            }}
-            size={editing ? 19 : 16}
-            icon={`${
-              editing ? "fa-solid fa-check" : "fa-regular fa-pen-to-square"
-            }`}
-          />
-        </Button>
-        <Button
-          style={buttonStyle}
-          variants={buttonVariants}
-          whileHover="hovered"
-          whileTap="tapped"
-          custom={editing}
-          animate="animate"
-          className="cursor-pointer flex items-center justify-center px-1 py-[2px] rounded-lg"
-        >
-          <SmallIcon
-            style={{ y: 0 }}
-            size={editing ? 22 : 20}
-            icon="fa-solid fa-xmark"
-            className="relative text-red-500  text-lg"
-          />
-        </Button>
+        {editing ? (
+          <Button
+            type="submit"
+            style={buttonStyle}
+            variants={buttonVariants}
+            whileHover="hovered"
+            whileTap="tapped"
+            custom={editing}
+            animate="animate"
+            onClick={() => handleEdit()}
+            className="cursor-pointer text-sm text-white p-1 rounded-lg"
+          >
+            Finish
+          </Button>
+        ) : (
+          <>
+            <Button
+              style={buttonStyle}
+              variants={buttonVariants}
+              whileHover="hovered"
+              whileTap="tapped"
+              custom={editing}
+              animate="animate"
+              onClick={() => handleEdit()}
+              className="cursor-pointer px-1 py-[2px] rounded-lg"
+            >
+              <SmallIcon
+                style={{ color: "black", y: 0 }}
+                animate={{
+                  color: "black",
+                }}
+                size={16}
+                icon="fa-regular fa-pen-to-square"
+              />
+            </Button>
+            <Button
+              style={buttonStyle}
+              variants={buttonVariants}
+              whileHover="hovered"
+              whileTap="tapped"
+              custom={editing}
+              type="button"
+              onClick={() => handleDelete()}
+              animate="animate"
+              className="cursor-pointer flex items-center justify-center px-1 py-[2px] rounded-lg"
+            >
+              <SmallIcon
+                style={{ y: 0 }}
+                size={20}
+                icon="fa-solid fa-xmark"
+                className="relative text-red-500  text-lg"
+              />
+            </Button>
+            <Button
+              style={buttonStyle}
+              variants={buttonVariants}
+              whileHover="hovered"
+              whileTap="tapped"
+              custom={editing}
+              animate="animate"
+              className="cursor-pointer px-1 py-[2px] rounded-lg"
+            >
+              <SmallIcon
+                style={{ color: "green", y: 0 }}
+                animate={{
+                  color: "green",
+                }}
+                size={16}
+                icon="fa-solid fa-check"
+              />
+            </Button>
+          </>
+        )}
       </motion.div>
     </motion.div>
   );

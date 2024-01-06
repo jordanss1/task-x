@@ -1,13 +1,18 @@
 import { Form, Formik, FormikConfig } from "formik";
 import { AnimatePresence, Variants, motion, useAnimate } from "framer-motion";
 import { ReactElement, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppThunkDispatch } from "../../../app/store";
 import { colors, fonts } from "../../../constants";
+import { deleteTask } from "../../../features/taskList/taskListSlice";
+import { taskWallSelector } from "../../../features/taskWall/taskWallSlice";
 import { TaskSchemaType, taskSchema } from "../../../schemas";
 import "../../../styles/mui-overrides/task.css";
 import { TaskType } from "../../../types";
 import ModalBackground from "../../__reusable/ModalBackground";
 import TaskTextArea from "../../__reusable/TaskTextArea";
 import ToggleSwitch from "../../__reusable/ToggleSwitch";
+import Popup, { PopupPropsType } from "../../popup/Popup";
 import TasksCalender from "../TasksCalender";
 import TaskListTaskOverlay from "./TaskListTaskOverlay";
 import TaskListTaskStatus from "./TaskListTaskStatus";
@@ -32,7 +37,24 @@ const TaskListTask = ({
   taskItem,
   index,
 }: TaskListTaskPropsType): ReactElement => {
-  const { task, enabledDueDate, dueDate, created, onTaskWall } = taskItem;
+  const { task, enabledDueDate, dueDate, onTaskWall, taskId } = taskItem;
+  const dispatch = useDispatch<AppThunkDispatch>();
+  const { userTaskWallTasks } = useSelector(taskWallSelector);
+
+  const [prompt, setPrompt] = useState<PopupPropsType["prompt"]>({
+    message: (
+      <span>
+        This will also delete your Task Wall task.
+        <br></br>
+        <b>Are you sure?</b>
+      </span>
+    ),
+    onDeny: () => setPrompt(undefined),
+    onAccept: async () => {
+      await dispatch(deleteTask(taskItem));
+      setPrompt(undefined);
+    },
+  });
   const [editing, setEditing] = useState(false);
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -134,9 +156,50 @@ const TaskListTask = ({
           }
         };
 
+        const handleDelete = async () => {
+          let matchingUserWallTask;
+
+          if (userTaskWallTasks)
+            matchingUserWallTask = userTaskWallTasks.find(
+              ({ taskId }) => taskId === taskId
+            );
+
+          if (matchingUserWallTask) {
+            setPrompt({
+              message: (
+                <span>
+                  This will also delete your Task Wall task.
+                  <br></br>
+                  Are you sure?
+                </span>
+              ),
+              onDeny: () => setPrompt(undefined),
+              onAccept: async () => {
+                await dispatch(deleteTask(taskItem));
+                setPrompt(undefined);
+              },
+            });
+            return;
+          }
+
+          dispatch(deleteTask(taskItem));
+        };
+
         return (
           <Form>
-            <>
+            <AnimatePresence mode="wait">
+              {prompt && <Popup key="prompt" prompt={prompt} />}
+            </AnimatePresence>
+            <motion.div
+              initial={{ y: 20, scale: 0.8, opacity: 0 }}
+              animate={{
+                y: 0,
+                scale: 1,
+                opacity: 1,
+                transition: { duration: 0.4, type: "tween", ease: "easeInOut" },
+              }}
+              exit={{ y: -20, scale: 0.8, opacity: 0 }}
+            >
               <AnimatePresence mode="wait">
                 {editing && (
                   <ModalBackground
@@ -169,6 +232,7 @@ const TaskListTask = ({
                 <TaskListTaskStatus
                   editing={editing}
                   handleEdit={handleEdit}
+                  handleDelete={handleDelete}
                   dueDate={dueDate}
                 />
                 <motion.div
@@ -241,7 +305,7 @@ const TaskListTask = ({
                   </motion.div>
                 </motion.div>
               </motion.div>
-            </>
+            </motion.div>
           </Form>
         );
       }}

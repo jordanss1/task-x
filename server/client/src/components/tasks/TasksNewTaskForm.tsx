@@ -1,6 +1,6 @@
 import { Form, Formik, FormikConfig } from "formik";
 import { AnimatePresence, Variants, motion } from "framer-motion";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "../../app/store";
 import { colors, fonts } from "../../constants";
@@ -12,6 +12,7 @@ import {
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import { TaskSchemaType, taskSchema } from "../../schemas";
 import SmallIcon from "../__reusable/SmallIcon";
+import Spinner from "../__reusable/Spinner";
 import TaskTextArea from "../__reusable/TaskTextArea";
 import ToggleSwitch from "../__reusable/ToggleSwitch";
 import TaskNewTaskOverlay from "../tasks/TaskNewTaskOverlay";
@@ -50,21 +51,21 @@ const overlayVariants: Variants = {
   exit: {
     x: 220,
     y: 280,
+    zIndex: 30,
     width: "64px",
     height: "64px",
     backgroundImage: [
       `radial-gradient(circle at -10% 50%, transparent 0%, rgb(0,0,0)), radial-gradient(circle at 100% 0%, transparent 40%, rgb(0,0,0)), repeating-conic-gradient(from 40deg at 10% 50%, ${colors.purple} 0deg 10deg, rgb(0,0,255) 10deg 20deg, ${colors.yellow} 28deg 30deg)`,
       `radial-gradient(circle at -10% 50%, transparent 0%, rgb(0,0,0)), radial-gradient(circle at 100% 0%, transparent 40%, rgb(0,0,0)), repeating-conic-gradient(from 20deg at 10% 50%, ${colors.purple} 20deg 30deg, rgb(0,0,255) 30deg 40deg, ${colors.yellow} 48deg 50deg)`,
-      `radial-gradient(circle at 50% 50%, transparent 70%, rgb(0,0,0)), radial-gradient(circle at 100% 0%, transparent 80%, rgb(0,0,0)), repeating-conic-gradient(from 0deg at 10% 50%, ${colors.purple} 20deg 30deg, ${colors.purple} 30deg 40deg, ${colors.purple} 48deg 50deg)`,
+      `radial-gradient(circle at 50% 50%, transparent 70%, rgb(202, 255, 159)), radial-gradient(circle at 100% 0%, transparent 80%, rgb(0,0,0)), repeating-conic-gradient(from 0deg at 10% 50%, ${colors.purple} 20deg 30deg, ${colors.purple} 30deg 40deg, ${colors.purple} 48deg 50deg)`,
     ],
     borderRadius: [null, "30%"],
     boxShadow:
       "1px 3px 10px rgba(0,0,0,0), -1px -1px 10px rgba(0,0,0,0), inset 10px 10px 10px rgba(0,0,0,0), inset -10px -10px 10px rgba(0,0,0,0)",
     transition: {
-      duration: 0.6,
       boxShadow: { duration: 0.3 },
       backgroundImage: { duration: 0.3, delay: 0.2 },
-      borderRadius: { delay: 0.6 },
+      borderRadius: { delay: 0.4 },
       x: { delay: 0.5, duration: 0.6 },
       y: { delay: 0.5, duration: 0.6 },
       height: { delay: 0.4 },
@@ -114,9 +115,13 @@ const childVariants: Variants = {
 };
 
 const TasksNewTaskForm = (): ReactElement => {
-  const { formActive } = useSelector(taskListSelector);
+  const { formActive, fetching } = useSelector(taskListSelector);
   const dispatch = useDispatch<AppThunkDispatch>();
   const mobile = useMediaQuery(640);
+
+  useEffect(() => {
+    if (formActive) document.body.style.overflow = "hidden";
+  }, [formActive]);
 
   const handleSubmit: FormikConfig<TaskSchemaType>["onSubmit"] = (
     values,
@@ -259,11 +264,15 @@ const TasksNewTaskForm = (): ReactElement => {
                     whileTap={{ scale: 0.9 }}
                     className="w-9 h-9 flex cursor-pointer items-center justify-center ml-auto"
                   >
-                    <SmallIcon
-                      style={{ color: colors.whiteShades[1] }}
-                      size={15}
-                      icon="fa-solid fa-plus"
-                    />
+                    {fetching ? (
+                      <Spinner />
+                    ) : (
+                      <SmallIcon
+                        style={{ color: colors.whiteShades[1] }}
+                        size={15}
+                        icon="fa-solid fa-plus"
+                      />
+                    )}
                   </motion.div>
                 </motion.div>
               )}
