@@ -23,9 +23,11 @@ const useSortTasks = ({
     }
 
     if (sortBy === "Due") {
-      const newTasks = tasks
-        ?.filter((task) => task.enabledDueDate === true)
-        .toSorted(
+      let newTasks = tasks;
+
+      newTasks
+        .filter((task) => task.enabledDueDate === true)
+        .sort(
           (taskA: TaskType, taskB: TaskType) =>
             dayjs(taskA.dueDate).utcOffset() - dayjs(taskB.dueDate).utcOffset()
         );
