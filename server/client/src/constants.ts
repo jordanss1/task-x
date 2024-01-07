@@ -52,6 +52,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
     taskId: "123",
     dueDate: dayjs().subtract(2, "week").toDate().toISOString(),
     enabledDueDate: true,
+    complete: false,
     created: dayjs()
       .subtract(2, "days")
       .subtract(12, "hours")
@@ -118,6 +119,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
       .subtract(3, "hours")
       .toDate()
       .toISOString(),
+    complete: false,
     likes: 100,
     awards: ["supported", "superSupported", "communityLegend"],
     comments: [
@@ -174,6 +176,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
     dueDate: dayjs().add(3, "weeks").toDate().toISOString(),
     enabledDueDate: true,
     created: dayjs().subtract(2, "days").add(6, "hours").toDate().toISOString(),
+    complete: true,
     likes: 2,
     awards: [],
     comments: [],
@@ -194,6 +197,7 @@ export const taskWallTasks: TaskWallTaskType[] = [
     enabledDueDate: true,
     created: dayjs().subtract(5, "days").toDate().toISOString(),
     likes: 20,
+    complete: false,
     awards: ["supported"],
     comments: [
       {

@@ -251,9 +251,11 @@ const TasksNewTaskForm = (): ReactElement => {
                     />
                   </motion.div>
                   <motion.div
-                    onClick={() => props.submitForm()}
+                    onClick={() => {
+                      if (!fetching) props.submitForm();
+                    }}
                     style={{
-                      background: colors.buttonGradients[1],
+                      background: fetching ? "grey" : colors.buttonGradients[1],
                       borderRadius: "30%",
                     }}
                     variants={childVariants}

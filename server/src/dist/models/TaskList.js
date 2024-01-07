@@ -9,10 +9,12 @@ exports.taskSchema = new mongoose_1.Schema({
     dueDate: { required: false, type: String, default: undefined },
     created: { required: true, type: String },
     onTaskWall: { required: true, type: Boolean },
+    complete: { required: true, type: Boolean, default: false },
 });
 exports.taskListSchema = new mongoose_1.Schema({
     _user: { required: true, type: mongoose_1.Types.ObjectId, ref: "User" },
     tasks: { required: true, type: [exports.taskSchema], default: null },
+    totalTasks: { required: true, type: Number, default: 0 },
 });
 (0, mongoose_1.model)("taskList", exports.taskListSchema);
 (0, mongoose_1.model)("task", exports.taskSchema);

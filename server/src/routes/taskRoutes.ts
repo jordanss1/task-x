@@ -5,6 +5,7 @@ import requireJwt from "../middlewares/requireJwt";
 import { PublicTaskListType, PublicTaskType } from "../models/PublicTaskList";
 import { TaskListType, TaskType, TaskTypeIncoming } from "../models/TaskList";
 import { ValidUserType } from "../models/User";
+import { assertRequestWithUser } from "../types";
 
 const Task = model<TaskType>("task");
 const TaskList = model<TaskListType>("taskList");
@@ -77,7 +78,7 @@ const taskRoutes = (app: Express) => {
         try {
           await TaskList.findOneAndUpdate(
             { _user: req.user?._id },
-            { $push: { tasks: newTask } }
+            { $push: { tasks: newTask }, $inc: { totalTasks: 1 } }
           ).exec();
         } catch (err) {
           return res.status(500).send("Unable to update task list, try again");
@@ -95,6 +96,7 @@ const taskRoutes = (app: Express) => {
           const tasks = await new TaskList({
             _user: req.user?._id,
             tasks: [newTask],
+            totalTasks: 1,
           }).save();
 
           updatedUserTasks = tasks?.tasks.map((task) => task);
@@ -125,7 +127,7 @@ const taskRoutes = (app: Express) => {
           try {
             await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
               { _user: req.user?._id },
-              { $push: { tasks: publicTask, $inc: { totalTasks: 1 } } }
+              { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }
             ).exec();
           } catch (err) {
             return res
@@ -145,18 +147,20 @@ const taskRoutes = (app: Express) => {
             await new PublicTaskList({
               _user: req.user?._id,
               tasks: [publicTask],
-              $inc: { totalTasks: 1 },
+              totalTasks: 1,
             }).save();
           } catch (err) {
             return res
               .status(500)
               .send("Unable to add your task to task wall, try again");
           } finally {
-            updatedUserPublicTasks = await PublicTaskList.findOne({
+            const tasks = await PublicTaskList.findOne({
               _user: req.user?._id,
             })
               .select("tasks")
               .exec();
+
+            updatedUserPublicTasks = tasks?.tasks.map((task) => task);
           }
         }
       }
@@ -186,22 +190,85 @@ const taskRoutes = (app: Express) => {
       let updatedUserTasks;
       let updatedUserPublicTasks;
 
-      // try {
-      //   await TaskList.findOneAndDelete<TaskListType>(
-      //     { _user: req.user?._id },
-      //     { $pull: { tasks: { taskId: req.body.taskId } } }
-      //   ).exec();
+      const tasks = await TaskList.findOne<TaskListType>({
+        _user: req.user?._id,
+      })
+        .select("totalTasks")
+        .exec();
 
-      //   const tasks = await TaskList.findById(req.user?._id).select("tasks");
+      const publicTasks = await PublicTaskList.findOne<PublicTaskListType>({
+        _user: req.user?._id,
+      })
+        .select("totalTasks")
+        .exec();
 
-      //   updatedUserTasks = tasks?.tasks.map((task) => task);
-      // } catch (err) {
-      //   return res.status(500).send("Unable to delete task, try again");
-      // }
+      if (tasks?.totalTasks && tasks.totalTasks > 1) {
+        try {
+          await TaskList.findOneAndUpdate<TaskListType>(
+            { _user: req.user?._id },
+            {
+              $pull: { tasks: { taskId: req.body.taskId } },
+              $inc: { totalTasks: -1 },
+            }
+          ).exec();
 
-      // console.log(updatedUserTasks);
+          const tasks = await TaskList.findOne({ _user: req.user?._id })
+            .select("tasks")
+            .exec();
 
-      res.send([updatedUserTasks, updatedUserPublicTasks || false, false]);
+          updatedUserTasks = tasks?.tasks.map((task) => task);
+        } catch (err) {
+          return res.status(500).send("Unable to delete task, try again");
+        }
+      }
+
+      if (tasks?.totalTasks && tasks.totalTasks === 1) {
+        try {
+          await TaskList.findOneAndDelete<TaskListType>({
+            _user: req.user?._id,
+          }).exec();
+
+          updatedUserTasks = null;
+        } catch (err) {
+          return res.status(500).send("Unable to delete task, try again");
+        }
+      }
+
+      if (publicTasks && publicTasks.totalTasks > 1) {
+        try {
+          await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
+            { _user: req.user?._id },
+            {
+              $pull: { tasks: { taskId: req.body.taskId } },
+              $inc: { totalTasks: -1 },
+            }
+          ).exec();
+
+          const tasks = await PublicTaskList.findOne({ _user: req.user?._id });
+
+          updatedUserPublicTasks = tasks?.tasks.map((task) => task);
+        } catch (err) {
+          return res
+            .status(500)
+            .send("Unable to delete task from Task Wall, try again");
+        }
+      }
+
+      if (publicTasks && publicTasks.totalTasks === 1) {
+        try {
+          await PublicTaskList.findOneAndDelete<TaskListType>({
+            _user: req.user?._id,
+          }).exec();
+
+          updatedUserPublicTasks = null;
+        } catch (err) {
+          return res
+            .status(500)
+            .send("Unable to delete task from Task Wall, try again");
+        }
+      }
+
+      res.send([updatedUserTasks, updatedUserPublicTasks, false]);
     }
   );
 };

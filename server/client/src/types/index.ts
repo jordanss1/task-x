@@ -5,6 +5,7 @@ export type TaskType = {
   dueDate?: string;
   created: string;
   onTaskWall: boolean;
+  complete: boolean;
 };
 
 export type TaskTypeSent = Omit<TaskType, "created" | "taskId">;
@@ -16,6 +17,7 @@ export type TaskWallTaskType = {
   dueDate?: string;
   enabledDueDate: boolean;
   created: string;
+  complete: boolean;
   awards: AwardType[];
   likes: number;
   comments: CommentType[] | [];
@@ -50,4 +52,3 @@ export type UserType = {
 } & UserProfile;
 
 export type UserStateType = UserType | ValidUserType | false | null;
-

@@ -7,11 +7,13 @@ export const taskSchema = new Schema({
   dueDate: { required: false, type: String, default: undefined },
   created: { required: true, type: String },
   onTaskWall: { required: true, type: Boolean },
+  complete: { required: true, type: Boolean, default: false },
 });
 
 export const taskListSchema = new Schema({
   _user: { required: true, type: Types.ObjectId, ref: "User" },
   tasks: { required: true, type: [taskSchema], default: null },
+  totalTasks: { required: true, type: Number, default: 0 },
 });
 
 export type TaskType = InferSchemaType<typeof taskSchema>;

@@ -36,11 +36,11 @@ export const taskStatus = (date?: Dayjs) => {
   } else if (dayjs().isBefore(date) && minutes) {
     taskIsOverdue = false;
     timeLeft = minutes;
-    timeFormat = minutes > 1 ? "minutes" : "minute";
+    timeFormat = minutes > 1 ? "mins" : "min";
   } else if (dayjs().isBefore(date) && seconds) {
     taskIsOverdue = false;
     timeLeft = seconds;
-    timeFormat = seconds > 1 ? "seconds" : "second";
+    timeFormat = seconds > 1 ? "secs" : "sec";
   }
 
   return { taskIsOverdue, timeLeft, timeFormat, noDueDate };

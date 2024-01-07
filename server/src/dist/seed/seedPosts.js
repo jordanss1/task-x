@@ -190,7 +190,6 @@ const todoTasks = [
     },
 ];
 const fakerPosts = async (uri) => {
-    console.log(uri);
     const db = (0, mongoose_1.createConnection)(uri);
     const User = db.model("users", User_1.userSchema);
     const PublicTaskList = db.model("publicTaskList", PublicTaskList_1.publicTaskListSchema);
@@ -249,6 +248,7 @@ const fakerPosts = async (uri) => {
                 to: (0, dayjs_1.default)().subtract(2, "weeks").toDate(),
             })
                 .toISOString();
+        const complete = faker.datatype.boolean();
         const publicTask = new PublicTask({
             task: task,
             taskId: faker.string.uuid(),
@@ -259,6 +259,7 @@ const fakerPosts = async (uri) => {
             awards,
             likes,
             comments: commentArray,
+            complete,
         });
         const publicTaskList = await PublicTaskList.findOne({
             _user: user?._id,

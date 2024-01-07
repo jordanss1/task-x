@@ -72,6 +72,11 @@ export const updateTaskState = (
     return;
   }
 
+  if (action.payload === null) {
+    state[taskState] = false;
+    return;
+  }
+
   state[taskState] = state[taskState] ? state[taskState] : false;
 };
 

@@ -8,6 +8,7 @@ import {
   taskListSelector,
 } from "../../../features/taskList/taskListSlice";
 import Spinner from "../../__reusable/Spinner";
+import TaskListCategory from "./TaskListCategory";
 import TaskListPlaceholder from "./TaskListPlaceholder";
 import TaskListTask from "./TaskListTask";
 
@@ -75,22 +76,12 @@ const TaskList = (): ReactElement => {
       );
     } else {
       return (
-        <motion.section
-          key={3}
-          style={{
-            justifyItems: tasks.length < 4 ? "left" : "center",
-            gridTemplateColumns:
-              tasks.length < 4
-                ? "repeat(auto-fit, minmax(230px, 250px))"
-                : "repeat(auto-fit, minmax(230px, 1fr))",
-          }}
-          className="grid gap-8 py-20 relative"
-        >
+        <>
           {fetching && BigSpinner}
-          {tasks.map((taskItem, i) => (
-            <TaskListTask key={i} index={i} taskItem={taskItem} />
-          ))}
-        </motion.section>
+          <TaskListCategory sortBy="Due" />
+          <TaskListCategory sortBy="Not due" />
+          <TaskListCategory sortBy="Complete" />
+        </>
       );
     }
   };

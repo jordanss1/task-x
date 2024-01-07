@@ -92,7 +92,7 @@ const TaskListTaskStatusPopout = ({
             initial="initial"
             animate="animate"
             exit="exit"
-            className="absolute p-1 w-32 bottom-[35px] cursor-default origin-bottom-right h-fit right-0  border-[1px] font-[jura] rounded-lg overflow-hidden text-xs bg-[#f4f0ed] border-slate-400 text-slate-600 opacity-80"
+            className="absolute p-1 w-32 z-30 bottom-[35px] cursor-default origin-bottom-right h-fit right-0  border-[1px] font-[jura] rounded-lg overflow-hidden text-xs bg-[#f4f0ed] border-slate-400 text-slate-600 opacity-80"
           >
             You can set due date using the edit button
           </motion.div>
@@ -124,7 +124,7 @@ const TaskListTaskStatusPopout = ({
           initial="initial"
           animate="animate"
           exit="exit"
-          className="absolute p-2 w-40 bottom-[38px] cursor-default origin-bottom-right h-fit right-0 border-[1px] rounded-lg overflow-hidden text-sm bg-[#f4f0ed] border-slate-400 text-slate-600 opacity-80"
+          className="absolute p-2 w-40 bottom-[38px] z-30 cursor-default origin-bottom-right h-fit right-0 border-[1px] rounded-lg overflow-hidden text-sm bg-[#f4f0ed] border-slate-400 text-slate-600 opacity-80"
         >
           {dayjs(dueDate).format("DD/MM/YYYY HH:mm")}
         </motion.div>

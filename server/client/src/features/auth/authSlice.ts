@@ -29,7 +29,6 @@ export const updateProfile = createAsyncThunk<
     return await axiosUpdateProfile(profile);
   } catch (err) {
     if (err instanceof AxiosError) {
-      console.log(err.response?.data);
       dispatch(setError("hi"));
     }
 

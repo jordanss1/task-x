@@ -11,6 +11,7 @@ exports.publicTaskSchema = new mongoose_1.Schema({
     enabledDueDate: { required: true, type: Boolean },
     dueDate: { required: false, type: String, default: null },
     created: { required: true, type: String },
+    complete: { required: false, type: Boolean, default: false },
     awards: {
         required: false,
         type: Array,

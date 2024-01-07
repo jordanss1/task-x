@@ -34,13 +34,9 @@ const returnTasksAndUpdateStore = async (
 ) => {
   dispatch(setFetching(true));
 
-  console.log(arg);
-
   try {
     const [userTasks, userTaskWallTasks, allTaskWallTasks] =
       await axiosFunction(arg);
-
-    console.log(userTasks);
 
     dispatch(assignAllWallTasks(allTaskWallTasks));
     dispatch(assignUserWallTasks(userTaskWallTasks));
@@ -150,7 +146,7 @@ const taskListSlice = createSlice({
             return;
           }
 
-          if (!action.payload) {
+          if (action.payload === null) {
             state.tasks = false;
             state.fetching = false;
           }

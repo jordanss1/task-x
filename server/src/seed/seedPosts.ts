@@ -194,7 +194,6 @@ const todoTasks = [
 ];
 
 const fakerPosts = async (uri: string) => {
-  console.log(uri);
   const db = createConnection(uri);
   const User = db.model("users", userSchema);
   const PublicTaskList = db.model("publicTaskList", publicTaskListSchema);
@@ -268,6 +267,8 @@ const fakerPosts = async (uri: string) => {
             })
             .toISOString();
 
+      const complete = faker.datatype.boolean();
+
       const publicTask = new PublicTask<PublicTaskType>({
         task: task,
         taskId: faker.string.uuid(),
@@ -278,6 +279,7 @@ const fakerPosts = async (uri: string) => {
         awards,
         likes,
         comments: commentArray as any,
+        complete,
       });
 
       const publicTaskList = await PublicTaskList.findOne<PublicTaskListType>({

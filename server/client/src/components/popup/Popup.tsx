@@ -36,7 +36,7 @@ const PromptVariants: Variants = {
 };
 
 const SuccessOrErrorVariants: Variants = {
-  initial: { y: "-100%" },
+  initial: { y: "-100%", left: "calc(50% - 140px)" },
   animate: { y: "10%", transition: { type: "tween", ease: "easeInOut" } },
   exit: { y: "-100%", transition: { type: "tween", ease: "easeInOut" } },
 };
@@ -107,12 +107,11 @@ const Popup = ({ error, success, prompt }: PopupPropsType): ReactElement => {
         exit="exit"
         style={{
           top: prompt ? "unset" : "0",
-          left: prompt ? "unset" : "0",
           margin: prompt ? "auto" : "0",
           flexDirection: prompt ? "column" : "row",
-          inset: prompt ? "0" : "initial",
+          inset: prompt ? "0" : "unset",
         }}
-        className="fixed px-5 z-30 justify-center items-center w-full flex"
+        className="fixed px-5 z-30 justify-center items-center mx-auto flex"
       >
         <div
           style={{
@@ -127,7 +126,7 @@ const Popup = ({ error, success, prompt }: PopupPropsType): ReactElement => {
             padding: prompt ? "20px" : "10px",
             height: prompt ? "160px" : "128px",
           }}
-          className="h-32 flex flex-col gap-1 overflow-visible rounded-xl justify-center items-center max-w-xs w-full"
+          className="h-32 flex flex-col gap-1 overflow-visible rounded-xl justify-center items-center max-w-xs w-full mx-auto"
         >
           <div
             style={{

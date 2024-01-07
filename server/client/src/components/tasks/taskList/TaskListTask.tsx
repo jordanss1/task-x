@@ -41,20 +41,7 @@ const TaskListTask = ({
   const dispatch = useDispatch<AppThunkDispatch>();
   const { userTaskWallTasks } = useSelector(taskWallSelector);
 
-  const [prompt, setPrompt] = useState<PopupPropsType["prompt"]>({
-    message: (
-      <span>
-        This will also delete your Task Wall task.
-        <br></br>
-        <b>Are you sure?</b>
-      </span>
-    ),
-    onDeny: () => setPrompt(undefined),
-    onAccept: async () => {
-      await dispatch(deleteTask(taskItem));
-      setPrompt(undefined);
-    },
-  });
+  const [prompt, setPrompt] = useState<PopupPropsType["prompt"]>();
   const [editing, setEditing] = useState(false);
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -161,7 +148,7 @@ const TaskListTask = ({
 
           if (userTaskWallTasks)
             matchingUserWallTask = userTaskWallTasks.find(
-              ({ taskId }) => taskId === taskId
+              ({ taskId }) => taskId === taskItem.taskId
             );
 
           if (matchingUserWallTask) {
@@ -220,7 +207,7 @@ const TaskListTask = ({
                 style={{
                   scale: 1,
                 }}
-                className="relative gap-8 sm:[--scale-to:1.2] [--scale-to:1.1]  flex flex-col p-4 max-w-[230px] rounded-3xl w-full"
+                className="relative gap-8 sm:[--scale-to:1.2] [--scale-to:1.1]  flex flex-col max-w-[190px] rounded-3xl w-full"
               >
                 {editing && (
                   <TaskListTaskOverlay
