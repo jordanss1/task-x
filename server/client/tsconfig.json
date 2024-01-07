@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext", "ESNext.Array"],
     "module": "ESNext",
     "skipLibCheck": true,
     "types": ["vite/client", "node"],

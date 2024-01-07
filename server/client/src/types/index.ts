@@ -8,7 +8,7 @@ export type TaskType = {
   complete: boolean;
 };
 
-export type TaskTypeSent = Omit<TaskType, "created" | "taskId">;
+export type TaskTypeSent = Omit<TaskType, "created" | "taskId" | "complete">;
 
 export type TaskWallTaskType = {
   task: string;

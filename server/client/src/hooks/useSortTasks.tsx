@@ -26,7 +26,7 @@ const useSortTasks = ({
       const newTasks = tasks
         ?.filter((task) => task.enabledDueDate === true)
         .toSorted(
-          (taskA, taskB) =>
+          (taskA: TaskType, taskB: TaskType) =>
             dayjs(taskA.dueDate).utcOffset() - dayjs(taskB.dueDate).utcOffset()
         );
 
