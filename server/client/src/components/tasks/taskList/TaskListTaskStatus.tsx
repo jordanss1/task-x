@@ -8,8 +8,10 @@ import TaskListTaskStatusPopout from "./TaskListTaskStatusPopout";
 type TaskListTaskStatusPropsType = {
   dueDate: string | undefined;
   editing: boolean;
+  complete: boolean;
   handleEdit: () => void;
   handleDelete: () => void;
+  handleComplete: () => void;
 };
 
 const containerVariants: Variants = {
@@ -55,6 +57,8 @@ const TaskListTaskStatus = ({
   editing,
   handleEdit,
   handleDelete,
+  handleComplete,
+  complete,
 }: TaskListTaskStatusPropsType): ReactElement => {
   const buttonStyle = {
     background: colors.buttonGradients[0],
@@ -77,11 +81,16 @@ const TaskListTaskStatus = ({
       animate="animate"
       className="relative flex items-center justify-between min-h-[29px] rounded-xl"
     >
-      <TaskListTaskStatusPopout editing={editing} dueDate={dueDate} />
+      <TaskListTaskStatusPopout
+        editing={editing}
+        complete={complete}
+        dueDate={dueDate}
+      />
       <motion.div
         animate={{
           gap: "8px",
           maxWidth: editing ? "55px" : "87px",
+          justifyContent: complete ? "end" : "normal",
         }}
         className="w-full gap-2 flex max-w-[87px]"
       >
@@ -101,25 +110,27 @@ const TaskListTaskStatus = ({
           </Button>
         ) : (
           <>
-            <Button
-              style={buttonStyle}
-              variants={buttonVariants}
-              whileHover="hovered"
-              whileTap="tapped"
-              custom={editing}
-              animate="animate"
-              onClick={() => handleEdit()}
-              className="cursor-pointer px-1 py-[2px] rounded-lg"
-            >
-              <SmallIcon
-                style={{ color: "black", y: 0 }}
-                animate={{
-                  color: "black",
-                }}
-                size={16}
-                icon="fa-regular fa-pen-to-square"
-              />
-            </Button>
+            {!complete && (
+              <Button
+                style={buttonStyle}
+                variants={buttonVariants}
+                whileHover="hovered"
+                whileTap="tapped"
+                custom={editing}
+                animate="animate"
+                onClick={() => handleEdit()}
+                className="cursor-pointer px-1 py-[2px] rounded-lg"
+              >
+                <SmallIcon
+                  style={{ color: "black", y: 0 }}
+                  animate={{
+                    color: "black",
+                  }}
+                  size={16}
+                  icon="fa-regular fa-pen-to-square"
+                />
+              </Button>
+            )}
             <Button
               style={buttonStyle}
               variants={buttonVariants}
@@ -138,24 +149,27 @@ const TaskListTaskStatus = ({
                 className="relative text-red-500  text-lg"
               />
             </Button>
-            <Button
-              style={buttonStyle}
-              variants={buttonVariants}
-              whileHover="hovered"
-              whileTap="tapped"
-              custom={editing}
-              animate="animate"
-              className="cursor-pointer px-1 py-[2px] rounded-lg"
-            >
-              <SmallIcon
-                style={{ color: "green", y: 0 }}
-                animate={{
-                  color: "green",
-                }}
-                size={16}
-                icon="fa-solid fa-check"
-              />
-            </Button>
+            {!complete && (
+              <Button
+                style={buttonStyle}
+                variants={buttonVariants}
+                whileHover="hovered"
+                whileTap="tapped"
+                custom={editing}
+                onClick={() => handleComplete()}
+                animate="animate"
+                className="cursor-pointer px-1 py-[2px] rounded-lg"
+              >
+                <SmallIcon
+                  style={{ color: "green", y: 0 }}
+                  animate={{
+                    color: "green",
+                  }}
+                  size={16}
+                  icon="fa-solid fa-check"
+                />
+              </Button>
+            )}
           </>
         )}
       </motion.div>

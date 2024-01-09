@@ -8,6 +8,7 @@ import {
 import { AxiosError } from "axios";
 import {
   SubmitTaskReturnType,
+  axiosCompleteTask,
   axiosDeleteTask,
   axiosGetUserTasks,
   axiosSubmitTask,
@@ -23,6 +24,7 @@ import {
 } from "../taskWall/taskWallSlice";
 
 type AxiosFunctionType =
+  | ((task: TaskType["taskId"]) => Promise<SubmitTaskReturnType>)
   | ((task: TaskType) => Promise<SubmitTaskReturnType>)
   | ((task: TaskTypeSent) => Promise<SubmitTaskReturnType>);
 
@@ -58,7 +60,7 @@ export const submitTask = createAsyncThunk<
   TaskTypeSent,
   { state: StateType }
 >("taskList/submitTask", async (task, { dispatch }) => {
-  return returnTasksAndUpdateStore(
+  return await returnTasksAndUpdateStore(
     dispatch,
     task,
     "Task created successfully",
@@ -83,14 +85,27 @@ export const getUserTasks = createAsyncThunk<TaskType[] | false>(
 
 export const deleteTask = createAsyncThunk<
   TaskType[] | false,
-  TaskType,
+  TaskType["taskId"],
   { state: StateType }
->("taskList/deleteTask", async (task, { dispatch }) => {
-  return returnTasksAndUpdateStore(
+>("taskList/deleteTask", async (taskId, { dispatch }) => {
+  return await returnTasksAndUpdateStore(
     dispatch,
-    task,
+    taskId,
     "Task has been deleted",
     axiosDeleteTask
+  );
+});
+
+export const completeTask = createAsyncThunk<
+  TaskType[] | false,
+  TaskType["taskId"],
+  { state: StateType }
+>("taskList/completeTask", async (taskId, { dispatch }) => {
+  return await returnTasksAndUpdateStore(
+    dispatch,
+    taskId,
+    "Task marked as complete",
+    axiosCompleteTask
   );
 });
 
@@ -121,9 +136,11 @@ const taskListSlice = createSlice({
     builder
       .addMatcher(
         (action) =>
-          ["taskList/submitTask", "taskList/getUserTasks"].some((type) =>
-            action.type.includes(type)
-          ),
+          [
+            "taskList/submitTask",
+            "taskList/getUserTasks",
+            "taskList/completeTask",
+          ].some((type) => action.type.includes(type)),
         (state, action: PayloadAction<TaskType[] | false>) => {
           reducerMatcherFunction(action, () => {
             updateTaskState(state, action, "tasks");

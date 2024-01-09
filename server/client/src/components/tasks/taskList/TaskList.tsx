@@ -7,25 +7,35 @@ import {
   getUserTasks,
   taskListSelector,
 } from "../../../features/taskList/taskListSlice";
+import {
+  getUserWallTasks,
+  taskWallSelector,
+} from "../../../features/taskWall/taskWallSlice";
 import Spinner from "../../__reusable/Spinner";
 import TaskListCategory from "./TaskListCategory";
 import TaskListPlaceholder from "./TaskListPlaceholder";
-import TaskListTask from "./TaskListTask";
 
 const TaskList = (): ReactElement => {
   const { tasks, fetching } = useSelector(taskListSelector);
+  const { userTaskWallTasks } = useSelector(taskWallSelector);
   const dispatch = useDispatch<AppThunkDispatch>();
+
+  console.log(fetching);
 
   useEffect(() => {
     if (tasks === null) {
       dispatch(getUserTasks());
+    }
+
+    if (userTaskWallTasks === null) {
+      dispatch(getUserWallTasks());
     }
   }, []);
 
   const BigSpinner = (
     <div
       style={{ background: "rgba(0,0,0,.3)" }}
-      className="absolute rounded-full z-10 inset-0 m-auto p-[6px] w-fit h-fit flex justify-center items-center"
+      className="fixed rounded-full z-[100] inset-0 m-auto p-9 w-fit h-fit flex justify-center items-center"
     >
       <Spinner size="large" color={colors.purple} />
     </div>
@@ -76,12 +86,21 @@ const TaskList = (): ReactElement => {
       );
     } else {
       return (
-        <>
+        <div className="pb-14">
           {fetching && BigSpinner}
-          <TaskListCategory sortBy="Due" />
-          <TaskListCategory sortBy="Not due" />
-          <TaskListCategory sortBy="Complete" />
-        </>
+          <TaskListCategory
+            userTaskWallTasks={userTaskWallTasks}
+            sortBy="Due"
+          />
+          <TaskListCategory
+            userTaskWallTasks={userTaskWallTasks}
+            sortBy="Not due"
+          />
+          <TaskListCategory
+            userTaskWallTasks={userTaskWallTasks}
+            sortBy="Complete"
+          />
+        </div>
       );
     }
   };

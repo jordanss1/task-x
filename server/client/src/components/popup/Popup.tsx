@@ -97,6 +97,7 @@ const Popup = ({ error, success, prompt }: PopupPropsType): ReactElement => {
         <ModalBackground
           onClick={() => prompt.onDeny()}
           mixBlendMode="normal"
+          zIndex={29}
           background="rgb(0,0,0,.3)"
         />
       )}
@@ -111,7 +112,7 @@ const Popup = ({ error, success, prompt }: PopupPropsType): ReactElement => {
           flexDirection: prompt ? "column" : "row",
           inset: prompt ? "0" : "unset",
         }}
-        className="fixed px-5 z-30 justify-center items-center mx-auto flex"
+        className="fixed px-5 z-30 h-fit w-fit justify-center items-center mx-auto flex"
       >
         <div
           style={{
@@ -124,9 +125,10 @@ const Popup = ({ error, success, prompt }: PopupPropsType): ReactElement => {
             outlineOffset: "3px",
             outlineStyle: "double",
             padding: prompt ? "20px" : "10px",
-            height: prompt ? "160px" : "128px",
+            height: prompt ? "initial" : "128px",
+            maxWidth: prompt ? "400px" : "320px",
           }}
-          className="h-32 flex flex-col gap-1 overflow-visible rounded-xl justify-center items-center max-w-xs w-full mx-auto"
+          className="min-h-[128px] flex flex-col gap-1 overflow-visible rounded-xl justify-center items-center max-w-xs w-full mx-auto"
         >
           <div
             style={{

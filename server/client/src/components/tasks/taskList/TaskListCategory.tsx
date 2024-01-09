@@ -2,18 +2,20 @@ import { ReactElement } from "react";
 import { colors, fonts } from "../../../constants";
 import { useScreenSize } from "../../../hooks/MediaQueryHooks";
 import useSortTasks from "../../../hooks/useSortTasks";
+import { TaskType, TaskWallTaskType } from "../../../types";
 import TaskListTask from "./TaskListTask";
 
 type TaskListCategoryType = {
   sortBy: "Due" | "Not due" | "Complete";
+  userTaskWallTasks: TaskWallTaskType[] | false | null;
 };
 
-const TaskListCategory = ({ sortBy }: TaskListCategoryType): ReactElement => {
+const TaskListCategory = ({
+  sortBy,
+  userTaskWallTasks,
+}: TaskListCategoryType): ReactElement => {
   const tasks = useSortTasks({ sortBy });
   const screenWidth = useScreenSize();
-
-  const taskAmount =
-    screenWidth > 923 ? 4 : screenWidth > 573 ? 3 : screenWidth > 532 ? 2 : 1;
 
   return (
     <section className="pt-10">
@@ -38,18 +40,31 @@ const TaskListCategory = ({ sortBy }: TaskListCategoryType): ReactElement => {
         <div
           key={3}
           style={{
-            justifyItems: tasks?.length < taskAmount ? "left" : "center",
-            gridTemplateColumns:
-              tasks.length < taskAmount
-                ? "repeat(auto-fit, minmax(200px, 220px))"
-                : "repeat(auto-fit, minmax(200px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 220px))",
+            justifyContent: screenWidth < 580 ? "center" : "normal",
             rowGap: "60px",
           }}
           className="grid gap-8 px-1 py-5 min-h-[222px]"
         >
-          {tasks.map((taskItem, i) => (
-            <TaskListTask key={i} index={i} taskItem={taskItem} />
-          ))}
+          {tasks.map((taskItem, i) => {
+            let matchingUserWallTask: TaskWallTaskType | boolean | undefined =
+              false;
+
+            matchingUserWallTask = !userTaskWallTasks
+              ? false
+              : userTaskWallTasks.find(
+                  ({ taskId }) => taskId === taskItem.taskId
+                );
+
+            return (
+              <TaskListTask
+                key={i}
+                matchingUserWallTask={matchingUserWallTask || false}
+                index={i}
+                taskItem={taskItem}
+              />
+            );
+          })}
         </div>
       )}
     </section>

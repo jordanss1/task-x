@@ -13,7 +13,7 @@ const PublicTask = model<PublicTaskType>("publicTask");
 const PublicTaskList = model<PublicTaskListType>("publicTaskList");
 
 const taskRoutes = (app: Express) => {
-  app.get("/api/user_tasks", requireJwt, async (req, res) => {
+  app.get("/api/tasks/user", requireJwt, async (req, res) => {
     try {
       const data = await TaskList.findOne({ _user: req.user?._id })
         .select("tasks")
@@ -25,7 +25,7 @@ const taskRoutes = (app: Express) => {
     }
   });
 
-  app.get("/api/user_wall_tasks", requireJwt, async (req, res) => {
+  app.get("/api/wall_tasks/user", requireJwt, async (req, res) => {
     try {
       const data = await PublicTaskList.findOne({ _user: req.user?._id })
         .select("tasks")
@@ -35,11 +35,11 @@ const taskRoutes = (app: Express) => {
     } catch (err) {
       return res
         .status(500)
-        .send("Issue retrieving task wall tasks, server error");
+        .send("Issue retrieving user task wall tasks, server error");
     }
   });
 
-  app.get("/api/wall_tasks", requireJwt, async (req, res) => {
+  app.get("/api/wall_tasks/all", requireJwt, async (req, res) => {
     try {
       const publicTasks = await PublicTaskList.find({
         totalTasks: { $gt: 0 },
@@ -60,7 +60,58 @@ const taskRoutes = (app: Express) => {
   });
 
   app.post(
-    "/api/new_task",
+    "/api/task/complete",
+    requireJwt,
+    async (req: Request<{}, any, { taskId: TaskType["taskId"] }>, res) => {
+      try {
+        await TaskList.findOneAndUpdate(
+          {
+            _user: req.user?._id,
+          },
+          { $set: { "tasks.$[task].complete": true } },
+          { arrayFilters: [{ "task.taskId": req.body.taskId }] }
+        ).exec();
+
+        await PublicTaskList.findOneAndUpdate(
+          {
+            _user: req.user?._id,
+          },
+          { $set: { "tasks.$[task].complete": true } },
+          { arrayFilters: [{ "task.taskId": req.body.taskId }] }
+        );
+
+        const tasks = await TaskList.findOne({
+          _user: req.user?._id,
+        })
+          .select("tasks")
+          .exec();
+
+        const publicTasks = await PublicTaskList.findOne({
+          _user: req.user?._id,
+        })
+          .select("tasks")
+          .exec();
+
+        const updatedUserTasks = tasks?.tasks.map((task) => task);
+
+        const updatedUserPublicTasks = publicTasks?.tasks.map((task) => task);
+
+        res.send([
+          updatedUserTasks || false,
+          updatedUserPublicTasks || false,
+          false,
+        ]);
+      } catch (err) {
+        console.log(err);
+        return res
+          .status(500)
+          .send("Unable to set task as complete, try again");
+      }
+    }
+  );
+
+  app.post(
+    "/api/task",
     requireJwt,
     async (req: Request<{}, any, TaskTypeIncoming>, res) => {
       const newTask = new Task<TaskType>({
@@ -184,9 +235,9 @@ const taskRoutes = (app: Express) => {
   );
 
   app.delete(
-    "/api/delete_task",
+    "/api/task",
     requireJwt,
-    async (req: Request<{}, any, TaskType>, res) => {
+    async (req: Request<{}, any, { taskId: TaskType["taskId"] }>, res) => {
       let updatedUserTasks;
       let updatedUserPublicTasks;
 

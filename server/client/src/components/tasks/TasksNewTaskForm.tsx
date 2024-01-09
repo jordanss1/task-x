@@ -257,6 +257,7 @@ const TasksNewTaskForm = (): ReactElement => {
                     style={{
                       background: fetching ? "grey" : colors.buttonGradients[1],
                       borderRadius: "30%",
+                      cursor: fetching ? "default" : "pointer",
                     }}
                     variants={childVariants}
                     custom={40}
@@ -264,7 +265,7 @@ const TasksNewTaskForm = (): ReactElement => {
                       background: colors.hoveredButtonGradient,
                     }}
                     whileTap={{ scale: 0.9 }}
-                    className="w-9 h-9 flex cursor-pointer items-center justify-center ml-auto"
+                    className="w-9 h-9 flex items-center justify-center ml-auto"
                   >
                     {fetching ? (
                       <Spinner />

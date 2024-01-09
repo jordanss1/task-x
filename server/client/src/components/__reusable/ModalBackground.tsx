@@ -35,6 +35,7 @@ const ModalBackground = ({
       />
       {blur ? (
         <motion.div
+          onClick={onClick}
           initial={{
             backdropFilter: "blur(0px) drop-shadow(0px 0px 0px black)",
             background: "rgba(0,0,0,0)",
@@ -53,6 +54,7 @@ const ModalBackground = ({
       ) : (
         <motion.div
           className="modal_normal fixed inset-0"
+          onClick={onClick}
           style={{ background, zIndex: zIndex - 1, mixBlendMode }}
           initial={{
             opacity: 0,

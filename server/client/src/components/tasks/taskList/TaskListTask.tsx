@@ -1,14 +1,16 @@
 import { Form, Formik, FormikConfig } from "formik";
 import { AnimatePresence, Variants, motion, useAnimate } from "framer-motion";
 import { ReactElement, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "../../../app/store";
 import { colors, fonts } from "../../../constants";
-import { deleteTask } from "../../../features/taskList/taskListSlice";
-import { taskWallSelector } from "../../../features/taskWall/taskWallSlice";
+import {
+  completeTask,
+  deleteTask,
+} from "../../../features/taskList/taskListSlice";
 import { TaskSchemaType, taskSchema } from "../../../schemas";
 import "../../../styles/mui-overrides/task.css";
-import { TaskType } from "../../../types";
+import { TaskType, TaskWallTaskType } from "../../../types";
 import ModalBackground from "../../__reusable/ModalBackground";
 import TaskTextArea from "../../__reusable/TaskTextArea";
 import ToggleSwitch from "../../__reusable/ToggleSwitch";
@@ -19,6 +21,7 @@ import TaskListTaskStatus from "./TaskListTaskStatus";
 
 type TaskListTaskPropsType = {
   taskItem: TaskType;
+  matchingUserWallTask: TaskWallTaskType | false;
   index: number;
 };
 
@@ -36,10 +39,11 @@ const toggleVariants: Variants = {
 const TaskListTask = ({
   taskItem,
   index,
+  matchingUserWallTask,
 }: TaskListTaskPropsType): ReactElement => {
-  const { task, enabledDueDate, dueDate, onTaskWall, taskId } = taskItem;
+  const { task, enabledDueDate, dueDate, onTaskWall, taskId, complete } =
+    taskItem;
   const dispatch = useDispatch<AppThunkDispatch>();
-  const { userTaskWallTasks } = useSelector(taskWallSelector);
 
   const [prompt, setPrompt] = useState<PopupPropsType["prompt"]>();
   const [editing, setEditing] = useState(false);
@@ -144,32 +148,48 @@ const TaskListTask = ({
         };
 
         const handleDelete = async () => {
-          let matchingUserWallTask;
-
-          if (userTaskWallTasks)
-            matchingUserWallTask = userTaskWallTasks.find(
-              ({ taskId }) => taskId === taskItem.taskId
-            );
-
           if (matchingUserWallTask) {
             setPrompt({
               message: (
-                <span>
-                  This will also delete your Task Wall task.
-                  <br></br>
+                <div className="flex flex-col gap-2 max-w-[240px] pb-1">
+                  <span>
+                    This will also delete your Task Wall task including all
+                    awards, likes, and comments associated.
+                  </span>
+                  <span>
+                    If you mark the task as complete you can keep these things.
+                  </span>
                   Are you sure?
-                </span>
+                </div>
               ),
               onDeny: () => setPrompt(undefined),
               onAccept: async () => {
-                await dispatch(deleteTask(taskItem));
+                await dispatch(deleteTask(taskId));
                 setPrompt(undefined);
               },
             });
             return;
           }
 
-          dispatch(deleteTask(taskItem));
+          dispatch(deleteTask(taskItem.taskId));
+        };
+
+        const handleComplete = async () => {
+          setPrompt({
+            message: (
+              <div className="flex flex-col gap-2 max-w-[240px] pb-1">
+                <span>
+                  Completing this task will mean you can never edit it again.
+                </span>
+                Are you sure?
+              </div>
+            ),
+            onAccept: async () => {
+              await dispatch(completeTask(taskId));
+              setPrompt(undefined);
+            },
+            onDeny: () => setPrompt(undefined),
+          });
         };
 
         return (
@@ -220,6 +240,8 @@ const TaskListTask = ({
                   editing={editing}
                   handleEdit={handleEdit}
                   handleDelete={handleDelete}
+                  handleComplete={handleComplete}
+                  complete={complete}
                   dueDate={dueDate}
                 />
                 <motion.div

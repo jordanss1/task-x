@@ -23,20 +23,20 @@ const useSortTasks = ({
     }
 
     if (sortBy === "Due") {
-      let newTasks = tasks;
-
-      newTasks
-        .filter((task) => task.enabledDueDate === true)
+      let sortedTasks = tasks
+        .filter((task) => task.enabledDueDate === true && !task.complete)
         .sort(
           (taskA: TaskType, taskB: TaskType) =>
-            dayjs(taskA.dueDate).utcOffset() - dayjs(taskB.dueDate).utcOffset()
+            dayjs(taskA.dueDate).valueOf() - dayjs(taskB.dueDate).valueOf()
         );
 
-      setSortedTasks(newTasks ? newTasks : false);
+      setSortedTasks(sortedTasks ? sortedTasks : false);
     }
 
     if (sortBy === "Not due") {
-      const newTasks = tasks?.filter((task) => task.enabledDueDate === false);
+      const newTasks = tasks?.filter(
+        (task) => task.enabledDueDate === false && !task.complete
+      );
 
       setSortedTasks(newTasks ? newTasks : false);
     }

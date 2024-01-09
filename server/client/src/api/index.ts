@@ -68,7 +68,27 @@ export const axiosSubmitTask = async (
 ): Promise<SubmitTaskReturnType> => {
   const api = createAxios(true);
 
-  const { data } = await api.post("/new_task", { ...task });
+  const { data } = await api.post("/task", { ...task });
+
+  return data;
+};
+
+export const axiosDeleteTask = async (
+  taskId: TaskType["taskId"]
+): Promise<SubmitTaskReturnType> => {
+  const api = createAxios(true);
+
+  const { data } = await api.delete("/task", { data: { taskId } });
+
+  return data;
+};
+
+export const axiosCompleteTask = async (
+  taskId: TaskType["taskId"]
+): Promise<SubmitTaskReturnType> => {
+  const api = createAxios(true);
+
+  const { data } = await api.post("/task/complete", { taskId });
 
   return data;
 };
@@ -76,7 +96,7 @@ export const axiosSubmitTask = async (
 export const axiosGetUserTasks = async (): Promise<TaskType[] | false> => {
   const api = createAxios(true);
 
-  const { data } = await api.get("/user_tasks");
+  const { data } = await api.get("/tasks/user");
 
   return data;
 };
@@ -86,7 +106,7 @@ export const axiosGetUserWallTasks = async (): Promise<
 > => {
   const api = createAxios(true);
 
-  const { data } = await api.get("/user_wall_tasks");
+  const { data } = await api.get("/wall_tasks/user");
 
   return data;
 };
@@ -96,17 +116,7 @@ export const axiosGetAllTaskWallTasks = async (): Promise<
 > => {
   const api = createAxios(true);
 
-  const { data } = await api.get("/wall_tasks");
-
-  return data;
-};
-
-export const axiosDeleteTask = async (
-  task: TaskType
-): Promise<SubmitTaskReturnType> => {
-  const api = createAxios(true);
-
-  const { data } = await api.delete("/delete_task", { data: { ...task } });
+  const { data } = await api.get("/wall_tasks/all");
 
   return data;
 };
