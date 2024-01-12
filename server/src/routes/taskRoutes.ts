@@ -60,6 +60,90 @@ const taskRoutes = (app: Express) => {
   });
 
   app.post(
+    "/api/task/edit",
+    requireJwt,
+    async (req: Request<{}, any, TaskType>, res) => {
+      const { task, dueDate, enabledDueDate, onTaskWall } = req.body;
+
+      let updatedUserPublicTasks;
+
+      const publicTask = await PublicTaskList.findOne<PublicTaskListType>({
+        _user: req.user?._id,
+        tasks: { $elemMatch: { taskId: req.body.taskId } },
+      })
+        .select({ tasks: { $elemMatch: { taskId: req.body.taskId } } })
+        .exec();
+
+      try {
+        await TaskList.findOneAndUpdate(
+          {
+            _user: req.user?._id,
+            "tasks.taskId": req.body.taskId,
+          },
+          {
+            "tasks.$.task": task,
+            "tasks.$.dueDate": dueDate,
+            "tasks.$.enabledDueDate": enabledDueDate,
+            "tasks.$.onTaskWall": onTaskWall,
+          }
+        ).exec();
+      } catch (err) {
+        res.status(500).send("Issue editing task, try again");
+      }
+
+      if (publicTask && !onTaskWall) {
+        const totalTasks = await PublicTaskList.findOne<PublicTaskListType>({
+          _user: req.user?._id,
+        })
+          .select(["totalTasks", "-_id"])
+          .exec();
+
+        if (totalTasks?.totalTasks === 1) {
+          try {
+            await PublicTaskList.findOneAndDelete<PublicTaskListType>({
+              _user: req.user?._id,
+            }).exec();
+
+            updatedUserPublicTasks = false;
+          } catch (err) {
+            res
+              .status(500)
+              .send("Edited task but unable to delete task wall task");
+          }
+        } else {
+          try {
+            await PublicTaskList.findOneAndUpdate(
+              { _user: req.user?._id },
+              {
+                $pull: { tasks: { taskId: req.body.taskId } },
+                $inc: { totalTasks: -1 },
+              }
+            ).exec();
+          } catch (err) {
+            res
+              .status(500)
+              .send("Edited task but unable to delete task wall task");
+          } finally {
+            const tasks = await PublicTaskList.findOne({
+              _user: req.user?._id,
+            }).select(["tasks", "-_id"]);
+
+            updatedUserPublicTasks = tasks?.tasks.map((task) => task);
+          }
+        }
+      }
+
+      const tasks = await TaskList.findOne({ _user: req.user?._id })
+        .select("tasks")
+        .exec();
+
+      const userTasks = tasks?.tasks.map((task) => task);
+
+      res.send([userTasks, updatedUserPublicTasks || false, false]);
+    }
+  );
+
+  app.post(
     "/api/task/complete",
     requireJwt,
     async (req: Request<{}, any, { taskId: TaskType["taskId"] }>, res) => {

@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { axiosCheckUsername } from "../api";
 
-export const taskSchema = yup.object().shape({
+export const taskSubmitSchema = yup.object().shape({
   task: yup
     .string()
     .max(80, "Must be less than 80 characters")
@@ -17,9 +17,7 @@ export const taskSchema = yup.object().shape({
   onTaskWall: yup.boolean().required("Choose your task's visibility"),
 });
 
-export type TaskSchemaType = yup.InferType<typeof taskSchema>;
-
-let timer: NodeJS.Timeout;
+export type TaskSubmitSchemaType = yup.InferType<typeof taskSubmitSchema>;
 
 export const profileSchema = yup.object().shape({
   profilePicture: yup.string().required("Choose a profile photo"),

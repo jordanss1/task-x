@@ -20,8 +20,6 @@ const TaskList = (): ReactElement => {
   const { userTaskWallTasks } = useSelector(taskWallSelector);
   const dispatch = useDispatch<AppThunkDispatch>();
 
-  console.log(fetching);
-
   useEffect(() => {
     if (tasks === null) {
       dispatch(getUserTasks());
@@ -31,6 +29,8 @@ const TaskList = (): ReactElement => {
       dispatch(getUserWallTasks());
     }
   }, []);
+
+  
 
   const BigSpinner = (
     <div

@@ -2,13 +2,15 @@ import { Form, Formik, FormikConfig } from "formik";
 import { AnimatePresence, Variants, motion, useAnimate } from "framer-motion";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 import { AppThunkDispatch } from "../../../app/store";
 import { colors, fonts } from "../../../constants";
 import {
   completeTask,
   deleteTask,
+  editTask,
 } from "../../../features/taskList/taskListSlice";
-import { TaskSchemaType, taskSchema } from "../../../schemas";
+import { TaskSubmitSchemaType, taskSubmitSchema } from "../../../schemas";
 import "../../../styles/mui-overrides/task.css";
 import { TaskType, TaskWallTaskType } from "../../../types";
 import ModalBackground from "../../__reusable/ModalBackground";
@@ -41,12 +43,21 @@ const TaskListTask = ({
   index,
   matchingUserWallTask,
 }: TaskListTaskPropsType): ReactElement => {
-  const { task, enabledDueDate, dueDate, onTaskWall, taskId, complete } =
-    taskItem;
+  const {
+    task,
+    enabledDueDate,
+    dueDate,
+    onTaskWall,
+    taskId,
+    complete,
+    created,
+  } = taskItem;
   const dispatch = useDispatch<AppThunkDispatch>();
 
   const [prompt, setPrompt] = useState<PopupPropsType["prompt"]>();
   const [editing, setEditing] = useState(false);
+  const [uuid, setUuid] = useState(uuidv4());
+  const [overlayUuid, setOverlayUuid] = useState(uuidv4());
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -101,6 +112,7 @@ const TaskListTask = ({
           )`,
           ],
         },
+
         { type: "spring", stiffness: 70 }
       );
 
@@ -111,15 +123,23 @@ const TaskListTask = ({
     }
   }, [editing]);
 
-  const handleSubmit: FormikConfig<TaskSchemaType>["onSubmit"] = (
+  const handleSubmit: FormikConfig<TaskSubmitSchemaType>["onSubmit"] = (
     values,
     actions
   ) => {
-    console.log(values);
+    dispatch(
+      editTask({
+        ...values,
+        taskId,
+        complete,
+        created,
+      })
+    );
+    actions.resetForm({ values });
   };
 
   return (
-    <Formik<TaskSchemaType>
+    <Formik<TaskSubmitSchemaType>
       initialValues={{
         task,
         enabledDueDate,
@@ -127,21 +147,21 @@ const TaskListTask = ({
         onTaskWall,
       }}
       onSubmit={handleSubmit}
-      validationSchema={taskSchema}
+      validationSchema={taskSubmitSchema}
     >
       {(props) => {
-        const { errors, values } = props;
+        const { errors, values, initialValues, setValues } = props;
 
         const handleToggle = () => {
           if (editing) props.setFieldValue("onTaskWall", !values.onTaskWall);
         };
 
-        const handleEdit = async () => {
+        const handleEdit = async (reset?: boolean) => {
           if (!editing && inputRef.current) {
             await enterAnimation();
             setEditing(true);
           } else if (!Object.keys(errors).length && editing) {
-            await props.submitForm();
+            !reset && (await props.submitForm());
             props.setTouched({ dueDate: undefined });
             setEditing(false);
           }
@@ -198,14 +218,25 @@ const TaskListTask = ({
               {prompt && <Popup key="prompt" prompt={prompt} />}
             </AnimatePresence>
             <motion.div
+              key={`task-${uuid}`}
+              layoutId={`task-layout-${uuid}`}
               initial={{ y: 20, scale: 0.8, opacity: 0 }}
+              style={{ left: "initial" }}
               animate={{
                 y: 0,
                 scale: 1,
+                position: editing ? "fixed" : "initial",
+                top: editing ? "25%" : "initial",
+                bottom: editing ? "25%" : "initial",
                 opacity: 1,
-                transition: { duration: 0.4, type: "tween", ease: "easeInOut" },
+                transition: {
+                  duration: 0.4,
+                  type: "tween",
+                  ease: "easeInOut",
+                },
               }}
-              exit={{ y: -20, scale: 0.8, opacity: 0 }}
+              exit={{ y: -20, scale: 0.9, opacity: 0 }}
+              className=" z-10"
             >
               <AnimatePresence mode="wait">
                 {editing && (
@@ -213,7 +244,10 @@ const TaskListTask = ({
                     key={1}
                     mixBlendMode="normal"
                     background="rgba(0,0,0,.2)"
-                    onClick={() => setEditing(false)}
+                    onClick={() => {
+                      setValues(initialValues);
+                      setEditing(false);
+                    }}
                   />
                 )}
               </AnimatePresence>
@@ -231,7 +265,7 @@ const TaskListTask = ({
               >
                 {editing && (
                   <TaskListTaskOverlay
-                    index={index}
+                    uuid={overlayUuid}
                     editing={editing}
                     scope={scope}
                   />
@@ -243,6 +277,7 @@ const TaskListTask = ({
                   handleComplete={handleComplete}
                   complete={complete}
                   dueDate={dueDate}
+                  {...props}
                 />
                 <motion.div
                   animate={{
@@ -254,7 +289,7 @@ const TaskListTask = ({
                   {!editing && (
                     <TaskListTaskOverlay
                       key="calender"
-                      index={index}
+                      uuid={overlayUuid}
                       editing={editing}
                       scope={scope}
                     />
@@ -287,6 +322,7 @@ const TaskListTask = ({
                           opacity: 1,
                         }}
                         exit={{
+                          position: "absolute",
                           opacity: 0,
                           height: "0px",
                         }}

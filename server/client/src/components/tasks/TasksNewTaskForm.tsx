@@ -10,7 +10,7 @@ import {
   toggleForm,
 } from "../../features/taskList/taskListSlice";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
-import { TaskSchemaType, taskSchema } from "../../schemas";
+import { TaskSubmitSchemaType, taskSubmitSchema } from "../../schemas";
 import SmallIcon from "../__reusable/SmallIcon";
 import Spinner from "../__reusable/Spinner";
 import TaskTextArea from "../__reusable/TaskTextArea";
@@ -123,7 +123,7 @@ const TasksNewTaskForm = (): ReactElement => {
     if (formActive) document.body.style.overflow = "hidden";
   }, [formActive]);
 
-  const handleSubmit: FormikConfig<TaskSchemaType>["onSubmit"] = (
+  const handleSubmit: FormikConfig<TaskSubmitSchemaType>["onSubmit"] = (
     values,
     actions
   ) => {
@@ -131,7 +131,7 @@ const TasksNewTaskForm = (): ReactElement => {
   };
 
   return (
-    <Formik<TaskSchemaType>
+    <Formik<TaskSubmitSchemaType>
       initialValues={{
         task: "",
         enabledDueDate: false,
@@ -140,7 +140,7 @@ const TasksNewTaskForm = (): ReactElement => {
       }}
       onSubmit={handleSubmit}
       validateOnBlur
-      validationSchema={taskSchema}
+      validationSchema={taskSubmitSchema}
     >
       {(props) => {
         const onTaskWall = props.values.onTaskWall;

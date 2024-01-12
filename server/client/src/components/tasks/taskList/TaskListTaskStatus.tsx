@@ -1,18 +1,23 @@
+import { FormikProps } from "formik";
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
+import { useSelector } from "react-redux";
 import { colors, fonts } from "../../../constants";
+import { taskListSelector } from "../../../features/taskList/taskListSlice";
+import { TaskSubmitSchemaType } from "../../../schemas";
 import Button from "../../__reusable/Button";
 import SmallIcon from "../../__reusable/SmallIcon";
 import TaskListTaskStatusPopout from "./TaskListTaskStatusPopout";
 
-type TaskListTaskStatusPropsType = {
+interface TaskListTaskStatusPropsType
+  extends FormikProps<TaskSubmitSchemaType> {
   dueDate: string | undefined;
   editing: boolean;
   complete: boolean;
-  handleEdit: () => void;
+  handleEdit: (reset?: boolean) => void;
   handleDelete: () => void;
   handleComplete: () => void;
-};
+}
 
 const containerVariants: Variants = {
   animate: (editing: boolean) => ({
@@ -59,7 +64,11 @@ const TaskListTaskStatus = ({
   handleDelete,
   handleComplete,
   complete,
+  ...props
 }: TaskListTaskStatusPropsType): ReactElement => {
+  const { dirty, setValues, initialValues } = props;
+  const { fetching } = useSelector(taskListSelector);
+
   const buttonStyle = {
     background: colors.buttonGradients[0],
     boxShadow:
@@ -75,6 +84,7 @@ const TaskListTaskStatus = ({
         background: colors.blackGradient[0],
         padding: "0px",
         outline: "1px solid rgb(224, 220, 217,0)",
+        justifyContent: !dueDate && editing ? "end" : "space-between",
       }}
       custom={editing}
       variants={containerVariants}
@@ -89,34 +99,45 @@ const TaskListTaskStatus = ({
       <motion.div
         animate={{
           gap: "8px",
-          maxWidth: editing ? "55px" : "87px",
+          maxWidth: editing ? "85px" : "90px",
           justifyContent: complete ? "end" : "normal",
         }}
-        className="w-full gap-2 flex max-w-[87px]"
+        className="w-full gap-1 flex max-w-[85px]"
       >
         {editing ? (
-          <Button
-            type="submit"
-            style={buttonStyle}
-            variants={buttonVariants}
-            whileHover="hovered"
-            whileTap="tapped"
-            custom={editing}
-            animate="animate"
-            onClick={() => handleEdit()}
-            className="cursor-pointer text-sm text-white p-1 rounded-lg"
-          >
-            Finish
-          </Button>
+          <div className="flex items-center gap-[1px]">
+            <Button
+              style={{ ...buttonStyle, boxShadow: "0px" }}
+              icon={<i className="fa-solid fa-arrow-rotate-left" />}
+              disabled={!dirty || fetching}
+              onClick={async () => {
+                await setValues(initialValues);
+                handleEdit(true);
+              }}
+              className="cursor-pointer disabled:cursor-default disabled:text-slate-500 text-sm text-white p-1"
+            />
+
+            <Button
+              type="submit"
+              style={buttonStyle}
+              disabled={!dirty || fetching}
+              onClick={() => handleEdit()}
+              className="cursor-pointer disabled:cursor-default disabled:text-slate-500 text-sm text-white p-1 rounded-lg"
+            >
+              Submit
+            </Button>
+          </div>
         ) : (
           <>
             {!complete && (
               <Button
+                type="button"
                 style={buttonStyle}
                 variants={buttonVariants}
                 whileHover="hovered"
                 whileTap="tapped"
                 custom={editing}
+                disabled={fetching}
                 animate="animate"
                 onClick={() => handleEdit()}
                 className="cursor-pointer px-1 py-[2px] rounded-lg"
@@ -137,6 +158,7 @@ const TaskListTaskStatus = ({
               whileHover="hovered"
               whileTap="tapped"
               custom={editing}
+              disabled={fetching}
               type="button"
               onClick={() => handleDelete()}
               animate="animate"
@@ -156,6 +178,7 @@ const TaskListTaskStatus = ({
                 whileHover="hovered"
                 whileTap="tapped"
                 custom={editing}
+                disabled={fetching}
                 onClick={() => handleComplete()}
                 animate="animate"
                 className="cursor-pointer px-1 py-[2px] rounded-lg"

@@ -73,6 +73,16 @@ export const axiosSubmitTask = async (
   return data;
 };
 
+export const axiosEditTask = async (
+  task: TaskType
+): Promise<SubmitTaskReturnType> => {
+  const api = createAxios(true);
+
+  const { data } = await api.post("/task/edit", { ...task });
+
+  return data;
+};
+
 export const axiosDeleteTask = async (
   taskId: TaskType["taskId"]
 ): Promise<SubmitTaskReturnType> => {

@@ -64,10 +64,12 @@ const TaskListTaskStatusPopout = ({
   if (noDueDate) {
     return (
       <ButtonPopout
+        type="button"
         style={{
           fontFamily: fonts.jura,
           color: "rgb(0,0,0)",
           cursor: complete ? "initial" : "pointer",
+          display: editing ? "none" : "flex",
         }}
         animate={{
           background: editing ? "rgb(0,0,0,0)" : "rgb(255,255,255, 0)",
@@ -78,10 +80,9 @@ const TaskListTaskStatusPopout = ({
             editing || complete ? "rgb(0, 0, 0, 0)" : "rgb(180,180,180)",
           transition: { duration: 0.2 },
         }}
-        className="gap-1 p-1 px-2 rounded-lg underline underline-offset-4 bg-transparent decoration-black"
+        className="gap-1 p-1 ms-1 px-2 rounded-lg underline underline-offset-4 bg-transparent decoration-black"
         action="hover"
-        fontSize={14}
-        label={!complete && "Not due"}
+        label={<></>}
         icon={
           !complete && (
             <SmallIcon
@@ -92,7 +93,7 @@ const TaskListTaskStatusPopout = ({
                 color: editing ? colors.whiteShades[2] : "rgb(0,0,0)",
               }}
               size={14}
-              className="relative ps-1 bottom-[1px] font-extrabold"
+              className="relative text-center bottom-[1px] font-extrabold"
               icon="fa-solid fa-info"
             />
           )
@@ -114,6 +115,7 @@ const TaskListTaskStatusPopout = ({
   } else {
     return (
       <ButtonPopout
+        type="button"
         animate={{
           background: editing ? "rgb(0,0,0,0)" : "rgb(255,255,255, 0)",
         }}

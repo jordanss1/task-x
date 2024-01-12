@@ -10,6 +10,7 @@ import {
   SubmitTaskReturnType,
   axiosCompleteTask,
   axiosDeleteTask,
+  axiosEditTask,
   axiosGetUserTasks,
   axiosSubmitTask,
 } from "../../api";
@@ -65,6 +66,19 @@ export const submitTask = createAsyncThunk<
     task,
     "Task created successfully",
     axiosSubmitTask
+  );
+});
+
+export const editTask = createAsyncThunk<
+  TaskType[] | false,
+  TaskType,
+  { state: StateType }
+>("taskList/editTask", async (task, { dispatch }) => {
+  return await returnTasksAndUpdateStore(
+    dispatch,
+    task,
+    "Task edited successfully",
+    axiosEditTask
   );
 });
 
@@ -140,6 +154,7 @@ const taskListSlice = createSlice({
             "taskList/submitTask",
             "taskList/getUserTasks",
             "taskList/completeTask",
+            "taskList/editTask",
           ].some((type) => action.type.includes(type)),
         (state, action: PayloadAction<TaskType[] | false>) => {
           reducerMatcherFunction(action, () => {

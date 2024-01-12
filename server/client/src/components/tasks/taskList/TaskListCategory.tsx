@@ -1,8 +1,9 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement } from "react";
-import { colors, fonts } from "../../../constants";
+import { fonts } from "../../../constants";
 import { useScreenSize } from "../../../hooks/MediaQueryHooks";
 import useSortTasks from "../../../hooks/useSortTasks";
-import { TaskType, TaskWallTaskType } from "../../../types";
+import { TaskWallTaskType } from "../../../types";
 import TaskListTask from "./TaskListTask";
 
 type TaskListCategoryType = {
@@ -37,8 +38,9 @@ const TaskListCategory = ({
         className="rounded-3xl"
       />
       {tasks && (
-        <div
+        <motion.div
           key={3}
+          layout
           style={{
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 220px))",
             justifyContent: screenWidth < 580 ? "center" : "normal",
@@ -46,26 +48,28 @@ const TaskListCategory = ({
           }}
           className="grid gap-8 px-1 py-5 min-h-[222px]"
         >
-          {tasks.map((taskItem, i) => {
-            let matchingUserWallTask: TaskWallTaskType | boolean | undefined =
-              false;
+          <AnimatePresence>
+            {tasks.map((taskItem, i) => {
+              let matchingUserWallTask: TaskWallTaskType | boolean | undefined =
+                false;
 
-            matchingUserWallTask = !userTaskWallTasks
-              ? false
-              : userTaskWallTasks.find(
-                  ({ taskId }) => taskId === taskItem.taskId
-                );
+              matchingUserWallTask = !userTaskWallTasks
+                ? false
+                : userTaskWallTasks.find(
+                    ({ taskId }) => taskId === taskItem.taskId
+                  );
 
-            return (
-              <TaskListTask
-                key={i}
-                matchingUserWallTask={matchingUserWallTask || false}
-                index={i}
-                taskItem={taskItem}
-              />
-            );
-          })}
-        </div>
+              return (
+                <TaskListTask
+                  key={i}
+                  matchingUserWallTask={matchingUserWallTask || false}
+                  index={i}
+                  taskItem={taskItem}
+                />
+              );
+            })}
+          </AnimatePresence>
+        </motion.div>
       )}
     </section>
   );
