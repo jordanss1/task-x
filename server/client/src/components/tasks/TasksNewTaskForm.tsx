@@ -96,7 +96,7 @@ const formVariants: Variants = {
 };
 
 const childVariants: Variants = {
-  initial: (x) => ({
+  initial: ({ x }) => ({
     opacity: 0,
     x,
   }),
@@ -108,6 +108,28 @@ const childVariants: Variants = {
       duration: 0.4,
     },
   },
+  exit: {
+    scale: 0.8,
+    opacity: 0,
+  },
+};
+
+const childVariants2: Variants = {
+  initial: ({ x }) => ({
+    opacity: 0,
+    x,
+  }),
+  animate: ({ x, fetching }) => ({
+    opacity: 1,
+    x: 0,
+    background: fetching
+      ? "linear-gradient(120deg, rgb(120,120,120) 0%, rgb(120,120,120) 30% 70%, rgb(120,120,120))"
+      : colors.buttonGradients[1],
+    transition: {
+      type: "tween",
+      duration: 0.4,
+    },
+  }),
   exit: {
     scale: 0.8,
     opacity: 0,
@@ -198,7 +220,7 @@ const TasksNewTaskForm = (): ReactElement => {
                 >
                   <motion.h3
                     variants={childVariants}
-                    custom={40}
+                    custom={{ x: 40 }}
                     style={{
                       fontFamily: fonts.jura,
                       color: colors.whiteShades[1],
@@ -210,7 +232,7 @@ const TasksNewTaskForm = (): ReactElement => {
                   </motion.h3>
                   <motion.div
                     variants={childVariants}
-                    custom={-40}
+                    custom={{ x: -40 }}
                     className="py-1 relative"
                   >
                     <TaskTextArea
@@ -230,14 +252,14 @@ const TasksNewTaskForm = (): ReactElement => {
                         background: colors.blackGradient[1],
                       }}
                       variants={childVariants}
-                      custom={40}
+                      custom={{ x: 40 }}
                       className="flex min-h-[45px] relative isolate px-3 gap-3 rounded-xl  items-center"
                       formikProps={props}
                     />
                   </AnimatePresence>
                   <motion.div
                     variants={childVariants}
-                    custom={-40}
+                    custom={{ x: -40 }}
                     style={{
                       background: colors.blackGradient[1],
                       outline: "rgb(180, 180, 180) solid 1px",
@@ -255,12 +277,12 @@ const TasksNewTaskForm = (): ReactElement => {
                       if (!fetching) props.submitForm();
                     }}
                     style={{
-                      background: fetching ? "grey" : colors.buttonGradients[1],
+                      background: colors.buttonGradients[1],
                       borderRadius: "30%",
                       cursor: fetching ? "default" : "pointer",
                     }}
-                    variants={childVariants}
-                    custom={40}
+                    variants={childVariants2}
+                    custom={{ x: 40, fetching }}
                     whileHover={{
                       background: colors.hoveredButtonGradient,
                     }}

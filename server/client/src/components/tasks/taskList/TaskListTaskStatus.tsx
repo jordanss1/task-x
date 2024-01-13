@@ -109,7 +109,7 @@ const TaskListTaskStatus = ({
             <Button
               style={{ ...buttonStyle, boxShadow: "0px" }}
               icon={<i className="fa-solid fa-arrow-rotate-left" />}
-              disabled={!dirty || fetching}
+              disabled={fetching}
               onClick={async () => {
                 await setValues(initialValues);
                 handleEdit(true);
@@ -118,7 +118,7 @@ const TaskListTaskStatus = ({
             />
 
             <Button
-              type="submit"
+              type="button"
               style={buttonStyle}
               disabled={!dirty || fetching}
               onClick={() => handleEdit()}
@@ -173,6 +173,7 @@ const TaskListTaskStatus = ({
             </Button>
             {!complete && (
               <Button
+                type="button"
                 style={buttonStyle}
                 variants={buttonVariants}
                 whileHover="hovered"

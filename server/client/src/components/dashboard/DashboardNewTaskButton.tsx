@@ -121,7 +121,7 @@ const DashboardNewTaskButton = ({
           ? "var(--active-justify)"
           : "var(--inactive-justify)",
       }}
-      className="w-full pr-3 fixed right-0 flex isolate items-center justify-end sm:bottom-5 bottom-14 sm:[--active-justify:flex-end] sm:[--inactive-justify:flex-end] [--active-justify:center] z-20 [--inactive-justify:flex-end]"
+      className="w-full h-[0px] pr-3 fixed right-0 flex isolate items-center justify-end sm:bottom-14 bottom-20 sm:[--active-justify:flex-end] sm:[--inactive-justify:flex-end] [--active-justify:center] z-20 [--inactive-justify:flex-end]"
     >
       <Button
         onClick={(e) => handleClick(e)}

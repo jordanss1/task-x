@@ -11,7 +11,7 @@ export const taskSchema = new Schema({
 });
 
 export const taskListSchema = new Schema({
-  _user: { required: true, type: Types.ObjectId, ref: "User" },
+  _user: { required: true, type: Schema.Types.ObjectId, ref: "User" },
   tasks: { required: true, type: [taskSchema], default: null },
   totalTasks: { required: true, type: Number, default: 0 },
 });

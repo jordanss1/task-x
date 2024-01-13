@@ -20,7 +20,6 @@ const Dashboard = (): ReactElement => {
   const dispatch = useDispatch();
   const { user } = useSelector(authSelector);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
-  const [app, setApp] = useState<"home" | "social">("home");
 
   const { formActive } = useSelector(taskListSelector);
 
@@ -56,7 +55,7 @@ const Dashboard = (): ReactElement => {
           <Header
             link="/dashboard/home"
             containerClass="dashboard_header"
-            nav={<DashboardNav />}
+            nav={<DashboardNav profile={user.profile} />}
           />
           <main>
             <DashboardPanel

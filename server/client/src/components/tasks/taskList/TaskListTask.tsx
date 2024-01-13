@@ -123,11 +123,11 @@ const TaskListTask = ({
     }
   }, [editing]);
 
-  const handleSubmit: FormikConfig<TaskSubmitSchemaType>["onSubmit"] = (
+  const handleSubmit: FormikConfig<TaskSubmitSchemaType>["onSubmit"] = async (
     values,
     actions
   ) => {
-    dispatch(
+    await dispatch(
       editTask({
         ...values,
         taskId,
@@ -135,6 +135,7 @@ const TaskListTask = ({
         created,
       })
     );
+
     actions.resetForm({ values });
   };
 
@@ -152,16 +153,53 @@ const TaskListTask = ({
       {(props) => {
         const { errors, values, initialValues, setValues } = props;
 
+        const deletingTaskWallTask =
+          !values.onTaskWall && initialValues.onTaskWall;
+
         const handleToggle = () => {
           if (editing) props.setFieldValue("onTaskWall", !values.onTaskWall);
         };
 
         const handleEdit = async (reset?: boolean) => {
+          if (reset) {
+            props.setTouched({ dueDate: undefined });
+            setEditing(false);
+            return;
+          }
+
           if (!editing && inputRef.current) {
             await enterAnimation();
             setEditing(true);
+            return;
+          } else if (
+            !Object.keys(errors).length &&
+            editing &&
+            deletingTaskWallTask
+          ) {
+            setPrompt({
+              message: (
+                <div className="flex flex-col gap-2 max-w-[240px] pb-1">
+                  <span>
+                    This will also delete your Task Wall task including all
+                    awards, likes, and comments associated.
+                  </span>
+                  Are you sure?
+                </div>
+              ),
+              onDeny: () => {
+                setPrompt(undefined);
+                handleEdit(false);
+              },
+              onAccept: async () => {
+                await props.submitForm();
+                setPrompt(undefined);
+                props.setTouched({ dueDate: undefined });
+                setEditing(false);
+              },
+            });
+            return;
           } else if (!Object.keys(errors).length && editing) {
-            !reset && (await props.submitForm());
+            await props.submitForm();
             props.setTouched({ dueDate: undefined });
             setEditing(false);
           }
@@ -176,9 +214,12 @@ const TaskListTask = ({
                     This will also delete your Task Wall task including all
                     awards, likes, and comments associated.
                   </span>
-                  <span>
-                    If you mark the task as complete you can keep these things.
-                  </span>
+                  {!complete && (
+                    <span>
+                      If you mark the task as complete you can keep these
+                      things.
+                    </span>
+                  )}
                   Are you sure?
                 </div>
               ),
@@ -206,6 +247,7 @@ const TaskListTask = ({
             ),
             onAccept: async () => {
               await dispatch(completeTask(taskId));
+              props.resetForm({ values });
               setPrompt(undefined);
             },
             onDeny: () => setPrompt(undefined),

@@ -14,8 +14,12 @@ const PublicTaskList = model<PublicTaskListType>("publicTaskList");
 
 const taskRoutes = (app: Express) => {
   app.get("/api/tasks/user", requireJwt, async (req, res) => {
+    assertRequestWithUser(req);
+
     try {
-      const data = await TaskList.findOne({ _user: req.user?._id })
+      const data = await TaskList.findOne<TaskListType>({
+        _user: req.user._id,
+      })
         .select("tasks")
         .exec();
 
@@ -26,8 +30,10 @@ const taskRoutes = (app: Express) => {
   });
 
   app.get("/api/wall_tasks/user", requireJwt, async (req, res) => {
+    assertRequestWithUser(req);
+
     try {
-      const data = await PublicTaskList.findOne({ _user: req.user?._id })
+      const data = await PublicTaskList.findOne({ _user: req.user._id })
         .select("tasks")
         .exec();
 
@@ -64,6 +70,7 @@ const taskRoutes = (app: Express) => {
     requireJwt,
     async (req: Request<{}, any, TaskType>, res) => {
       const { task, dueDate, enabledDueDate, onTaskWall } = req.body;
+      assertRequestWithUser(req);
 
       let updatedUserPublicTasks;
 
@@ -75,14 +82,14 @@ const taskRoutes = (app: Express) => {
         .exec();
 
       try {
-        await TaskList.findOneAndUpdate(
+        await TaskList.findOneAndUpdate<TaskListType>(
           {
             _user: req.user?._id,
             "tasks.taskId": req.body.taskId,
           },
           {
             "tasks.$.task": task,
-            "tasks.$.dueDate": dueDate,
+            "tasks.$.dueDate": enabledDueDate ? dueDate : null,
             "tasks.$.enabledDueDate": enabledDueDate,
             "tasks.$.onTaskWall": onTaskWall,
           }
@@ -104,7 +111,7 @@ const taskRoutes = (app: Express) => {
               _user: req.user?._id,
             }).exec();
 
-            updatedUserPublicTasks = false;
+            updatedUserPublicTasks = null;
           } catch (err) {
             res
               .status(500)
@@ -112,7 +119,7 @@ const taskRoutes = (app: Express) => {
           }
         } else {
           try {
-            await PublicTaskList.findOneAndUpdate(
+            await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
               { _user: req.user?._id },
               {
                 $pull: { tasks: { taskId: req.body.taskId } },
@@ -124,9 +131,91 @@ const taskRoutes = (app: Express) => {
               .status(500)
               .send("Edited task but unable to delete task wall task");
           } finally {
-            const tasks = await PublicTaskList.findOne({
+            const tasks = await PublicTaskList.findOne<PublicTaskListType>({
               _user: req.user?._id,
-            }).select(["tasks", "-_id"]);
+            })
+              .select(["tasks", "-_id"])
+              .exec();
+
+            updatedUserPublicTasks = tasks?.tasks.map((task) => task);
+          }
+        }
+      }
+
+      if (publicTask && onTaskWall) {
+        try {
+          await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
+            {
+              _user: req.user?._id,
+              "tasks.taskId": req.body.taskId,
+            },
+            {
+              "tasks.$.task": task,
+              "tasks.$.dueDate": enabledDueDate ? dueDate : null,
+              "tasks.$.enabledDueDate": enabledDueDate,
+              "tasks.$.onTaskWall": onTaskWall,
+            }
+          ).exec();
+        } catch (err) {
+          res.status(500).send("Unable to update task wall task, try again");
+        } finally {
+          const tasks = await PublicTaskList.findOne<PublicTaskListType>({
+            _user: req.user?._id,
+          })
+            .select(["tasks", "-_id"])
+            .exec();
+
+          updatedUserPublicTasks = tasks?.tasks.map((task) => task);
+        }
+      } else if (!publicTask && onTaskWall) {
+        const totalTasks = await PublicTaskList.findOne<PublicTaskListType>({
+          _user: req.user?._id,
+        })
+          .select(["-_id", "totalTasks"])
+          .exec();
+
+        const publicTask = new PublicTask<PublicTaskType>({
+          user: req.user as ValidUserType,
+          created: new Date().toISOString(),
+          dueDate,
+          enabledDueDate,
+          task,
+          taskId: req.body.taskId,
+        });
+
+        if (!totalTasks?.totalTasks || totalTasks.totalTasks === 0) {
+          try {
+            const taskList = await new PublicTaskList({
+              _user: req.user._id,
+              tasks: [publicTask],
+              totalTasks: 1,
+            }).save();
+
+            updatedUserPublicTasks = taskList.tasks;
+          } catch (err) {
+            res
+              .status(500)
+              .send("Edited task but unable add task to task wall");
+          }
+        } else {
+          try {
+            await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
+              { _user: req.user?._id },
+              {
+                $push: { tasks: publicTask },
+                $inc: { totalTasks: 1 },
+              }
+            ).exec();
+          } catch (err) {
+            res
+              .status(500)
+              .send("Edited task but unable add task to task wall");
+          } finally {
+            const tasks = await PublicTaskList.findOne<PublicTaskListType>({
+              _user: req.user?._id,
+            })
+              .select(["tasks", "-_id"])
+              .exec();
 
             updatedUserPublicTasks = tasks?.tasks.map((task) => task);
           }
@@ -139,7 +228,7 @@ const taskRoutes = (app: Express) => {
 
       const userTasks = tasks?.tasks.map((task) => task);
 
-      res.send([userTasks, updatedUserPublicTasks || false, false]);
+      res.send([userTasks, updatedUserPublicTasks, false]);
     }
   );
 
@@ -147,6 +236,16 @@ const taskRoutes = (app: Express) => {
     "/api/task/complete",
     requireJwt,
     async (req: Request<{}, any, { taskId: TaskType["taskId"] }>, res) => {
+      const publicTask = await PublicTaskList.findOne({
+        _user: req.user?._id,
+        "tasks.taskId": req.body.taskId,
+      })
+        .select({ tasks: { $elemMatch: { taskId: req.body.taskId } } })
+        .exec();
+
+      let updatedUserTasks;
+      let updatedUserPublicTasks;
+
       try {
         await TaskList.findOneAndUpdate(
           {
@@ -156,41 +255,48 @@ const taskRoutes = (app: Express) => {
           { arrayFilters: [{ "task.taskId": req.body.taskId }] }
         ).exec();
 
-        await PublicTaskList.findOneAndUpdate(
-          {
-            _user: req.user?._id,
-          },
-          { $set: { "tasks.$[task].complete": true } },
-          { arrayFilters: [{ "task.taskId": req.body.taskId }] }
-        );
-
         const tasks = await TaskList.findOne({
           _user: req.user?._id,
         })
           .select("tasks")
           .exec();
 
-        const publicTasks = await PublicTaskList.findOne({
-          _user: req.user?._id,
-        })
-          .select("tasks")
-          .exec();
-
-        const updatedUserTasks = tasks?.tasks.map((task) => task);
-
-        const updatedUserPublicTasks = publicTasks?.tasks.map((task) => task);
-
-        res.send([
-          updatedUserTasks || false,
-          updatedUserPublicTasks || false,
-          false,
-        ]);
+        updatedUserTasks = tasks?.tasks.map((task) => task);
       } catch (err) {
-        console.log(err);
         return res
           .status(500)
           .send("Unable to set task as complete, try again");
       }
+
+      if (publicTask) {
+        try {
+          await PublicTaskList.findOneAndUpdate(
+            {
+              _user: req.user?._id,
+            },
+            { $set: { "tasks.$[task].complete": true } },
+            { arrayFilters: [{ "task.taskId": req.body.taskId }] }
+          ).exec();
+
+          const publicTasks = await PublicTaskList.findOne({
+            _user: req.user?._id,
+          })
+            .select("tasks")
+            .exec();
+
+          updatedUserPublicTasks = publicTasks?.tasks.map((task) => task);
+        } catch (err) {
+          return res
+            .status(500)
+            .send("Unable to set task wall task as complete, try again");
+        }
+      }
+
+      res.send([
+        updatedUserTasks || false,
+        updatedUserPublicTasks || false,
+        false,
+      ]);
     }
   );
 
@@ -198,27 +304,31 @@ const taskRoutes = (app: Express) => {
     "/api/task",
     requireJwt,
     async (req: Request<{}, any, TaskTypeIncoming>, res) => {
+      assertRequestWithUser(req);
+
       const newTask = new Task<TaskType>({
         ...req.body,
         created: new Date().toISOString(),
         taskId: crypto.randomUUID().toString(),
       });
 
-      const taskList = await TaskList.findOne({ _user: req.user?._id }).exec();
+      const taskList = await TaskList.findOne<TaskListType>({
+        _user: req.user?._id,
+      }).exec();
 
       let updatedUserTasks;
       let updatedUserPublicTasks;
 
       if (taskList) {
         try {
-          await TaskList.findOneAndUpdate(
+          await TaskList.findOneAndUpdate<TaskListType>(
             { _user: req.user?._id },
             { $push: { tasks: newTask }, $inc: { totalTasks: 1 } }
           ).exec();
         } catch (err) {
           return res.status(500).send("Unable to update task list, try again");
         } finally {
-          const tasks = await TaskList.findOne({
+          const tasks = await TaskList.findOne<TaskListType>({
             _user: req.user?._id,
           })
             .select("tasks")
@@ -250,7 +360,7 @@ const taskRoutes = (app: Express) => {
         const { created, dueDate, enabledDueDate, task, taskId } = newTask;
 
         const publicTask = new PublicTask<PublicTaskType>({
-          user: req.user as ValidUserType,
+          user: req.user,
           created,
           dueDate,
           enabledDueDate,
@@ -269,7 +379,7 @@ const taskRoutes = (app: Express) => {
               .status(500)
               .send("Unable to add your first task to task wall, try again");
           } finally {
-            const tasks = await PublicTaskList.findOne({
+            const tasks = await PublicTaskList.findOne<PublicTaskListType>({
               _user: req.user?._id,
             })
               .select("tasks")

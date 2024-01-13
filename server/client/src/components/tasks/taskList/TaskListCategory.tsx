@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { fonts } from "../../../constants";
 import { useScreenSize } from "../../../hooks/MediaQueryHooks";
 import useSortTasks from "../../../hooks/useSortTasks";
@@ -39,7 +40,6 @@ const TaskListCategory = ({
       />
       {tasks && (
         <motion.div
-          key={3}
           layout
           style={{
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 220px))",
@@ -61,7 +61,7 @@ const TaskListCategory = ({
 
               return (
                 <TaskListTask
-                  key={i}
+                  key={taskItem.taskId}
                   matchingUserWallTask={matchingUserWallTask || false}
                   index={i}
                   taskItem={taskItem}
