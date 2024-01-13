@@ -29,14 +29,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const crypto = __importStar(require("crypto"));
 const mongoose_1 = require("mongoose");
 const requireJwt_1 = __importDefault(require("../middlewares/requireJwt"));
+const types_1 = require("../types");
 const Task = (0, mongoose_1.model)("task");
 const TaskList = (0, mongoose_1.model)("taskList");
 const PublicTask = (0, mongoose_1.model)("publicTask");
 const PublicTaskList = (0, mongoose_1.model)("publicTaskList");
 const taskRoutes = (app) => {
     app.get("/api/tasks/user", requireJwt_1.default, async (req, res) => {
+        (0, types_1.assertRequestWithUser)(req);
         try {
-            const data = await TaskList.findOne({ _user: req.user?._id })
+            const data = await TaskList.findOne({
+                _user: req.user._id,
+            })
                 .select("tasks")
                 .exec();
             return res.send(data ? data.tasks.map((task) => task) : false);
@@ -46,8 +50,9 @@ const taskRoutes = (app) => {
         }
     });
     app.get("/api/wall_tasks/user", requireJwt_1.default, async (req, res) => {
+        (0, types_1.assertRequestWithUser)(req);
         try {
-            const data = await PublicTaskList.findOne({ _user: req.user?._id })
+            const data = await PublicTaskList.findOne({ _user: req.user._id })
                 .select("tasks")
                 .exec();
             return res.send(data ? data.tasks.map((task) => task) : false);
@@ -78,6 +83,7 @@ const taskRoutes = (app) => {
     });
     app.post("/api/task/edit", requireJwt_1.default, async (req, res) => {
         const { task, dueDate, enabledDueDate, onTaskWall } = req.body;
+        (0, types_1.assertRequestWithUser)(req);
         let updatedUserPublicTasks;
         const publicTask = await PublicTaskList.findOne({
             _user: req.user?._id,
@@ -91,7 +97,7 @@ const taskRoutes = (app) => {
                 "tasks.taskId": req.body.taskId,
             }, {
                 "tasks.$.task": task,
-                "tasks.$.dueDate": dueDate,
+                "tasks.$.dueDate": enabledDueDate ? dueDate : null,
                 "tasks.$.enabledDueDate": enabledDueDate,
                 "tasks.$.onTaskWall": onTaskWall,
             }).exec();
@@ -110,7 +116,7 @@ const taskRoutes = (app) => {
                     await PublicTaskList.findOneAndDelete({
                         _user: req.user?._id,
                     }).exec();
-                    updatedUserPublicTasks = false;
+                    updatedUserPublicTasks = null;
                 }
                 catch (err) {
                     res
@@ -133,7 +139,84 @@ const taskRoutes = (app) => {
                 finally {
                     const tasks = await PublicTaskList.findOne({
                         _user: req.user?._id,
-                    }).select(["tasks", "-_id"]);
+                    })
+                        .select(["tasks", "-_id"])
+                        .exec();
+                    updatedUserPublicTasks = tasks?.tasks.map((task) => task);
+                }
+            }
+        }
+        if (publicTask && onTaskWall) {
+            try {
+                await PublicTaskList.findOneAndUpdate({
+                    _user: req.user?._id,
+                    "tasks.taskId": req.body.taskId,
+                }, {
+                    "tasks.$.task": task,
+                    "tasks.$.dueDate": enabledDueDate ? dueDate : null,
+                    "tasks.$.enabledDueDate": enabledDueDate,
+                    "tasks.$.onTaskWall": onTaskWall,
+                }).exec();
+            }
+            catch (err) {
+                res.status(500).send("Unable to update task wall task, try again");
+            }
+            finally {
+                const tasks = await PublicTaskList.findOne({
+                    _user: req.user?._id,
+                })
+                    .select(["tasks", "-_id"])
+                    .exec();
+                updatedUserPublicTasks = tasks?.tasks.map((task) => task);
+            }
+        }
+        else if (!publicTask && onTaskWall) {
+            const totalTasks = await PublicTaskList.findOne({
+                _user: req.user?._id,
+            })
+                .select(["-_id", "totalTasks"])
+                .exec();
+            const publicTask = new PublicTask({
+                user: req.user,
+                created: new Date().toISOString(),
+                dueDate,
+                enabledDueDate,
+                task,
+                taskId: req.body.taskId,
+            });
+            if (!totalTasks?.totalTasks || totalTasks.totalTasks === 0) {
+                try {
+                    const taskList = await new PublicTaskList({
+                        _user: req.user._id,
+                        tasks: [publicTask],
+                        totalTasks: 1,
+                    }).save();
+                    updatedUserPublicTasks = taskList.tasks;
+                }
+                catch (err) {
+                    res
+                        .status(500)
+                        .send("Edited task but unable add task to task wall");
+                }
+            }
+            else {
+                try {
+                    await PublicTaskList.findOneAndUpdate({ _user: req.user?._id }, {
+                        $push: { tasks: publicTask },
+                        $inc: { totalTasks: 1 },
+                    }).exec();
+                }
+                catch (err) {
+                    res
+                        .status(500)
+                        .send("Edited task but unable add task to task wall");
+                }
+                finally {
+                    const tasks = await PublicTaskList.findOne({
+                        _user: req.user?._id,
+                    })
+                        .select(["tasks", "-_id"])
+                        .exec();
                     updatedUserPublicTasks = tasks?.tasks.map((task) => task);
                 }
             }
@@ -142,48 +225,67 @@ const taskRoutes = (app) => {
             .select("tasks")
             .exec();
         const userTasks = tasks?.tasks.map((task) => task);
-        res.send([userTasks, updatedUserPublicTasks || false, false]);
+        res.send([userTasks, updatedUserPublicTasks, false]);
     });
     app.post("/api/task/complete", requireJwt_1.default, async (req, res) => {
+        const publicTask = await PublicTaskList.findOne({
+            _user: req.user?._id,
+            "tasks.taskId": req.body.taskId,
+        })
+            .select({ tasks: { $elemMatch: { taskId: req.body.taskId } } })
+            .exec();
+        let updatedUserTasks;
+        let updatedUserPublicTasks;
         try {
             await TaskList.findOneAndUpdate({
                 _user: req.user?._id,
             }, { $set: { "tasks.$[task].complete": true } }, { arrayFilters: [{ "task.taskId": req.body.taskId }] }).exec();
-            await PublicTaskList.findOneAndUpdate({
-                _user: req.user?._id,
-            }, { $set: { "tasks.$[task].complete": true } }, { arrayFilters: [{ "task.taskId": req.body.taskId }] });
             const tasks = await TaskList.findOne({
                 _user: req.user?._id,
             })
                 .select("tasks")
                 .exec();
-            const publicTasks = await PublicTaskList.findOne({
-                _user: req.user?._id,
-            })
-                .select("tasks")
-                .exec();
-            const updatedUserTasks = tasks?.tasks.map((task) => task);
-            const updatedUserPublicTasks = publicTasks?.tasks.map((task) => task);
-            res.send([
-                updatedUserTasks || false,
-                updatedUserPublicTasks || false,
-                false,
-            ]);
+            updatedUserTasks = tasks?.tasks.map((task) => task);
         }
         catch (err) {
-            console.log(err);
             return res
                 .status(500)
                 .send("Unable to set task as complete, try again");
         }
+        if (publicTask) {
+            try {
+                await PublicTaskList.findOneAndUpdate({
+                    _user: req.user?._id,
+                }, { $set: { "tasks.$[task].complete": true } }, { arrayFilters: [{ "task.taskId": req.body.taskId }] }).exec();
+                const publicTasks = await PublicTaskList.findOne({
+                    _user: req.user?._id,
+                })
+                    .select("tasks")
+                    .exec();
+                updatedUserPublicTasks = publicTasks?.tasks.map((task) => task);
+            }
+            catch (err) {
+                return res
+                    .status(500)
+                    .send("Unable to set task wall task as complete, try again");
+            }
+        }
+        res.send([
+            updatedUserTasks || false,
+            updatedUserPublicTasks || false,
+            false,
+        ]);
     });
     app.post("/api/task", requireJwt_1.default, async (req, res) => {
+        (0, types_1.assertRequestWithUser)(req);
         const newTask = new Task({
             ...req.body,
             created: new Date().toISOString(),
             taskId: crypto.randomUUID().toString(),
         });
-        const taskList = await TaskList.findOne({ _user: req.user?._id }).exec();
+        const taskList = await TaskList.findOne({
+            _user: req.user?._id,
+        }).exec();
         let updatedUserTasks;
         let updatedUserPublicTasks;
         if (taskList) {

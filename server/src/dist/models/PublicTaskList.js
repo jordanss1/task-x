@@ -21,7 +21,7 @@ exports.publicTaskSchema = new mongoose_1.Schema({
     comments: { type: [Comment_1.commentSchema], required: false, default: [] },
 });
 exports.publicTaskListSchema = new mongoose_1.Schema({
-    _user: { required: true, type: mongoose_1.Types.ObjectId, ref: "User" },
+    _user: { required: true, type: mongoose_1.Schema.Types.ObjectId, ref: "User" },
     tasks: { required: true, type: [exports.publicTaskSchema], default: null },
     totalTasks: { required: true, type: Number, default: 0 },
 });
