@@ -55,7 +55,7 @@ const Dashboard = (): ReactElement => {
           <Header
             link="/dashboard/home"
             containerClass="dashboard_header"
-            nav={<DashboardNav profile={user.profile} />}
+            nav={<DashboardNav />}
           />
           <main>
             <DashboardPanel

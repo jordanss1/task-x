@@ -1,6 +1,8 @@
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
+import { useSelector } from "react-redux";
 import { colors, fonts } from "../../constants";
+import { authSelector } from "../../features/auth/authSlice";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import { ValidUserType } from "../../types";
 import ButtonPopout from "../__reusable/ButtonPopout";
@@ -34,12 +36,9 @@ const menuVariants: Variants = {
   },
 };
 
-const DashboardNav = ({
-  profile,
-}: {
-  profile?: ValidUserType["profile"];
-}): ReactElement => {
+const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
   const mobile = useMediaQuery(640);
+  const { user } = useSelector(authSelector);
 
   const renderSettings = settingsList.map(({ icon, label }) => (
     <motion.div
@@ -109,56 +108,68 @@ const DashboardNav = ({
 
   return (
     <nav className="h-10 flex justify-center">
-      <motion.ul
-        style={{ fontFamily: fonts.jura }}
-        className="text-sl items-center list-none flex gap-6 sm:gap-5 z-3"
-      >
-        <li>
-          <ButtonPopout
-            icon={<NotificationBell notifications={[]} />}
-            action="click"
-          >
-            {renderNotifications()}
-          </ButtonPopout>
-        </li>
-        <li className="sm:flex hidden items-center">
-          <ButtonPopout
-            iconSize={10}
-            fontSize={15}
-            label="Account"
-            className="border-0"
-            action="click"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1, transition: { ease: "easeIn" } }}
-              exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
-              className="absolute w-44 z-[50] top-[40px] cursor-default origin-top-right h-fit right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+      {user && user.profile && (
+        <motion.ul
+          style={{ fontFamily: fonts.jura }}
+          className="text-sl items-center list-none flex gap-6 sm:gap-5 z-3"
+        >
+          {!profile && (
+            <li>
+              <ButtonPopout
+                icon={<NotificationBell notifications={[]} />}
+                action="click"
+              >
+                {renderNotifications()}
+              </ButtonPopout>
+            </li>
+          )}
+          <li className="sm:flex hidden items-center">
+            <ButtonPopout
+              iconSize={10}
+              fontSize={15}
+              label="Account"
+              className="border-0"
+              action="click"
             >
-              {profile && renderProfile(profile)}
-              {renderSettings}
-            </motion.div>
-          </ButtonPopout>
-        </li>
-        <MenuPopout className="sm:hidden min-h-[45px] relative gap-1 flex items-center">
-          <motion.div
-            key={2}
-            variants={menuVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="dashboard_nav origin-right popout_z_index fixed pt-[min(25vh,120px)] w-8/12 right-0 top-0 bottom-0 left-9/12 cursor-default overflow-hidden"
-          >
-            <div className="relative">
-              <div className="absolute p-2 ps-4 bottom-[235px]">
-                <LightBulb size={70} />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  transition: { ease: "easeIn" },
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.95,
+                  transition: { duration: 0.1 },
+                }}
+                className="absolute w-44 z-[50] top-[40px] cursor-default origin-top-right h-fit right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+              >
+                {renderProfile(user.profile)}
+                {renderSettings}
+              </motion.div>
+            </ButtonPopout>
+          </li>
+          <MenuPopout className="sm:hidden min-h-[45px] relative gap-1 flex items-center">
+            <motion.div
+              key={2}
+              variants={menuVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="dashboard_nav origin-right popout_z_index fixed pt-[min(25vh,120px)] w-8/12 right-0 top-0 bottom-0 left-9/12 cursor-default overflow-hidden"
+            >
+              <div className="relative">
+                <div className="absolute p-2 ps-4 bottom-[235px]">
+                  <LightBulb size={70} />
+                </div>
+                {renderProfile(user.profile)}
+                {renderSettings}
               </div>
-              {profile && renderProfile(profile)}
-              {renderSettings}
-            </div>
-          </motion.div>
-        </MenuPopout>
-      </motion.ul>
+            </motion.div>
+          </MenuPopout>
+        </motion.ul>
+      )}
     </nav>
   );
 };
