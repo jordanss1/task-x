@@ -3,6 +3,7 @@ import { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fonts } from "../../../../constants";
 import {
+  SortType,
   changeSort,
   taskWallSelector,
 } from "../../../../features/taskWall/taskWallSlice";
@@ -21,7 +22,7 @@ const TaskWallNavSort = (): ReactElement => {
     <div
       key={label}
       className="text-right w-full gap-2 items-center p-2 ps-2 hover:bg-[#991ff1] text-slate-700 hover:text-white rounded-sm text-xs relative flex cursor-pointer"
-      onClick={() => dispatch(changeSort(option))}
+      onClick={() => dispatch(changeSort(option as SortType))}
     >
       {label}
     </div>

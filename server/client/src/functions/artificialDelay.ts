@@ -1,6 +1,5 @@
 import axios from "axios";
 import { MutableRefObject } from "react";
-import { AppThunkDispatch } from "../app/store";
 
 type ArtificialDelayType = (
   timer: MutableRefObject<number | NodeJS.Timeout>,

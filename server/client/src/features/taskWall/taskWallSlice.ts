@@ -54,7 +54,7 @@ export const getAllTaskWallTasks = createAsyncThunk<
   }
 });
 
-type SortType = "popular" | "recent";
+export type SortType = "popular" | "recent";
 
 type CategoryType = "user" | "all";
 
