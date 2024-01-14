@@ -67,7 +67,7 @@ const TaskListTaskStatus = ({
   ...props
 }: TaskListTaskStatusPropsType): ReactElement => {
   const { dirty, setValues, initialValues } = props;
-  const { fetching } = useSelector(taskListSelector);
+  const { taskListFetching } = useSelector(taskListSelector);
 
   const buttonStyle = {
     background: colors.buttonGradients[0],
@@ -109,7 +109,7 @@ const TaskListTaskStatus = ({
             <Button
               style={{ ...buttonStyle, boxShadow: "0px" }}
               icon={<i className="fa-solid fa-arrow-rotate-left" />}
-              disabled={fetching}
+              disabled={taskListFetching}
               onClick={async () => {
                 await setValues(initialValues);
                 handleEdit(true);
@@ -120,7 +120,7 @@ const TaskListTaskStatus = ({
             <Button
               type="button"
               style={buttonStyle}
-              disabled={!dirty || fetching}
+              disabled={!dirty || taskListFetching}
               onClick={() => handleEdit()}
               className="cursor-pointer disabled:cursor-default disabled:text-slate-500 text-sm text-white p-1 rounded-lg"
             >
@@ -137,7 +137,7 @@ const TaskListTaskStatus = ({
                 whileHover="hovered"
                 whileTap="tapped"
                 custom={editing}
-                disabled={fetching}
+                disabled={taskListFetching}
                 animate="animate"
                 onClick={() => handleEdit()}
                 className="cursor-pointer px-1 py-[2px] rounded-lg"
@@ -158,7 +158,7 @@ const TaskListTaskStatus = ({
               whileHover="hovered"
               whileTap="tapped"
               custom={editing}
-              disabled={fetching}
+              disabled={taskListFetching}
               type="button"
               onClick={() => handleDelete()}
               animate="animate"
@@ -179,7 +179,7 @@ const TaskListTaskStatus = ({
                 whileHover="hovered"
                 whileTap="tapped"
                 custom={editing}
-                disabled={fetching}
+                disabled={taskListFetching}
                 onClick={() => handleComplete()}
                 animate="animate"
                 className="cursor-pointer px-1 py-[2px] rounded-lg"

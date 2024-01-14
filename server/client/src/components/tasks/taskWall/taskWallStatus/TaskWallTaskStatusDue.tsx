@@ -9,21 +9,27 @@ import SmallIcon from "../../../__reusable/SmallIcon";
 const TaskWallTaskStatusDue = ({
   dueDate,
   mobile,
+  complete,
 }: {
   dueDate?: string;
   mobile: boolean;
+  complete: boolean;
 }): ReactElement => {
   const { noDueDate, taskIsOverdue } = taskStatus(dayjs(dueDate));
 
-  const renderPopout = noDueDate
-    ? "Freeflow"
+  const renderPopout = complete
+    ? ""
+    : noDueDate
+    ? "Freeflow - no due date"
     : taskIsOverdue
     ? "Overdue: Give them motivation!"
     : taskIsOverdue === false
     ? "Due soon: Inspire them"
     : "";
 
-  const label = noDueDate
+  const label = complete
+    ? "Complete"
+    : noDueDate
     ? "Freeflow"
     : taskIsOverdue
     ? "Procrastinator"
@@ -31,7 +37,9 @@ const TaskWallTaskStatusDue = ({
     ? "In the clear"
     : "";
 
-  const icon = noDueDate ? (
+  const icon = complete ? (
+    <SmallIcon icon="fa-solid fa-check" />
+  ) : noDueDate ? (
     <SmallIcon icon="fa-solid fa-check" />
   ) : (
     <SmallIcon icon="fa-solid fa-clock" />
@@ -41,7 +49,7 @@ const TaskWallTaskStatusDue = ({
     <ButtonPopout
       icon={mobile ? icon : ""}
       style={{
-        background: taskIsOverdue ? "red" : "green",
+        background: complete ? "green" : taskIsOverdue ? "red" : "green",
         fontFamily: fonts.orbitron,
       }}
       fontSize={mobile ? 10 : 12}
@@ -54,7 +62,10 @@ const TaskWallTaskStatusDue = ({
         initial="initial"
         animate="animate"
         exit="exit"
-        style={{ fontFamily: fonts.orbitron }}
+        style={{
+          fontFamily: fonts.orbitron,
+          display: complete ? "none" : "flex",
+        }}
         className="absolute z-[5] whitespace-nowrap bottom-[40px] cursor-default origin-bottom -left-[325%] sm:-left-[50%] p-1 border-[1px] text-[10px] sm:text-xs rounded-lg overflow-hidden bg-[#f4f0ed] text-black border-slate-400"
       >
         {renderPopout}

@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "../../../app/store";
-import { colors } from "../../../constants";
+import { colors, placeholderVariants } from "../../../constants";
 import {
   getUserTasks,
   taskListSelector,
@@ -16,7 +16,7 @@ import TaskListCategory from "./TaskListCategory";
 import TaskListPlaceholder from "./TaskListPlaceholder";
 
 const TaskList = (): ReactElement => {
-  const { tasks, fetching } = useSelector(taskListSelector);
+  const { tasks, taskListFetching } = useSelector(taskListSelector);
   const { userTaskWallTasks } = useSelector(taskWallSelector);
   const dispatch = useDispatch<AppThunkDispatch>();
 
@@ -29,8 +29,6 @@ const TaskList = (): ReactElement => {
       dispatch(getUserWallTasks());
     }
   }, []);
-
-  
 
   const BigSpinner = (
     <div
@@ -55,29 +53,14 @@ const TaskList = (): ReactElement => {
     } else if (tasks === false) {
       return (
         <>
-          {fetching && BigSpinner}
+          {taskListFetching && BigSpinner}
           <motion.section
             key={2}
-            initial={{ y: 30, filter: "blur(10px)", scale: 0.9 }}
-            animate={{
-              y: 0,
-              filter: fetching ? "blur(5px)" : "blur(0px)",
-              scale: fetching ? 0.95 : 1,
-              transition: {
-                scale: { type: "spring", stiffness: 150 },
-                y: { type: "spring", stiffness: 120 },
-              },
-            }}
-            exit={{
-              y: -20,
-              filter: "blur(5px)",
-              scale: 0.9,
-              opacity: 0,
-              transition: {
-                scale: { type: "spring", stiffness: 200 },
-                y: { type: "spring", stiffness: 120 },
-              },
-            }}
+            variants={placeholderVariants}
+            custom={taskListFetching}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             className="h-[80vh] rounded-xl flex justify-center items-center"
           >
             <TaskListPlaceholder />
@@ -87,7 +70,7 @@ const TaskList = (): ReactElement => {
     } else {
       return (
         <div className="pb-14">
-          {fetching && BigSpinner}
+          {taskListFetching && BigSpinner}
           <TaskListCategory
             userTaskWallTasks={userTaskWallTasks}
             sortBy="Due"

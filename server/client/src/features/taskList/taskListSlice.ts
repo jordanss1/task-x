@@ -33,9 +33,12 @@ const returnTasksAndUpdateStore = async (
   dispatch: ThunkDispatch<StateType, unknown, AnyAction>,
   arg: any,
   successArg: string,
-  axiosFunction: AxiosFunctionType
+  axiosFunction: AxiosFunctionType,
+  fetching: boolean
 ) => {
-  dispatch(setFetching(true));
+  if (!fetching) {
+    dispatch(setTaskListFetching(true));
+  }
 
   try {
     const [userTasks, userTaskWallTasks, allTaskWallTasks] =
@@ -60,12 +63,19 @@ export const submitTask = createAsyncThunk<
   TaskType[] | false,
   TaskTypeSent,
   { state: StateType }
->("taskList/submitTask", async (task, { dispatch }) => {
+>("taskList/submitTask", async (task, { dispatch, getState }) => {
+  const { taskList, taskWall } = getState();
+
+  const fetching = taskList.taskListFetching && taskWall.taskWallFetching;
+
+  console.log(fetching);
+
   return await returnTasksAndUpdateStore(
     dispatch,
     task,
     "Task created successfully",
-    axiosSubmitTask
+    axiosSubmitTask,
+    fetching
   );
 });
 
@@ -73,18 +83,23 @@ export const editTask = createAsyncThunk<
   TaskType[] | false,
   TaskType,
   { state: StateType }
->("taskList/editTask", async (task, { dispatch }) => {
+>("taskList/editTask", async (task, { dispatch, getState }) => {
+  const { taskList, taskWall } = getState();
+
+  const fetching = taskList.taskListFetching && taskWall.taskWallFetching;
+
   return await returnTasksAndUpdateStore(
     dispatch,
     task,
     "Task edited successfully",
-    axiosEditTask
+    axiosEditTask,
+    fetching
   );
 });
 
 export const getUserTasks = createAsyncThunk<TaskType[] | false>(
   "taskList/getUserTasks",
-  async (undefined, { dispatch }) => {
+  async (undefined, { dispatch, getState }) => {
     try {
       return await axiosGetUserTasks();
     } catch (err) {
@@ -101,12 +116,17 @@ export const deleteTask = createAsyncThunk<
   TaskType[] | false,
   TaskType["taskId"],
   { state: StateType }
->("taskList/deleteTask", async (taskId, { dispatch }) => {
+>("taskList/deleteTask", async (taskId, { dispatch, getState }) => {
+  const { taskList, taskWall } = getState();
+
+  const fetching = taskList.taskListFetching && taskWall.taskWallFetching;
+
   return await returnTasksAndUpdateStore(
     dispatch,
     taskId,
     "Task has been deleted",
-    axiosDeleteTask
+    axiosDeleteTask,
+    fetching
   );
 });
 
@@ -114,25 +134,30 @@ export const completeTask = createAsyncThunk<
   TaskType[] | false,
   TaskType["taskId"],
   { state: StateType }
->("taskList/completeTask", async (taskId, { dispatch }) => {
+>("taskList/completeTask", async (taskId, { dispatch, getState }) => {
+  const { taskList, taskWall } = getState();
+
+  const fetching = taskList.taskListFetching && taskWall.taskWallFetching;
+
   return await returnTasksAndUpdateStore(
     dispatch,
     taskId,
     "Task marked as complete",
-    axiosCompleteTask
+    axiosCompleteTask,
+    fetching
   );
 });
 
 type TaskListStateType = {
   formActive: boolean;
   tasks: TaskType[] | null | false;
-  fetching: boolean;
+  taskListFetching: boolean;
 };
 
 const initialState: TaskListStateType = {
   formActive: false,
   tasks: null,
-  fetching: false,
+  taskListFetching: false,
 };
 
 const taskListSlice = createSlice({
@@ -142,8 +167,8 @@ const taskListSlice = createSlice({
     toggleForm: (state) => {
       state.formActive = !state.formActive;
     },
-    setFetching: (state, action) => {
-      state.fetching = action.payload;
+    setTaskListFetching: (state, action) => {
+      state.taskListFetching = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -159,7 +184,10 @@ const taskListSlice = createSlice({
         (state, action: PayloadAction<TaskType[] | false>) => {
           reducerMatcherFunction(action, () => {
             updateTaskState(state, action, "tasks");
-            state.fetching = false;
+
+            if (state.taskListFetching) {
+              state.taskListFetching = false;
+            }
           });
         }
       )
@@ -168,19 +196,28 @@ const taskListSlice = createSlice({
         (state, action: PayloadAction<TaskType[] | false>) => {
           if (action.payload === false) {
             state.tasks = state.tasks;
-            state.fetching = false;
+            if (state.taskListFetching) {
+              state.taskListFetching = false;
+            }
+
             return;
           }
 
           if (action.payload && action.payload.length) {
             state.tasks = action.payload;
-            state.fetching = false;
+            if (state.taskListFetching) {
+              state.taskListFetching = false;
+            }
+
             return;
           }
 
           if (action.payload === null) {
             state.tasks = false;
-            state.fetching = false;
+
+            if (state.taskListFetching) {
+              state.taskListFetching = false;
+            }
           }
         }
       );
@@ -191,6 +228,6 @@ type TaskListSelectorType = (state: StateType) => TaskListStateType;
 
 export const taskListSelector: TaskListSelectorType = (state) => state.taskList;
 
-export const { toggleForm, setFetching } = taskListSlice.actions;
+export const { toggleForm, setTaskListFetching } = taskListSlice.actions;
 
 export default taskListSlice.reducer;

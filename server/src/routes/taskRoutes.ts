@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { Express, Request } from "express";
-import { model } from "mongoose";
+import { Model, Types, model } from "mongoose";
 import requireJwt from "../middlewares/requireJwt";
 import { PublicTaskListType, PublicTaskType } from "../models/PublicTaskList";
 import { TaskListType, TaskType, TaskTypeIncoming } from "../models/TaskList";
@@ -50,11 +50,13 @@ const taskRoutes = (app: Express) => {
       const publicTasks = await PublicTaskList.find({
         totalTasks: { $gt: 0 },
       })
-        .select("tasks")
+        .select(["tasks", "-_id"])
         .exec();
 
-      const allPublicTasks = publicTasks.map(({ tasks }) => {
-        return tasks.reduce((task) => task);
+      let allPublicTasks: PublicTaskType[] = [];
+
+      publicTasks.forEach(({ tasks }) => {
+        return allPublicTasks.push(...tasks);
       });
 
       return res.send(allPublicTasks || false);
@@ -416,8 +418,10 @@ const taskRoutes = (app: Express) => {
         .select("tasks")
         .exec();
 
-      const allPublicTasks = publicTasks.map(({ tasks }) => {
-        return tasks.reduce((task) => task);
+      let allPublicTasks: PublicTaskType[] = [];
+
+      publicTasks.forEach(({ tasks }) => {
+        return allPublicTasks.push(...tasks);
       });
 
       res.send([
@@ -435,6 +439,12 @@ const taskRoutes = (app: Express) => {
       let updatedUserTasks;
       let updatedUserPublicTasks;
 
+      const userWallTasks = await PublicTaskList.findOne({
+        _user: req.user?._id,
+      }).exec();
+
+      updatedUserPublicTasks = userWallTasks?.tasks.map((task) => task);
+
       const tasks = await TaskList.findOne<TaskListType>({
         _user: req.user?._id,
       })
@@ -446,6 +456,14 @@ const taskRoutes = (app: Express) => {
       })
         .select("totalTasks")
         .exec();
+
+      const matchingPublicTask =
+        await PublicTaskList.findOne<PublicTaskListType>({
+          _user: req.user?._id,
+          tasks: { $elemMatch: { taskId: req.body.taskId } },
+        })
+          .select({ tasks: { $elemMatch: { taskId: req.body.taskId } } })
+          .exec();
 
       if (tasks?.totalTasks && tasks.totalTasks > 1) {
         try {
@@ -479,7 +497,7 @@ const taskRoutes = (app: Express) => {
         }
       }
 
-      if (publicTasks && publicTasks.totalTasks > 1) {
+      if (publicTasks && publicTasks.totalTasks > 1 && matchingPublicTask) {
         try {
           await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
             { _user: req.user?._id },
@@ -499,7 +517,7 @@ const taskRoutes = (app: Express) => {
         }
       }
 
-      if (publicTasks && publicTasks.totalTasks === 1) {
+      if (publicTasks && publicTasks.totalTasks === 1 && matchingPublicTask) {
         try {
           await PublicTaskList.findOneAndDelete<TaskListType>({
             _user: req.user?._id,

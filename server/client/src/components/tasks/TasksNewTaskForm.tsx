@@ -137,7 +137,7 @@ const childVariants2: Variants = {
 };
 
 const TasksNewTaskForm = (): ReactElement => {
-  const { formActive, fetching } = useSelector(taskListSelector);
+  const { formActive, taskListFetching } = useSelector(taskListSelector);
   const dispatch = useDispatch<AppThunkDispatch>();
   const mobile = useMediaQuery(640);
 
@@ -274,22 +274,22 @@ const TasksNewTaskForm = (): ReactElement => {
                   </motion.div>
                   <motion.div
                     onClick={() => {
-                      if (!fetching) props.submitForm();
+                      if (!taskListFetching) props.submitForm();
                     }}
                     style={{
                       background: colors.buttonGradients[1],
                       borderRadius: "30%",
-                      cursor: fetching ? "default" : "pointer",
+                      cursor: taskListFetching ? "default" : "pointer",
                     }}
                     variants={childVariants2}
-                    custom={{ x: 40, fetching }}
+                    custom={{ x: 40, taskListFetching }}
                     whileHover={{
                       background: colors.hoveredButtonGradient,
                     }}
                     whileTap={{ scale: 0.9 }}
                     className="w-9 h-9 flex items-center justify-center ml-auto"
                   >
-                    {fetching ? (
+                    {taskListFetching ? (
                       <Spinner />
                     ) : (
                       <SmallIcon

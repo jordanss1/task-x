@@ -1,12 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import setRandomInterval from "set-random-interval";
-import { AppThunkDispatch } from "../app/store";
-import {
-  interfaceSelector,
-  setFetching,
-  updateProgress,
-} from "../features/interface/interfaceSlice";
+import { updateProgress } from "../features/interface/interfaceSlice";
 
 type ArtificialProgressOptions = {
   onFullProgress?: () => void;
@@ -15,6 +10,7 @@ type ArtificialProgressOptions = {
 type UseArtificialProgressType = (options: ArtificialProgressOptions) => {
   beginProgress: () => void;
   stopProgress: () => void;
+  resetProgress: () => void;
   progress: number;
   complete: boolean;
 };
@@ -33,12 +29,16 @@ const useArtificialProgress: UseArtificialProgressType = (options) => {
 
   const timer = useRef<(() => void) | null>(null);
 
+  const resetProgress = () => {
+    setProgress(0);
+    setIsFetching(false);
+    dispatch(updateProgress(0));
+    timer.current && timer.current();
+  };
+
   useEffect(() => {
     return () => {
-      setProgress(0);
-      setIsFetching(false);
-      dispatch(updateProgress(0));
-      timer.current && timer.current();
+      resetProgress();
     };
   }, []);
 
@@ -80,7 +80,7 @@ const useArtificialProgress: UseArtificialProgressType = (options) => {
 
   const complete = progress === 100;
 
-  return { beginProgress, stopProgress, progress, complete };
+  return { beginProgress, stopProgress, resetProgress, progress, complete };
 };
 
 export default useArtificialProgress;

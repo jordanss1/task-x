@@ -4,7 +4,7 @@ import { AppThunkDispatch } from "../app/store";
 
 type ArtificialDelayType = (
   timer: MutableRefObject<number | NodeJS.Timeout>,
-  action?: Promise<any> | AppThunkDispatch,
+  action?: () => void,
   beginProgress?: () => void,
   stopProgress?: () => void
 ) => Promise<any> | void;
@@ -15,12 +15,14 @@ const artificialDelay: ArtificialDelayType = async (
   beginProgress,
   stopProgress
 ) => {
+  const func = action ? action : () => {};
+
   clearTimeout(timer.current);
 
   if (beginProgress) beginProgress();
 
   const [res] = await axios.all([
-    action ? action : () => {},
+    new Promise((resolve) => resolve(func())),
 
     new Promise(
       (resolve) =>
@@ -28,7 +30,7 @@ const artificialDelay: ArtificialDelayType = async (
           () => resolve(stopProgress && stopProgress()),
           1200
         ))
-    ),  
+    ),
   ]);
 
   return res;

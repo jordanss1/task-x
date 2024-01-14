@@ -13,8 +13,8 @@ const TaskWallNavSort = (): ReactElement => {
   const { sort } = useSelector(taskWallSelector);
 
   const options = [
-    { option: "recent", label: "Most recent" },
     { option: "popular", label: "Popular" },
+    { option: "recent", label: "Most recent" },
   ];
 
   const renderOptions = options.map(({ option, label }) => (
@@ -27,15 +27,13 @@ const TaskWallNavSort = (): ReactElement => {
     </div>
   ));
 
-  const label = sort === "popular" ? "Popular" : "Most recent";
-
   return (
     <ButtonPopout
       style={{ fontFamily: fonts.jura }}
       className="gap-1 p-1 ml-auto"
       fontSize={15}
       iconSize={10}
-      label={label}
+      label={sort === "popular" ? "Popular" : "Most recent"}
       action="click"
     >
       <motion.div

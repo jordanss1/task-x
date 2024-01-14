@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { ReactElement, useState } from "react";
 import useMeasure from "react-use-measure";
+import { colors } from "../../../constants";
 import { TaskWallTaskType } from "../../../types";
 import TaskWallTaskCommentList from "./taskWallComments/TaskWallTaskCommentList";
 import TaskWallTaskStatus from "./taskWallStatus/TaskWallTaskStatus";
@@ -38,13 +39,17 @@ const TaskWallTask = ({ task }: TaskWallTaskPropsType): ReactElement => {
 
   return (
     <motion.div
-      style={{ boxShadow: "1px 1px 2px black, -1px -1px 2px black" }}
+      style={{
+        boxShadow: "1px 1px 2px black, -1px -1px 2px black",
+        background: "#ebe7e4",
+      }}
       className="sm:min-h-[15rem] w-full flex flex-col gap-5 p-3 rounded-2xl"
     >
       <TaskWallTaskStatus
         awards={task.awards}
         dueDate={task.dueDate}
         created={task.created}
+        complete={task.complete}
         user={task.user}
       />
       <TaskWallTaskTask task={task.task} />

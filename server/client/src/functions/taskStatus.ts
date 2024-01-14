@@ -13,7 +13,8 @@ export const taskStatus = (date?: Dayjs) => {
   const minutes = date?.diff(dayjs(), "minutes");
   const seconds = date?.diff(dayjs(), "seconds");
 
-  if (!date) {
+  if (!dayjs(date).isValid() || date === undefined) {
+    console.log("first");
     noDueDate = true;
   } else if (dayjs().isAfter(date) || dayjs().isSame(date)) {
     taskIsOverdue = true;

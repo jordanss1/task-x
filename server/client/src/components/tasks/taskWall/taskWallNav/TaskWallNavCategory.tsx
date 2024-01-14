@@ -1,29 +1,88 @@
+import { Variants } from "framer-motion";
 import { ReactElement } from "react";
+import { useDispatch } from "react-redux";
+import { AppThunkDispatch } from "../../../../app/store";
+import { colors } from "../../../../constants";
+import { changeCategory } from "../../../../features/taskWall/taskWallSlice";
 import Button from "../../../__reusable/Button";
 import SmallIcon from "../../../__reusable/SmallIcon";
 import Social from "../../../svg/Social";
 
-const TaskWallNavCategory = (): ReactElement => {
+const TaskWallNavCategory = ({
+  category,
+}: {
+  category: "all" | "user";
+}): ReactElement => {
+  const dispatch = useDispatch<AppThunkDispatch>();
+
+  const rightButtonVariants: Variants = {
+    animate: {
+      background:
+        category === "all"
+          ? colors.buttonGradients[0]
+          : colors.hoveredButtonGradient,
+      boxShadow:
+        category === "all"
+          ? "1px 1px 3px rgb(50,50,50), -0px -0px 3px rgb(50,50,50)"
+          : "inset 2px 2px 5px rgb(30,30,30), inset -0px -1px 1px rgb(30,30,30)",
+      minHeight: category === "all" ? "36px" : "39px",
+    },
+  };
+
+  const leftButtonVariants: Variants = {
+    animate: {
+      background:
+        category === "all"
+          ? colors.hoveredButtonGradientInverted
+          : colors.buttonGradients[0],
+      boxShadow:
+        category === "all"
+          ? "inset 2px 2px 5px rgb(30,30,30), inset -1px -0px 3px rgb(30,30,30)"
+          : "0px 1px 1px rgb(50,50,50), -1px -1px 3px rgb(50,50,50)",
+      minHeight: category === "all" ? "39px" : "36px",
+    },
+  };
+
   return (
-    <div className="flex max-h-[28px]">
+    <div style={{}} className="flex gap-[0px] items-center max-h-[28px]">
       <Button
-        className="min-w-[43px] py-4  border-r-0 justify-center"
+        variants={leftButtonVariants}
+        onClick={() => dispatch(changeCategory("all"))}
+        animate="animate"
+        className="min-w-[43px] min-h-[39px] px-2 justify-center"
         style={{
+          boxShadow:
+            " inset 2px 2px 5px rgb(30,30,30), inset -0px -1px 1px rgb(30,30,30)",
           alignItems: "center",
-          border: "1px solid black",
-          borderRight: "none",
           borderRadius: "200px 0px 0px 200px",
         }}
-        icon={<Social size={30} />}
+        icon={
+          <Social
+            active={category === "all" ? true : false}
+            size={category === "all" ? 26 : 28}
+          />
+        }
       />
       <Button
-        className="min-w-[43px] py-4 overflow-hidden border-l-0 justify-center"
+        onClick={() => dispatch(changeCategory("user"))}
+        className="min-w-[45px] min-h-[36px]  px-2 border-l-0 justify-center"
+        variants={rightButtonVariants}
+        animate="animate"
         style={{
+          boxShadow: "1px 1px 3px rgb(50,50,50), -0px -0px 3px rgb(50,50,50)",
           alignItems: "center",
-          border: "1px solid black",
           borderRadius: "0px 200px 200px 0px",
         }}
-        icon={<SmallIcon size={20} icon="fa-regular fa-user" />}
+        icon={
+          <SmallIcon
+            style={{
+              color: category === "user" ? "rgb(230,230,230)" : "rgb(50,50,50)",
+            }}
+            className="relative right-[2px]"
+            size={category === "user" ? 16 : 18}
+            icon="fa-regular fa-user"
+          />
+        }
       />
     </div>
   );

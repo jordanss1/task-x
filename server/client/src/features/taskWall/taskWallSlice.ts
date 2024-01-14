@@ -3,52 +3,75 @@ import { AxiosError } from "axios";
 import dayjs from "dayjs";
 import { axiosGetAllTaskWallTasks, axiosGetUserWallTasks } from "../../api";
 import { StateType } from "../../app/store";
-import { taskWallTasks } from "../../constants";
 import { TaskType, TaskWallTaskType } from "../../types";
 import { setError } from "../notification/notificationSlice";
 
-export const getUserWallTasks = createAsyncThunk<TaskWallTaskType[] | false>(
-  "taskWall/userTasks",
-  async (undefined, { dispatch }) => {
-    try {
-      return await axiosGetUserWallTasks();
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        dispatch(setError(err.response?.data));
-      }
+export const getUserWallTasks = createAsyncThunk<
+  TaskWallTaskType[] | false,
+  undefined,
+  { state: StateType }
+>("taskWall/userTasks", async (undefined, { dispatch, getState }) => {
+  const { taskList, taskWall } = getState();
 
-      return false;
-    }
+  const fetching = taskList.taskListFetching && taskWall.taskWallFetching;
+
+  if (!fetching) {
+    dispatch(setTaskWallFetching(true));
   }
-);
 
-export const getAllTaskWallTasks = createAsyncThunk<TaskWallTaskType[] | false>(
-  "taskWall/allTasks",
-  async (undefined, { dispatch }) => {
-    try {
-      return await axiosGetAllTaskWallTasks();
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        dispatch(setError(err.response?.data));
-      }
-
-      return false;
+  try {
+    return await axiosGetUserWallTasks();
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
     }
+
+    return false;
   }
-);
+});
+
+export const getAllTaskWallTasks = createAsyncThunk<
+  TaskWallTaskType[] | false,
+  undefined,
+  { state: StateType }
+>("taskWall/allTasks", async (undefined, { dispatch, getState }) => {
+  const { taskList, taskWall } = getState();
+
+  const fetching = taskList.taskListFetching && taskWall.taskWallFetching;
+
+  if (!fetching) {
+    dispatch(setTaskWallFetching(true));
+  }
+
+  try {
+    return await axiosGetAllTaskWallTasks();
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
+
+    return false;
+  }
+});
 
 type SortType = "popular" | "recent";
 
+type CategoryType = "user" | "all";
+
 type TaskWallStateType = {
   sort: SortType;
+  category: CategoryType;
   allTaskWallTasks: TaskWallTaskType[] | null | false;
   userTaskWallTasks: TaskWallTaskType[] | null | false;
+  taskWallFetching: boolean;
 };
 
 const initialState: TaskWallStateType = {
   allTaskWallTasks: null,
   userTaskWallTasks: null,
+  category: "all",
   sort: "popular",
+  taskWallFetching: false,
 };
 
 const sortFunction = (sort: SortType) => {
@@ -84,7 +107,7 @@ const taskWallSlice = createSlice({
   name: "taskWall",
   initialState,
   reducers: {
-    changeSort: (state, action) => {
+    changeSort: (state, action: PayloadAction<SortType>) => {
       state.sort = action.payload;
 
       if (state.allTaskWallTasks) {
@@ -95,10 +118,19 @@ const taskWallSlice = createSlice({
         );
       }
     },
+    changeCategory: (state, action: PayloadAction<CategoryType>) => {
+      state.category = action.payload;
+    },
     assignAllWallTasks: (
       state,
       action: PayloadAction<TaskWallTaskType[] | false>
     ) => {
+      const sort = sortFunction(state.sort);
+
+      if (action.payload) {
+        action.payload = [...action.payload].sort((a, b) => sort(a, b));
+      }
+
       updateTaskState(state, action, "allTaskWallTasks");
     },
     assignUserWallTasks: (
@@ -106,6 +138,9 @@ const taskWallSlice = createSlice({
       action: PayloadAction<TaskWallTaskType[] | false>
     ) => {
       updateTaskState(state, action, "userTaskWallTasks");
+    },
+    setTaskWallFetching: (state, action: PayloadAction<boolean>) => {
+      state.taskWallFetching = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -115,11 +150,30 @@ const taskWallSlice = createSlice({
           action.type.includes(type)
         ),
       (state, action: PayloadAction<TaskWallTaskType[] | false>) => {
+        if (action.payload === undefined) {
+          return;
+        }
+
         if (action.type.includes("allTasks")) {
-          return updateTaskState(state, action, "allTaskWallTasks");
+          const sort = sortFunction(state.sort);
+
+          if (action.payload) {
+            action.payload = [...action.payload].sort((a, b) => sort(a, b));
+          }
+
+          updateTaskState(state, action, "allTaskWallTasks");
+
+          if (state.taskWallFetching) {
+            state.taskWallFetching = false;
+          }
+          return;
         }
 
         updateTaskState(state, action, "userTaskWallTasks");
+
+        if (state.taskWallFetching) {
+          state.taskWallFetching = false;
+        }
       }
     );
   },
@@ -129,7 +183,12 @@ type TaskWallSelectorType = (state: StateType) => TaskWallStateType;
 
 export const taskWallSelector: TaskWallSelectorType = (state) => state.taskWall;
 
-export const { changeSort, assignAllWallTasks, assignUserWallTasks } =
-  taskWallSlice.actions;
+export const {
+  changeSort,
+  changeCategory,
+  assignAllWallTasks,
+  assignUserWallTasks,
+  setTaskWallFetching,
+} = taskWallSlice.actions;
 
 export default taskWallSlice.reducer;

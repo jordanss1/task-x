@@ -12,6 +12,7 @@ type TaskWallTaskStatusPropsType = {
   awards: AwardType[];
   created: string;
   dueDate?: string;
+  complete: boolean;
 };
 
 const TaskWallTaskStatus = ({
@@ -19,6 +20,7 @@ const TaskWallTaskStatus = ({
   awards,
   created,
   dueDate,
+  complete,
 }: TaskWallTaskStatusPropsType): ReactElement => {
   const mobile = useMediaQuery(640);
   const { profilePicture, userName } = user.profile;
@@ -41,7 +43,11 @@ const TaskWallTaskStatus = ({
       </div>
       <div className="flex md:flex-row flex-col-reverse relative items-center md:gap-5 gap-2">
         {awards.length > 0 && <TaskWallTaskStatusAwards awards={awards} />}
-        <TaskWallTaskStatusDue mobile={mobile} dueDate={dueDate} />
+        <TaskWallTaskStatusDue
+          complete={complete}
+          mobile={mobile}
+          dueDate={dueDate}
+        />
       </div>
     </div>
   );

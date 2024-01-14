@@ -143,7 +143,7 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
                   scale: 0.95,
                   transition: { duration: 0.1 },
                 }}
-                className="absolute w-44 z-[50] top-[40px] cursor-default origin-top-right h-fit right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+                className="absolute w-44 z-[5] top-[40px] cursor-default origin-top-right h-fit right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
               >
                 {renderProfile(user.profile)}
                 {renderSettings}

@@ -1,10 +1,21 @@
 import { motion, Variants } from "framer-motion";
 import { capitalize } from "lodash";
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AppThunkDispatch } from "../../app/store";
 import { colors, fonts } from "../../constants";
+import { interfaceSelector } from "../../features/interface/interfaceSlice";
+import { getUserTasks } from "../../features/taskList/taskListSlice";
+import {
+  getAllTaskWallTasks,
+  getUserWallTasks,
+} from "../../features/taskWall/taskWallSlice";
+import artificialDelay from "../../functions/artificialDelay";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
+import useArtificialProgress from "../../hooks/useArtificialProgress";
 import Button from "../__reusable/Button";
+import ProgressBar from "../__reusable/ProgressBar";
 import HeaderLogo from "../header/HeaderLogo";
 import MenuButton from "../svg/MenuButton";
 import { panelButtons, PanelButtonType } from "./content";
@@ -33,9 +44,42 @@ const DashboardPanel = ({
   expanded,
   setExpanded,
 }: DashboardPanelPropsType): ReactElement => {
+  const { beginProgress, stopProgress, complete, resetProgress } =
+    useArtificialProgress({});
+  const { progress } = useSelector(interfaceSelector);
+  const dispatch = useDispatch<AppThunkDispatch>();
+  const timer = useRef<NodeJS.Timeout | number>(0);
+  const timer2 = useRef<number | NodeJS.Timeout>(0);
   const navigate = useNavigate();
   const location = useLocation();
   const mobile = useMediaQuery(640);
+
+  useEffect(() => {
+    if (complete && location.pathname === "/dashboard/home") {
+      setTimeout(() => navigate("/dashboard/social"), 300);
+    } else if (complete && location.pathname === "/dashboard/social") {
+      setTimeout(() => navigate("/dashboard/home"), 300);
+    }
+
+    return () => {
+      setTimeout(() => resetProgress(), 300);
+    };
+  }, [complete]);
+
+  const getAllTasks = async () => {
+    if (location.pathname === "/dashboard/home") {
+      await dispatch(getAllTaskWallTasks());
+      await dispatch(getUserWallTasks());
+    } else {
+      await dispatch(getUserTasks());
+    }
+  };
+
+  const handleClick = async (path: string) => {
+    if (path !== location.pathname) {
+      await artificialDelay(timer, getAllTasks, beginProgress, stopProgress);
+    }
+  };
 
   const renderButtons = panelButtons.map(
     ({ Element, label, path }: PanelButtonType) => (
@@ -53,7 +97,7 @@ const DashboardPanel = ({
           animate="animate"
           whileHover={path === location.pathname ? "hovered" : ""}
           custom={path === location.pathname}
-          onClick={() => navigate(path)}
+          onClick={() => handleClick(path)}
           className="group min-h-[50px] sm:min-h-0 sm:[--border-active:1px_solid_#991FFF] sm:[--border-inactive:1px_solid_#991FFF00] [--border-active:3px_solid_rgb(242,_238,_235)] [--border-inactive:3px_solid_rgb(242,_238,_235,0)] scale-[1.10] sm:scale-[.9]  transition-all relative rounded-[30%] [--p-from:1rem] [--p-to:.5rem_.8rem] sm:[--p-from:1rem] sm:[--p-to:1rem] p-4 sm:bottom-0 bottom-[32px]"
         >
           <Element
@@ -89,23 +133,26 @@ const DashboardPanel = ({
   );
 
   return (
-    <motion.section
-      style={{ width: mobile ? "100%" : "70px" }}
-      animate={{ width: expanded ? "var(--w-from)" : "var(--w-to)" }}
-      className="dashboard_panel z-[5] sm:py-7 flex justify-center sm:justify-start gap-8 sm:gap-6 sm:flex-col items-center fixed left-0 sm:top-0 bottom-0 sm:h-full h-11 sm:w-32 w-full sm:[--w-from:155px] sm:[--w-to:70px] [--w-from:100%] [--w-to:100%]"
-    >
-      <div className="sm:flex px-3 py-4 gap-1 w-full justify-center items-center hidden min-h-[60px]">
-        <motion.div className="flex justify-center flex-[2]">
-          <MenuButton
-            animate={{ scale: expanded ? 1.1 : 1 }}
-            onClick={() => setExpanded((prev) => !prev)}
-            className="cursor-pointer"
-          />
-        </motion.div>
-        {expanded && <HeaderLogo link="/" fontSize={15} />}
-      </div>
-      {renderButtons}
-    </motion.section>
+    <>
+      {progress ? <ProgressBar progress={progress} /> : <></>}
+      <motion.section
+        style={{ width: mobile ? "100%" : "70px" }}
+        animate={{ width: expanded ? "var(--w-from)" : "var(--w-to)" }}
+        className="dashboard_panel z-[5] sm:py-7 flex justify-center sm:justify-start gap-8 sm:gap-6 sm:flex-col items-center fixed left-0 sm:top-0 bottom-0 sm:h-full h-11 sm:w-32 w-full sm:[--w-from:155px] sm:[--w-to:70px] [--w-from:100%] [--w-to:100%]"
+      >
+        <div className="sm:flex px-3 py-4 gap-1 w-full justify-center items-center hidden min-h-[60px]">
+          <motion.div className="flex justify-center flex-[2]">
+            <MenuButton
+              animate={{ scale: expanded ? 1.1 : 1 }}
+              onClick={() => setExpanded((prev) => !prev)}
+              className="cursor-pointer"
+            />
+          </motion.div>
+          {expanded && <HeaderLogo link="/" fontSize={15} />}
+        </div>
+        {renderButtons}
+      </motion.section>
+    </>
   );
 };
 

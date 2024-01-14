@@ -1,7 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import { ReactElement, ReactNode, useEffect, useRef, useState } from "react";
 import Button, { MotionButton } from "./Button";
-import ModalBackground from "./ModalBackground";
 import SmallIcon from "./SmallIcon";
 
 interface ButtonPopoutPropsType extends MotionButton {
@@ -27,6 +26,23 @@ const ButtonPopout = ({
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const [expanded, setExpanded] = useState(false);
 
+  const exitModal = (e: MouseEvent) => {
+    if (buttonRef.current && !buttonRef.current.contains(e.target as Node)) {
+      setExpanded(false);
+
+      document.removeEventListener("click", exitModal);
+    }
+  };
+
+  useEffect(() => {
+    if (expanded) {
+      document.addEventListener("click", exitModal);
+      return;
+    }
+
+    return () => document.removeEventListener("click", exitModal);
+  }, [expanded]);
+
   const onClick =
     action === "click" ? () => setExpanded((prev) => !prev) : () => {};
 
@@ -34,34 +50,21 @@ const ButtonPopout = ({
     action === "hover" ? () => setExpanded(expanded) : () => {};
 
   return (
-    <>
-      {action === "click" && expanded && (
-        <ModalBackground
-          blur={false}
-          mixBlendMode="normal"
-          background="rgb(0,0,0,0)"
-          onClick={() => setExpanded(false)}
-          zIndex={39}
-        />
-      )}
-      <Button
-        ref={buttonRef}
-        label={label}
-        fontSize={fontSize}
-        onClick={onClick}
-        onMouseEnter={onHover(true)}
-        onMouseLeave={onHover(false)}
-        icon={
-          icon ?? <SmallIcon size={iconSize} icon={"fa solid fa-angle-down"} />
-        }
-        className={`${className} relative`}
-        {...props}
-      >
-        <AnimatePresence initial={false}>
-          {expanded && children}
-        </AnimatePresence>
-      </Button>
-    </>
+    <Button
+      ref={buttonRef}
+      label={label}
+      fontSize={fontSize}
+      onClick={onClick}
+      onMouseEnter={onHover(true)}
+      onMouseLeave={onHover(false)}
+      icon={
+        icon ?? <SmallIcon size={iconSize} icon={"fa solid fa-angle-down"} />
+      }
+      className={`${className} relative`}
+      {...props}
+    >
+      <AnimatePresence initial={false}>{expanded && children}</AnimatePresence>
+    </Button>
   );
 };
 
