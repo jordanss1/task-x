@@ -5,11 +5,13 @@ import { colors } from "../../constants";
 type SpinnerPropsType = {
   size?: "small" | "medium" | "large";
   color?: CSSProperties["color"];
+  position?: CSSProperties["position"];
 };
 
 const Spinner = ({
   size = "small",
   color = colors.whiteShades[1],
+  position = "fixed",
 }: SpinnerPropsType): ReactElement => {
   const padding =
     size === "small" ? "8px" : size === "medium" ? "16px" : "24px";
@@ -20,6 +22,7 @@ const Spinner = ({
     <motion.div
       className="rounded-full fixed z-100"
       style={{
+        position,
         border: `${borderSize} solid rgb(150,150,150)`,
         borderTop: `${borderSize} solid ${color}`,
         padding,

@@ -1,9 +1,15 @@
 import { Variants } from "framer-motion";
-import { ReactElement } from "react";
+import { ReactElement, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "../../../../app/store";
 import { colors } from "../../../../constants";
-import { changeCategory } from "../../../../features/taskWall/taskWallSlice";
+import {
+  changeCategory,
+  getAllTaskWallTasks,
+  getUserWallTasks,
+  setTaskWallFetching,
+} from "../../../../features/taskWall/taskWallSlice";
+import artificialDelay from "../../../../functions/artificialDelay";
 import Button from "../../../__reusable/Button";
 import SmallIcon from "../../../__reusable/SmallIcon";
 import Social from "../../../svg/Social";
@@ -14,6 +20,20 @@ const TaskWallNavCategory = ({
   category: "all" | "user";
 }): ReactElement => {
   const dispatch = useDispatch<AppThunkDispatch>();
+  const timer = useRef<NodeJS.Timeout | number>(0);
+
+  const handleClick = async (category: "all" | "user") => {
+    dispatch(setTaskWallFetching(true));
+
+    const action =
+      category === "all"
+        ? () => setTimeout(() => dispatch(getAllTaskWallTasks()), 1000)
+        : () => setTimeout(() => dispatch(getUserWallTasks()), 1000);
+
+    await artificialDelay(timer, action);
+
+    dispatch(changeCategory(category));
+  };
 
   const rightButtonVariants: Variants = {
     animate: {
@@ -47,7 +67,11 @@ const TaskWallNavCategory = ({
     <div style={{}} className="flex gap-[0px] items-center max-h-[28px]">
       <Button
         variants={leftButtonVariants}
-        onClick={() => dispatch(changeCategory("all"))}
+        onClick={async () => {
+          if (category === "user") {
+            await handleClick("all");
+          }
+        }}
         animate="animate"
         className="min-w-[43px] min-h-[39px] px-2 justify-center"
         style={{
@@ -64,7 +88,11 @@ const TaskWallNavCategory = ({
         }
       />
       <Button
-        onClick={() => dispatch(changeCategory("user"))}
+        onClick={async () => {
+          if (category === "all") {
+            await handleClick("user");
+          }
+        }}
         className="min-w-[45px] min-h-[36px]  px-2 border-l-0 justify-center"
         variants={rightButtonVariants}
         animate="animate"

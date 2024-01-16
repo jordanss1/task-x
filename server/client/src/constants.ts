@@ -40,23 +40,25 @@ export const popoutVariants: Variants = {
 };
 
 export const placeholderVariants: Variants = {
-  initial: { y: 30, filter: "blur(10px)", scale: 0.9 },
+  initial: { y: 30, filter: "blur(10px)", scaleX: 0.95, scaleY: 0.99 },
   animate: (fetching) => ({
     y: 0,
     filter: fetching ? "blur(5px)" : "blur(0px)",
-    scale: fetching ? 0.95 : 1,
+    scaleX: fetching ? 0.97 : 1,
+    scaleY: fetching ? 0.99 : 1,
     transition: {
       scale: { type: "spring", stiffness: 150 },
       y: { type: "spring", stiffness: 120 },
     },
   }),
   exit: {
-    y: -20,
     filter: "blur(5px)",
-    scale: 0.9,
+    scaleX: 0.95,
+    scaleY: 0.99,
     opacity: 0,
     transition: {
-      scale: { type: "spring", stiffness: 200 },
+      scaleX: { type: "spring", stiffness: 150 },
+      scaleY: { type: "spring", stiffness: 150 },
       y: { type: "spring", stiffness: 120 },
     },
   },

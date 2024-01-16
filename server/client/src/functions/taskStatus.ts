@@ -14,7 +14,6 @@ export const taskStatus = (date?: Dayjs) => {
   const seconds = date?.diff(dayjs(), "seconds");
 
   if (!dayjs(date).isValid() || date === undefined) {
-    console.log("first");
     noDueDate = true;
   } else if (dayjs().isAfter(date) || dayjs().isSame(date)) {
     taskIsOverdue = true;

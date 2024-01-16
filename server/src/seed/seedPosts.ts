@@ -242,14 +242,32 @@ const fakerPosts = async (uri: string) => {
         })
       );
 
-      const likes = faker.number.int({ max: 120, min: 0 });
+      const likes: { likes: number; users: UserType["profile"][] } = {
+        likes: faker.number.int({ max: 120, min: 0 }),
+        users: [],
+      };
+
+      if (likes.likes) {
+        await new Promise(async (resolve) => {
+          for (let step = 0; step < likes.likes; step++) {
+            const count = await User.countDocuments().exec();
+            const random = Math.floor(Math.random() * count);
+
+            const user = await User.findOne().skip(random).exec();
+
+            likes.users.push(user?.profile);
+          }
+
+          resolve("done");
+        });
+      }
 
       const awards =
-        likes >= 25 && likes < 50
+        likes.likes >= 25 && likes.likes < 50
           ? ["supported"]
-          : likes >= 50 && likes < 100
+          : likes.likes >= 50 && likes.likes < 100
           ? ["supported", "superSupported"]
-          : likes >= 100
+          : likes.likes >= 100
           ? ["supported", "superSupported", "communityLegend"]
           : [];
 
@@ -277,7 +295,7 @@ const fakerPosts = async (uri: string) => {
         dueDate,
         created,
         awards,
-        likes,
+        likes: likes as PublicTaskType["likes"],
         comments: commentArray as any,
         complete,
       });
@@ -301,5 +319,4 @@ const fakerPosts = async (uri: string) => {
   );
 };
 
-fakerPosts(process.env.MONGO_URI as string);
 fakerPosts(keys.mongoURI);

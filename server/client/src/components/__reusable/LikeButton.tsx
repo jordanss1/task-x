@@ -1,48 +1,72 @@
+import { AnimatePresence } from "framer-motion";
 import { ReactElement } from "react";
 import { colors } from "../../constants";
 import Button from "./Button";
 import SmallIcon from "./SmallIcon";
+import Spinner from "./Spinner";
 
 type LikeButtonPropsType = {
   likes: number;
   liked: boolean;
+  fetching: boolean;
   size?: number;
   onClick: () => void;
 };
 
 const LikeButton = ({
   likes,
+  fetching,
   liked,
   size,
   onClick,
 }: LikeButtonPropsType): ReactElement => {
-  const likeAmount = likes > 0 ? likes : "";
+  const likeAmount = fetching ? (
+    <div className="flex relative top-0">
+      <Spinner position="initial" size="small" />
+    </div>
+  ) : likes > 0 ? (
+    likes
+  ) : (
+    ""
+  );
+
   size = size ?? 18;
+
+  const renderLabel = (
+    <AnimatePresence initial={false}>
+      <SmallIcon
+        className="text-[rgb(0,0,0)]"
+        style={{
+          y: 0,
+          color: liked ? colors.purple : "rgb(0,0,0)",
+          scale: 1,
+        }}
+        animate={{
+          y: liked ? [0, -15, 0] : 0,
+          color: liked ? colors.purple : "rgb(0,0,0)",
+          scale: liked ? [0.5, 1.3, 1] : 1,
+          transition: {
+            ease: "easeInOut",
+            duration: liked ? 0.4 : 0.1,
+          },
+        }}
+        size={size}
+        icon="fa-regular fa-thumbs-up"
+      />
+    </AnimatePresence>
+  );
 
   return (
     <Button
       label={likeAmount}
       onClick={onClick}
-      className="gap-1 items-center font-extralight flex-row-reverse"
+      className="items-center justify-center font-extralight flex-row-reverse"
       style={{
+        gap: fetching ? "6px" : "4px",
+        alignItems: fetching ? "center" : "baseline",
         fontSize: `${size - 1}px`,
       }}
-      icon={
-        <SmallIcon
-          className="text-[rgb(0,0,0)]"
-          animate={{
-            y: liked ? [0, -15, 0] : 0,
-            color: liked ? colors.purple : "rgb(0,0,0)",
-            scale: liked ? [0.5, 1.3, 1] : 1,
-            transition: {
-              ease: "easeInOut",
-              duration: liked ? 0.4 : 0.1,
-            },
-          }}
-          size={size}
-          icon="fa-regular fa-thumbs-up"
-        />
-      }
+      icon={renderLabel}
     />
   );
 };

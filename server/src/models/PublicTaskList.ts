@@ -1,5 +1,6 @@
 import { InferSchemaType, Schema, Types, model } from "mongoose";
 import { commentSchema } from "./Comment";
+import { profileSchema } from "./Profile";
 import { userSchema } from "./User";
 
 export const publicTaskSchema = new Schema({
@@ -15,7 +16,10 @@ export const publicTaskSchema = new Schema({
     type: Array,
     default: [],
   },
-  likes: { required: false, type: Number, default: 0 },
+  likes: {
+    likes: { required: false, type: Number, default: 0 },
+    users: { required: false, type: [profileSchema], default: [] },
+  },
   comments: { type: [commentSchema], required: false, default: [] },
 });
 

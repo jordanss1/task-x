@@ -9,7 +9,7 @@ const ProgressBar = ({ progress }: ProgressBarType): ReactElement => {
   return (
     <div
       style={{ background: progress ? "grey" : "transparent" }}
-      className="absolute w-full z-20 left-0 top-0 h-[5px]"
+      className="fixed w-full z-20 left-0 top-0 h-[5px]"
     >
       <motion.div
         className="relative h-full bg-[#991ff1]"

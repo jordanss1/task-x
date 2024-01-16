@@ -11,7 +11,8 @@ import "./models/TaskList";
 import "./models/User";
 import assetsRoutes from "./routes/assetsRoutes";
 import googleAuthRoutes from "./routes/authRoutes";
-import taskRoutes from "./routes/taskRoutes";
+import taskListRoutes from "./routes/taskListRoutes";
+import taskWallRoutes from "./routes/taskWallRoutes";
 import "./services/passport";
 import types from "./types/express";
 
@@ -60,7 +61,9 @@ googleAuthRoutes(app);
 
 assetsRoutes(app);
 
-taskRoutes(app);
+taskListRoutes(app);
+
+taskWallRoutes(app);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/dist"));

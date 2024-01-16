@@ -12,8 +12,8 @@ const TaskList = model<TaskListType>("taskList");
 const PublicTask = model<PublicTaskType>("publicTask");
 const PublicTaskList = model<PublicTaskListType>("publicTaskList");
 
-const taskRoutes = (app: Express) => {
-  app.get("/api/tasks/user", requireJwt, async (req, res) => {
+const taskListRoutes = (app: Express) => {
+  app.get("/api/tasks", requireJwt, async (req, res) => {
     assertRequestWithUser(req);
 
     try {
@@ -29,50 +29,12 @@ const taskRoutes = (app: Express) => {
     }
   });
 
-  app.get("/api/wall_tasks/user", requireJwt, async (req, res) => {
-    assertRequestWithUser(req);
-
-    try {
-      const data = await PublicTaskList.findOne({ _user: req.user._id })
-        .select("tasks")
-        .exec();
-
-      return res.send(data ? data.tasks.map((task) => task) : false);
-    } catch (err) {
-      return res
-        .status(500)
-        .send("Issue retrieving user task wall tasks, server error");
-    }
-  });
-
-  app.get("/api/wall_tasks/all", requireJwt, async (req, res) => {
-    try {
-      const publicTasks = await PublicTaskList.find({
-        totalTasks: { $gt: 0 },
-      })
-        .select(["tasks", "-_id"])
-        .exec();
-
-      let allPublicTasks: PublicTaskType[] = [];
-
-      publicTasks.forEach(({ tasks }) => {
-        return allPublicTasks.push(...tasks);
-      });
-
-      return res.send(allPublicTasks || false);
-    } catch (err) {
-      return res
-        .status(500)
-        .send("Issue retrieving all wall tasks, server error");
-    }
-  });
-
   app.post(
     "/api/task/edit",
     requireJwt,
     async (req: Request<{}, any, TaskType>, res) => {
       const { task, dueDate, enabledDueDate, onTaskWall } = req.body;
-      assertRequestWithUser(req);
+      assertRequestWithUser<TaskType>(req);
 
       let updatedUserPublicTasks;
 
@@ -306,7 +268,7 @@ const taskRoutes = (app: Express) => {
     "/api/task",
     requireJwt,
     async (req: Request<{}, any, TaskTypeIncoming>, res) => {
-      assertRequestWithUser(req);
+      assertRequestWithUser<TaskTypeIncoming>(req);
 
       const newTask = new Task<TaskType>({
         ...req.body,
@@ -536,4 +498,4 @@ const taskRoutes = (app: Express) => {
   );
 };
 
-export default taskRoutes;
+export default taskListRoutes;

@@ -19,13 +19,16 @@ export type TaskWallTaskType = {
   created: string;
   complete: boolean;
   awards: AwardType[];
-  likes: number;
+  likes: LikesType;
   comments: CommentType[] | [];
 };
 
 export type AwardType = "supported" | "superSupported" | "communityLegend";
 
-export type LikesType = Pick<NonNullable<UserType>, "userId">[];
+export type LikesType = {
+  likes: number;
+  users: NonNullable<UserProfile["profile"]>[];
+};
 
 export type CommentType = {
   user: ValidUserType;

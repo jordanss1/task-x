@@ -1,13 +1,15 @@
 import { Request } from "express";
 import types from "./express/index";
 
-type RequestWithUser = Request & { user: Express.User };
+type RequestWithUser<reqBody> = Request<{}, any, reqBody> & {
+  user: Express.User;
+};
 
 type RequestWithProperties<Props> = Request & Props;
 
-export const assertRequestWithUser: (
+export const assertRequestWithUser: <reqBody>(
   req: Request
-) => asserts req is RequestWithUser = (req) => {
+) => asserts req is RequestWithUser<reqBody> = (req) => {
   if (req.user === undefined) {
     throw new Error("User not found on request object");
   }

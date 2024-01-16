@@ -1,15 +1,19 @@
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { ReactElement, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import useMeasure from "react-use-measure";
+import { AppThunkDispatch } from "../../../app/store";
 import { colors } from "../../../constants";
+import { authSelector } from "../../../features/auth/authSlice";
+import { sendLike } from "../../../features/taskWall/taskWallSlice";
 import { TaskWallTaskType } from "../../../types";
 import TaskWallTaskCommentList from "./taskWallComments/TaskWallTaskCommentList";
 import TaskWallTaskStatus from "./taskWallStatus/TaskWallTaskStatus";
 import TaskWallTaskInteraction from "./TaskWallTaskInteraction";
-import TaskWallTaskTask from "./TaskWallTaskTask";
+import TaskWallTaskText from "./TaskWallTaskText";
 
 type TaskWallTaskPropsType = {
-  task: TaskWallTaskType;
+  taskItem: TaskWallTaskType;
 };
 
 const listVariants: Variants = {
@@ -33,9 +37,40 @@ const listVariants: Variants = {
   },
 };
 
-const TaskWallTask = ({ task }: TaskWallTaskPropsType): ReactElement => {
+const TaskWallTask = ({ taskItem }: TaskWallTaskPropsType): ReactElement => {
+  const dispatch = useDispatch<AppThunkDispatch>();
+  const auth = useSelector(authSelector);
   const [openComments, setOpenComments] = useState(false);
   const [ref, { height }] = useMeasure();
+
+  const {
+    likes,
+    awards,
+    taskId,
+    dueDate,
+    created,
+    complete,
+    comments,
+    user,
+    task,
+  } = taskItem;
+
+  const currentlyLiked = likes.users.some(({ userName }) => {
+    if (auth.user) {
+      return userName === auth.user.profile?.userName;
+    }
+  });
+
+  const handleLike = async () => {
+    await dispatch(
+      sendLike({
+        currentlyLiked,
+        currentAwards: awards,
+        previousLikes: likes.likes,
+        taskId: taskId,
+      })
+    );
+  };
 
   return (
     <motion.div
@@ -46,19 +81,21 @@ const TaskWallTask = ({ task }: TaskWallTaskPropsType): ReactElement => {
       className="sm:min-h-[15rem] w-full flex flex-col gap-5 p-3 rounded-2xl"
     >
       <TaskWallTaskStatus
-        awards={task.awards}
-        dueDate={task.dueDate}
-        created={task.created}
-        complete={task.complete}
-        user={task.user}
+        awards={awards}
+        dueDate={dueDate}
+        created={created}
+        complete={complete}
+        user={user}
       />
-      <TaskWallTaskTask task={task.task} />
+      <TaskWallTaskText task={task} />
       <TaskWallTaskInteraction
-        likes={task.likes}
-        created={task.created}
+        likes={likes.likes}
+        currentlyLiked={currentlyLiked}
+        handleLike={handleLike}
+        created={created}
         openComments={openComments}
         handleComments={setOpenComments}
-        commentAmount={task.comments.length}
+        commentAmount={comments.length}
       />
       <motion.section
         animate={{
@@ -82,7 +119,7 @@ const TaskWallTask = ({ task }: TaskWallTaskPropsType): ReactElement => {
               ref={ref}
               className="p-2 rounded-2xl overflow-hidden h-auto bg-slate-300 flex flex-col gap-2"
             >
-              <TaskWallTaskCommentList comments={task.comments} />
+              <TaskWallTaskCommentList comments={comments} />
             </motion.div>
           )}
         </AnimatePresence>

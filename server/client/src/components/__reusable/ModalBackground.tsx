@@ -1,14 +1,14 @@
-import { motion } from "framer-motion";
+import { MotionProps, motion } from "framer-motion";
 import { CSSProperties, ReactElement, useEffect } from "react";
 
-type ModalBackgroundPropsType = {
+interface ModalBackgroundPropsType extends MotionProps {
   onClick?: () => void;
   zIndex?: number;
   blur?: boolean;
   background?: string;
   mixBlendMode?: CSSProperties["mixBlendMode"];
   width?: CSSProperties["width"];
-};
+}
 
 const ModalBackground = ({
   onClick,
@@ -17,6 +17,7 @@ const ModalBackground = ({
   width = "auto",
   mixBlendMode = "screen",
   background = "linear-gradient(130deg, rgb(46, 46, 46), #e0dcd9, rgb(46, 46, 46)",
+  ...props
 }: ModalBackgroundPropsType): ReactElement => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -32,6 +33,7 @@ const ModalBackground = ({
         onClick={onClick}
         style={{ zIndex, width }}
         className="fixed inset-0"
+        {...props}
       />
       {blur ? (
         <motion.div

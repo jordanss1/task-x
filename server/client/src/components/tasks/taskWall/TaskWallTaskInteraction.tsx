@@ -1,6 +1,7 @@
 import { ReactElement, useState } from "react";
 import { fonts } from "../../../constants";
 import { useMediaQuery } from "../../../hooks/MediaQueryHooks";
+import { TaskWallTaskType } from "../../../types";
 import Button from "../../__reusable/Button";
 import LikeButton from "../../__reusable/LikeButton";
 import SmallIcon from "../../__reusable/SmallIcon";
@@ -8,20 +9,24 @@ import TaskWallTaskTimeStamp from "./TaskWallTaskTimeStamp";
 
 type TaskWallTaskInteractionPropsType = {
   likes: number;
+  currentlyLiked: boolean;
   commentAmount: number;
   openComments: boolean;
   created: string;
+  handleLike: () => Promise<void>;
   handleComments: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const TaskWallTaskInteraction = ({
   likes,
+  currentlyLiked,
   commentAmount,
   openComments,
   created,
+  handleLike,
   handleComments,
 }: TaskWallTaskInteractionPropsType): ReactElement => {
-  const [liked, setLiked] = useState(false);
+  const [fetching, setFetching] = useState(false);
   const mobile = useMediaQuery(640);
 
   const comments = commentAmount > 0 ? commentAmount : "";
@@ -37,9 +42,16 @@ const TaskWallTaskInteraction = ({
       >
         <LikeButton
           likes={likes}
-          liked={liked}
+          liked={currentlyLiked}
+          fetching={fetching}
           size={mobile ? 13 : 18}
-          onClick={() => setLiked((prev) => !prev)}
+          onClick={async () => {
+            if (!fetching) {
+              setFetching(true);
+              await handleLike();
+              setFetching(false);
+            }
+          }}
         />
         <Button
           label={comments}

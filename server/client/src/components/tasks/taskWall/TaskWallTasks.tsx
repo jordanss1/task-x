@@ -1,23 +1,43 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { ReactElement } from "react";
-import { useSelector } from "react-redux";
+import { ReactElement, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppThunkDispatch } from "../../../app/store";
 import { colors, placeholderVariants } from "../../../constants";
 import { taskListSelector } from "../../../features/taskList/taskListSlice";
-import { taskWallSelector } from "../../../features/taskWall/taskWallSlice";
-import { TaskWallTaskType } from "../../../types";
+import {
+  getAllTaskWallTasks,
+  getUserWallTasks,
+  taskWallSelector,
+} from "../../../features/taskWall/taskWallSlice";
 import Spinner from "../../__reusable/Spinner";
 import TaskWallPlaceholder from "./TaskWallPlaceholder";
 import TaskWallTask from "./TaskWallTask";
 
-const TaskWallAllTasks = ({
-  allTaskWallTasks,
+const TaskWallTasks = ({
+  category,
 }: {
-  allTaskWallTasks: TaskWallTaskType[] | false | null;
+  category: "all" | "user";
 }): ReactElement => {
-  const { taskWallFetching } = useSelector(taskWallSelector);
+  const dispatch = useDispatch<AppThunkDispatch>();
+
+  const { taskWallFetching, userTaskWallTasks, allTaskWallTasks } =
+    useSelector(taskWallSelector);
+
   const { taskListFetching } = useSelector(taskListSelector);
 
   const fetching = taskWallFetching || taskListFetching;
+
+  const tasks = category === "all" ? allTaskWallTasks : userTaskWallTasks;
+
+  useEffect(() => {
+    if (category === "all" && allTaskWallTasks === null) {
+      dispatch(getAllTaskWallTasks());
+    }
+
+    if (category === "user" && userTaskWallTasks === null) {
+      dispatch(getUserWallTasks());
+    }
+  }, [category]);
 
   const BigSpinner = (
     <div
@@ -29,24 +49,26 @@ const TaskWallAllTasks = ({
   );
 
   const renderTasks = () => {
-    if (allTaskWallTasks === null) {
+    if (tasks === null) {
       return (
         <motion.div key={1} exit={{ opacity: 0, transition: { delay: 0.5 } }}>
           {BigSpinner}
         </motion.div>
       );
-    } else if (allTaskWallTasks === false) {
+    } else if (tasks === false) {
       return (
         <>
           {fetching && BigSpinner}
           <motion.div
+            key={2}
             variants={placeholderVariants}
             custom={fetching}
             initial="initial"
             animate="animate"
             exit="exit"
+            className="flex justify-center py-10"
           >
-            <TaskWallPlaceholder key={2} category="all" />
+            <TaskWallPlaceholder key={2} category={category} />
           </motion.div>
         </>
       );
@@ -54,14 +76,22 @@ const TaskWallAllTasks = ({
       return (
         <>
           {fetching && BigSpinner}
-          <div
+          <motion.div
+            animate={{
+              filter: fetching ? "blur(5px)" : "blur(0px)",
+              scaleX: fetching ? 0.97 : 1,
+              scaleY: fetching ? 0.99 : 1,
+              transition: {
+                scale: { type: "tween", ease: "easeIn" },
+              },
+            }}
             className="flex max-w-3xl mr-auto ml-auto flex-col gap-8 items-center py-20"
             key={3}
           >
-            {allTaskWallTasks.map((task) => (
-              <TaskWallTask key={task.taskId} task={task} />
+            {tasks.map((task) => (
+              <TaskWallTask key={task.taskId} taskItem={task} />
             ))}
-          </div>
+          </motion.div>
         </>
       );
     }
@@ -70,4 +100,4 @@ const TaskWallAllTasks = ({
   return <AnimatePresence mode="wait">{renderTasks()}</AnimatePresence>;
 };
 
-export default TaskWallAllTasks;
+export default TaskWallTasks;

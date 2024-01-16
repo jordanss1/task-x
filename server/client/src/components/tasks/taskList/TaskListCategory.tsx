@@ -1,7 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement } from "react";
+import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { fonts } from "../../../constants";
+import { taskListSelector } from "../../../features/taskList/taskListSlice";
 import { useScreenSize } from "../../../hooks/MediaQueryHooks";
 import useSortTasks from "../../../hooks/useSortTasks";
 import { TaskWallTaskType } from "../../../types";
@@ -18,19 +20,28 @@ const TaskListCategory = ({
 }: TaskListCategoryType): ReactElement => {
   const tasks = useSortTasks({ sortBy });
   const screenWidth = useScreenSize();
+  const { taskListFetching } = useSelector(taskListSelector);
 
   return (
-    <section className="pt-10">
-      <h3
+    <section className="pt-10 relative">
+      <motion.h3
         style={{
           color: "rgb(50,50,50)",
           fontFamily: fonts.jura,
           letterSpacing: ".5px",
         }}
+        animate={{
+          filter: taskListFetching ? "blur(5px)" : "blur(0px)",
+          scaleX: taskListFetching ? 0.97 : 1,
+          scaleY: taskListFetching ? 0.99 : 1,
+          transition: {
+            scale: { type: "tween", ease: "easeIn" },
+          },
+        }}
         className="text-sm py-1 ps-[1px]"
       >
         {sortBy}
-      </h3>
+      </motion.h3>
       <div
         style={{
           background: tasks ? "rgb(50,50,50)" : "rgb(100,100,100)",
@@ -48,7 +59,7 @@ const TaskListCategory = ({
           }}
           className="grid gap-8 px-1 py-5 min-h-[222px]"
         >
-          <AnimatePresence>
+          <AnimatePresence initial={false}>
             {tasks.map((taskItem, i) => {
               let matchingUserWallTask: TaskWallTaskType | boolean | undefined =
                 false;

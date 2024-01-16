@@ -6,7 +6,10 @@ import {
   taskListSelector,
   toggleForm,
 } from "../../features/taskList/taskListSlice";
-import { changeSort } from "../../features/taskWall/taskWallSlice";
+import {
+  changeSort,
+  taskWallSelector,
+} from "../../features/taskWall/taskWallSlice";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import "../../styles/dashboard.css";
 import ModalBackground from "../__reusable/ModalBackground";
@@ -21,7 +24,8 @@ const Dashboard = (): ReactElement => {
   const { user } = useSelector(authSelector);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
-  const { formActive } = useSelector(taskListSelector);
+  const { formActive, taskListFetching } = useSelector(taskListSelector);
+  const { taskWallFetching } = useSelector(taskWallSelector);
 
   const mobile = useMediaQuery(640);
 
@@ -45,7 +49,7 @@ const Dashboard = (): ReactElement => {
           ? "var(--p-left-to)"
           : "var(--p-left-from)",
       }}
-      className="dashboard isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
+      className="dashboard relative isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
     >
       {formActive && (
         <ModalBackground mixBlendMode="normal" background="rgba(0,0,0,.2)" />

@@ -16,7 +16,8 @@ require("./models/TaskList");
 require("./models/User");
 const assetsRoutes_1 = __importDefault(require("./routes/assetsRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
-const taskRoutes_1 = __importDefault(require("./routes/taskRoutes"));
+const taskListRoutes_1 = __importDefault(require("./routes/taskListRoutes"));
+const taskWallRoutes_1 = __importDefault(require("./routes/taskWallRoutes"));
 require("./services/passport");
 const { mongoURI } = keys_1.default;
 (0, mongoose_1.connect)(mongoURI);
@@ -51,7 +52,8 @@ if (process.env.NODE_ENV !== "production") {
 }
 (0, authRoutes_1.default)(app);
 (0, assetsRoutes_1.default)(app);
-(0, taskRoutes_1.default)(app);
+(0, taskListRoutes_1.default)(app);
+(0, taskWallRoutes_1.default)(app);
 if (process.env.NODE_ENV === "production") {
     app.use(express_1.default.static("client/dist"));
     app.get("*", (req, res) => {

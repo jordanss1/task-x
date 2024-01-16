@@ -1,7 +1,12 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import dayjs from "dayjs";
-import { axiosGetAllTaskWallTasks, axiosGetUserWallTasks } from "../../api";
+import {
+  SendLikeRequestType,
+  axiosGetAllTaskWallTasks,
+  axiosGetUserWallTasks,
+  axiosLikeTask,
+} from "../../api";
 import { StateType } from "../../app/store";
 import { TaskType, TaskWallTaskType } from "../../types";
 import { setError } from "../notification/notificationSlice";
@@ -54,6 +59,23 @@ export const getAllTaskWallTasks = createAsyncThunk<
   }
 });
 
+export const sendLike = createAsyncThunk<
+  TaskWallTaskType | null,
+  SendLikeRequestType,
+  { state: StateType }
+>("taskWall/like", async (like, { dispatch }) => {
+  console.log(like);
+  try {
+    return await axiosLikeTask(like);
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
+
+    return null;
+  }
+});
+
 export type SortType = "popular" | "recent";
 
 type CategoryType = "user" | "all";
@@ -78,7 +100,7 @@ const sortFunction = (sort: SortType) => {
   switch (sort) {
     case "popular":
       return (taska: TaskWallTaskType, taskb: TaskWallTaskType) =>
-        taskb.likes - taska.likes;
+        taskb.likes.likes - taska.likes.likes;
     case "recent":
       return (taska: TaskWallTaskType, taskb: TaskWallTaskType) =>
         dayjs(taskb.created).valueOf() - dayjs(taska.created).valueOf();
@@ -144,38 +166,49 @@ const taskWallSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(
-      (action) =>
-        ["taskWall/userTasks", "taskWall/allTasks"].some((type) =>
-          action.type.includes(type)
-        ),
-      (state, action: PayloadAction<TaskWallTaskType[] | false>) => {
-        if (action.payload === undefined) {
-          return;
-        }
-
-        if (action.type.includes("allTasks")) {
-          const sort = sortFunction(state.sort);
-
-          if (action.payload) {
-            action.payload = [...action.payload].sort((a, b) => sort(a, b));
+    builder
+      .addMatcher(
+        (action) =>
+          ["taskWall/userTasks", "taskWall/allTasks"].some((type) =>
+            action.type.includes(type)
+          ),
+        (state, action: PayloadAction<TaskWallTaskType[] | false>) => {
+          if (action.payload === undefined) {
+            return;
           }
 
-          updateTaskState(state, action, "allTaskWallTasks");
+          if (action.type.includes("allTasks")) {
+            const sort = sortFunction(state.sort);
+
+            if (action.payload) {
+              action.payload = [...action.payload].sort((a, b) => sort(a, b));
+            }
+
+            updateTaskState(state, action, "allTaskWallTasks");
+
+            if (state.taskWallFetching) {
+              state.taskWallFetching = false;
+            }
+            return;
+          }
+
+          updateTaskState(state, action, "userTaskWallTasks");
 
           if (state.taskWallFetching) {
             state.taskWallFetching = false;
           }
-          return;
         }
-
-        updateTaskState(state, action, "userTaskWallTasks");
-
-        if (state.taskWallFetching) {
-          state.taskWallFetching = false;
+      )
+      .addMatcher(
+        (action) => action.type.includes("taskWall/like"),
+        (state, action: PayloadAction<TaskWallTaskType | null>) => {
+          if (action.payload && state.allTaskWallTasks) {
+            state.allTaskWallTasks = state.allTaskWallTasks.map((task) =>
+              task.taskId === action.payload?.taskId ? action.payload : task
+            );
+          }
         }
-      }
-    );
+      );
   },
 });
 

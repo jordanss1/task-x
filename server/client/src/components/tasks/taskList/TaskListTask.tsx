@@ -1,7 +1,7 @@
 import { Form, Formik, FormikConfig } from "formik";
 import { AnimatePresence, Variants, motion, useAnimate } from "framer-motion";
 import { ReactElement, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { AppThunkDispatch } from "../../../app/store";
 import { colors, fonts } from "../../../constants";
@@ -9,6 +9,7 @@ import {
   completeTask,
   deleteTask,
   editTask,
+  taskListSelector,
 } from "../../../features/taskList/taskListSlice";
 import { TaskSubmitSchemaType, taskSubmitSchema } from "../../../schemas";
 import "../../../styles/mui-overrides/task.css";
@@ -53,6 +54,7 @@ const TaskListTask = ({
     created,
   } = taskItem;
   const dispatch = useDispatch<AppThunkDispatch>();
+  const { taskListFetching } = useSelector(taskListSelector);
 
   const [prompt, setPrompt] = useState<PopupPropsType["prompt"]>();
   const [editing, setEditing] = useState(false);
@@ -259,6 +261,31 @@ const TaskListTask = ({
             <AnimatePresence mode="wait">
               {prompt && <Popup key="prompt" prompt={prompt} />}
             </AnimatePresence>
+            <AnimatePresence mode="wait">
+              {(editing || taskListFetching) && (
+                <div>
+                  <ModalBackground
+                    key={1}
+                    animate={{
+                      filter: taskListFetching ? "blur(5px)" : "blur(0px)",
+                      scaleX: taskListFetching ? 0.97 : 1,
+                      scaleY: taskListFetching ? 0.99 : 1,
+                      transition: {
+                        scale: { type: "tween", ease: "easeIn" },
+                      },
+                    }}
+                    mixBlendMode="normal"
+                    background={
+                      taskListFetching ? "rgba(0,0,0,0)" : "rgba(0,0,0,.2)"
+                    }
+                    onClick={() => {
+                      setValues(initialValues);
+                      setEditing(false);
+                    }}
+                  />
+                </div>
+              )}
+            </AnimatePresence>
             <motion.div
               key={`task-${uuid}`}
               layoutId={`task-layout-${uuid}`}
@@ -270,29 +297,20 @@ const TaskListTask = ({
                 position: editing ? "fixed" : "initial",
                 top: editing ? "25%" : "initial",
                 bottom: editing ? "25%" : "initial",
+                filter: taskListFetching ? "blur(5px)" : "blur(0px)",
+                scaleX: taskListFetching ? 0.97 : 1,
+                scaleY: taskListFetching ? 0.99 : 1,
                 opacity: 1,
                 transition: {
                   duration: 0.4,
                   type: "tween",
                   ease: "easeInOut",
+                  scale: { type: "tween", ease: "easeIn" },
                 },
               }}
               exit={{ y: -20, scale: 0.9, opacity: 0 }}
               className=" z-10"
             >
-              <AnimatePresence mode="wait">
-                {editing && (
-                  <ModalBackground
-                    key={1}
-                    mixBlendMode="normal"
-                    background="rgba(0,0,0,.2)"
-                    onClick={() => {
-                      setValues(initialValues);
-                      setEditing(false);
-                    }}
-                  />
-                )}
-              </AnimatePresence>
               <motion.div
                 animate={{
                   scale: editing ? "var(--scale-to)" : 1,

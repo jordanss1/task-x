@@ -7,7 +7,7 @@ import {
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import {
-  SubmitTaskReturnType,
+  AllTasksReturnType,
   axiosCompleteTask,
   axiosDeleteTask,
   axiosEditTask,
@@ -25,9 +25,9 @@ import {
 } from "../taskWall/taskWallSlice";
 
 type AxiosFunctionType =
-  | ((task: TaskType["taskId"]) => Promise<SubmitTaskReturnType>)
-  | ((task: TaskType) => Promise<SubmitTaskReturnType>)
-  | ((task: TaskTypeSent) => Promise<SubmitTaskReturnType>);
+  | ((task: TaskType["taskId"]) => Promise<AllTasksReturnType>)
+  | ((task: TaskType) => Promise<AllTasksReturnType>)
+  | ((task: TaskTypeSent) => Promise<AllTasksReturnType>);
 
 const returnTasksAndUpdateStore = async (
   dispatch: ThunkDispatch<StateType, unknown, AnyAction>,
