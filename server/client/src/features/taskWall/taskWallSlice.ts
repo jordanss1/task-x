@@ -2,9 +2,11 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import dayjs from "dayjs";
 import {
-  SendLikeRequestType,
+  LikeCommentReturnType,
+  LikeTaskRequestType,
   axiosGetAllTaskWallTasks,
   axiosGetUserWallTasks,
+  axiosLikeComment,
   axiosLikeTask,
 } from "../../api";
 import { StateType } from "../../app/store";
@@ -59,14 +61,29 @@ export const getAllTaskWallTasks = createAsyncThunk<
   }
 });
 
-export const sendLike = createAsyncThunk<
+export const sendTaskLike = createAsyncThunk<
   TaskWallTaskType | null,
-  SendLikeRequestType,
+  LikeTaskRequestType,
   { state: StateType }
->("taskWall/like", async (like, { dispatch }) => {
-  console.log(like);
+>("taskWall/likeTask", async (like, { dispatch }) => {
   try {
     return await axiosLikeTask(like);
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
+
+    return null;
+  }
+});
+
+export const sendCommentLike = createAsyncThunk<
+  LikeCommentReturnType | null,
+  Omit<LikeTaskRequestType, "currentAwards">,
+  { state: StateType }
+>("taskWall/likeComment", async (like, { dispatch }) => {
+  try {
+    return await axiosLikeComment(like);
   } catch (err) {
     if (err instanceof AxiosError) {
       dispatch(setError(err.response?.data));
@@ -200,12 +217,29 @@ const taskWallSlice = createSlice({
         }
       )
       .addMatcher(
-        (action) => action.type.includes("taskWall/like"),
+        (action) => action.type.includes("taskWall/likeTask"),
         (state, action: PayloadAction<TaskWallTaskType | null>) => {
           if (action.payload && state.allTaskWallTasks) {
             state.allTaskWallTasks = state.allTaskWallTasks.map((task) =>
               task.taskId === action.payload?.taskId ? action.payload : task
             );
+          }
+        }
+      )
+      .addMatcher(
+        (action) => action.type.includes("taskWall/likeComment"),
+        (state, action: PayloadAction<LikeCommentReturnType | null>) => {
+          if (action.payload && state.allTaskWallTasks) {
+            state.allTaskWallTasks = state.allTaskWallTasks.map((task) => {
+              if (task.taskId !== action.payload?.taskId) {
+                return task;
+              } else {
+                return {
+                  ...task,
+                  ...action.payload.comments,
+                };
+              }
+            });
           }
         }
       );

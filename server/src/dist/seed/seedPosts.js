@@ -207,14 +207,44 @@ const fakerPosts = async (uri) => {
             })
                 .toISOString()
             : null;
+        const taskLikes = {
+            likes: faker.number.int({ max: 120, min: 0 }),
+            users: [],
+        };
+        if (taskLikes.likes) {
+            await new Promise(async (resolve) => {
+                for (let step = 0; step < taskLikes.likes; step++) {
+                    const count = await User.countDocuments().exec();
+                    const random = Math.floor(Math.random() * count);
+                    const user = await User.findOne().skip(random).exec();
+                    taskLikes.users.push(user?.profile);
+                }
+                resolve("done");
+            });
+        }
         const commentArray = await Promise.all(comments.map(async (comment) => {
             const count = await User.countDocuments().exec();
             const random = Math.floor(Math.random() * count);
             const user = await User.findOne().skip(random).exec();
+            const likes = {
+                likes: faker.number.int({ max: taskLikes.likes / 2, min: 0 }),
+                users: [],
+            };
+            if (likes.likes) {
+                await new Promise(async (resolve) => {
+                    for (let step = 0; step < likes.likes; step++) {
+                        const count = await User.countDocuments().exec();
+                        const random = Math.floor(Math.random() * count);
+                        const user = await User.findOne().skip(random).exec();
+                        likes.users.push(user?.profile);
+                    }
+                    resolve("done");
+                });
+            }
             return {
                 comment,
                 user,
-                likes: faker.number.int({ max: 15, min: 0 }),
+                likes,
                 created: faker.date
                     .between({
                     from: (0, dayjs_1.default)(dueDate || undefined)
@@ -227,26 +257,11 @@ const fakerPosts = async (uri) => {
                     .toISOString(),
             };
         }));
-        const likes = {
-            likes: faker.number.int({ max: 120, min: 0 }),
-            users: [],
-        };
-        if (likes.likes) {
-            await new Promise(async (resolve) => {
-                for (let step = 0; step < likes.likes; step++) {
-                    const count = await User.countDocuments().exec();
-                    const random = Math.floor(Math.random() * count);
-                    const user = await User.findOne().skip(random).exec();
-                    likes.users.push(user?.profile);
-                }
-                resolve("done");
-            });
-        }
-        const awards = likes.likes >= 25 && likes.likes < 50
+        const awards = taskLikes.likes >= 25 && taskLikes.likes < 50
             ? ["supported"]
-            : likes.likes >= 50 && likes.likes < 100
+            : taskLikes.likes >= 50 && taskLikes.likes < 100
                 ? ["supported", "superSupported"]
-                : likes.likes >= 100
+                : taskLikes.likes >= 100
                     ? ["supported", "superSupported", "communityLegend"]
                     : [];
         const created = enabledDueDate
@@ -271,7 +286,7 @@ const fakerPosts = async (uri) => {
             dueDate,
             created,
             awards,
-            likes: likes,
+            likes: taskLikes,
             comments: commentArray,
             complete,
         });
@@ -288,4 +303,5 @@ const fakerPosts = async (uri) => {
         }).save();
     }));
 };
+fakerPosts(process.env.MONGO_URI);
 fakerPosts(keys_1.default.mongoURI);

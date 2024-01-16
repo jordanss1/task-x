@@ -5,7 +5,7 @@ import useMeasure from "react-use-measure";
 import { AppThunkDispatch } from "../../../app/store";
 import { colors } from "../../../constants";
 import { authSelector } from "../../../features/auth/authSlice";
-import { sendLike } from "../../../features/taskWall/taskWallSlice";
+import { sendTaskLike } from "../../../features/taskWall/taskWallSlice";
 import { TaskWallTaskType } from "../../../types";
 import TaskWallTaskCommentList from "./taskWallComments/TaskWallTaskCommentList";
 import TaskWallTaskStatus from "./taskWallStatus/TaskWallTaskStatus";
@@ -55,7 +55,7 @@ const TaskWallTask = ({ taskItem }: TaskWallTaskPropsType): ReactElement => {
     task,
   } = taskItem;
 
-  const currentlyLiked = likes.users.some(({ userName }) => {
+  const liked = likes.users.some(({ userName }) => {
     if (auth.user) {
       return userName === auth.user.profile?.userName;
     }
@@ -63,8 +63,8 @@ const TaskWallTask = ({ taskItem }: TaskWallTaskPropsType): ReactElement => {
 
   const handleLike = async () => {
     await dispatch(
-      sendLike({
-        currentlyLiked,
+      sendTaskLike({
+        liked,
         currentAwards: awards,
         previousLikes: likes.likes,
         taskId: taskId,
@@ -90,7 +90,7 @@ const TaskWallTask = ({ taskItem }: TaskWallTaskPropsType): ReactElement => {
       <TaskWallTaskText task={task} />
       <TaskWallTaskInteraction
         likes={likes.likes}
-        currentlyLiked={currentlyLiked}
+        liked={liked}
         handleLike={handleLike}
         created={created}
         openComments={openComments}
@@ -119,7 +119,7 @@ const TaskWallTask = ({ taskItem }: TaskWallTaskPropsType): ReactElement => {
               ref={ref}
               className="p-2 rounded-2xl overflow-hidden h-auto bg-slate-300 flex flex-col gap-2"
             >
-              <TaskWallTaskCommentList comments={comments} />
+              <TaskWallTaskCommentList taskId={taskId} comments={comments} />
             </motion.div>
           )}
         </AnimatePresence>

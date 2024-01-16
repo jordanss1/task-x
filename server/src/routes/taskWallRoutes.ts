@@ -56,7 +56,7 @@ const taskWallRoutes = (app: Express) => {
   });
 
   app.post(
-    "/api/task_wall/like",
+    "/api/task_wall/like/task",
     requireJwt,
     async (req: Request<{}, any, LikeRequestType>, res) => {
       assertRequestWithUser<LikeRequestType>(req);
@@ -117,6 +117,8 @@ const taskWallRoutes = (app: Express) => {
       }
     }
   );
+
+  app.post("/api/task_wall/like/comment", requireJwt, async (req, res) => {});
 };
 
 export default taskWallRoutes;

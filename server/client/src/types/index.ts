@@ -33,7 +33,7 @@ export type LikesType = {
 export type CommentType = {
   user: ValidUserType;
   comment: string;
-  likes: number;
+  likes: LikesType;
   created: string;
 };
 

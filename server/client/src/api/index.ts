@@ -13,10 +13,15 @@ export type AllTasksReturnType = [
   TaskWallTaskType[] | false
 ];
 
-export type SendLikeRequestType = {
+export type LikeTaskRequestType = {
   previousLikes: number;
-  currentlyLiked: boolean;
+  liked: boolean;
   currentAwards: TaskWallTaskType["awards"];
+  taskId: TaskWallTaskType["taskId"];
+};
+
+export type LikeCommentReturnType = {
+  comments: TaskWallTaskType["comments"];
   taskId: TaskWallTaskType["taskId"];
 };
 
@@ -139,11 +144,21 @@ export const axiosGetAllTaskWallTasks = async (): Promise<
 };
 
 export const axiosLikeTask = async (
-  like: SendLikeRequestType
+  like: LikeTaskRequestType
 ): Promise<TaskWallTaskType> => {
   const api = createAxios(true);
 
-  const { data } = await api.post("/task_wall/like", like);
+  const { data } = await api.post("/task_wall/like/task", like);
+
+  return data;
+};
+
+export const axiosLikeComment = async (
+  like: Omit<LikeTaskRequestType, "currentAwards">
+): Promise<LikeCommentReturnType> => {
+  const api = createAxios(true);
+
+  const { data } = await api.post("/task_wall/like/comment", like);
 
   return data;
 };

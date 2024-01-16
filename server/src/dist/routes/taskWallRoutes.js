@@ -41,7 +41,7 @@ const taskWallRoutes = (app) => {
                 .send("Issue retrieving all wall tasks, server error");
         }
     });
-    app.post("/api/task_wall/like", requireJwt_1.default, async (req, res) => {
+    app.post("/api/task_wall/like/task", requireJwt_1.default, async (req, res) => {
         (0, types_1.assertRequestWithUser)(req);
         const { previousLikes, currentAwards, currentlyLiked, taskId } = req.body;
         let awardArray = currentAwards?.length ? currentAwards : [];
@@ -87,5 +87,6 @@ const taskWallRoutes = (app) => {
             res.status(500).send("Problem liking task, try again");
         }
     });
+    app.post("/api/task_wall/like/comment", requireJwt_1.default, async (req, res) => { });
 };
 exports.default = taskWallRoutes;

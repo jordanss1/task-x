@@ -1,11 +1,12 @@
 import { Variants, motion } from "framer-motion";
 import { ReactElement } from "react";
-import { CommentType } from "../../../../types";
+import { CommentType, TaskWallTaskType } from "../../../../types";
 import TaskWallTaskComment from "./TaskWallTaskComment";
 import TaskWallTaskInput from "./TaskWallTaskInput";
 
 type TaskWallTaskCommentListPropsType = {
   comments: CommentType[];
+  taskId: TaskWallTaskType["taskId"];
 };
 
 const inputVariants: Variants = {
@@ -41,6 +42,7 @@ const listVariants: Variants = {
 
 const TaskWallTaskCommentList = ({
   comments,
+  taskId,
 }: TaskWallTaskCommentListPropsType): ReactElement => {
   return (
     <>
@@ -52,7 +54,7 @@ const TaskWallTaskCommentList = ({
       </motion.div>
       <motion.div variants={listVariants} className="flex flex-col pb-1 px-1">
         {comments.map((comment, i) => (
-          <TaskWallTaskComment key={i} comment={comment} />
+          <TaskWallTaskComment key={i} taskId={taskId} commentItem={comment} />
         ))}
       </motion.div>
     </>

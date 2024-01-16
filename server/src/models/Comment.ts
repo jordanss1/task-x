@@ -1,10 +1,14 @@
 import { InferSchemaType, Schema } from "mongoose";
+import { profileSchema } from "./Profile";
 import { userSchema } from "./User";
 
 export const commentSchema = new Schema({
   user: { required: true, type: userSchema },
   comment: { required: true, type: String },
-  likes: { required: true, type: Number, default: 0 },
+  likes: {
+    likes: { required: false, type: Number, default: 0 },
+    users: { required: false, type: [profileSchema], default: [] },
+  },
   created: { required: true, type: String },
 });
 

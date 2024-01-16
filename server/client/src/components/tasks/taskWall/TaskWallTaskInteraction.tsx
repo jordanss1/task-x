@@ -9,7 +9,7 @@ import TaskWallTaskTimeStamp from "./TaskWallTaskTimeStamp";
 
 type TaskWallTaskInteractionPropsType = {
   likes: number;
-  currentlyLiked: boolean;
+  liked: boolean;
   commentAmount: number;
   openComments: boolean;
   created: string;
@@ -19,7 +19,7 @@ type TaskWallTaskInteractionPropsType = {
 
 const TaskWallTaskInteraction = ({
   likes,
-  currentlyLiked,
+  liked,
   commentAmount,
   openComments,
   created,
@@ -42,7 +42,7 @@ const TaskWallTaskInteraction = ({
       >
         <LikeButton
           likes={likes}
-          liked={currentlyLiked}
+          liked={liked}
           fetching={fetching}
           size={mobile ? 13 : 18}
           onClick={async () => {
