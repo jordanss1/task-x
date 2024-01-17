@@ -7,7 +7,6 @@ import {
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import {
-  AllTasksReturnType,
   axiosCompleteTask,
   axiosDeleteTask,
   axiosEditTask,
@@ -15,7 +14,7 @@ import {
   axiosSubmitTask,
 } from "../../api";
 import { StateType } from "../../app/store";
-import { TaskType, TaskTypeSent } from "../../types";
+import { AllTasksReturnType, TaskType, TaskTypeSent } from "../../types";
 import { reducerMatcherFunction } from "../auth/authSlice";
 import { setError, setSuccess } from "../notification/notificationSlice";
 import {
