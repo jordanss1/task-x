@@ -1,9 +1,12 @@
 import { Variants, motion } from "framer-motion";
-import { ReactElement } from "react";
+import { ReactElement, useRef } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { colors, fonts } from "../../constants";
 import { authSelector } from "../../features/auth/authSlice";
+import artificialDelay from "../../functions/artificialDelay";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
+import useArtificialProgress from "../../hooks/useArtificialProgress";
 import { ValidUserType } from "../../types";
 import ButtonPopout from "../__reusable/ButtonPopout";
 import MenuPopout from "../__reusable/MenuPopout";
@@ -38,13 +41,36 @@ const menuVariants: Variants = {
 
 const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
   const mobile = useMediaQuery(640);
+  const timer = useRef<NodeJS.Timeout | number>(0);
+  const timer2 = useRef<NodeJS.Timeout | number>(0);
+  const route = useRef<string>("");
   const { user } = useSelector(authSelector);
+  const navigate = useNavigate();
+  const { beginProgress, stopProgress, complete } = useArtificialProgress({
+    onFullProgress: () => handleFullProgress(),
+  });
 
-  const renderSettings = settingsList.map(({ icon, label }) => (
+  const handleFullProgress = () => {
+    clearTimeout(timer2.current);
+
+    timer2.current = setTimeout(() => {
+      if (route.current.includes("/api/logout")) {
+        window.location.href = route.current;
+      } else {
+        navigate(route.current);
+      }
+    }, 300);
+  };
+
+  const renderSettings = settingsList.map(({ icon, label, url }) => (
     <motion.div
       key={label}
       transition={{ duration: 0.6 }}
       className="w-full gap-4 sm:min-h-0 min-h-[73px] sm:gap-2 items-center p-2 ps-8 sm:ps-2 hover:bg-slate-500 hover:text-slate-200 sm:hover:bg-slate-200 sm:text-slate-700 sm:hover:text-black sm:rounded-[3px] text-left text-xl sm:text-xs sm:z-auto z-[16] relative flex cursor-pointer"
+      onClick={async () => {
+        await artificialDelay(timer, undefined, beginProgress, stopProgress);
+        route.current = url;
+      }}
     >
       <i className={icon} />
       <span>{label}</span>

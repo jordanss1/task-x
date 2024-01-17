@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { model } from "mongoose";
 import keys from "../config/keys";
+import { UserType } from "../models/User";
 import types from "../types/express";
+
+const User = model<UserType>("users");
 
 const { jwtSecret } = keys;
 
@@ -11,30 +15,53 @@ const verifyToken = (token: string) => {
   return user;
 };
 
-export const requireJwt = (req: Request, res: Response, next: NextFunction) => {
+export const requireJwt = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const unprotectedPaths = req.path.includes("current_user");
 
   if (unprotectedPaths) {
-    req.user = req.cookies.token ? verifyToken(req.cookies.token) : undefined;
-    return next();
+    const user = req.cookies.token ? verifyToken(req.cookies.token) : undefined;
+
+    const foundUser = await User.findOne({ userId: user?.userId })
+      .select(["-_id", "userId", "profile"])
+      .exec();
+
+    req.user = foundUser || undefined;
+
+    next();
+    return;
   }
 
   if (!req.cookies.token) {
-    res.status(401);
-    return next("You must be logged in");
+    res.status(401).send("You must be logged in");
+    return;
   }
 
   const { token } = req.cookies;
 
+  const errorFunc = () => {
+    req.user = undefined;
+    res.clearCookie("token");
+    res.status(401).send("You must be logged in");
+    return;
+  };
+
   try {
     const { user } = jwt.verify(token, jwtSecret) as JwtPayload;
+    const foundUser = await User.findOne({ userId: user?.userId }).exec();
+
+    if (!foundUser) {
+      errorFunc();
+      return;
+    }
+
     req.user = user;
     next();
   } catch (err) {
-    req.user = undefined;
-    res.clearCookie("token");
-    res.status(401).send("Error authenticating user, please login again");
-    res.redirect("/");
+    errorFunc();
   }
 };
 

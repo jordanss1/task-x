@@ -204,7 +204,11 @@ const fakerPosts = async (uri: string) => {
       const count = await User.countDocuments().exec();
       const random = Math.floor(Math.random() * count);
 
-      const user = await User.findOne().skip(random).exec();
+      const user = await User.findOne({
+        profile: { $ne: { userName: "creator" } },
+      })
+        .skip(random)
+        .exec();
 
       const enabledDueDate = faker.datatype.boolean();
 

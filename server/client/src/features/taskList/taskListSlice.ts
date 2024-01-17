@@ -68,8 +68,6 @@ export const submitTask = createAsyncThunk<
 
   const fetching = taskList.taskListFetching && taskWall.taskWallFetching;
 
-  console.log(fetching);
-
   return await returnTasksAndUpdateStore(
     dispatch,
     task,

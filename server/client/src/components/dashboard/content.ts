@@ -3,10 +3,11 @@ import Home from "../svg/Home";
 import World, { DashButtonPropsType } from "../svg/World";
 
 export const settingsList = [
-  { label: "Edit Profile", icon: "fa-solid fa-user" },
+  { label: "Edit Profile", icon: "fa-solid fa-user", url: "/profile/edit" },
   {
     label: "Sign Out",
     icon: "fa-solid fa-arrow-right-from-bracket",
+    url: "/api/logout",
   },
 ];
 

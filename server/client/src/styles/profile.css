@@ -1,13 +1,8 @@
 .profile {
   position: relative;
   background-color: rgb(0, 0, 0);
-  background-image: radial-gradient(
-      circle at 50% 50%,
-      transparent 10%,
-      rgb(0, 0, 0, 0.9)
-    ),
-    url("public/multicolored-6.jpg");
-  background-position: 100% 100%, center;
+  background-image: url("/api/multicolored-6.jpg");
+  background-position: center;
 }
 
 .profile_setup_picture {
@@ -64,13 +59,9 @@
   .profile {
     position: relative;
     background-color: rgb(0, 0, 0);
-    background-image: radial-gradient(
-        circle at 50% 50%,
-        transparent 10%,
-        rgb(0, 0, 0, 0.9)
-      ),
-      url("public/multicolored-6.jpg");
-    background-position: 100% 100%, center;
+    background-image: url("public/multicolored-6.jpg");
+    background-position: center;
+    background-size: cover;
   }
 }
 

@@ -14,12 +14,14 @@ const taskWallRoutes = (app) => {
             const data = await PublicTaskList.findOne({ _user: req.user._id })
                 .select("tasks")
                 .exec();
-            return res.send(data ? data.tasks.map((task) => task) : false);
+            res.send(data ? data.tasks.map((task) => task) : false);
+            return;
         }
         catch (err) {
-            return res
+            res
                 .status(500)
                 .send("Issue retrieving user task wall tasks, server error");
+            return;
         }
     });
     app.get("/api/task_wall/all", requireJwt_1.default, async (req, res) => {
@@ -33,12 +35,10 @@ const taskWallRoutes = (app) => {
             publicTasks.forEach(({ tasks }) => {
                 return allPublicTasks.push(...tasks);
             });
-            return res.send(allPublicTasks || false);
+            res.send(allPublicTasks || false);
         }
         catch (err) {
-            return res
-                .status(500)
-                .send("Issue retrieving all wall tasks, server error");
+            res.status(500).send("Issue retrieving all wall tasks, server error");
         }
     });
     app.post("/api/task_wall/like/task", requireJwt_1.default, async (req, res) => {

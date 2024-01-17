@@ -34,7 +34,7 @@ const ValidateIcons = ({
 
   return (
     <div className="w-5 h-5 p-3 flex rounded-full items-center justify-center">
-      {isValidating ? <Spinner /> : renderIcon()}
+      {isValidating ? <Spinner position="initial" /> : renderIcon()}
     </div>
   );
 };

@@ -20,7 +20,7 @@ const Spinner = ({
 
   return (
     <motion.div
-      className="rounded-full fixed z-100"
+      className="rounded-full z-100"
       style={{
         position,
         border: `${borderSize} solid rgb(150,150,150)`,

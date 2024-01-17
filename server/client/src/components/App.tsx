@@ -1,7 +1,7 @@
 import { AnimatePresence } from "framer-motion";
 import { ReactElement, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { AppThunkDispatch } from "../app/store";
 import { getUser } from "../features/auth/authSlice";
 import {
@@ -22,6 +22,7 @@ const App = (): ReactElement => {
   useRedirect();
   const dispatch = useDispatch<AppThunkDispatch>();
   const { error, success } = useSelector(notificationSelector);
+  const navigate = useNavigate();
 
   const timer = useRef<NodeJS.Timeout>();
 

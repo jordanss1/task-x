@@ -3,6 +3,7 @@ import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "../../../app/store";
 import { colors, placeholderVariants } from "../../../constants";
+import { getUser } from "../../../features/auth/authSlice";
 import { taskListSelector } from "../../../features/taskList/taskListSlice";
 import {
   getAllTaskWallTasks,
@@ -28,6 +29,10 @@ const TaskWallTasks = ({
   const fetching = taskWallFetching || taskListFetching;
 
   const tasks = category === "all" ? allTaskWallTasks : userTaskWallTasks;
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
 
   useEffect(() => {
     if (category === "all" && allTaskWallTasks === null) {

@@ -76,7 +76,7 @@ const NextButton = ({
       className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990] gap-[1px] rounded-xl"
       icon={
         isSubmitting ? (
-          <Spinner />
+          <Spinner position="initial" />
         ) : (
           <SmallIcon
             style={{ color: colors.purple }}

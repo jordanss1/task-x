@@ -43,10 +43,10 @@ const taskListRoutes = (app) => {
             })
                 .select("tasks")
                 .exec();
-            return res.send(data ? data.tasks.map((task) => task) : false);
+            res.send(data ? data.tasks.map((task) => task) : false);
         }
         catch (err) {
-            return res.status(500).send("Issue retrieving task list, server error");
+            res.status(500).send("Issue retrieving task list, server error");
         }
     });
     app.post("/api/task/edit", requireJwt_1.default, async (req, res) => {
@@ -261,7 +261,8 @@ const taskListRoutes = (app) => {
                 await TaskList.findOneAndUpdate({ _user: req.user?._id }, { $push: { tasks: newTask }, $inc: { totalTasks: 1 } }).exec();
             }
             catch (err) {
-                return res.status(500).send("Unable to update task list, try again");
+                res.status(500).send("Unable to update task list, try again");
+                return;
             }
             finally {
                 const tasks = await TaskList.findOne({
@@ -282,7 +283,8 @@ const taskListRoutes = (app) => {
                 updatedUserTasks = tasks?.tasks.map((task) => task);
             }
             catch (err) {
-                return res.status(500).send("Unable to create new task, try again");
+                res.status(500).send("Unable to create new task, try again");
+                return;
             }
         }
         if (newTask.onTaskWall) {
@@ -389,7 +391,8 @@ const taskListRoutes = (app) => {
                 updatedUserTasks = tasks?.tasks.map((task) => task);
             }
             catch (err) {
-                return res.status(500).send("Unable to delete task, try again");
+                res.status(500).send("Unable to delete task, try again");
+                return;
             }
         }
         if (tasks?.totalTasks && tasks.totalTasks === 1) {
@@ -400,7 +403,8 @@ const taskListRoutes = (app) => {
                 updatedUserTasks = null;
             }
             catch (err) {
-                return res.status(500).send("Unable to delete task, try again");
+                res.status(500).send("Unable to delete task, try again");
+                return;
             }
         }
         if (publicTasks && publicTasks.totalTasks > 1 && matchingPublicTask) {
@@ -413,9 +417,10 @@ const taskListRoutes = (app) => {
                 updatedUserPublicTasks = tasks?.tasks.map((task) => task);
             }
             catch (err) {
-                return res
+                res
                     .status(500)
                     .send("Unable to delete task from Task Wall, try again");
+                return;
             }
         }
         if (publicTasks && publicTasks.totalTasks === 1 && matchingPublicTask) {

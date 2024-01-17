@@ -23,9 +23,9 @@ const taskListRoutes = (app: Express) => {
         .select("tasks")
         .exec();
 
-      return res.send(data ? data.tasks.map((task) => task) : false);
+      res.send(data ? data.tasks.map((task) => task) : false);
     } catch (err) {
-      return res.status(500).send("Issue retrieving task list, server error");
+      res.status(500).send("Issue retrieving task list, server error");
     }
   });
 
@@ -290,7 +290,8 @@ const taskListRoutes = (app: Express) => {
             { $push: { tasks: newTask }, $inc: { totalTasks: 1 } }
           ).exec();
         } catch (err) {
-          return res.status(500).send("Unable to update task list, try again");
+          res.status(500).send("Unable to update task list, try again");
+          return;
         } finally {
           const tasks = await TaskList.findOne<TaskListType>({
             _user: req.user?._id,
@@ -310,7 +311,8 @@ const taskListRoutes = (app: Express) => {
 
           updatedUserTasks = tasks?.tasks.map((task) => task);
         } catch (err) {
-          return res.status(500).send("Unable to create new task, try again");
+          res.status(500).send("Unable to create new task, try again");
+          return;
         }
       }
 
@@ -443,7 +445,8 @@ const taskListRoutes = (app: Express) => {
 
           updatedUserTasks = tasks?.tasks.map((task) => task);
         } catch (err) {
-          return res.status(500).send("Unable to delete task, try again");
+          res.status(500).send("Unable to delete task, try again");
+          return;
         }
       }
 
@@ -455,7 +458,8 @@ const taskListRoutes = (app: Express) => {
 
           updatedUserTasks = null;
         } catch (err) {
-          return res.status(500).send("Unable to delete task, try again");
+          res.status(500).send("Unable to delete task, try again");
+          return;
         }
       }
 
@@ -473,9 +477,10 @@ const taskListRoutes = (app: Express) => {
 
           updatedUserPublicTasks = tasks?.tasks.map((task) => task);
         } catch (err) {
-          return res
+          res
             .status(500)
             .send("Unable to delete task from Task Wall, try again");
+          return;
         }
       }
 

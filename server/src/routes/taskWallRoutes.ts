@@ -25,11 +25,13 @@ const taskWallRoutes = (app: Express) => {
         .select("tasks")
         .exec();
 
-      return res.send(data ? data.tasks.map((task) => task) : false);
+      res.send(data ? data.tasks.map((task) => task) : false);
+      return;
     } catch (err) {
-      return res
+      res
         .status(500)
         .send("Issue retrieving user task wall tasks, server error");
+      return;
     }
   });
 
@@ -47,11 +49,9 @@ const taskWallRoutes = (app: Express) => {
         return allPublicTasks.push(...tasks);
       });
 
-      return res.send(allPublicTasks || false);
+      res.send(allPublicTasks || false);
     } catch (err) {
-      return res
-        .status(500)
-        .send("Issue retrieving all wall tasks, server error");
+      res.status(500).send("Issue retrieving all wall tasks, server error");
     }
   });
 

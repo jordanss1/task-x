@@ -35,7 +35,9 @@ const ProfileIconList = ({
   return (
     <motion.div {...props} className={className}>
       {profileIcons === false
-        ? spinnerArray.map((item) => <Spinner size="medium" />)
+        ? spinnerArray.map((item) => (
+            <Spinner key={item} position="initial" size="medium" />
+          ))
         : profileIcons?.map((profilePicture) => {
             const chosenPhoto = profilePicture === field.value;
 
