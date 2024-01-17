@@ -1,29 +1,17 @@
 import axios from "axios";
 import {
+  AllTasksReturnType,
+  CommentType,
+  LikeCommentRequestType,
+  CommentReturnType,
+  LikeTaskRequestType,
+  NewCommentRequestType,
   TaskType,
   TaskTypeSent,
   TaskWallTaskType,
   UserType,
   ValidUserType,
 } from "../types";
-
-export type AllTasksReturnType = [
-  TaskType[] | false,
-  TaskWallTaskType[] | false,
-  TaskWallTaskType[] | false
-];
-
-export type LikeTaskRequestType = {
-  previousLikes: number;
-  liked: boolean;
-  currentAwards: TaskWallTaskType["awards"];
-  taskId: TaskWallTaskType["taskId"];
-};
-
-export type LikeCommentReturnType = {
-  comments: TaskWallTaskType["comments"];
-  taskId: TaskWallTaskType["taskId"];
-};
 
 const createAxios = (cookies: boolean) =>
   axios.create({
@@ -143,22 +131,32 @@ export const axiosGetAllTaskWallTasks = async (): Promise<
   return data;
 };
 
+export const axiosSubmitComment = async (
+  comment: NewCommentRequestType
+): Promise<CommentReturnType | null> => {
+  const api = createAxios(true);
+
+  const { data } = await api.post("/task_wall/comment", comment);
+
+  return data;
+};
+
 export const axiosLikeTask = async (
   like: LikeTaskRequestType
 ): Promise<TaskWallTaskType> => {
   const api = createAxios(true);
 
-  const { data } = await api.post("/task_wall/like/task", like);
+  const { data } = await api.post("/task_wall/task/like", like);
 
   return data;
 };
 
 export const axiosLikeComment = async (
-  like: Omit<LikeTaskRequestType, "currentAwards">
-): Promise<LikeCommentReturnType> => {
+  like: LikeCommentRequestType
+): Promise<CommentReturnType> => {
   const api = createAxios(true);
 
-  const { data } = await api.post("/task_wall/like/comment", like);
+  const { data } = await api.post("/task_wall/comment/like", like);
 
   return data;
 };

@@ -38,6 +38,7 @@ const googleAuthRoutes = (app: Express) => {
 
       if (user?.profile) {
         response.redirect("/dashboard/home");
+        return;
       }
 
       response.redirect("/setup");

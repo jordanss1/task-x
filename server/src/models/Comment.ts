@@ -1,4 +1,4 @@
-import { InferSchemaType, Schema } from "mongoose";
+import { InferSchemaType, Schema, model } from "mongoose";
 import { profileSchema } from "./Profile";
 import { userSchema } from "./User";
 
@@ -13,3 +13,5 @@ export const commentSchema = new Schema({
 });
 
 export type CommentType = InferSchemaType<typeof commentSchema>;
+
+model<CommentType>("comment", commentSchema);

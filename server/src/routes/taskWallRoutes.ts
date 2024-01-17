@@ -1,20 +1,20 @@
 import { Express, Request } from "express";
 import { UpdateQuery, model } from "mongoose";
 import requireJwt from "../middlewares/requireJwt";
+import { CommentType } from "../models/Comment";
 import { PublicTaskListType, PublicTaskType } from "../models/PublicTaskList";
 import { TaskType } from "../models/TaskList";
-import { assertRequestWithUser } from "../types";
+import { ValidUserType } from "../models/User";
+import {
+  AwardType,
+  LikeCommentRequestType,
+  LikeTaskRequestType,
+  NewCommentRequestType,
+  assertRequestWithUser,
+} from "../types";
 
 const PublicTaskList = model<PublicTaskListType>("publicTaskList");
-
-type LikeRequestType = {
-  previousLikes: number;
-  currentlyLiked: boolean;
-  currentAwards: PublicTaskType["awards"];
-  taskId: PublicTaskType["taskId"];
-};
-
-export type AwardType = "supported" | "superSupported" | "communityLegend";
+const Comment = model<CommentType>("comment");
 
 const taskWallRoutes = (app: Express) => {
   app.get("/api/task_wall/user", requireJwt, async (req, res) => {
@@ -56,16 +56,55 @@ const taskWallRoutes = (app: Express) => {
   });
 
   app.post(
-    "/api/task_wall/like/task",
+    "/api/task_wall/comment",
     requireJwt,
-    async (req: Request<{}, any, LikeRequestType>, res) => {
-      assertRequestWithUser<LikeRequestType>(req);
+    async (req: Request<any, {}, NewCommentRequestType>, res) => {
+      assertRequestWithUser<NewCommentRequestType>(req);
 
-      const { previousLikes, currentAwards, currentlyLiked, taskId } = req.body;
+      const { comment, taskId } = req.body;
+
+      if (!comment.length || comment.length > 80) {
+        res.status(400).send("Comment does not meet required length");
+        return;
+      }
+
+      const newComment = new Comment<CommentType>({
+        comment,
+        user: req.user,
+        created: new Date().toISOString(),
+      });
+
+      try {
+        await PublicTaskList.findOneAndUpdate(
+          {
+            tasks: { $elemMatch: { taskId } },
+          },
+          {
+            $push: { "tasks.$[task].comments": newComment },
+          },
+          { arrayFilters: [{ "task.taskId": taskId }] }
+        )
+          .select({ tasks: { $elemMatch: { taskId } } })
+          .exec();
+
+        res.send({ comment: newComment, taskId });
+      } catch (err) {
+        res.status(500).send("Error adding comment, try again");
+      }
+    }
+  );
+
+  app.post(
+    "/api/task_wall/task/like",
+    requireJwt,
+    async (req: Request<{}, any, LikeTaskRequestType>, res) => {
+      assertRequestWithUser<LikeTaskRequestType>(req);
+
+      const { previousLikes, currentAwards, liked, taskId } = req.body;
 
       let awardArray = currentAwards?.length ? currentAwards : [];
 
-      if (!currentlyLiked) {
+      if (!liked) {
         const newAward: AwardType | null =
           previousLikes === 24
             ? "supported"
@@ -80,7 +119,7 @@ const taskWallRoutes = (app: Express) => {
         }
       }
 
-      const updateQuery: UpdateQuery<PublicTaskListType> = currentlyLiked
+      const updateQuery: UpdateQuery<PublicTaskListType> = liked
         ? {
             $inc: { "tasks.$[task].likes.likes": -1 },
             $pull: {
@@ -108,7 +147,7 @@ const taskWallRoutes = (app: Express) => {
             },
             { arrayFilters: [{ "task.taskId": taskId }], new: true }
           )
-            .select(["-_id", "tasks"])
+            .select({ tasks: { $elemMatch: { taskId } } })
             .exec();
 
         res.send(likedTask?.tasks[0]);
@@ -118,7 +157,52 @@ const taskWallRoutes = (app: Express) => {
     }
   );
 
-  app.post("/api/task_wall/like/comment", requireJwt, async (req, res) => {});
+  app.post(
+    "/api/task_wall/comment/like",
+    requireJwt,
+    async (req: Request<{}, any, LikeCommentRequestType>, res) => {
+      assertRequestWithUser<LikeCommentRequestType>(req);
+
+      const { liked, _id, taskId } = req.body;
+
+      const updateQuery: UpdateQuery<PublicTaskListType> = liked
+        ? {
+            $inc: { "tasks.$[task].comments.$[comment].likes.likes": -1 },
+            $pull: {
+              "tasks.$[task].comments.$[comment].likes.users": req.user.profile,
+            },
+          }
+        : {
+            $inc: { "tasks.$[task].comments.$[comment].likes.likes": 1 },
+            $push: {
+              "tasks.$[task].comments.$[comment].likes.users": req.user.profile,
+            },
+          };
+
+      try {
+        const comment = await PublicTaskList.findOneAndUpdate(
+          {
+            tasks: { $elemMatch: { taskId } },
+          },
+          updateQuery,
+          {
+            arrayFilters: [{ "task.taskId": taskId }, { "comment._id": _id }],
+            new: true,
+          }
+        )
+          .select({ tasks: { $elemMatch: { taskId } } })
+          .exec();
+
+        const updatedComment = comment?.tasks[0]?.comments?.find(
+          (comment) => comment.id === _id
+        );
+
+        res.send({ comment: updatedComment, taskId });
+      } catch (err) {
+        res.status(500).send("Error liking comment, try again");
+      }
+    }
+  );
 };
 
 export default taskWallRoutes;

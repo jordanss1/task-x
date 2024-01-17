@@ -35,6 +35,7 @@ export type CommentType = {
   comment: string;
   likes: LikesType;
   created: string;
+  _id: string;
 };
 
 export type ValidUserType = Omit<UserType, "profile"> & {
@@ -55,3 +56,32 @@ export type UserType = {
 } & UserProfile;
 
 export type UserStateType = UserType | ValidUserType | false | null;
+
+export type AllTasksReturnType = [
+  TaskType[] | false,
+  TaskWallTaskType[] | false,
+  TaskWallTaskType[] | false
+];
+
+export type LikeTaskRequestType = {
+  previousLikes: number;
+  liked: boolean;
+  currentAwards: TaskWallTaskType["awards"];
+  taskId: TaskWallTaskType["taskId"];
+};
+
+export type LikeCommentRequestType = {
+  liked: boolean;
+  _id: string;
+  taskId: TaskWallTaskType["taskId"];
+};
+
+export type CommentReturnType = {
+  comment: CommentType;
+  taskId: TaskWallTaskType["taskId"];
+};
+
+export type NewCommentRequestType = {
+  comment: string;
+  taskId: TaskWallTaskType["taskId"];
+};

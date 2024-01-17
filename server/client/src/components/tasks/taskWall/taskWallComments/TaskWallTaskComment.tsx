@@ -36,7 +36,7 @@ const TaskWallTaskComment = ({
   const auth = useSelector(authSelector);
   const [fetching, setFetching] = useState(false);
 
-  const { likes, comment, user } = commentItem;
+  const { likes, comment, user, _id } = commentItem;
 
   const liked = likes.users.some(({ userName }) => {
     if (auth.user) {
@@ -47,9 +47,7 @@ const TaskWallTaskComment = ({
   const handleLike = async () => {
     if (!fetching) {
       setFetching(true);
-      await dispatch(
-        sendCommentLike({ taskId, liked, previousLikes: likes.likes })
-      );
+      await dispatch(sendCommentLike({ _id, liked, taskId }));
       setFetching(false);
     }
   };

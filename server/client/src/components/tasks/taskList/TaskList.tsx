@@ -22,7 +22,7 @@ const TaskList = (): ReactElement => {
   const dispatch = useDispatch<AppThunkDispatch>();
 
   useEffect(() => {
-    dispatch(getUser());
+      dispatch(getUser());
 
     if (tasks === null) {
       dispatch(getUserTasks());

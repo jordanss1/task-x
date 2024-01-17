@@ -1,5 +1,10 @@
+import { Formik, FormikConfig } from "formik";
 import { Variants, motion } from "framer-motion";
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import * as yup from "yup";
+import { AppThunkDispatch } from "../../../../app/store";
+import { submitComment } from "../../../../features/taskWall/taskWallSlice";
 import { CommentType, TaskWallTaskType } from "../../../../types";
 import TaskWallTaskComment from "./TaskWallTaskComment";
 import TaskWallTaskInput from "./TaskWallTaskInput";
@@ -40,18 +45,51 @@ const listVariants: Variants = {
   },
 };
 
+const commentSchema = yup.object().shape({
+  comment: yup
+    .string()
+    .min(1, "Comment cannot be empty")
+    .max(80, "Must not exceed 80 characters")
+    .required(),
+  taskId: yup.string().required(),
+});
+
+export type CommentSchemaType = yup.InferType<typeof commentSchema>;
+
 const TaskWallTaskCommentList = ({
   comments,
   taskId,
 }: TaskWallTaskCommentListPropsType): ReactElement => {
+  const [fetching, setFetching] = useState(false);
+  const dispatch = useDispatch<AppThunkDispatch>();
+
+  const handleSubmit: FormikConfig<CommentSchemaType>["onSubmit"] = async (
+    values,
+    actions
+  ) => {
+    await dispatch(submitComment(values));
+
+    actions.resetForm({ values: { taskId, comment: "" } });
+  };
+
   return (
     <>
-      <motion.div
-        variants={inputVariants}
-        className="py-2 px-1 justify-center items-center w-full h-14"
+      <Formik<CommentSchemaType>
+        onSubmit={handleSubmit}
+        initialValues={{ comment: "", taskId }}
+        validationSchema={commentSchema}
       >
-        <TaskWallTaskInput />
-      </motion.div>
+        {(props) => {
+          return (
+            <motion.div
+              variants={inputVariants}
+              className="py-2 px-1 justify-center items-center w-full h-14"
+            >
+              <TaskWallTaskInput {...props} />
+            </motion.div>
+          );
+        }}
+      </Formik>
       <motion.div variants={listVariants} className="flex flex-col pb-1 px-1">
         {comments.map((comment, i) => (
           <TaskWallTaskComment key={i} taskId={taskId} commentItem={comment} />

@@ -2,15 +2,22 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import dayjs from "dayjs";
 import {
-  LikeCommentReturnType,
-  LikeTaskRequestType,
   axiosGetAllTaskWallTasks,
   axiosGetUserWallTasks,
   axiosLikeComment,
   axiosLikeTask,
+  axiosSubmitComment,
 } from "../../api";
 import { StateType } from "../../app/store";
-import { TaskType, TaskWallTaskType } from "../../types";
+import {
+  CommentReturnType,
+  CommentType,
+  LikeCommentRequestType,
+  LikeTaskRequestType,
+  NewCommentRequestType,
+  TaskType,
+  TaskWallTaskType,
+} from "../../types";
 import { setError } from "../notification/notificationSlice";
 
 export const getUserWallTasks = createAsyncThunk<
@@ -61,6 +68,22 @@ export const getAllTaskWallTasks = createAsyncThunk<
   }
 });
 
+export const submitComment = createAsyncThunk<
+  CommentReturnType | null,
+  NewCommentRequestType,
+  { state: StateType }
+>("taskWall/submitComment", async (comment, { dispatch }) => {
+  try {
+    return await axiosSubmitComment(comment);
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
+
+    return null;
+  }
+});
+
 export const sendTaskLike = createAsyncThunk<
   TaskWallTaskType | null,
   LikeTaskRequestType,
@@ -78,8 +101,8 @@ export const sendTaskLike = createAsyncThunk<
 });
 
 export const sendCommentLike = createAsyncThunk<
-  LikeCommentReturnType | null,
-  Omit<LikeTaskRequestType, "currentAwards">,
+  CommentReturnType | null,
+  LikeCommentRequestType,
   { state: StateType }
 >("taskWall/likeComment", async (like, { dispatch }) => {
   try {
@@ -228,18 +251,35 @@ const taskWallSlice = createSlice({
       )
       .addMatcher(
         (action) => action.type.includes("taskWall/likeComment"),
-        (state, action: PayloadAction<LikeCommentReturnType | null>) => {
+        (state, action: PayloadAction<CommentReturnType | null>) => {
           if (action.payload && state.allTaskWallTasks) {
-            state.allTaskWallTasks = state.allTaskWallTasks.map((task) => {
-              if (task.taskId !== action.payload?.taskId) {
-                return task;
-              } else {
-                return {
-                  ...task,
-                  ...action.payload.comments,
-                };
-              }
-            });
+            const taskIndex = state.allTaskWallTasks.findIndex(
+              (task) => task.taskId === action.payload?.taskId
+            );
+
+            const commentIndex = state.allTaskWallTasks[
+              taskIndex
+            ].comments.findIndex(
+              (comment) => comment._id === action.payload?.comment._id
+            );
+
+            state.allTaskWallTasks[taskIndex].comments[commentIndex] =
+              action.payload?.comment;
+          }
+        }
+      )
+      .addMatcher(
+        (action) => action.type.includes("taskWall/submitComment"),
+        (state, action: PayloadAction<CommentReturnType | null>) => {
+          if (action.payload && state.allTaskWallTasks) {
+            const taskIndex = state.allTaskWallTasks.findIndex(
+              (task) => task.taskId === action.payload?.taskId
+            );
+
+            state.allTaskWallTasks[taskIndex].comments = [
+              ...state.allTaskWallTasks[taskIndex].comments,
+              action.payload.comment,
+            ];
           }
         }
       );

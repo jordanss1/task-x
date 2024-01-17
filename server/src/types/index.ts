@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { PublicTaskType } from "../models/PublicTaskList";
 import types from "./express/index";
 
 type RequestWithUser<reqBody> = Request<{}, any, reqBody> & {
@@ -25,3 +26,23 @@ type PropTypes = "cookie";
 //     throw new Error("Request does not have these properties");
 //   }
 // };
+
+export type LikeTaskRequestType = {
+  previousLikes: number;
+  liked: boolean;
+  currentAwards: PublicTaskType["awards"];
+  taskId: PublicTaskType["taskId"];
+};
+
+export type LikeCommentRequestType = {
+  _id: string;
+  liked: boolean;
+  taskId: PublicTaskType["taskId"];
+};
+
+export type NewCommentRequestType = {
+  comment: string;
+  taskId: PublicTaskType["taskId"];
+};
+
+export type AwardType = "supported" | "superSupported" | "communityLegend";

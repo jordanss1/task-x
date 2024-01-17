@@ -43,6 +43,7 @@ const TaskWallTaskInteraction = ({
         <LikeButton
           likes={likes}
           liked={liked}
+          disabled={fetching}
           fetching={fetching}
           size={mobile ? 13 : 18}
           onClick={async () => {

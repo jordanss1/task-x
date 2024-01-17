@@ -1,11 +1,14 @@
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, MotionProps } from "framer-motion";
 import { ReactElement } from "react";
 import { colors } from "../../constants";
 import Button from "./Button";
 import SmallIcon from "./SmallIcon";
 import Spinner from "./Spinner";
 
-type LikeButtonPropsType = {
+export type MotionButton = MotionProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+type LikeButtonPropsType = MotionButton & {
   likes: number;
   liked: boolean;
   fetching: boolean;
@@ -19,6 +22,7 @@ const LikeButton = ({
   liked,
   size,
   onClick,
+  ...props
 }: LikeButtonPropsType): ReactElement => {
   const likeAmount = fetching ? (
     <div className="flex relative top-0">
@@ -58,6 +62,7 @@ const LikeButton = ({
 
   return (
     <Button
+      {...props}
       label={likeAmount}
       onClick={onClick}
       className="items-center justify-center font-extralight flex-row-reverse"

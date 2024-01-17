@@ -13,3 +13,4 @@ exports.commentSchema = new mongoose_1.Schema({
     },
     created: { required: true, type: String },
 });
+(0, mongoose_1.model)("comment", exports.commentSchema);

@@ -7,11 +7,3 @@ const assertRequestWithUser = (req) => {
     }
 };
 exports.assertRequestWithUser = assertRequestWithUser;
-// export const assertRequestHasProperties: <Properties>(
-//   req: Request,
-//   props: PropTypes[]
-// ) => asserts req is RequestWithProperties<Properties> = (req, props) => {
-//   if (props && props.some((prop) => req[prop] === undefined)) {
-//     throw new Error("Request does not have these properties");
-//   }
-// };

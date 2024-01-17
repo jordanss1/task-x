@@ -26,6 +26,7 @@ const googleAuthRoutes = (app) => {
         const response = (0, createTokenAndCookie_1.default)(user, res);
         if (user?.profile) {
             response.redirect("/dashboard/home");
+            return;
         }
         response.redirect("/setup");
     });
