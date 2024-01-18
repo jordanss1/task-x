@@ -44,5 +44,10 @@ export type NewCommentRequestType = {
   comment: string;
   taskId: PublicTaskType["taskId"];
 };
+export type EditCommentRequestType = {
+  comment: string;
+  _id: string;
+  taskId: PublicTaskType["taskId"];
+};
 
 export type AwardType = "supported" | "superSupported" | "communityLegend";

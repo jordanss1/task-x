@@ -7,7 +7,7 @@ import { AppThunkDispatch } from "../../../../app/store";
 import { submitComment } from "../../../../features/taskWall/taskWallSlice";
 import { CommentType, TaskWallTaskType } from "../../../../types";
 import TaskWallTaskComment from "./TaskWallTaskComment";
-import TaskWallTaskInput from "./TaskWallTaskInput";
+import TaskWallTaskCommentInput from "./TaskWallTaskCommentInput";
 
 type TaskWallTaskCommentListPropsType = {
   comments: CommentType[];
@@ -45,12 +45,12 @@ const listVariants: Variants = {
   },
 };
 
-const commentSchema = yup.object().shape({
+export const commentSchema = yup.object().shape({
   comment: yup
     .string()
     .min(1, "Comment cannot be empty")
     .max(80, "Must not exceed 80 characters")
-    .required(),
+    .required("Comment cannot be empty"),
   taskId: yup.string().required(),
 });
 
@@ -77,6 +77,7 @@ const TaskWallTaskCommentList = ({
       <Formik<CommentSchemaType>
         onSubmit={handleSubmit}
         initialValues={{ comment: "", taskId }}
+        validateOnBlur={false}
         validationSchema={commentSchema}
       >
         {(props) => {
@@ -85,12 +86,15 @@ const TaskWallTaskCommentList = ({
               variants={inputVariants}
               className="py-2 px-1 justify-center items-center w-full h-14"
             >
-              <TaskWallTaskInput {...props} />
+              <TaskWallTaskCommentInput {...props} />
             </motion.div>
           );
         }}
       </Formik>
-      <motion.div variants={listVariants} className="flex flex-col pb-1 px-1">
+      <motion.div
+        variants={listVariants}
+        className="flex flex-col pb-1 gap-2 px-1"
+      >
         {comments.map((comment, i) => (
           <TaskWallTaskComment key={i} taskId={taskId} commentItem={comment} />
         ))}

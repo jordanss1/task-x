@@ -2,6 +2,8 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import dayjs from "dayjs";
 import {
+  axiosDeleteComment,
+  axiosEditComment,
   axiosGetAllTaskWallTasks,
   axiosGetUserWallTasks,
   axiosLikeComment,
@@ -9,9 +11,12 @@ import {
   axiosSubmitComment,
 } from "../../api";
 import { StateType } from "../../app/store";
+import { PopupPropsType } from "../../components/__reusable/Popup";
 import {
   CommentReturnType,
   CommentType,
+  DeleteCommentReturnType,
+  EditCommentRequestType,
   LikeCommentRequestType,
   LikeTaskRequestType,
   NewCommentRequestType,
@@ -84,6 +89,43 @@ export const submitComment = createAsyncThunk<
   }
 });
 
+export const editComment = createAsyncThunk<
+  CommentReturnType | null,
+  EditCommentRequestType,
+  { state: StateType }
+>("taskWall/editComment", async (comment, { dispatch }) => {
+  try {
+    return await axiosEditComment(comment);
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
+
+    return null;
+  }
+});
+export const deleteComment = createAsyncThunk<
+  DeleteCommentReturnType | null,
+  Omit<EditCommentRequestType, "comment">,
+  { state: StateType }
+>("taskWall/deleteComment", async (comment, { dispatch, getState }) => {
+  const { taskWallFetching } = getState().taskWall;
+
+  if (!taskWallFetching) {
+    dispatch(setTaskWallFetching(true));
+  }
+
+  try {
+    return await axiosDeleteComment(comment);
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
+
+    return null;
+  }
+});
+
 export const sendTaskLike = createAsyncThunk<
   TaskWallTaskType | null,
   LikeTaskRequestType,
@@ -126,6 +168,7 @@ type TaskWallStateType = {
   allTaskWallTasks: TaskWallTaskType[] | null | false;
   userTaskWallTasks: TaskWallTaskType[] | null | false;
   taskWallFetching: boolean;
+  taskWallPrompt: PopupPropsType["prompt"];
 };
 
 const initialState: TaskWallStateType = {
@@ -134,6 +177,7 @@ const initialState: TaskWallStateType = {
   category: "all",
   sort: "popular",
   taskWallFetching: false,
+  taskWallPrompt: undefined,
 };
 
 const sortFunction = (sort: SortType) => {
@@ -204,6 +248,12 @@ const taskWallSlice = createSlice({
     setTaskWallFetching: (state, action: PayloadAction<boolean>) => {
       state.taskWallFetching = action.payload;
     },
+    setTaskWallPrompt: (
+      state,
+      action: PayloadAction<PopupPropsType["prompt"]>
+    ) => {
+      state.taskWallPrompt = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -269,17 +319,51 @@ const taskWallSlice = createSlice({
         }
       )
       .addMatcher(
-        (action) => action.type.includes("taskWall/submitComment"),
+        (action) =>
+          ["taskWall/submitComment", "taskWall/editComment"].some((type) =>
+            action.type.includes(type)
+          ),
         (state, action: PayloadAction<CommentReturnType | null>) => {
           if (action.payload && state.allTaskWallTasks) {
             const taskIndex = state.allTaskWallTasks.findIndex(
               (task) => task.taskId === action.payload?.taskId
             );
 
+            if (action.type.includes("submitComment")) {
+              state.allTaskWallTasks[taskIndex].comments = [
+                ...state.allTaskWallTasks[taskIndex].comments,
+                action.payload.comment,
+              ];
+            }
+
+            if (action.type.includes("editComment")) {
+              const commentIndex = state.allTaskWallTasks[
+                taskIndex
+              ].comments.findIndex(
+                (comment) => comment._id === action.payload?.comment._id
+              );
+
+              state.allTaskWallTasks[taskIndex].comments[commentIndex] =
+                action.payload?.comment;
+            }
+          }
+        }
+      )
+      .addMatcher(
+        (action) => action.type.includes("taskWall/deleteComment"),
+        (state, action: PayloadAction<DeleteCommentReturnType | null>) => {
+          if (action.payload && state.allTaskWallTasks) {
+            const taskIndex = state.allTaskWallTasks.findIndex(
+              (task) => task.taskId === action.payload?.taskId
+            );
+
             state.allTaskWallTasks[taskIndex].comments = [
-              ...state.allTaskWallTasks[taskIndex].comments,
-              action.payload.comment,
+              ...action.payload.comments,
             ];
+          }
+
+          if (state.taskWallFetching) {
+            state.taskWallFetching = false;
           }
         }
       );
@@ -296,6 +380,7 @@ export const {
   assignAllWallTasks,
   assignUserWallTasks,
   setTaskWallFetching,
+  setTaskWallPrompt,
 } = taskWallSlice.actions;
 
 export default taskWallSlice.reducer;

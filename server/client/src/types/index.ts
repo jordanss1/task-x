@@ -85,3 +85,14 @@ export type NewCommentRequestType = {
   comment: string;
   taskId: TaskWallTaskType["taskId"];
 };
+
+export type EditCommentRequestType = {
+  comment: string;
+  _id: string;
+  taskId: TaskWallTaskType["taskId"];
+};
+
+export type DeleteCommentReturnType = {
+  comments: CommentType[];
+  taskId: TaskWallTaskType["taskId"];
+};

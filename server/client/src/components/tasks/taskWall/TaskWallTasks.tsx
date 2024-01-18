@@ -10,6 +10,7 @@ import {
   getUserWallTasks,
   taskWallSelector,
 } from "../../../features/taskWall/taskWallSlice";
+import Popup from "../../__reusable/Popup";
 import Spinner from "../../__reusable/Spinner";
 import TaskWallPlaceholder from "./TaskWallPlaceholder";
 import TaskWallTask from "./TaskWallTask";
@@ -21,8 +22,12 @@ const TaskWallTasks = ({
 }): ReactElement => {
   const dispatch = useDispatch<AppThunkDispatch>();
 
-  const { taskWallFetching, userTaskWallTasks, allTaskWallTasks } =
-    useSelector(taskWallSelector);
+  const {
+    taskWallFetching,
+    userTaskWallTasks,
+    allTaskWallTasks,
+    taskWallPrompt,
+  } = useSelector(taskWallSelector);
 
   const { taskListFetching } = useSelector(taskListSelector);
 
@@ -81,6 +86,9 @@ const TaskWallTasks = ({
       return (
         <>
           {fetching && BigSpinner}
+          <AnimatePresence mode="wait">
+            {taskWallPrompt && <Popup prompt={taskWallPrompt} />}
+          </AnimatePresence>
           <motion.div
             animate={{
               filter: fetching ? "blur(5px)" : "blur(0px)",

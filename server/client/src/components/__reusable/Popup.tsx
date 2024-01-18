@@ -2,11 +2,11 @@ import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { Variants, motion } from "framer-motion";
 import { CSSProperties, ReactElement } from "react";
 import { colors, fonts } from "../../constants";
-import Button from "../__reusable/Button";
-import ModalBackground from "../__reusable/ModalBackground";
 import Error from "../svg/Error";
 import Question from "../svg/Question";
 import Success from "../svg/Success";
+import Button from "./Button";
+import ModalBackground from "./ModalBackground";
 
 export type PopupPropsType = {
   error?: string | null;

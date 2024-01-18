@@ -63,6 +63,7 @@ const LikeButton = ({
   return (
     <Button
       {...props}
+      type="button"
       label={likeAmount}
       onClick={onClick}
       className="items-center justify-center font-extralight flex-row-reverse"

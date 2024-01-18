@@ -72,6 +72,8 @@ const TaskWallTask = ({ taskItem }: TaskWallTaskPropsType): ReactElement => {
     );
   };
 
+  console.log("first", taskId);
+
   return (
     <motion.div
       style={{
@@ -101,7 +103,7 @@ const TaskWallTask = ({ taskItem }: TaskWallTaskPropsType): ReactElement => {
         animate={{
           height,
           transition: {
-            duration: openComments ? 0.6 : 0.2,
+            duration: 0.4,
             type: "tween",
             ease: openComments ? "easeInOut" : "linear",
           },
@@ -115,7 +117,7 @@ const TaskWallTask = ({ taskItem }: TaskWallTaskPropsType): ReactElement => {
               initial="initial"
               animate="animate"
               exit="exit"
-              key="comments"
+              key={`comments-${taskId}`}
               ref={ref}
               className="p-2 rounded-2xl overflow-hidden h-auto bg-slate-300 flex flex-col gap-2"
             >

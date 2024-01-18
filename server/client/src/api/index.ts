@@ -1,9 +1,11 @@
 import axios from "axios";
 import {
   AllTasksReturnType,
-  CommentType,
-  LikeCommentRequestType,
   CommentReturnType,
+  CommentType,
+  DeleteCommentReturnType,
+  EditCommentRequestType,
+  LikeCommentRequestType,
   LikeTaskRequestType,
   NewCommentRequestType,
   TaskType,
@@ -137,6 +139,26 @@ export const axiosSubmitComment = async (
   const api = createAxios(true);
 
   const { data } = await api.post("/task_wall/comment", comment);
+
+  return data;
+};
+
+export const axiosEditComment = async (
+  comment: EditCommentRequestType
+): Promise<CommentReturnType | null> => {
+  const api = createAxios(true);
+
+  const { data } = await api.patch("/task_wall/comment", comment);
+
+  return data;
+};
+
+export const axiosDeleteComment = async (
+  comment: Omit<EditCommentRequestType, "comment">
+): Promise<DeleteCommentReturnType | null> => {
+  const api = createAxios(true);
+
+  const { data } = await api.delete("/task_wall/comment", { data: comment });
 
   return data;
 };

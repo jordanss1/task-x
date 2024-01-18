@@ -8,11 +8,11 @@ import SmallIcon from "../../../__reusable/SmallIcon";
 import Spinner from "../../../__reusable/Spinner";
 import { CommentSchemaType } from "./TaskWallTaskCommentList";
 
-interface TaskWallTaskInputPropsType extends FormikProps<CommentSchemaType> {}
+interface TaskWallTaskCommentInputPropsType extends FormikProps<CommentSchemaType> {}
 
-const TaskWallTaskInput = ({
+const TaskWallTaskCommentInput = ({
   ...props
-}: TaskWallTaskInputPropsType): ReactElement => {
+}: TaskWallTaskCommentInputPropsType): ReactElement => {
   const [field, meta] = useField("comment");
 
   const error = meta.touched && meta.error;
@@ -68,4 +68,4 @@ const TaskWallTaskInput = ({
   );
 };
 
-export default TaskWallTaskInput;
+export default TaskWallTaskCommentInput;

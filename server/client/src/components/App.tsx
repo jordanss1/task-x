@@ -12,9 +12,9 @@ import {
 import useRedirect from "../hooks/useRedirect";
 import "../index.css";
 import "../styles/all.css";
+import Popup from "./__reusable/Popup";
 import Dashboard from "./dashboard/Dashboard";
 import Landing from "./landing/Landing";
-import Popup from "./popup/Popup";
 import ProfileEdit from "./profile/profile-edit/ProfileEdit";
 import ProfileSetup from "./profile/profile-setup/ProfileSetup";
 

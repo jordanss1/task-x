@@ -7,6 +7,7 @@ import { TaskType } from "../models/TaskList";
 import { ValidUserType } from "../models/User";
 import {
   AwardType,
+  EditCommentRequestType,
   LikeCommentRequestType,
   LikeTaskRequestType,
   NewCommentRequestType,
@@ -90,6 +91,77 @@ const taskWallRoutes = (app: Express) => {
         res.send({ comment: newComment, taskId });
       } catch (err) {
         res.status(500).send("Error adding comment, try again");
+      }
+    }
+  );
+
+  app.patch(
+    "/api/task_wall/comment",
+    requireJwt,
+    async (req: Request<any, {}, EditCommentRequestType>, res) => {
+      const { comment, _id, taskId } = req.body;
+
+      if (!comment.length || comment.length > 80) {
+        res.status(400).send("Comment does not meet required length");
+        return;
+      }
+
+      try {
+        const newComment =
+          await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
+            { tasks: { $elemMatch: { taskId } } },
+            {
+              $set: { "tasks.$[task].comments.$[comment].comment": comment },
+            },
+            {
+              new: true,
+              arrayFilters: [{ "task.taskId": taskId }, { "comment._id": _id }],
+            }
+          )
+            .select({ tasks: { $elemMatch: { taskId } } })
+            .exec();
+
+        const updatedComment = newComment?.tasks[0]?.comments?.find(
+          (comment) => comment.id === _id
+        );
+
+        res.send({ comment: updatedComment, taskId });
+      } catch (err) {
+        res.status(500).send("Error editing comment, try again");
+      }
+    }
+  );
+
+  app.delete(
+    "/api/task_wall/comment",
+    requireJwt,
+    async (
+      req: Request<any, {}, Omit<EditCommentRequestType, "comment">>,
+      res
+    ) => {
+      const { _id, taskId } = req.body;
+
+      try {
+        const task = await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
+          { tasks: { $elemMatch: { taskId } } },
+          {
+            $pull: { "tasks.$[task].comments": { _id: { _id } } },
+          },
+          {
+            new: true,
+            arrayFilters: [{ "task.taskId": taskId }],
+          }
+        )
+          .select({ tasks: { $elemMatch: { taskId } } })
+          .exec();
+
+        const comments = task?.tasks[0]?.comments;
+
+
+        res.send({ comments, taskId });
+      } catch (err) {
+        console.log(err);
+        res.status(500).send("Error deleting comment, try again");
       }
     }
   );

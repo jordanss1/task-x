@@ -68,6 +68,47 @@ const taskWallRoutes = (app) => {
             res.status(500).send("Error adding comment, try again");
         }
     });
+    app.patch("/api/task_wall/comment", requireJwt_1.default, async (req, res) => {
+        const { comment, _id, taskId } = req.body;
+        if (!comment.length || comment.length > 80) {
+            res.status(400).send("Comment does not meet required length");
+            return;
+        }
+        try {
+            const newComment = await PublicTaskList.findOneAndUpdate({ tasks: { $elemMatch: { taskId } } }, {
+                $set: { "tasks.$[task].comments.$[comment].comment": comment },
+            }, {
+                new: true,
+                arrayFilters: [{ "task.taskId": taskId }, { "comment._id": _id }],
+            })
+                .select({ tasks: { $elemMatch: { taskId } } })
+                .exec();
+            const updatedComment = newComment?.tasks[0]?.comments?.find((comment) => comment.id === _id);
+            res.send({ comment: updatedComment, taskId });
+        }
+        catch (err) {
+            res.status(500).send("Error editing comment, try again");
+        }
+    });
+    app.delete("/api/task_wall/comment", requireJwt_1.default, async (req, res) => {
+        const { _id, taskId } = req.body;
+        try {
+            const task = await PublicTaskList.findOneAndUpdate({ tasks: { $elemMatch: { taskId } } }, {
+                $pull: { "tasks.$[task].comments": { _id: { _id } } },
+            }, {
+                new: true,
+                arrayFilters: [{ "task.taskId": taskId }],
+            })
+                .select({ tasks: { $elemMatch: { taskId } } })
+                .exec();
+            const comments = task?.tasks[0]?.comments;
+            res.send({ comments, taskId });
+        }
+        catch (err) {
+            console.log(err);
+            res.status(500).send("Error deleting comment, try again");
+        }
+    });
     app.post("/api/task_wall/task/like", requireJwt_1.default, async (req, res) => {
         (0, types_1.assertRequestWithUser)(req);
         const { previousLikes, currentAwards, liked, taskId } = req.body;

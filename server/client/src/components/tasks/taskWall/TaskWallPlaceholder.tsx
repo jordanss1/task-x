@@ -11,14 +11,12 @@ const TaskWallPlaceholder = ({
   const notice =
     category === "all" ? "No wall tasks yet" : "You've added no wall tasks";
 
-  const instruction =
-    category === "all" ? (
-      "No task wall tasks have been added"
-    ) : (
-      <span>
-        Press button and toggle <i>'Task Wall'</i> <br></br> to add one
-      </span>
-    );
+  const instruction = (
+    <span>
+      {category === "all" ? "Be the first, press the button " : "Press button "}
+      and toggle <i>'Task Wall'</i> <br></br> to add one
+    </span>
+  );
 
   return (
     <div

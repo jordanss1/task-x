@@ -1,13 +1,21 @@
-import { Variants, motion } from "framer-motion";
+import { AnimatePresence, Variants, motion } from "framer-motion";
 import { ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useMeasure from "react-use-measure";
 import { AppThunkDispatch } from "../../../../app/store";
 import { fonts } from "../../../../constants";
 import { authSelector } from "../../../../features/auth/authSlice";
-import { sendCommentLike } from "../../../../features/taskWall/taskWallSlice";
+import {
+  deleteComment,
+  editComment,
+  sendCommentLike,
+  setTaskWallPrompt,
+} from "../../../../features/taskWall/taskWallSlice";
 import { CommentType, TaskWallTaskType } from "../../../../types";
 import LikeButton from "../../../__reusable/LikeButton";
+import Popup, { PopupPropsType } from "../../../__reusable/Popup";
 import TaskWallCommentUser from "./TaskWallCommentUser";
+import TaskWallTaskCommentEdit from "./TaskWallTaskCommentEdit";
 
 type TaskWallTaskCommentPropsType = {
   commentItem: CommentType;
@@ -35,6 +43,9 @@ const TaskWallTaskComment = ({
   const dispatch = useDispatch<AppThunkDispatch>();
   const auth = useSelector(authSelector);
   const [fetching, setFetching] = useState(false);
+  const [formActive, setFormActive] = useState(false);
+
+  const [ref, { height }] = useMeasure();
 
   const { likes, comment, user, _id } = commentItem;
 
@@ -44,6 +55,12 @@ const TaskWallTaskComment = ({
     }
   });
 
+  let currentUserComment = false;
+
+  if (auth.user) {
+    currentUserComment = auth.user.userId === user.userId;
+  }
+
   const handleLike = async () => {
     if (!fetching) {
       setFetching(true);
@@ -52,26 +69,82 @@ const TaskWallTaskComment = ({
     }
   };
 
+  const handleEdit = async (active: boolean, comment?: string) => {
+    if (active) {
+      setFormActive(active);
+      return;
+    }
+
+    if (comment) {
+      await dispatch(editComment({ _id, comment, taskId }));
+    }
+
+    setFormActive(active);
+  };
+
+  const handleDelete = async () => {
+    dispatch(
+      setTaskWallPrompt({
+        message: "Are you sure you want to delete your comment?",
+        onDeny: () => dispatch(setTaskWallPrompt(undefined)),
+        onAccept: async () => {
+          await dispatch(deleteComment({ _id, taskId }));
+          dispatch(setTaskWallPrompt(undefined));
+        },
+      })
+    );
+  };
+
+  const renderComment = (
+    <motion.div key={`comment-${taskId}`} ref={ref}>
+      {!formActive || !currentUserComment ? (
+        <span
+          className="font-light text-sm sm:text-[16px] ps-9 sm:ps-12 pe-3"
+          style={{ fontFamily: fonts.jura }}
+        >
+          {comment}
+        </span>
+      ) : (
+        <TaskWallTaskCommentEdit comment={comment} handleEdit={handleEdit} />
+      )}
+    </motion.div>
+  );
+
   return (
     <motion.div
       variants={commentVariants}
       className="flex flex-col gap-1 justify-center"
     >
-      <TaskWallCommentUser user={user.profile} />
-      <span
-        className="font-light text-sm sm:text-[16px] ps-9 sm:ps-12 pe-3"
-        style={{ fontFamily: fonts.jura }}
+      <TaskWallCommentUser
+        currentUserComment={currentUserComment}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        formActive={formActive}
+        user={user.profile}
+      />
+      <motion.div
+        animate={{
+          height,
+          transition: {
+            duration: 0.4,
+            type: "tween",
+            ease: "easeOut",
+          },
+        }}
+        className="min-h-[30px] overflow-hidden"
       >
-        {comment}
-      </span>
+        {renderComment}
+      </motion.div>
       <div className="w-full relative bottom-1 flex justify-end px-6">
-        <LikeButton
-          size={15}
-          fetching={fetching}
-          likes={likes.likes}
-          liked={liked}
-          onClick={async () => await handleLike()}
-        />
+        {!formActive && (
+          <LikeButton
+            size={15}
+            fetching={fetching}
+            likes={likes.likes}
+            liked={liked}
+            onClick={async () => await handleLike()}
+          />
+        )}
       </div>
     </motion.div>
   );
