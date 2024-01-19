@@ -42,6 +42,21 @@ const taskWallRoutes = (app) => {
             res.status(500).send("Issue retrieving all wall tasks, server error");
         }
     });
+    app.patch("/api/task_wall", requireJwt_1.default, async (req, res) => {
+        (0, types_1.assertRequestWithUser)(req);
+        const { userName, _id } = req.body;
+        // in task likes and comment likes we have _id
+        // in comments we have profile._id
+        try {
+            const found = await PublicTaskList.find({}, {}, { arrayFilters: [{ like: "users" }, { "user._id": _id }] }).exec();
+            console.log(found);
+            res.send([false, false]);
+        }
+        catch (err) {
+            console.log(err);
+            res.status(500).send("Problem");
+        }
+    });
     app.post("/api/task_wall/comment", requireJwt_1.default, async (req, res) => {
         (0, types_1.assertRequestWithUser)(req);
         const { comment, taskId } = req.body;
@@ -49,11 +64,11 @@ const taskWallRoutes = (app) => {
             res.status(400).send("Comment does not meet required length");
             return;
         }
-        const newComment = new Comment({
+        const newComment = await new Comment({
             comment,
             user: req.user,
             created: new Date().toISOString(),
-        });
+        }).save();
         try {
             await PublicTaskList.findOneAndUpdate({
                 tasks: { $elemMatch: { taskId } },

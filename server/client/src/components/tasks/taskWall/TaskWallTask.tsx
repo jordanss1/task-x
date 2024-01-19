@@ -72,8 +72,6 @@ const TaskWallTask = ({ taskItem }: TaskWallTaskPropsType): ReactElement => {
     );
   };
 
-  console.log("first", taskId);
-
   return (
     <motion.div
       style={{

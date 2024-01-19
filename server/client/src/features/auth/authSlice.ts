@@ -5,10 +5,15 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { axiosFetchUser, axiosUpdateProfile } from "../../api";
+import {
+  axiosCreateProfile,
+  axiosFetchUser,
+  axiosUpdateProfile,
+} from "../../api";
 import { StateType } from "../../app/store";
 import { UserStateType, UserType, ValidUserType } from "../../types";
-import { setError } from "../notification/notificationSlice";
+import { setError, setSuccess } from "../notification/notificationSlice";
+import { updateUserProfileContent } from "../taskWall/taskWallSlice";
 
 export const getUser = createAsyncThunk<UserType | undefined>(
   "auth/user",
@@ -17,16 +22,16 @@ export const getUser = createAsyncThunk<UserType | undefined>(
   }
 );
 
-export const updateProfile = createAsyncThunk<
+export const createProfile = createAsyncThunk<
   UserType | ValidUserType,
   ValidUserType["profile"],
   { state: StateType }
->("auth/profile", async (profile, { getState, dispatch }) => {
+>("auth/createProfile", async (profile, { getState, dispatch }) => {
   const { user } = getState().auth;
   dispatch(setUpdatedProfile(true));
 
   try {
-    return await axiosUpdateProfile(profile);
+    return await axiosCreateProfile(profile);
   } catch (err) {
     if (err instanceof AxiosError) {
       dispatch(setError(err.response?.data));
@@ -36,14 +41,39 @@ export const updateProfile = createAsyncThunk<
   }
 });
 
+export const updateProfile = createAsyncThunk<
+  ValidUserType,
+  ValidUserType["profile"],
+  { state: StateType }
+>("auth/updateProfile", async (profile, { dispatch, getState }) => {
+  const { user } = getState().auth;
+
+  try {
+    const [user, prevProfile] = await axiosUpdateProfile(profile);
+
+    await dispatch(updateUserProfileContent(prevProfile));
+
+    dispatch(setSuccess("Profile updated successfully"));
+    return user;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
+
+    return user as ValidUserType;
+  }
+});
+
 type AuthStateType = {
   user: UserStateType;
   updatedProfile: boolean;
+  authFetching: boolean;
 };
 
 const initialState: AuthStateType = {
   user: null,
   updatedProfile: false,
+  authFetching: false,
 };
 
 type ReducerMatcherType = (
@@ -62,8 +92,11 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUpdatedProfile: (state, action) => {
+    setUpdatedProfile: (state, action: PayloadAction<boolean>) => {
       state.updatedProfile = action.payload;
+    },
+    setAuthFetching: (state, action: PayloadAction<boolean>) => {
+      state.authFetching = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -76,14 +109,15 @@ const authSlice = createSlice({
           })
       )
       .addMatcher(
-        (action) => action.type.includes("auth/profile"),
+        (action) =>
+          ["auth/createProfile", "auth/updateProfile"].some((type) =>
+            action.type.includes(type)
+          ),
         (state, action: PayloadAction<ValidUserType | UserType>) =>
           reducerMatcherFunction(action, () => {
             state.user = action.payload;
           })
-      )
-
-      .addDefaultCase((state, action) => state);
+      );
   },
 });
 

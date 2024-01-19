@@ -1,6 +1,6 @@
 import { Formik, FormikConfig } from "formik";
 import { Variants, motion } from "framer-motion";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement } from "react";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import { AppThunkDispatch } from "../../../../app/store";
@@ -60,7 +60,6 @@ const TaskWallTaskCommentList = ({
   comments,
   taskId,
 }: TaskWallTaskCommentListPropsType): ReactElement => {
-  const [fetching, setFetching] = useState(false);
   const dispatch = useDispatch<AppThunkDispatch>();
 
   const handleSubmit: FormikConfig<CommentSchemaType>["onSubmit"] = async (
@@ -68,8 +67,7 @@ const TaskWallTaskCommentList = ({
     actions
   ) => {
     await dispatch(submitComment(values));
-
-    actions.resetForm({ values: { taskId, comment: "" } });
+    actions.resetForm({ values });
   };
 
   return (

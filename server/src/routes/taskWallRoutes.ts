@@ -1,3 +1,4 @@
+import { assert } from "console";
 import { Express, Request } from "express";
 import { UpdateQuery, model } from "mongoose";
 import requireJwt from "../middlewares/requireJwt";
@@ -55,6 +56,36 @@ const taskWallRoutes = (app: Express) => {
       res.status(500).send("Issue retrieving all wall tasks, server error");
     }
   });
+
+  app.patch(
+    "/api/task_wall",
+    requireJwt,
+    async (
+      req: Request<any, {}, ValidUserType["profile"] & { _id: string }>,
+      res
+    ) => {
+      assertRequestWithUser<ValidUserType["profile"] & { _id: string }>(req);
+
+      const { userName, _id } = req.body;
+
+      // in task likes and comment likes we have _id
+      // in comments we have profile._id
+
+      try {
+        const found = await PublicTaskList.find<PublicTaskListType>(
+          {},
+          {},
+          { arrayFilters: [{ like: "users" }, { "user._id": _id }] }
+        ).exec();
+
+        console.log(found);
+        res.send([false, false]);
+      } catch (err) {
+        console.log(err);
+        res.status(500).send("Problem");
+      }
+    }
+  );
 
   app.post(
     "/api/task_wall/comment",
@@ -156,7 +187,6 @@ const taskWallRoutes = (app: Express) => {
           .exec();
 
         const comments = task?.tasks[0]?.comments;
-
 
         res.send({ comments, taskId });
       } catch (err) {

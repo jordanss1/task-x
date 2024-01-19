@@ -1,17 +1,14 @@
-import dayjs from "dayjs";
 import { Express, Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import { HydratedDocument, model } from "mongoose";
 import passport from "passport";
-import keys from "../config/keys";
 import createTokenAndCookie from "../functions/createTokenAndCookie";
 import requireJwt from "../middlewares/requireJwt";
+import { PublicTaskListType } from "../models/PublicTaskList";
 import { UserType, ValidUserType } from "../models/User";
 import { assertRequestWithUser } from "../types";
 
-const { jwtSecret } = keys;
-
 const User = model<UserType>("users");
+const PublicTaskList = model<PublicTaskListType>("publicTaskList");
 
 const googleAuthRoutes = (app: Express) => {
   app.get(
@@ -60,7 +57,7 @@ const googleAuthRoutes = (app: Express) => {
     requireJwt,
     async (req: Request, res: Response) => {
       const match = await User.findOne<UserType>({
-        "profile.userName": req.body.username,
+        "profile.nameLowerCase": req.body.username.toLowerCase(),
       })
         .select("profile.userName")
         .exec();
@@ -70,17 +67,26 @@ const googleAuthRoutes = (app: Express) => {
   );
 
   app.post(
-    "/api/profileUpdate",
+    "/api/profile",
     requireJwt,
-    async (req: Request, res: Response) => {
+    async (
+      req: Request<any, {}, Omit<ValidUserType["profile"], "nameLowerCase">>,
+      res: Response
+    ) => {
+      const { userName, profilePicture } = req.body;
+
       try {
-        const updatedUser = await User.findOneAndUpdate(
+        const updatedUser = await User.findOneAndUpdate<UserType>(
           { _id: req.user?._id },
           {
-            profile: req.body,
+            profile: {
+              userName,
+              profilePicture,
+              nameLowerCase: userName.toLowerCase(),
+            },
           },
           { new: true }
-        );
+        ).exec();
 
         const response = createTokenAndCookie(
           updatedUser as HydratedDocument<ValidUserType>,
@@ -91,6 +97,47 @@ const googleAuthRoutes = (app: Express) => {
         response.send(updatedUser);
       } catch (err) {
         res.status(500).send("Server error please try again");
+      }
+    }
+  );
+
+  app.patch(
+    "/api/profile",
+    requireJwt,
+    async (
+      req: Request<any, {}, Omit<ValidUserType["profile"], "nameLowerCase">>,
+      res
+    ) => {
+      assertRequestWithUser<Omit<ValidUserType["profile"], "nameLowerCase">>(
+        req
+      );
+
+      const { userName, profilePicture } = req.body;
+
+      try {
+        const user = await User.findOneAndUpdate<ValidUserType>(
+          { _id: req.user?._id },
+          {
+            profile: {
+              userName,
+              profilePicture,
+              nameLowerCase: userName.toLowerCase(),
+            },
+          },
+          { new: true }
+        ).exec();
+
+        const response = createTokenAndCookie(
+          user as HydratedDocument<ValidUserType>,
+          res
+        );
+
+        response.send([
+          user as HydratedDocument<ValidUserType>,
+          req.user.profile,
+        ]);
+      } catch (err) {
+        res.status(500).send("Problem updating profile, try again");
       }
     }
   );

@@ -55,12 +55,30 @@ export const axiosCheckUsername = async (
   return data;
 };
 
-export const axiosUpdateProfile = async (
+export const axiosCreateProfile = async (
   profile: ValidUserType["profile"]
 ): Promise<UserType> => {
   const api = createAxios(true);
 
-  const { data } = await api.post("/profileUpdate", { ...profile });
+  const { data } = await api.post("/profile", { ...profile });
+
+  return data;
+};
+
+export const axiosUpdateProfile = async (
+  profile: ValidUserType["profile"]
+): Promise<[ValidUserType, ValidUserType["profile"]]> => {
+  const api = createAxios(true);
+
+  const { data } = await api.patch("/profile", { ...profile });
+
+  return data;
+};
+
+export const axiosDeleteProfile = async (): Promise<void> => {
+  const api = createAxios(true);
+
+  const { data } = await api.delete("/profile");
 
   return data;
 };
@@ -129,6 +147,16 @@ export const axiosGetAllTaskWallTasks = async (): Promise<
   const api = createAxios(true);
 
   const { data } = await api.get("/task_wall/all");
+
+  return data;
+};
+
+export const axiosUpdateUserProfileContent = async (
+  profile: ValidUserType["profile"]
+): Promise<[TaskWallTaskType[] | false, TaskWallTaskType[] | false]> => {
+  const api = createAxios(true);
+
+  const { data } = await api.patch("/task_wall", profile);
 
   return data;
 };

@@ -6,9 +6,11 @@ import { ValidUserType } from "../../../../types";
 import Button from "../../../__reusable/Button";
 import ProfileIcon from "../../../__reusable/ProfileIcon";
 import SmallIcon from "../../../__reusable/SmallIcon";
+import TaskWallTaskTimeStamp from "../TaskWallTaskTimeStamp";
 
 type TaskWallCommentUserPropsType = {
   user: ValidUserType["profile"];
+  created: string;
   currentUserComment: boolean;
   formActive: boolean;
   handleEdit: (active: boolean) => void;
@@ -17,6 +19,7 @@ type TaskWallCommentUserPropsType = {
 
 const TaskWallCommentUser = ({
   user,
+  created,
   currentUserComment,
   formActive,
   handleDelete,
@@ -51,6 +54,7 @@ const TaskWallCommentUser = ({
         >
           {userName}
         </span>
+        <TaskWallTaskTimeStamp time={created} />
       </div>
       <AnimatePresence initial={false}>
         {currentUserComment && !formActive && (

@@ -1,6 +1,5 @@
 import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppThunkDispatch } from "../../../app/store";
 import { authSelector, getUser } from "../../../features/auth/authSlice";
 import "../../../styles/dashboard.css";
 import "../../../styles/profile.css";
@@ -10,10 +9,9 @@ import ProfileEditForm from "./ProfileEditForm";
 
 const ProfileEdit = (): ReactElement => {
   const { user } = useSelector(authSelector);
-  const dispatch = useDispatch<AppThunkDispatch>();
 
   return (
-    <main className="profile_edit flex flex-col px-5 sm:px-[50px] sm:h-screen">
+    <main className="profile_edit px-5 min-h-screen">
       {user && user.profile && (
         <>
           <Header
@@ -22,7 +20,7 @@ const ProfileEdit = (): ReactElement => {
             containerClass="dashboard_header items-center sm:pt-0 pt-5"
             nav={<DashboardNav profile />}
           />
-          <ProfileEditForm />
+          <ProfileEditForm user={user.profile} />
         </>
       )}
     </main>

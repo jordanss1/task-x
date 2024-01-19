@@ -27,6 +27,7 @@ const TaskWallTaskCommentEdit = ({
     resetForm,
     submitForm,
     isSubmitting,
+    initialValues,
     dirty,
   } = useFormik<Pick<CommentSchemaType, "comment">>({
     validateOnBlur: false,
@@ -80,7 +81,7 @@ const TaskWallTaskCommentEdit = ({
           const handleClick = cancel
             ? () => {
                 handleEdit(false);
-                resetForm({});
+                resetForm();
               }
             : () => submitForm();
 

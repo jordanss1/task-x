@@ -47,7 +47,7 @@ const TaskWallTaskComment = ({
 
   const [ref, { height }] = useMeasure();
 
-  const { likes, comment, user, _id } = commentItem;
+  const { likes, comment, user, _id, created } = commentItem;
 
   const liked = likes.users.some(({ userName }) => {
     if (auth.user) {
@@ -96,10 +96,14 @@ const TaskWallTaskComment = ({
   };
 
   const renderComment = (
-    <motion.div key={`comment-${taskId}`} ref={ref}>
+    <motion.div
+      key={`comment-${taskId}`}
+      className="md:max-w-[93%] sm:max-w-[91%] max-w-[92%] w-full ms-auto"
+      ref={ref}
+    >
       {!formActive || !currentUserComment ? (
         <span
-          className="font-light text-sm sm:text-[16px] ps-9 sm:ps-12 pe-3"
+          className="font-light text-sm sm:text-[16px]  pe-3"
           style={{ fontFamily: fonts.jura }}
         >
           {comment}
@@ -117,6 +121,7 @@ const TaskWallTaskComment = ({
     >
       <TaskWallCommentUser
         currentUserComment={currentUserComment}
+        created={created}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         formActive={formActive}

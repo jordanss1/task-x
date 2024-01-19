@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { AppThunkDispatch } from "../../../app/store";
 import {
   authSelector,
+  createProfile,
   getUser,
   setUpdatedProfile,
-  updateProfile,
 } from "../../../features/auth/authSlice";
 import { interfaceSelector } from "../../../features/interface/interfaceSlice";
 import { notificationSelector } from "../../../features/notification/notificationSlice";
@@ -153,7 +153,7 @@ const ProfileSetup = (): ReactElement => {
                 profilePicture: `/api/profileIcons/default-profile.svg`,
                 userName: "",
               }}
-              onSubmit={async (values) => await dispatch(updateProfile(values))}
+              onSubmit={async (values) => await dispatch(createProfile(values))}
               validationSchema={profileSchema}
             >
               {(props) => {

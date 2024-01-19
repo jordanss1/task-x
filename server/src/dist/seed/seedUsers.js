@@ -17,10 +17,13 @@ const fakerUsers = async (uri) => {
     const User = db.model("users", User_1.userSchema);
     let users = [];
     for (let i = 0; i < 100; i += 1) {
+        let userName = faker.internet.userName();
+        userName = userName.replace(/[^a-zA-Z0-9]/g, "");
         let user = {
             userId: faker.string.numeric(20),
             profile: {
-                userName: faker.internet.userName(),
+                userName,
+                nameLowerCase: userName.toLowerCase(),
                 profilePicture: faker.helpers.arrayElement(profileUrls_1.default),
             },
         };

@@ -9,6 +9,7 @@ import {
   axiosLikeComment,
   axiosLikeTask,
   axiosSubmitComment,
+  axiosUpdateUserProfileContent,
 } from "../../api";
 import { StateType } from "../../app/store";
 import { PopupPropsType } from "../../components/__reusable/Popup";
@@ -22,6 +23,7 @@ import {
   NewCommentRequestType,
   TaskType,
   TaskWallTaskType,
+  ValidUserType,
 } from "../../types";
 import { setError } from "../notification/notificationSlice";
 
@@ -155,6 +157,25 @@ export const sendCommentLike = createAsyncThunk<
     }
 
     return null;
+  }
+});
+
+export const updateUserProfileContent = createAsyncThunk<
+  void,
+  ValidUserType["profile"],
+  { state: StateType }
+>("taskWall/updatedUserProfileContent", async (profile, { dispatch }) => {
+  try {
+    const [allTaskWallTasks, userTaskWallTasks] =
+      await axiosUpdateUserProfileContent(profile);
+
+    dispatch(assignAllWallTasks(allTaskWallTasks));
+
+    dispatch(assignUserWallTasks(userTaskWallTasks));
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
   }
 });
 
@@ -296,6 +317,12 @@ const taskWallSlice = createSlice({
             state.allTaskWallTasks = state.allTaskWallTasks.map((task) =>
               task.taskId === action.payload?.taskId ? action.payload : task
             );
+
+            if (state.userTaskWallTasks) {
+              state.userTaskWallTasks = state.userTaskWallTasks.map((task) =>
+                task.taskId === action.payload?.taskId ? action.payload : task
+              );
+            }
           }
         }
       )
@@ -315,9 +342,21 @@ const taskWallSlice = createSlice({
 
             state.allTaskWallTasks[taskIndex].comments[commentIndex] =
               action.payload?.comment;
+
+            if (state.userTaskWallTasks) {
+              const taskIndex = state.userTaskWallTasks.findIndex(
+                (task) => task.taskId === action.payload?.taskId
+              );
+
+              if (taskIndex > -1) {
+                state.userTaskWallTasks[taskIndex].comments[commentIndex] =
+                  action.payload?.comment;
+              }
+            }
           }
         }
       )
+
       .addMatcher(
         (action) =>
           ["taskWall/submitComment", "taskWall/editComment"].some((type) =>
@@ -329,11 +368,26 @@ const taskWallSlice = createSlice({
               (task) => task.taskId === action.payload?.taskId
             );
 
+            let userTaskIndex = -1;
+
+            if (state.userTaskWallTasks) {
+              userTaskIndex = state.userTaskWallTasks.findIndex(
+                (task) => task.taskId === action.payload?.taskId
+              );
+            }
+
             if (action.type.includes("submitComment")) {
               state.allTaskWallTasks[taskIndex].comments = [
                 ...state.allTaskWallTasks[taskIndex].comments,
                 action.payload.comment,
               ];
+
+              if (userTaskIndex > -1 && state.userTaskWallTasks) {
+                state.userTaskWallTasks[userTaskIndex].comments = [
+                  ...state.userTaskWallTasks[userTaskIndex].comments,
+                  action.payload.comment,
+                ];
+              }
             }
 
             if (action.type.includes("editComment")) {
@@ -345,6 +399,17 @@ const taskWallSlice = createSlice({
 
               state.allTaskWallTasks[taskIndex].comments[commentIndex] =
                 action.payload?.comment;
+
+              if (userTaskIndex > -1 && state.userTaskWallTasks) {
+                const commentIndex = state.userTaskWallTasks[
+                  userTaskIndex
+                ].comments.findIndex(
+                  (comment) => comment._id === action.payload?.comment._id
+                );
+
+                state.userTaskWallTasks[userTaskIndex].comments[commentIndex] =
+                  action.payload?.comment;
+              }
             }
           }
         }
@@ -360,6 +425,16 @@ const taskWallSlice = createSlice({
             state.allTaskWallTasks[taskIndex].comments = [
               ...action.payload.comments,
             ];
+
+            if (state.userTaskWallTasks) {
+              const userTaskIndex = state.userTaskWallTasks.findIndex(
+                (task) => task.taskId === action.payload?.taskId
+              );
+
+              state.userTaskWallTasks[userTaskIndex].comments = [
+                ...action.payload.comments,
+              ];
+            }
           }
 
           if (state.taskWallFetching) {

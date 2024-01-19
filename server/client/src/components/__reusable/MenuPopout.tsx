@@ -23,7 +23,7 @@ const MenuPopout = ({
       >
         <AnimatePresence>
           {expanded ? (
-            <i className="fa-solid fa-xmark relative left-8 text-3xl p-1 rounded-md text-slate-400 hover:bg-slate-500 hover:text-slate-200" />
+            <i className="fa-solid fa-xmark relative text-3xl p-1 rounded-md text-slate-400 hover:bg-slate-500 hover:text-slate-200" />
           ) : (
             <MenuButton />
           )}

@@ -19,19 +19,24 @@ export const taskSubmitSchema = yup.object().shape({
 
 export type TaskSubmitSchemaType = yup.InferType<typeof taskSubmitSchema>;
 
-export const profileSchema = yup.object().shape({
-  profilePicture: yup.string().required("Choose a profile photo"),
-  userName: yup
-    .string()
-    .min(3, "Must be more than 2 characters")
-    .max(24, "Must be less than 25 characters")
-    .matches(/^[a-zA-Z0-9_]+$/, "No special characters or space")
-    .required("You must enter a username")
-    .test("userList", "Username is taken", async (value, context) => {
-      if (value.length < 3) return false;
+export const profileSchema = (initialUsername?: string) =>
+  yup.object().shape({
+    profilePicture: yup.string().required("Choose a profile photo"),
+    userName: yup
+      .string()
+      .min(3, "Must be more than 2 characters")
+      .max(24, "Must be less than 25 characters")
+      .matches(/^[a-zA-Z0-9_]+$/, "No special characters or space")
+      .required("You must enter a username")
+      .test("userList", "Username is taken", async (value, context) => {
+        if (initialUsername) {
+          if (value === initialUsername) return true;
+        }
 
-      return !(await axiosCheckUsername(value));
-    }),
-});
+        if (value.length < 3) return false;
 
-export type ProfileSchemaType = yup.InferType<typeof profileSchema>;
+        return !(await axiosCheckUsername(value));
+      }),
+  });
+
+export type ProfileSchemaType = yup.InferType<ReturnType<typeof profileSchema>>;
