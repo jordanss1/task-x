@@ -96,7 +96,7 @@ export const editTask = createAsyncThunk<
 
 export const getUserTasks = createAsyncThunk<TaskType[] | false>(
   "taskList/getUserTasks",
-  async (undefined, { dispatch, getState }) => {
+  async (undefined, { dispatch }) => {
     try {
       return await axiosGetUserTasks();
     } catch (err) {

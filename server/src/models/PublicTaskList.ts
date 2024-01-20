@@ -6,7 +6,7 @@ import { userSchema } from "./User";
 export const publicTaskSchema = new Schema({
   task: { required: true, type: String },
   taskId: { required: true, type: String },
-  user: { type: userSchema, required: true },
+  user: { type: profileSchema, required: true },
   enabledDueDate: { required: true, type: Boolean },
   dueDate: { required: false, type: String, default: null },
   created: { required: true, type: String },
@@ -24,7 +24,7 @@ export const publicTaskSchema = new Schema({
 });
 
 export const publicTaskListSchema = new Schema({
-  _user: { required: true, type: Schema.Types.ObjectId, ref: "User" },
+  _user: { required: true, type: String },
   tasks: { required: true, type: [publicTaskSchema], default: null },
   totalTasks: { required: true, type: Number, default: 0 },
 });

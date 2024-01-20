@@ -25,8 +25,8 @@ export const requireJwt = async (
   if (unprotectedPaths) {
     const user = req.cookies.token ? verifyToken(req.cookies.token) : undefined;
 
-    const foundUser = await User.findOne({ userId: user?.userId })
-      .select(["-_id", "userId", "profile"])
+    const foundUser = await User.findOne({ _user: user?._user })
+      .select(["-_id", "_user", "profile"])
       .exec();
 
     req.user = foundUser || undefined;
@@ -51,7 +51,7 @@ export const requireJwt = async (
 
   try {
     const { user } = jwt.verify(token, jwtSecret) as JwtPayload;
-    const foundUser = await User.findOne({ userId: user?.userId }).exec();
+    const foundUser = await User.findOne({ _user: user?._user }).exec();
 
     if (!foundUser) {
       errorFunc();

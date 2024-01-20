@@ -20,16 +20,19 @@ const fakerUsers = async (uri: string) => {
     let userName = faker.internet.userName();
     userName = userName.replace(/[^a-zA-Z0-9]/g, "");
 
-    let user: UserType = {
-      userId: faker.string.numeric(20),
+    const _user = faker.string.numeric(20);
+
+    const newUser = await new User<UserType>({
+      _user,
       profile: {
+        _user,
         userName,
         nameLowerCase: userName.toLowerCase(),
         profilePicture: faker.helpers.arrayElement(profileUrls),
       },
-    };
+    }).save();
 
-    users.push(user);
+    users.push(newUser);
   }
 
   await User.insertMany(users);

@@ -12,7 +12,7 @@ exports.taskSchema = new mongoose_1.Schema({
     complete: { required: true, type: Boolean, default: false },
 });
 exports.taskListSchema = new mongoose_1.Schema({
-    _user: { required: true, type: mongoose_1.Schema.Types.ObjectId, ref: "User" },
+    _user: { required: true, type: String },
     tasks: { required: true, type: [exports.taskSchema], default: null },
     totalTasks: { required: true, type: Number, default: 0 },
 });

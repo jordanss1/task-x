@@ -58,7 +58,7 @@ const TaskWallTaskComment = ({
   let currentUserComment = false;
 
   if (auth.user) {
-    currentUserComment = auth.user.userId === user.userId;
+    currentUserComment = auth.user._user === user._user;
   }
 
   const handleLike = async () => {
@@ -125,7 +125,7 @@ const TaskWallTaskComment = ({
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         formActive={formActive}
-        user={user.profile}
+        user={user}
       />
       <motion.div
         animate={{

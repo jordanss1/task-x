@@ -39,7 +39,7 @@ const taskListRoutes = (app) => {
         (0, types_1.assertRequestWithUser)(req);
         try {
             const data = await TaskList.findOne({
-                _user: req.user._id,
+                _user: req.user._user,
             })
                 .select("tasks")
                 .exec();
@@ -54,14 +54,14 @@ const taskListRoutes = (app) => {
         (0, types_1.assertRequestWithUser)(req);
         let updatedUserPublicTasks;
         const publicTask = await PublicTaskList.findOne({
-            _user: req.user?._id,
+            _user: req.user?._user,
             tasks: { $elemMatch: { taskId: req.body.taskId } },
         })
             .select({ tasks: { $elemMatch: { taskId: req.body.taskId } } })
             .exec();
         try {
             await TaskList.findOneAndUpdate({
-                _user: req.user?._id,
+                _user: req.user?._user,
                 "tasks.taskId": req.body.taskId,
             }, {
                 "tasks.$.task": task,
@@ -75,14 +75,14 @@ const taskListRoutes = (app) => {
         }
         if (publicTask && !onTaskWall) {
             const totalTasks = await PublicTaskList.findOne({
-                _user: req.user?._id,
+                _user: req.user?._user,
             })
                 .select(["totalTasks", "-_id"])
                 .exec();
             if (totalTasks?.totalTasks === 1) {
                 try {
                     await PublicTaskList.findOneAndDelete({
-                        _user: req.user?._id,
+                        _user: req.user?._user,
                     }).exec();
                     updatedUserPublicTasks = null;
                 }
@@ -94,7 +94,7 @@ const taskListRoutes = (app) => {
             }
             else {
                 try {
-                    await PublicTaskList.findOneAndUpdate({ _user: req.user?._id }, {
+                    await PublicTaskList.findOneAndUpdate({ _user: req.user?._user }, {
                         $pull: { tasks: { taskId: req.body.taskId } },
                         $inc: { totalTasks: -1 },
                     }).exec();
@@ -106,7 +106,7 @@ const taskListRoutes = (app) => {
                 }
                 finally {
                     const tasks = await PublicTaskList.findOne({
-                        _user: req.user?._id,
+                        _user: req.user?._user,
                     })
                         .select(["tasks", "-_id"])
                         .exec();
@@ -117,7 +117,7 @@ const taskListRoutes = (app) => {
         if (publicTask && onTaskWall) {
             try {
                 await PublicTaskList.findOneAndUpdate({
-                    _user: req.user?._id,
+                    _user: req.user?._user,
                     "tasks.taskId": req.body.taskId,
                 }, {
                     "tasks.$.task": task,
@@ -131,7 +131,7 @@ const taskListRoutes = (app) => {
             }
             finally {
                 const tasks = await PublicTaskList.findOne({
-                    _user: req.user?._id,
+                    _user: req.user?._user,
                 })
                     .select(["tasks", "-_id"])
                     .exec();
@@ -140,12 +140,12 @@ const taskListRoutes = (app) => {
         }
         else if (!publicTask && onTaskWall) {
             const totalTasks = await PublicTaskList.findOne({
-                _user: req.user?._id,
+                _user: req.user?._user,
             })
                 .select(["-_id", "totalTasks"])
                 .exec();
             const publicTask = new PublicTask({
-                user: req.user,
+                user: req.user.profile,
                 created: new Date().toISOString(),
                 dueDate,
                 enabledDueDate,
@@ -155,7 +155,7 @@ const taskListRoutes = (app) => {
             if (!totalTasks?.totalTasks || totalTasks.totalTasks === 0) {
                 try {
                     const taskList = await new PublicTaskList({
-                        _user: req.user._id,
+                        _user: req.user._user,
                         tasks: [publicTask],
                         totalTasks: 1,
                     }).save();
@@ -169,7 +169,7 @@ const taskListRoutes = (app) => {
             }
             else {
                 try {
-                    await PublicTaskList.findOneAndUpdate({ _user: req.user?._id }, {
+                    await PublicTaskList.findOneAndUpdate({ _user: req.user?._user }, {
                         $push: { tasks: publicTask },
                         $inc: { totalTasks: 1 },
                     }).exec();
@@ -181,7 +181,7 @@ const taskListRoutes = (app) => {
                 }
                 finally {
                     const tasks = await PublicTaskList.findOne({
-                        _user: req.user?._id,
+                        _user: req.user?._user,
                     })
                         .select(["tasks", "-_id"])
                         .exec();
@@ -189,7 +189,7 @@ const taskListRoutes = (app) => {
                 }
             }
         }
-        const tasks = await TaskList.findOne({ _user: req.user?._id })
+        const tasks = await TaskList.findOne({ _user: req.user?._user })
             .select("tasks")
             .exec();
         const userTasks = tasks?.tasks.map((task) => task);
@@ -197,7 +197,7 @@ const taskListRoutes = (app) => {
     });
     app.post("/api/task/complete", requireJwt_1.default, async (req, res) => {
         const publicTask = await PublicTaskList.findOne({
-            _user: req.user?._id,
+            _user: req.user?._user,
             "tasks.taskId": req.body.taskId,
         })
             .select({ tasks: { $elemMatch: { taskId: req.body.taskId } } })
@@ -206,10 +206,10 @@ const taskListRoutes = (app) => {
         let updatedUserPublicTasks;
         try {
             await TaskList.findOneAndUpdate({
-                _user: req.user?._id,
+                _user: req.user?._user,
             }, { $set: { "tasks.$[task].complete": true } }, { arrayFilters: [{ "task.taskId": req.body.taskId }] }).exec();
             const tasks = await TaskList.findOne({
-                _user: req.user?._id,
+                _user: req.user?._user,
             })
                 .select("tasks")
                 .exec();
@@ -223,10 +223,10 @@ const taskListRoutes = (app) => {
         if (publicTask) {
             try {
                 await PublicTaskList.findOneAndUpdate({
-                    _user: req.user?._id,
+                    _user: req.user?._user,
                 }, { $set: { "tasks.$[task].complete": true } }, { arrayFilters: [{ "task.taskId": req.body.taskId }] }).exec();
                 const publicTasks = await PublicTaskList.findOne({
-                    _user: req.user?._id,
+                    _user: req.user?._user,
                 })
                     .select("tasks")
                     .exec();
@@ -252,13 +252,13 @@ const taskListRoutes = (app) => {
             taskId: crypto.randomUUID().toString(),
         });
         const taskList = await TaskList.findOne({
-            _user: req.user?._id,
+            _user: req.user?._user,
         }).exec();
         let updatedUserTasks;
         let updatedUserPublicTasks;
         if (taskList) {
             try {
-                await TaskList.findOneAndUpdate({ _user: req.user?._id }, { $push: { tasks: newTask }, $inc: { totalTasks: 1 } }).exec();
+                await TaskList.findOneAndUpdate({ _user: req.user?._user }, { $push: { tasks: newTask }, $inc: { totalTasks: 1 } }).exec();
             }
             catch (err) {
                 res.status(500).send("Unable to update task list, try again");
@@ -266,7 +266,7 @@ const taskListRoutes = (app) => {
             }
             finally {
                 const tasks = await TaskList.findOne({
-                    _user: req.user?._id,
+                    _user: req.user?._user,
                 })
                     .select("tasks")
                     .exec();
@@ -276,7 +276,7 @@ const taskListRoutes = (app) => {
         else {
             try {
                 const tasks = await new TaskList({
-                    _user: req.user?._id,
+                    _user: req.user?._user,
                     tasks: [newTask],
                     totalTasks: 1,
                 }).save();
@@ -289,11 +289,11 @@ const taskListRoutes = (app) => {
         }
         if (newTask.onTaskWall) {
             const publicTaskList = await PublicTaskList.findOne({
-                _user: req.user?._id,
+                _user: req.user?._user,
             }).exec();
             const { created, dueDate, enabledDueDate, task, taskId } = newTask;
             const publicTask = new PublicTask({
-                user: req.user,
+                user: req.user.profile,
                 created,
                 dueDate,
                 enabledDueDate,
@@ -302,7 +302,7 @@ const taskListRoutes = (app) => {
             });
             if (publicTaskList) {
                 try {
-                    await PublicTaskList.findOneAndUpdate({ _user: req.user?._id }, { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }).exec();
+                    await PublicTaskList.findOneAndUpdate({ _user: req.user?._user }, { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }).exec();
                 }
                 catch (err) {
                     return res
@@ -311,7 +311,7 @@ const taskListRoutes = (app) => {
                 }
                 finally {
                     const tasks = await PublicTaskList.findOne({
-                        _user: req.user?._id,
+                        _user: req.user?._user,
                     })
                         .select("tasks")
                         .exec();
@@ -321,7 +321,7 @@ const taskListRoutes = (app) => {
             else {
                 try {
                     await new PublicTaskList({
-                        _user: req.user?._id,
+                        _user: req.user?._user,
                         tasks: [publicTask],
                         totalTasks: 1,
                     }).save();
@@ -333,7 +333,7 @@ const taskListRoutes = (app) => {
                 }
                 finally {
                     const tasks = await PublicTaskList.findOne({
-                        _user: req.user?._id,
+                        _user: req.user?._user,
                     })
                         .select("tasks")
                         .exec();
@@ -360,32 +360,32 @@ const taskListRoutes = (app) => {
         let updatedUserTasks;
         let updatedUserPublicTasks;
         const userWallTasks = await PublicTaskList.findOne({
-            _user: req.user?._id,
+            _user: req.user?._user,
         }).exec();
         updatedUserPublicTasks = userWallTasks?.tasks.map((task) => task);
         const tasks = await TaskList.findOne({
-            _user: req.user?._id,
+            _user: req.user?._user,
         })
             .select("totalTasks")
             .exec();
         const publicTasks = await PublicTaskList.findOne({
-            _user: req.user?._id,
+            _user: req.user?._user,
         })
             .select("totalTasks")
             .exec();
         const matchingPublicTask = await PublicTaskList.findOne({
-            _user: req.user?._id,
+            _user: req.user?._user,
             tasks: { $elemMatch: { taskId: req.body.taskId } },
         })
             .select({ tasks: { $elemMatch: { taskId: req.body.taskId } } })
             .exec();
         if (tasks?.totalTasks && tasks.totalTasks > 1) {
             try {
-                await TaskList.findOneAndUpdate({ _user: req.user?._id }, {
+                await TaskList.findOneAndUpdate({ _user: req.user?._user }, {
                     $pull: { tasks: { taskId: req.body.taskId } },
                     $inc: { totalTasks: -1 },
                 }).exec();
-                const tasks = await TaskList.findOne({ _user: req.user?._id })
+                const tasks = await TaskList.findOne({ _user: req.user?._user })
                     .select("tasks")
                     .exec();
                 updatedUserTasks = tasks?.tasks.map((task) => task);
@@ -398,7 +398,7 @@ const taskListRoutes = (app) => {
         if (tasks?.totalTasks && tasks.totalTasks === 1) {
             try {
                 await TaskList.findOneAndDelete({
-                    _user: req.user?._id,
+                    _user: req.user?._user,
                 }).exec();
                 updatedUserTasks = null;
             }
@@ -409,11 +409,13 @@ const taskListRoutes = (app) => {
         }
         if (publicTasks && publicTasks.totalTasks > 1 && matchingPublicTask) {
             try {
-                await PublicTaskList.findOneAndUpdate({ _user: req.user?._id }, {
+                await PublicTaskList.findOneAndUpdate({ _user: req.user?._user }, {
                     $pull: { tasks: { taskId: req.body.taskId } },
                     $inc: { totalTasks: -1 },
                 }).exec();
-                const tasks = await PublicTaskList.findOne({ _user: req.user?._id });
+                const tasks = await PublicTaskList.findOne({
+                    _user: req.user?._user,
+                });
                 updatedUserPublicTasks = tasks?.tasks.map((task) => task);
             }
             catch (err) {
@@ -426,7 +428,7 @@ const taskListRoutes = (app) => {
         if (publicTasks && publicTasks.totalTasks === 1 && matchingPublicTask) {
             try {
                 await PublicTaskList.findOneAndDelete({
-                    _user: req.user?._id,
+                    _user: req.user?._user,
                 }).exec();
                 updatedUserPublicTasks = null;
             }

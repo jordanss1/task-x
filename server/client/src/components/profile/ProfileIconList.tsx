@@ -25,12 +25,11 @@ const ProfileIconList = ({
 }: ProfileIconListPropsType): ReactElement => {
   const dispatch = useDispatch<AppThunkDispatch>();
   const { profileIcons } = useSelector(assetsSelector);
+  const [field, meta, helpers] = useField("profilePicture");
 
   useEffect(() => {
     dispatch(getProfileIcons());
   }, []);
-
-  const [field, meta, helpers] = useField("profilePicture");
 
   return (
     <motion.div {...props} className={className}>

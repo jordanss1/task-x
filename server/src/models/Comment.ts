@@ -3,7 +3,7 @@ import { profileSchema } from "./Profile";
 import { userSchema } from "./User";
 
 export const commentSchema = new Schema({
-  user: { required: true, type: userSchema },
+  user: { required: true, type: profileSchema },
   comment: { required: true, type: String },
   likes: {
     likes: { required: false, type: Number, default: 0 },

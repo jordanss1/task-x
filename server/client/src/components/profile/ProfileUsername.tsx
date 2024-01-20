@@ -17,8 +17,6 @@ const ProfileUsername = ({
   const [field, meta, helpers] = useField("userName");
   const { isValidating } = useFormikContext();
 
-  console.log(meta.error);
-
   return (
     <>
       <TransformUnderline

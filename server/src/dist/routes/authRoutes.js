@@ -50,6 +50,7 @@ const googleAuthRoutes = (app) => {
         try {
             const updatedUser = await User.findOneAndUpdate({ _id: req.user?._id }, {
                 profile: {
+                    _user: req.user?._user,
                     userName,
                     profilePicture,
                     nameLowerCase: userName.toLowerCase(),
@@ -69,16 +70,14 @@ const googleAuthRoutes = (app) => {
         try {
             const user = await User.findOneAndUpdate({ _id: req.user?._id }, {
                 profile: {
+                    _user: req.user._user,
                     userName,
                     profilePicture,
                     nameLowerCase: userName.toLowerCase(),
                 },
             }, { new: true }).exec();
             const response = (0, createTokenAndCookie_1.default)(user, res);
-            response.send([
-                user,
-                req.user.profile,
-            ]);
+            response.send(user);
         }
         catch (err) {
             res.status(500).send("Problem updating profile, try again");

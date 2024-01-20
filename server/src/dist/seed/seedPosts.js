@@ -243,7 +243,7 @@ const fakerPosts = async (uri) => {
             }
             return {
                 comment,
-                user,
+                user: user?.profile,
                 likes,
                 created: faker.date
                     .between({
@@ -281,7 +281,7 @@ const fakerPosts = async (uri) => {
         const publicTask = new PublicTask({
             task: task,
             taskId: faker.string.uuid(),
-            user: user,
+            user: user?.profile,
             enabledDueDate,
             dueDate,
             created,
@@ -291,13 +291,13 @@ const fakerPosts = async (uri) => {
             complete,
         });
         const publicTaskList = await PublicTaskList.findOne({
-            _user: user?._id,
+            _user: user?._user,
         }).exec();
         if (publicTaskList) {
-            return await PublicTaskList.findOneAndUpdate({ _user: user?._id }, { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }).exec();
+            return await PublicTaskList.findOneAndUpdate({ _user: user?._user }, { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }).exec();
         }
         return await new PublicTaskList({
-            _user: user?._id,
+            _user: user?._user,
             tasks: [publicTask],
             totalTasks: 1,
         }).save();

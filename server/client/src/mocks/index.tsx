@@ -11,7 +11,7 @@ export const userProfile = { sub: "12345678", name: "Jordan", picture: "" };
 
 // export const initial: AuthStateType = {
 //   isSignedIn: true,
-//   userProfile: { userId: "12345678", name: "Jordan", img: "" },
+//   userProfile: { _user: "12345678", name: "Jordan", img: "" },
 //   beenSignedIn: true,
 //   beenSignedOut: false,
 //   loading: true,

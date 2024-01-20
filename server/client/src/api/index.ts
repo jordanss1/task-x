@@ -56,7 +56,7 @@ export const axiosCheckUsername = async (
 };
 
 export const axiosCreateProfile = async (
-  profile: ValidUserType["profile"]
+  profile: Omit<ValidUserType["profile"], "_user">
 ): Promise<UserType> => {
   const api = createAxios(true);
 
@@ -66,19 +66,11 @@ export const axiosCreateProfile = async (
 };
 
 export const axiosUpdateProfile = async (
-  profile: ValidUserType["profile"]
-): Promise<[ValidUserType, ValidUserType["profile"]]> => {
+  profile: Omit<ValidUserType["profile"], "_user">
+): Promise<ValidUserType> => {
   const api = createAxios(true);
 
   const { data } = await api.patch("/profile", { ...profile });
-
-  return data;
-};
-
-export const axiosDeleteProfile = async (): Promise<void> => {
-  const api = createAxios(true);
-
-  const { data } = await api.delete("/profile");
 
   return data;
 };
@@ -151,12 +143,12 @@ export const axiosGetAllTaskWallTasks = async (): Promise<
   return data;
 };
 
-export const axiosUpdateUserProfileContent = async (
-  profile: ValidUserType["profile"]
-): Promise<[TaskWallTaskType[] | false, TaskWallTaskType[] | false]> => {
+export const axiosUpdateUserProfileContent = async (): Promise<
+  [TaskWallTaskType[] | false, TaskWallTaskType[] | false]
+> => {
   const api = createAxios(true);
 
-  const { data } = await api.patch("/task_wall", profile);
+  const { data } = await api.patch("/task_wall");
 
   return data;
 };

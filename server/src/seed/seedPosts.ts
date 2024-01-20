@@ -11,7 +11,7 @@ import {
   PublicTaskType,
 } from "../models/PublicTaskList";
 import "../models/User";
-import { userSchema, UserType } from "../models/User";
+import { userSchema, UserType, ValidUserType } from "../models/User";
 
 config({ path: "../../../.env" });
 
@@ -266,7 +266,7 @@ const fakerPosts = async (uri: string) => {
 
           return {
             comment,
-            user,
+            user: user?.profile,
             likes,
             created: faker.date
               .between({
@@ -310,7 +310,7 @@ const fakerPosts = async (uri: string) => {
       const publicTask = new PublicTask<PublicTaskType>({
         task: task,
         taskId: faker.string.uuid(),
-        user: user as UserType,
+        user: user?.profile as ValidUserType["profile"],
         enabledDueDate,
         dueDate,
         created,
@@ -321,17 +321,17 @@ const fakerPosts = async (uri: string) => {
       });
 
       const publicTaskList = await PublicTaskList.findOne<PublicTaskListType>({
-        _user: user?._id,
+        _user: user?._user,
       }).exec();
 
       if (publicTaskList) {
         return await PublicTaskList.findOneAndUpdate(
-          { _user: user?._id },
+          { _user: user?._user },
           { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }
         ).exec();
       }
       return await new PublicTaskList({
-        _user: user?._id,
+        _user: user?._user,
         tasks: [publicTask],
         totalTasks: 1,
       }).save();

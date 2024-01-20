@@ -3,9 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.commentSchema = void 0;
 const mongoose_1 = require("mongoose");
 const Profile_1 = require("./Profile");
-const User_1 = require("./User");
 exports.commentSchema = new mongoose_1.Schema({
-    user: { required: true, type: User_1.userSchema },
+    user: { required: true, type: Profile_1.profileSchema },
     comment: { required: true, type: String },
     likes: {
         likes: { required: false, type: Number, default: 0 },

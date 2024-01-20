@@ -1,8 +1,8 @@
 import { assert } from "console";
 import { Express, Request } from "express";
-import { UpdateQuery, model } from "mongoose";
+import { HydratedDocument, UpdateQuery, model } from "mongoose";
 import requireJwt from "../middlewares/requireJwt";
-import { CommentType } from "../models/Comment";
+import { CommentType, commentSchema } from "../models/Comment";
 import { PublicTaskListType, PublicTaskType } from "../models/PublicTaskList";
 import { TaskType } from "../models/TaskList";
 import { ValidUserType } from "../models/User";
@@ -23,7 +23,7 @@ const taskWallRoutes = (app: Express) => {
     assertRequestWithUser(req);
 
     try {
-      const data = await PublicTaskList.findOne({ _user: req.user._id })
+      const data = await PublicTaskList.findOne({ _user: req.user._user })
         .select("tasks")
         .exec();
 
@@ -60,26 +60,65 @@ const taskWallRoutes = (app: Express) => {
   app.patch(
     "/api/task_wall",
     requireJwt,
-    async (
-      req: Request<any, {}, ValidUserType["profile"] & { _id: string }>,
-      res
-    ) => {
-      assertRequestWithUser<ValidUserType["profile"] & { _id: string }>(req);
+    async (req: Request<any, {}, ValidUserType["profile"]>, res) => {
+      assertRequestWithUser<ValidUserType["profile"]>(req);
 
-      const { userName, _id } = req.body;
-
-      // in task likes and comment likes we have _id
-      // in comments we have profile._id
+      const { _user, profile } = req.user as ValidUserType;
 
       try {
-        const found = await PublicTaskList.find<PublicTaskListType>(
+        await PublicTaskList.updateMany(
           {},
-          {},
-          { arrayFilters: [{ like: "users" }, { "user._id": _id }] }
+          {
+            $set: {
+              "tasks.$[commentUser].user.profilePicture":
+                profile.profilePicture,
+              "tasks.$[commentUser].user.userName": profile.userName,
+              "tasks.$[commentUser].user.nameLowerCase":
+                profile.userName.toLowerCase(),
+              "tasks.$[].likes.users.$[user].userName": profile.userName,
+              "tasks.$[].likes.users.$[user].nameLowerCase":
+                profile.userName.toLowerCase(),
+              "tasks.$[].likes.users.$[user].profilePicture":
+                profile.profilePicture,
+              "tasks.$[].comments.$[commentUser].user.profilePicture":
+                profile.profilePicture,
+              "tasks.$[].comments.$[commentUser].user.userName":
+                profile.userName,
+              "tasks.$[].comments.$[commentUser].user.nameLowerCase":
+                profile.userName.toLowerCase(),
+              "tasks.$[].comments.$[].likes.users.$[user].profilePicture":
+                profile.profilePicture,
+              "tasks.$[].comments.$[].likes.users.$[user].userName":
+                profile.userName,
+              "tasks.$[].comments.$[].likes.users.$[user].nameLowerCase":
+                profile.userName.toLowerCase(),
+            },
+          },
+          {
+            arrayFilters: [
+              { "user._user": _user },
+              { "commentUser.user._user": _user },
+            ],
+          }
         ).exec();
 
-        console.log(found);
-        res.send([false, false]);
+        const publicTasks = await PublicTaskList.find({
+          totalTasks: { $gt: 0 },
+        })
+          .select(["tasks", "-_id"])
+          .exec();
+
+        let allPublicTasks: PublicTaskType[] = [];
+
+        publicTasks.forEach(({ tasks }) => {
+          return allPublicTasks.push(...tasks);
+        });
+
+        const userTasks = allPublicTasks.filter(
+          ({ user }) => user._user === _user
+        );
+
+        res.send([allPublicTasks || false, userTasks || false]);
       } catch (err) {
         console.log(err);
         res.status(500).send("Problem");
@@ -102,7 +141,7 @@ const taskWallRoutes = (app: Express) => {
 
       const newComment = new Comment<CommentType>({
         comment,
-        user: req.user,
+        user: req.user.profile as ValidUserType["profile"],
         created: new Date().toISOString(),
       });
 

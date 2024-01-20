@@ -1,18 +1,18 @@
-import { ReactNode } from "react";
-import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
-import App from "../App.tsx";
-import { customRender } from "../../test-utils/test-utils.tsx";
-import { Provider } from "react-redux";
-import { userProfile } from "../../mocks/index.tsx";
 import { waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { ReactNode } from "react";
+import { Provider } from "react-redux";
 import { store } from "../../app/store.ts";
-import { changeTodoHandler } from "../../mocks/handlers.ts";
+import { TodoType } from "../../features/todos/todosSlice.ts";
 import {
   multipleTodosExistForLoggedInUser,
   oneTodoExistsForLoggedInUser,
 } from "../../mocks/api.ts";
-import { TodoType } from "../../features/todos/todosSlice.ts";
+import { changeTodoHandler } from "../../mocks/handlers.ts";
+import { userProfile } from "../../mocks/index.tsx";
+import { customRender } from "../../test-utils/test-utils.tsx";
+import App from "../App.tsx";
 
 type CreateTodoType = (
   queries: (HTMLInputElement | HTMLButtonElement)[],
@@ -116,7 +116,7 @@ describe("Logged in user has todos", () => {
 
     await createTodoFunction(queries, {
       todo: "New todo",
-      userId: "12345678",
+      _user: "12345678",
       id: 13,
     });
 
@@ -139,7 +139,7 @@ describe("Logged in user has todos", () => {
 
     changeTodoHandler({
       todo: "done",
-      userId: "12345678",
+      _user: "12345678",
       id: 12,
     });
 
@@ -173,7 +173,7 @@ describe("Logged in user has todos", () => {
 
     await createTodoFunction(queries, {
       todo: "New todo",
-      userId: "12345678",
+      _user: "12345678",
       id: 13,
     });
 
@@ -272,7 +272,7 @@ describe("Logged in user has many todos and arrows that change pages work as the
 
     await createTodoFunction(queries, {
       todo: "Second page todo",
-      userId: "12345678",
+      _user: "12345678",
       id: 18,
     });
 
@@ -321,7 +321,7 @@ describe("Logged in user has many todos and arrows that change pages work as the
 
     await createTodoFunction(queries, {
       todo: "Second page todo",
-      userId: "12345678",
+      _user: "12345678",
       id: 18,
     });
 

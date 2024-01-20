@@ -162,12 +162,12 @@ export const sendCommentLike = createAsyncThunk<
 
 export const updateUserProfileContent = createAsyncThunk<
   void,
-  ValidUserType["profile"],
+  undefined,
   { state: StateType }
->("taskWall/updatedUserProfileContent", async (profile, { dispatch }) => {
+>("taskWall/updatedUserProfileContent", async (undefined, { dispatch }) => {
   try {
     const [allTaskWallTasks, userTaskWallTasks] =
-      await axiosUpdateUserProfileContent(profile);
+      await axiosUpdateUserProfileContent();
 
     dispatch(assignAllWallTasks(allTaskWallTasks));
 
@@ -176,6 +176,8 @@ export const updateUserProfileContent = createAsyncThunk<
     if (err instanceof AxiosError) {
       dispatch(setError(err.response?.data));
     }
+
+    console.log(err);
   }
 });
 
@@ -217,6 +219,8 @@ export const updateTaskState = (
   action: PayloadAction<TaskWallTaskType[] | TaskType[] | false>,
   taskState: string
 ) => {
+  console.log(action.payload);
+
   if (action.payload) {
     state[taskState] = action.payload;
     return;
@@ -257,6 +261,8 @@ const taskWallSlice = createSlice({
       if (action.payload) {
         action.payload = [...action.payload].sort((a, b) => sort(a, b));
       }
+
+      console.log(action.payload);
 
       updateTaskState(state, action, "allTaskWallTasks");
     },

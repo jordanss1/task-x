@@ -8,7 +8,7 @@ import TaskWallTaskStatusAwards from "./TaskWallTaskStatusAwards";
 import TaskWallTaskStatusDue from "./TaskWallTaskStatusDue";
 
 type TaskWallTaskStatusPropsType = {
-  user: ValidUserType;
+  user: ValidUserType["profile"];
   awards: AwardType[];
   created: string;
   dueDate?: string;
@@ -23,7 +23,7 @@ const TaskWallTaskStatus = ({
   complete,
 }: TaskWallTaskStatusPropsType): ReactElement => {
   const mobile = useMediaQuery(640);
-  const { profilePicture, userName } = user.profile;
+  const { profilePicture, userName } = user;
 
   return (
     <div className="flex justify-between items-center">

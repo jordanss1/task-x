@@ -24,7 +24,7 @@ export const getUser = createAsyncThunk<UserType | undefined>(
 
 export const createProfile = createAsyncThunk<
   UserType | ValidUserType,
-  ValidUserType["profile"],
+  Omit<ValidUserType["profile"], "_user">,
   { state: StateType }
 >("auth/createProfile", async (profile, { getState, dispatch }) => {
   const { user } = getState().auth;
@@ -43,15 +43,15 @@ export const createProfile = createAsyncThunk<
 
 export const updateProfile = createAsyncThunk<
   ValidUserType,
-  ValidUserType["profile"],
+  Omit<ValidUserType["profile"], "_user">,
   { state: StateType }
 >("auth/updateProfile", async (profile, { dispatch, getState }) => {
   const { user } = getState().auth;
 
   try {
-    const [user, prevProfile] = await axiosUpdateProfile(profile);
+    const user = await axiosUpdateProfile(profile);
 
-    await dispatch(updateUserProfileContent(prevProfile));
+    await dispatch(updateUserProfileContent());
 
     dispatch(setSuccess("Profile updated successfully"));
     return user;

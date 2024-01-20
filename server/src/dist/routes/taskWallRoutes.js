@@ -12,7 +12,7 @@ const taskWallRoutes = (app) => {
     app.get("/api/task_wall/user", requireJwt_1.default, async (req, res) => {
         (0, types_1.assertRequestWithUser)(req);
         try {
-            const data = await PublicTaskList.findOne({ _user: req.user._id })
+            const data = await PublicTaskList.findOne({ _user: req.user._user })
                 .select("tasks")
                 .exec();
             res.send(data ? data.tasks.map((task) => task) : false);
@@ -44,13 +44,40 @@ const taskWallRoutes = (app) => {
     });
     app.patch("/api/task_wall", requireJwt_1.default, async (req, res) => {
         (0, types_1.assertRequestWithUser)(req);
-        const { userName, _id } = req.body;
-        // in task likes and comment likes we have _id
-        // in comments we have profile._id
+        const { _user, profile } = req.user;
         try {
-            const found = await PublicTaskList.find({}, {}, { arrayFilters: [{ like: "users" }, { "user._id": _id }] }).exec();
-            console.log(found);
-            res.send([false, false]);
+            await PublicTaskList.updateMany({}, {
+                $set: {
+                    "tasks.$[commentUser].user.profilePicture": profile.profilePicture,
+                    "tasks.$[commentUser].user.userName": profile.userName,
+                    "tasks.$[commentUser].user.nameLowerCase": profile.userName.toLowerCase(),
+                    "tasks.$[].likes.users.$[user].userName": profile.userName,
+                    "tasks.$[].likes.users.$[user].nameLowerCase": profile.userName.toLowerCase(),
+                    "tasks.$[].likes.users.$[user].profilePicture": profile.profilePicture,
+                    "tasks.$[].comments.$[commentUser].user.profilePicture": profile.profilePicture,
+                    "tasks.$[].comments.$[commentUser].user.userName": profile.userName,
+                    "tasks.$[].comments.$[commentUser].user.nameLowerCase": profile.userName.toLowerCase(),
+                    "tasks.$[].comments.$[].likes.users.$[user].profilePicture": profile.profilePicture,
+                    "tasks.$[].comments.$[].likes.users.$[user].userName": profile.userName,
+                    "tasks.$[].comments.$[].likes.users.$[user].nameLowerCase": profile.userName.toLowerCase(),
+                },
+            }, {
+                arrayFilters: [
+                    { "user._user": _user },
+                    { "commentUser.user._user": _user },
+                ],
+            }).exec();
+            const publicTasks = await PublicTaskList.find({
+                totalTasks: { $gt: 0 },
+            })
+                .select(["tasks", "-_id"])
+                .exec();
+            let allPublicTasks = [];
+            publicTasks.forEach(({ tasks }) => {
+                return allPublicTasks.push(...tasks);
+            });
+            const userTasks = allPublicTasks.filter(({ user }) => user._user === _user);
+            res.send([allPublicTasks || false, userTasks || false]);
         }
         catch (err) {
             console.log(err);
@@ -64,11 +91,11 @@ const taskWallRoutes = (app) => {
             res.status(400).send("Comment does not meet required length");
             return;
         }
-        const newComment = await new Comment({
+        const newComment = new Comment({
             comment,
-            user: req.user,
+            user: req.user.profile,
             created: new Date().toISOString(),
-        }).save();
+        });
         try {
             await PublicTaskList.findOneAndUpdate({
                 tasks: { $elemMatch: { taskId } },

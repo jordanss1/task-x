@@ -17,8 +17,8 @@ const requireJwt = async (req, res, next) => {
     const unprotectedPaths = req.path.includes("current_user");
     if (unprotectedPaths) {
         const user = req.cookies.token ? verifyToken(req.cookies.token) : undefined;
-        const foundUser = await User.findOne({ userId: user?.userId })
-            .select(["-_id", "userId", "profile"])
+        const foundUser = await User.findOne({ _user: user?._user })
+            .select(["-_id", "_user", "profile"])
             .exec();
         req.user = foundUser || undefined;
         next();
@@ -37,7 +37,7 @@ const requireJwt = async (req, res, next) => {
     };
     try {
         const { user } = jsonwebtoken_1.default.verify(token, jwtSecret);
-        const foundUser = await User.findOne({ userId: user?.userId }).exec();
+        const foundUser = await User.findOne({ _user: user?._user }).exec();
         if (!foundUser) {
             errorFunc();
             return;

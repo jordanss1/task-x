@@ -1,6 +1,6 @@
-import { ReactElement, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { authSelector, getUser } from "../../../features/auth/authSlice";
+import { ReactElement } from "react";
+import { useSelector } from "react-redux";
+import { authSelector } from "../../../features/auth/authSlice";
 import "../../../styles/dashboard.css";
 import "../../../styles/profile.css";
 import DashboardNav from "../../dashboard/DashboardNav";

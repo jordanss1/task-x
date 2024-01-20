@@ -80,6 +80,7 @@ const googleAuthRoutes = (app: Express) => {
           { _id: req.user?._id },
           {
             profile: {
+              _user: req.user?._user,
               userName,
               profilePicture,
               nameLowerCase: userName.toLowerCase(),
@@ -119,6 +120,7 @@ const googleAuthRoutes = (app: Express) => {
           { _id: req.user?._id },
           {
             profile: {
+              _user: req.user._user,
               userName,
               profilePicture,
               nameLowerCase: userName.toLowerCase(),
@@ -132,10 +134,7 @@ const googleAuthRoutes = (app: Express) => {
           res
         );
 
-        response.send([
-          user as HydratedDocument<ValidUserType>,
-          req.user.profile,
-        ]);
+        response.send(user as HydratedDocument<ValidUserType>);
       } catch (err) {
         res.status(500).send("Problem updating profile, try again");
       }

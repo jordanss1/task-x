@@ -13,7 +13,7 @@ export type TaskTypeSent = Omit<TaskType, "created" | "taskId" | "complete">;
 export type TaskWallTaskType = {
   task: string;
   taskId: string;
-  user: ValidUserType;
+  user: ValidUserType["profile"];
   dueDate?: string;
   enabledDueDate: boolean;
   created: string;
@@ -27,11 +27,11 @@ export type AwardType = "supported" | "superSupported" | "communityLegend";
 
 export type LikesType = {
   likes: number;
-  users: NonNullable<UserProfile["profile"]>[];
+  users: ValidUserType["profile"][];
 };
 
 export type CommentType = {
-  user: ValidUserType;
+  user: ValidUserType["profile"];
   comment: string;
   likes: LikesType;
   created: string;
@@ -44,6 +44,7 @@ export type ValidUserType = Omit<UserType, "profile"> & {
 
 export type UserProfile = {
   profile: {
+    _user: string;
     userName: string;
     profilePicture: string;
   } | null;
@@ -51,7 +52,7 @@ export type UserProfile = {
 
 export type UserType = {
   _id: string;
-  userId: string;
+  _user: string;
   __v: number;
 } & UserProfile;
 
