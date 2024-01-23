@@ -4,10 +4,12 @@ import passport from "passport";
 import createTokenAndCookie from "../functions/createTokenAndCookie";
 import requireJwt from "../middlewares/requireJwt";
 import { PublicTaskListType } from "../models/PublicTaskList";
+import { TaskListType } from "../models/TaskList";
 import { UserType, ValidUserType } from "../models/User";
 import { assertRequestWithUser } from "../types";
 
 const User = model<UserType>("users");
+const TaskList = model<TaskListType>("taskList");
 const PublicTaskList = model<PublicTaskListType>("publicTaskList");
 
 const googleAuthRoutes = (app: Express) => {
@@ -140,6 +142,73 @@ const googleAuthRoutes = (app: Express) => {
       }
     }
   );
+
+  app.delete("/api/profile", requireJwt, async (req, res) => {
+    try {
+      await TaskList.findOneAndDelete<TaskListType>({ _user: req.user?._user });
+    } catch (err) {
+      res.status(500).send("Problem deleting your tasks, try again");
+      return;
+    }
+
+    try {
+      await PublicTaskList.findOneAndDelete({ _user: req.user?._user }).exec();
+    } catch (err) {
+      res.status(500).send("Problem deleting your tasks, try again");
+      return;
+    }
+
+    try {
+      await PublicTaskList.updateMany(
+        {},
+        {
+          $pull: {
+            "tasks.$[].comments": {
+              "user._user": req.user?._user,
+            },
+            "tasks.$[].likes.users": {
+              _user: req.user?._user,
+            },
+          },
+          $inc: {
+            "tasks.$[like].likes.likes": -1,
+          },
+        },
+        { arrayFilters: [{ "like.likes.users._user": req.user?._user }] }
+      );
+
+      await PublicTaskList.updateMany(
+        {},
+        {
+          $inc: {
+            "tasks.$[].comments.$[like].likes.likes": -1,
+          },
+          $pull: {
+            "tasks.$[].comments.$[].likes.users": {
+              _user: req.user?._user,
+            },
+          },
+        },
+        { arrayFilters: [{ "like.likes.users._user": req.user?._user }] }
+      ).exec();
+    } catch (err) {
+      res.status(500).send("Problem deleting your content, try again");
+      return;
+    }
+
+    try {
+      await User.findOneAndDelete({
+        _user: req.user?._user,
+      }).exec();
+
+      req.user = undefined;
+      res.clearCookie("token");
+    } catch (err) {
+      res.status(500).send("Problem deleting your account, try again");
+    }
+
+    res.status(200).send();
+  });
 };
 
 export default googleAuthRoutes;

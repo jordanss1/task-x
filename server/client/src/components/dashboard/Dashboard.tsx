@@ -41,20 +41,23 @@ const Dashboard = (): ReactElement => {
   const dismissForm = formActive ? () => dispatch(toggleForm()) : () => {};
 
   return (
-    <motion.div
-      onClick={() => dismissForm()}
-      style={{ paddingLeft: "var(--p-left-from)" }}
-      animate={{
-        paddingLeft: sidebarExpanded
-          ? "var(--p-left-to)"
-          : "var(--p-left-from)",
-      }}
-      className="dashboard relative isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
-    >
-      {formActive && (
-        <ModalBackground mixBlendMode="normal" background="rgba(0,0,0,.2)" />
+    <>
+      {(user === null || (user && !user.profile)) && (
+        <div className="z-[100] absolute h-screen w-full bg-white" />
       )}
-      {user && user.profile && (
+      <motion.div
+        onClick={() => dismissForm()}
+        style={{ paddingLeft: "var(--p-left-from)" }}
+        animate={{
+          paddingLeft: sidebarExpanded
+            ? "var(--p-left-to)"
+            : "var(--p-left-from)",
+        }}
+        className="dashboard relative isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
+      >
+        {formActive && (
+          <ModalBackground mixBlendMode="normal" background="rgba(0,0,0,.2)" />
+        )}
         <>
           <Header
             link="/dashboard/home"
@@ -70,8 +73,8 @@ const Dashboard = (): ReactElement => {
             <DashboardNewTaskButton formActive={formActive} />
           </main>
         </>
-      )}
-    </motion.div>
+      </motion.div>
+    </>
   );
 };
 

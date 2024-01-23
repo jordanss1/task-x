@@ -15,7 +15,7 @@ type HeaderPropsType = {
   profile?: boolean;
 };
 
-const Header = ({
+const   Header = ({
   link,
   containerClass,
   nav,

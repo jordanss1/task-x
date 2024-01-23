@@ -1,4 +1,4 @@
-import { InferSchemaType, Schema, Types, model } from "mongoose";
+import { InferSchemaType, Schema, model } from "mongoose";
 import { commentSchema } from "./Comment";
 import { profileSchema } from "./Profile";
 import { userSchema } from "./User";

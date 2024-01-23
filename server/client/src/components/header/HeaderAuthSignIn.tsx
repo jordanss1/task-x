@@ -33,6 +33,7 @@ const HeaderAuthSignIn = ({
       style={{
         background: colors.whiteShades[0],
         fontFamily: fonts.orbitron,
+        boxShadow: "1px 1px 10px rgb(0,0,0,.4)",
         letterSpacing: "1px",
       }}
       onClick={async () =>

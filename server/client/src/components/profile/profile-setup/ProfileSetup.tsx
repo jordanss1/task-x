@@ -84,8 +84,13 @@ const ProfileSetup = (): ReactElement => {
     }
   }, [user]);
 
+  console.log(user && user?.profile);
+
   return (
     <>
+      {(user === null || (user && user.profile)) && (
+        <div className="z-[100] h-screen w-full bg-white" />
+      )}
       <ProgressBar progress={progress} />
       <motion.main
         style={{
@@ -130,65 +135,63 @@ const ProfileSetup = (): ReactElement => {
             },
           }}
         />
-        {user && !user.profile && (
-          <>
-            <motion.div
-              style={{
-                opacity: 0,
-                background: "linear-gradient(#991ff1, white, black, #991ff1)",
-                width: "var(--width)",
-              }}
-              animate={{
-                opacity: 0.4,
-                transition: {
-                  delay: 1,
-                  duration: 1,
-                },
-              }}
-              className="sm:[--width:90%] [--width:100%] mix-blend-color-burn absolute rounded-[100px] inset-0 m-auto h-[95%] -z-[10]"
-            />
+        <>
+          <motion.div
+            style={{
+              opacity: 0,
+              background: "linear-gradient(#991ff1, white, black, #991ff1)",
+              width: "var(--width)",
+            }}
+            animate={{
+              opacity: 0.4,
+              transition: {
+                delay: 1,
+                duration: 1,
+              },
+            }}
+            className="sm:[--width:90%] [--width:100%] mix-blend-color-burn absolute rounded-[100px] inset-0 m-auto h-[95%] -z-[10]"
+          />
 
-            <Formik<ProfileSchemaType>
-              initialValues={{
-                profilePicture: `/api/profileIcons/default-profile.svg`,
-                userName: "",
-              }}
-              onSubmit={async (values) => await dispatch(createProfile(values))}
-              validationSchema={profileSchema}
-            >
-              {(props) => {
-                const handleStep: HandleStepType = async (e, increment) => {
-                  e.preventDefault();
+          <Formik<ProfileSchemaType>
+            initialValues={{
+              profilePicture: `/api/profileIcons/default-profile.svg`,
+              userName: "",
+            }}
+            onSubmit={async (values) => await dispatch(createProfile(values))}
+            validationSchema={profileSchema}
+          >
+            {(props) => {
+              const handleStep: HandleStepType = async (e, increment) => {
+                e.preventDefault();
 
-                  setStep((prev) => {
-                    if (increment) {
-                      return prev + 1;
-                    } else {
-                      cycleFirst(prev === 1 ? 1 : 0);
-                      return prev - 1;
-                    }
-                  });
-                };
+                setStep((prev) => {
+                  if (increment) {
+                    return prev + 1;
+                  } else {
+                    cycleFirst(prev === 1 ? 1 : 0);
+                    return prev - 1;
+                  }
+                });
+              };
 
-                return (
-                  <form className="relative justify-evenly items-center flex flex-col gap-10 h-full">
-                    <ProfileSetupHeader firstCycle={firstCycle} step={step} />
-                    <ProfileSetupContent
-                      contentCycle={contentCycle}
-                      firstCycle={firstCycle}
-                      step={step}
-                    />
-                    <ProfileSetupControls
-                      step={step}
-                      handleStep={handleStep}
-                      {...props}
-                    />
-                  </form>
-                );
-              }}
-            </Formik>
-          </>
-        )}
+              return (
+                <form className="relative justify-evenly items-center flex flex-col gap-10 h-full">
+                  <ProfileSetupHeader firstCycle={firstCycle} step={step} />
+                  <ProfileSetupContent
+                    contentCycle={contentCycle}
+                    firstCycle={firstCycle}
+                    step={step}
+                  />
+                  <ProfileSetupControls
+                    step={step}
+                    handleStep={handleStep}
+                    {...props}
+                  />
+                </form>
+              );
+            }}
+          </Formik>
+        </>
       </motion.main>
     </>
   );

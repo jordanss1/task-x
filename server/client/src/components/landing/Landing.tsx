@@ -5,6 +5,7 @@ import { interfaceSelector } from "../../features/interface/interfaceSlice";
 import "../../styles/landing.css";
 import ProgressBar from "../__reusable/ProgressBar";
 import Header from "../header/Header";
+import LandingFooter from "./LandingHeroFooter";
 import LandingHero from "./LandingHero";
 
 const Landing = (): ReactElement => {

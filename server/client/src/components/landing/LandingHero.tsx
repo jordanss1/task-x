@@ -1,6 +1,7 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 import setHeroInterval from "../../functions/setHeroInterval";
 import LandingHeroCenter from "./LandingHeroCenter";
+import LandingHeroFooter from "./LandingHeroFooter";
 import LandingHeroLeft from "./LandingHeroLeft";
 import LandingHeroRight from "./LandingHeroRight";
 import { SidebarHeadingsType } from "./content";
@@ -13,7 +14,7 @@ export type HandleClickType = (
 const LandingHero = (): ReactElement => {
   const [hero, setHero] = useState<SidebarHeadingsType>("Welcome");
 
-  const timer = useRef<NodeJS.Timer | number>(0);
+  const timer = useRef<NodeJS.Timeout | number>(0);
 
   const speed = useRef<"slow" | "fast">("slow");
 
@@ -26,7 +27,7 @@ const LandingHero = (): ReactElement => {
   const handleClick = (heading: typeof hero, currentIndex: number) => {
     speed.current = "fast";
 
-    clearInterval(timer.current as number);
+    clearInterval(timer.current);
 
     setHero(heading);
 
@@ -38,6 +39,7 @@ const LandingHero = (): ReactElement => {
       <LandingHeroLeft hero={hero} />
       <LandingHeroCenter hero={hero} speed={speed} />
       <LandingHeroRight hero={hero} speed={speed} handleClick={handleClick} />
+      <LandingHeroFooter />
     </section>
   );
 };

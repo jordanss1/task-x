@@ -65,6 +65,14 @@ export const axiosCreateProfile = async (
   return data;
 };
 
+export const axiosDeleteProfile = async (): Promise<void> => {
+  const api = createAxios(true);
+
+  const { data } = await api.delete("/profile");
+
+  return data;
+};
+
 export const axiosUpdateProfile = async (
   profile: Omit<ValidUserType["profile"], "_user">
 ): Promise<ValidUserType> => {

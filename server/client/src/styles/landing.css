@@ -252,7 +252,7 @@
 
   .hero {
     padding: 0;
-    padding-bottom: 20px;
+    padding-bottom: 35px;
     grid-template-columns: repeat(auto-fit, minmax(351px, 1fr));
     gap: 100px;
     align-items: first baseline;

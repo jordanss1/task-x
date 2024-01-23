@@ -11,19 +11,24 @@ const ProfileEdit = (): ReactElement => {
   const { user } = useSelector(authSelector);
 
   return (
-    <main className="profile_edit px-5 min-h-screen">
-      {user && user.profile && (
-        <>
-          <Header
-            profile
-            link="/dashboard/home"
-            containerClass="dashboard_header items-center sm:pt-0 pt-5"
-            nav={<DashboardNav profile />}
-          />
-          <ProfileEditForm user={user.profile} />
-        </>
+    <>
+      {(user === null || (user && user.profile)) && (
+        <div className="z-[100] h-screen w-full bg-white" />
       )}
-    </main>
+      <main className="profile_edit px-5 min-h-screen">
+        {user && user.profile && (
+          <>
+            <Header
+              profile
+              link="/dashboard/home"
+              containerClass="dashboard_header items-center sm:pt-0 pt-5"
+              nav={<DashboardNav profile />}
+            />
+            <ProfileEditForm user={user.profile} />
+          </>
+        )}
+      </main>
+    </>
   );
 };
 

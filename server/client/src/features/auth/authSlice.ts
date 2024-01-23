@@ -7,6 +7,7 @@ import {
 import { AxiosError } from "axios";
 import {
   axiosCreateProfile,
+  axiosDeleteProfile,
   axiosFetchUser,
   axiosUpdateProfile,
 } from "../../api";
@@ -41,6 +42,37 @@ export const createProfile = createAsyncThunk<
   }
 });
 
+export const deleteProfile = createAsyncThunk<
+  void,
+  undefined,
+  { state: StateType }
+>("auth/createProfile", async (undefined, { dispatch, getState }) => {
+  const { authFetching } = getState().auth;
+  if (!authFetching) {
+    dispatch(setAuthFetching(true));
+  }
+
+  try {
+    await axiosDeleteProfile();
+
+    dispatch(setSuccess("Your profile has been deleted"));
+
+    if (authFetching) {
+      dispatch(setAuthFetching(false));
+    }
+
+    dispatch(setDeletedProfile(true));
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      dispatch(setError(err.response?.data));
+    }
+
+    if (authFetching) {
+      dispatch(setAuthFetching(false));
+    }
+  }
+});
+
 export const updateProfile = createAsyncThunk<
   ValidUserType,
   Omit<ValidUserType["profile"], "_user">,
@@ -68,12 +100,14 @@ type AuthStateType = {
   user: UserStateType;
   updatedProfile: boolean;
   authFetching: boolean;
+  deletedProfile: boolean;
 };
 
 const initialState: AuthStateType = {
   user: null,
   updatedProfile: false,
   authFetching: false,
+  deletedProfile: false,
 };
 
 type ReducerMatcherType = (
@@ -97,6 +131,9 @@ const authSlice = createSlice({
     },
     setAuthFetching: (state, action: PayloadAction<boolean>) => {
       state.authFetching = action.payload;
+    },
+    setDeletedProfile: (state, action: PayloadAction<boolean>) => {
+      state.deletedProfile = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -123,7 +160,8 @@ const authSlice = createSlice({
 
 type AuthSelectorType = (state: StateType) => AuthStateType;
 
-export const { setUpdatedProfile } = authSlice.actions;
+export const { setUpdatedProfile, setAuthFetching, setDeletedProfile } =
+  authSlice.actions;
 
 export const authSelector: AuthSelectorType = (state) => state.auth;
 

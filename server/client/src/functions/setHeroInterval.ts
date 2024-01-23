@@ -6,7 +6,7 @@ type SetHeroIntervalType = (
   >,
   currentIndex?: number,
   speed?: React.MutableRefObject<string>
-) => NodeJS.Timer;
+) => NodeJS.Timeout;
 
 const setHeroInterval: SetHeroIntervalType = (setHero, currentIndex, speed) => {
   let index: number = currentIndex ?? 0;
@@ -19,7 +19,7 @@ const setHeroInterval: SetHeroIntervalType = (setHero, currentIndex, speed) => {
     index = index < stateValues.length - 1 ? index + 1 : 0;
 
     setHero(stateValues[index]);
-  }, 4000);
+  }, 4500);
 };
 
 export default setHeroInterval;

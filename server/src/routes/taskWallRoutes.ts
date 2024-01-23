@@ -70,21 +70,19 @@ const taskWallRoutes = (app: Express) => {
           {},
           {
             $set: {
-              "tasks.$[commentUser].user.profilePicture":
-                profile.profilePicture,
-              "tasks.$[commentUser].user.userName": profile.userName,
-              "tasks.$[commentUser].user.nameLowerCase":
+              "tasks.$[deepUser].user.profilePicture": profile.profilePicture,
+              "tasks.$[deepUser].user.userName": profile.userName,
+              "tasks.$[deepUser].user.nameLowerCase":
                 profile.userName.toLowerCase(),
               "tasks.$[].likes.users.$[user].userName": profile.userName,
               "tasks.$[].likes.users.$[user].nameLowerCase":
                 profile.userName.toLowerCase(),
               "tasks.$[].likes.users.$[user].profilePicture":
                 profile.profilePicture,
-              "tasks.$[].comments.$[commentUser].user.profilePicture":
+              "tasks.$[].comments.$[deepUser].user.profilePicture":
                 profile.profilePicture,
-              "tasks.$[].comments.$[commentUser].user.userName":
-                profile.userName,
-              "tasks.$[].comments.$[commentUser].user.nameLowerCase":
+              "tasks.$[].comments.$[deepUser].user.userName": profile.userName,
+              "tasks.$[].comments.$[deepUser].user.nameLowerCase":
                 profile.userName.toLowerCase(),
               "tasks.$[].comments.$[].likes.users.$[user].profilePicture":
                 profile.profilePicture,
@@ -97,7 +95,7 @@ const taskWallRoutes = (app: Express) => {
           {
             arrayFilters: [
               { "user._user": _user },
-              { "commentUser.user._user": _user },
+              { "deepUser.user._user": _user },
             ],
           }
         ).exec();

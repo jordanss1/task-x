@@ -9,6 +9,7 @@ const createTokenAndCookie_1 = __importDefault(require("../functions/createToken
 const requireJwt_1 = __importDefault(require("../middlewares/requireJwt"));
 const types_1 = require("../types");
 const User = (0, mongoose_1.model)("users");
+const TaskList = (0, mongoose_1.model)("taskList");
 const PublicTaskList = (0, mongoose_1.model)("publicTaskList");
 const googleAuthRoutes = (app) => {
     app.get(`/api/auth/google`, passport_1.default.authenticate("google", {
@@ -82,6 +83,62 @@ const googleAuthRoutes = (app) => {
         catch (err) {
             res.status(500).send("Problem updating profile, try again");
         }
+    });
+    app.delete("/api/profile", requireJwt_1.default, async (req, res) => {
+        try {
+            await TaskList.findOneAndDelete({ _user: req.user?._user });
+        }
+        catch (err) {
+            res.status(500).send("Problem deleting your tasks, try again");
+            return;
+        }
+        try {
+            await PublicTaskList.findOneAndDelete({ _user: req.user?._user }).exec();
+        }
+        catch (err) {
+            res.status(500).send("Problem deleting your tasks, try again");
+            return;
+        }
+        try {
+            await PublicTaskList.updateMany({}, {
+                $pull: {
+                    "tasks.$[].comments": {
+                        "user._user": req.user?._user,
+                    },
+                    "tasks.$[].likes.users": {
+                        _user: req.user?._user,
+                    },
+                },
+                $inc: {
+                    "tasks.$[like].likes.likes": -1,
+                },
+            }, { arrayFilters: [{ "like.likes.users._user": req.user?._user }] });
+            await PublicTaskList.updateMany({}, {
+                $inc: {
+                    "tasks.$[].comments.$[like].likes.likes": -1,
+                },
+                $pull: {
+                    "tasks.$[].comments.$[].likes.users": {
+                        _user: req.user?._user,
+                    },
+                },
+            }, { arrayFilters: [{ "like.likes.users._user": req.user?._user }] }).exec();
+        }
+        catch (err) {
+            res.status(500).send("Problem deleting your content, try again");
+            return;
+        }
+        try {
+            await User.findOneAndDelete({
+                _user: req.user?._user,
+            }).exec();
+            req.user = undefined;
+            res.clearCookie("token");
+        }
+        catch (err) {
+            res.status(500).send("Problem deleting your account, try again");
+        }
+        res.status(200).send();
     });
 };
 exports.default = googleAuthRoutes;

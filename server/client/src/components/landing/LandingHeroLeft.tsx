@@ -8,7 +8,8 @@ import artificialDelay from "../../functions/artificialDelay";
 import useArtificialProgress from "../../hooks/useArtificialProgress";
 import Button from "../__reusable/Button";
 
-import { SidebarHeadingsType, contentItems } from "./content";
+import { SidebarHeadingsType } from "./content";
+import LandingHeroLeftContent from "./LandingHeroLeftBody";
 
 const buttonVariants: Variants = {
   hovered: {
@@ -57,8 +58,6 @@ const LandingHeroLeft = ({
   if (hero === "Prioritize") index = 1;
   if (hero === "Popular") index = 2;
 
-  const { heading, body, button } = contentItems[index];
-
   const buttonProps = {
     style: {
       width: "100%",
@@ -87,13 +86,20 @@ const LandingHeroLeft = ({
     </a>
   );
 
+  const renderHeading =
+    index === 0
+      ? "Login with Google"
+      : index === 1
+      ? "Order your tasks"
+      : "Need motivation?";
+
   return (
     <div className="hero_left">
-      <h2 className="hero_left_heading leading-snug">{heading}</h2>
+      <h2 className="hero_left_heading leading-snug">{renderHeading}</h2>
       <div className="hero_left_body">
-        <p>{body}</p>
+        <LandingHeroLeftContent index={index} />
       </div>
-      <div className="pt-5">{button && renderButton}</div>
+      <div className="pt-5">{index === 0 && renderButton}</div>
     </div>
   );
 };

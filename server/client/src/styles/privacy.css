@@ -1,0 +1,61 @@
+.privacy {
+  background: linear-gradient(to bottom, #f4f0ed 0%, #e0dcd9 30%, #f4f0ed 100%);
+  isolation: isolate;
+}
+
+.privacy::before {
+  content: "";
+  position: absolute;
+  inset: 70px 0 0 0;
+  z-index: -1;
+  filter: blur(100px);
+  background: linear-gradient(
+    to right,
+    rgba(100, 100, 100, 0.1),
+    rgba(0, 0, 0, 0.1),
+    rgb(100, 100, 100, 0.3)
+  );
+}
+
+/* .privacy_1st_img_section::after {
+  z-index: -1;
+  mix-blend-mode: hard-light;
+  left: calc(0% - 100px);
+  top: 0%;
+  height: 100%;
+  width: min(100%, 130%);
+  max-width: 1000px;
+  content: "";
+  background: linear-gradient(
+    120deg,
+    #e0dcd9,
+    rgb(153, 31, 255) 30% 70%,
+    #e0dcd9
+  );
+  position: absolute;
+  border: 5px solid black;
+  border-radius: 30px;
+} */
+
+.privacy_1st_img::before {
+  z-index: 10;
+  /* mix-blend-mode: hard-light; */
+  inset: 0;
+  height: 50%;
+  bottom: 20%;
+  content: "";
+  background: rgb(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  position: absolute;
+}
+
+.privacy_1st_img::after {
+  z-index: 10;
+  mix-blend-mode: hard-light;
+  inset: 0;
+  top: 50%;
+  height: 50%;
+  content: "";
+  background: rgb(0, 0, 0, 0.4);
+  position: absolute;
+}

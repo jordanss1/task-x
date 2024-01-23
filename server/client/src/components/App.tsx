@@ -15,6 +15,7 @@ import "../styles/all.css";
 import Popup from "./__reusable/Popup";
 import Dashboard from "./dashboard/Dashboard";
 import Landing from "./landing/Landing";
+import PrivacyPolicy from "./privacy/PrivacyPolicy";
 import ProfileEdit from "./profile/profile-edit/ProfileEdit";
 import ProfileSetup from "./profile/profile-setup/ProfileSetup";
 
@@ -51,6 +52,7 @@ const App = (): ReactElement => {
       </AnimatePresence>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/setup" element={<ProfileSetup />} />
         <Route path="profile/edit" element={<ProfileEdit />} />
         <Route path="/dashboard/home" element={<Dashboard />} />
