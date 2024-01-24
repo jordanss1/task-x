@@ -53,7 +53,7 @@ const Dashboard = (): ReactElement => {
             ? "var(--p-left-to)"
             : "var(--p-left-from)",
         }}
-        className="dashboard relative isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:50px] [--p-left-from:50px]"
+        className="dashboard relative isolate min-h-screen sm:[--p-left-from:120px] sm:[--p-left-to:205px] [--p-left-to:20px] [--p-left-from:20px]"
       >
         {formActive && (
           <ModalBackground mixBlendMode="normal" background="rgba(0,0,0,.2)" />

@@ -23,7 +23,7 @@
 
 @media screen and (max-width: 640px) {
   .dashboard {
-    padding: 0 50px;
+    padding: 0 20px;
   }
 
   .dashboard_header {

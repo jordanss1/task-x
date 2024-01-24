@@ -29,20 +29,20 @@ const TaskWallPlaceholder = ({
       }}
       className="flex sm:ps-8 h-[400px] flex-col items-center justify-center py-10 p-4 sm:w-4/5 sm:max-w-[366px] rounded-3xl"
     >
-      <div className="flex max-w-[300px] w-full sm:max-w-none gap-5 sm:gap-3 justify-center h-full items-center">
+      <div className="flex max-w-[300px] w-full sm:max-w-none gap-1 sm:gap-3 justify-center h-full items-center">
         <NeonClipboard style={{ minWidth: "200px" }} size={200} />
         <div
           style={{ fontFamily: fonts.orbitron }}
           className="h-full flex items-center py-6"
         >
-          <span className="text-2xl font-medium w-3/4">{notice}</span>
+          <span className="sm:text-2xl text-lg font-medium w-3/4">{notice}</span>
         </div>
       </div>
       <div className="flex h-full w-full max-w-[300px]">
-        <div className="flex sm:justify-normal items-center justify-center sm:gap-2 gap-3">
+        <div className="flex sm:justify-normal items-center justify-center sm:gap-2 gap-1">
           <p
             style={{ fontFamily: fonts.orbitron }}
-            className="text-lg ps-1 max-w-[60%] sm:max-w-[70%] w-full font-medium"
+            className="sm:text-lg text-sm ps-1 max-w-[60%] sm:max-w-[70%] w-full font-medium"
           >
             {instruction}
           </p>

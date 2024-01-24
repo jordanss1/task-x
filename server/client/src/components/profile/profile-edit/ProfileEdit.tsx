@@ -12,7 +12,7 @@ const ProfileEdit = (): ReactElement => {
 
   return (
     <>
-      {(user === null || (user && user.profile)) && (
+      {(user === null || (user && !user.profile)) && (
         <div className="z-[100] h-screen w-full bg-white" />
       )}
       <main className="profile_edit px-5 min-h-screen">
