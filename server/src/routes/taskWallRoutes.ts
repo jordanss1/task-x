@@ -1,8 +1,13 @@
-import { assert } from "console";
 import { Express, Request } from "express";
 import { HydratedDocument, UpdateQuery, model } from "mongoose";
 import requireJwt from "../middlewares/requireJwt";
 import { CommentType, commentSchema } from "../models/Comment";
+import {
+  AwardInteractionType,
+  CommentInteractionType,
+  InteractionType,
+  NotificationsType,
+} from "../models/Notifications";
 import { PublicTaskListType, PublicTaskType } from "../models/PublicTaskList";
 import { TaskType } from "../models/TaskList";
 import { ValidUserType } from "../models/User";
@@ -16,6 +21,10 @@ import {
 } from "../types";
 
 const PublicTaskList = model<PublicTaskListType>("publicTaskList");
+const Notifications = model<NotificationsType>("notifications");
+const Interaction = model<InteractionType>("interaction");
+const CommentInteraction = model<CommentInteractionType>("commentNotification");
+const AwardNotification = model<AwardInteractionType>("awardNotification");
 const Comment = model<CommentType>("comment");
 
 const taskWallRoutes = (app: Express) => {
@@ -30,6 +39,7 @@ const taskWallRoutes = (app: Express) => {
       res.send(data ? data.tasks.map((task) => task) : false);
       return;
     } catch (err) {
+      console.log(err);
       res
         .status(500)
         .send("Issue retrieving user task wall tasks, server error");
@@ -53,6 +63,7 @@ const taskWallRoutes = (app: Express) => {
 
       res.send(allPublicTasks || false);
     } catch (err) {
+      console.log(err);
       res.status(500).send("Issue retrieving all wall tasks, server error");
     }
   });
@@ -137,10 +148,34 @@ const taskWallRoutes = (app: Express) => {
         return;
       }
 
+      const publicTask = await PublicTaskList.findOne({
+        tasks: { $elemMatch: { taskId } },
+      })
+        .select({
+          tasks: { $elemMatch: { taskId } },
+        })
+        .exec();
+
+      const userCommentNotification =
+        await Notifications.findOne<NotificationsType>({
+          userTaskComments: { $elemMatch: { taskId } },
+        })
+          .select("_user")
+          .exec();
+
+      const ownUserCommentOnOwnTask =
+        userCommentNotification?._user === req.user._user;
+
       const newComment = new Comment<CommentType>({
         comment,
         user: req.user.profile as ValidUserType["profile"],
         created: new Date().toISOString(),
+      });
+
+      const newCommentLikeNotificationObject = new CommentInteraction({
+        taskId,
+        commentId: newComment.id,
+        task: publicTask?.tasks[0]?.task,
       });
 
       try {
@@ -156,8 +191,34 @@ const taskWallRoutes = (app: Express) => {
           .select({ tasks: { $elemMatch: { taskId } } })
           .exec();
 
+        await Notifications.findOneAndUpdate<NotificationsType>(
+          { _user: req.user._user },
+          {
+            $push: { commentLikes: newCommentLikeNotificationObject },
+          }
+        ).exec();
+
+        if (!ownUserCommentOnOwnTask) {
+          await Notifications.findOneAndUpdate<NotificationsType>(
+            {
+              _user: publicTask?.tasks[0]?.user._user,
+            },
+            {
+              $inc: {
+                "userTaskComments.$[task].total": 1,
+              },
+              $set: {
+                "userTaskComments.$[task].unseen": true,
+                "userTaskComments.$[task].created": new Date().toISOString(),
+              },
+            },
+            { arrayFilters: [{ "task.taskId": taskId }] }
+          ).exec();
+        }
+
         res.send({ comment: newComment, taskId });
       } catch (err) {
+        console.log(err);
         res.status(500).send("Error adding comment, try again");
       }
     }
@@ -195,6 +256,7 @@ const taskWallRoutes = (app: Express) => {
 
         res.send({ comment: updatedComment, taskId });
       } catch (err) {
+        console.log(err);
         res.status(500).send("Error editing comment, try again");
       }
     }
@@ -243,6 +305,24 @@ const taskWallRoutes = (app: Express) => {
 
       let awardArray = currentAwards?.length ? currentAwards : [];
 
+      const userLikeNotification =
+        await Notifications.findOne<NotificationsType>({
+          userTaskLikes: { $elemMatch: { taskId } },
+        })
+          .select(["_user", "userTaskLikes"])
+          .exec();
+
+      const ownUserTask = userLikeNotification?._user === req.user._user;
+
+      const filteredUserLikeNotification =
+        userLikeNotification?.userTaskLikes?.filter(
+          (notification) => notification.taskId === taskId
+        )[0];
+
+      const userHasLiked = filteredUserLikeNotification?.users?.some(
+        (user) => user === req.user._user
+      );
+
       if (!liked) {
         const newAward: AwardType | null =
           previousLikes === 24
@@ -255,6 +335,26 @@ const taskWallRoutes = (app: Express) => {
 
         if (newAward && !awardArray.includes(newAward)) {
           awardArray.push(newAward);
+
+          const awardNotification = new AwardNotification<AwardInteractionType>(
+            {
+              taskId,
+              task: filteredUserLikeNotification?.task as string,
+              award: newAward,
+              created: new Date().toISOString(),
+            }
+          );
+
+          await Notifications.findOneAndUpdate<NotificationsType>(
+            {
+              _user: userLikeNotification?._user,
+            },
+            {
+              $push: {
+                awardNotifications: awardNotification,
+              },
+            }
+          ).exec();
         }
       }
 
@@ -289,8 +389,30 @@ const taskWallRoutes = (app: Express) => {
             .select({ tasks: { $elemMatch: { taskId } } })
             .exec();
 
+        if (!userHasLiked && !ownUserTask) {
+          await Notifications.findOneAndUpdate<NotificationsType>(
+            {
+              _user: userLikeNotification?._user,
+            },
+            {
+              $push: {
+                "userTaskLikes.$[task].users": req.user._user,
+              },
+              $inc: {
+                "userTaskLikes.$[task].total": 1,
+              },
+              $set: {
+                "userTaskLikes.$[task].unseen": true,
+                "userTaskLikes.$[task].created": new Date().toISOString(),
+              },
+            },
+            { arrayFilters: [{ "task.taskId": taskId }] }
+          ).exec();
+        }
+
         res.send(likedTask?.tasks[0]);
       } catch (err) {
+        console.log(err);
         res.status(500).send("Problem liking task, try again");
       }
     }
@@ -318,6 +440,25 @@ const taskWallRoutes = (app: Express) => {
             },
           };
 
+      const commentLikeNotifications =
+        await Notifications.findOne<NotificationsType>({
+          commentLikes: { $elemMatch: { commentId: _id } },
+        })
+          .select(["_user", "commentLikes"])
+          .exec();
+
+      const ownUsersComment =
+        commentLikeNotifications?._user === req.user._user;
+
+      const filteredCommentLikeNotification =
+        commentLikeNotifications?.commentLikes?.filter(
+          (notification) => notification.commentId === _id
+        )[0];
+
+      const userHasLiked = filteredCommentLikeNotification?.users?.some(
+        (user) => user === req.user._user
+      );
+
       try {
         const comment = await PublicTaskList.findOneAndUpdate(
           {
@@ -336,8 +477,30 @@ const taskWallRoutes = (app: Express) => {
           (comment) => comment.id === _id
         );
 
+        if (!userHasLiked && !ownUsersComment) {
+          await Notifications.findOneAndUpdate<NotificationsType>(
+            {
+              _user: commentLikeNotifications?._user,
+            },
+            {
+              $push: {
+                "commentLikes.$[comment].users": req.user._user,
+              },
+              $inc: {
+                "commentLikes.$[comment].total": 1,
+              },
+              $set: {
+                "commentLikes.$[comment].unseen": true,
+                "commentLikes.$[comment].created": new Date().toISOString(),
+              },
+            },
+            { arrayFilters: [{ "comment.commentId": _id }] }
+          ).exec();
+        }
+
         res.send({ comment: updatedComment, taskId });
       } catch (err) {
+        console.log(err);
         res.status(500).send("Error liking comment, try again");
       }
     }

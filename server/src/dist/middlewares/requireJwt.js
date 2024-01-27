@@ -46,6 +46,7 @@ const requireJwt = async (req, res, next) => {
         next();
     }
     catch (err) {
+        console.log(err);
         errorFunc();
     }
 };

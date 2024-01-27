@@ -58,6 +58,38 @@ export type UserType = {
 
 export type UserStateType = UserType | ValidUserType | false | null;
 
+export type AwardNotificationType = {
+  taskId: string;
+  task: string;
+  award: string;
+  unseen: boolean;
+  created: string;
+};
+
+export type CommentAndLikeNotificationType = {
+  taskId: string;
+  task: string;
+  total: number;
+  unseen: boolean;
+  created: string;
+};
+
+export type CombinedNotificationType = {
+  taskId: string;
+  task: string;
+  award?: string;
+  total?: number;
+  unseen: boolean;
+  created: string;
+};
+
+export type AllNotificationsReturnType = [
+  AwardNotificationType[],
+  CommentAndLikeNotificationType[],
+  CommentAndLikeNotificationType[],
+  CommentAndLikeNotificationType[]
+];
+
 export type AllTasksReturnType = [
   TaskType[] | false,
   TaskWallTaskType[] | false,

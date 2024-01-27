@@ -136,7 +136,7 @@ const TaskWallTaskComment = ({
             ease: "easeOut",
           },
         }}
-        className="min-h-[30px] overflow-hidden"
+        className="min-h-[40px]"
       >
         {renderComment}
       </motion.div>

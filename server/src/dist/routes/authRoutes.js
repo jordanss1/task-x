@@ -11,6 +11,7 @@ const types_1 = require("../types");
 const User = (0, mongoose_1.model)("users");
 const TaskList = (0, mongoose_1.model)("taskList");
 const PublicTaskList = (0, mongoose_1.model)("publicTaskList");
+const Notifications = (0, mongoose_1.model)("notifications");
 const googleAuthRoutes = (app) => {
     app.get(`/api/auth/google`, passport_1.default.authenticate("google", {
         scope: ["profile", "email"],
@@ -47,6 +48,7 @@ const googleAuthRoutes = (app) => {
         res.send(match ? true : false);
     });
     app.post("/api/profile", requireJwt_1.default, async (req, res) => {
+        (0, types_1.assertRequestWithUser)(req);
         const { userName, profilePicture } = req.body;
         try {
             const updatedUser = await User.findOneAndUpdate({ _id: req.user?._id }, {
@@ -57,11 +59,15 @@ const googleAuthRoutes = (app) => {
                     nameLowerCase: userName.toLowerCase(),
                 },
             }, { new: true }).exec();
+            await new Notifications({
+                _user: req.user?._user,
+            }).save();
             const response = (0, createTokenAndCookie_1.default)(updatedUser, res);
             req.user = updatedUser;
             response.send(updatedUser);
         }
         catch (err) {
+            console.log(err);
             res.status(500).send("Server error please try again");
         }
     });
@@ -81,6 +87,7 @@ const googleAuthRoutes = (app) => {
             response.send(user);
         }
         catch (err) {
+            console.log(err);
             res.status(500).send("Problem updating profile, try again");
         }
     });
@@ -89,6 +96,7 @@ const googleAuthRoutes = (app) => {
             await TaskList.findOneAndDelete({ _user: req.user?._user });
         }
         catch (err) {
+            console.log(err);
             res.status(500).send("Problem deleting your tasks, try again");
             return;
         }
@@ -96,6 +104,7 @@ const googleAuthRoutes = (app) => {
             await PublicTaskList.findOneAndDelete({ _user: req.user?._user }).exec();
         }
         catch (err) {
+            console.log(err);
             res.status(500).send("Problem deleting your tasks, try again");
             return;
         }
@@ -125,6 +134,17 @@ const googleAuthRoutes = (app) => {
             }, { arrayFilters: [{ "like.likes.users._user": req.user?._user }] }).exec();
         }
         catch (err) {
+            console.log(err);
+            res.status(500).send("Problem deleting your content, try again");
+            return;
+        }
+        try {
+            await Notifications.findOneAndDelete({
+                _user: req.user?._user,
+            }).exec();
+        }
+        catch (err) {
+            console.log(err);
             res.status(500).send("Problem deleting your content, try again");
             return;
         }
@@ -136,6 +156,7 @@ const googleAuthRoutes = (app) => {
             res.clearCookie("token");
         }
         catch (err) {
+            console.log(err);
             res.status(500).send("Problem deleting your account, try again");
         }
         res.status(200).send();

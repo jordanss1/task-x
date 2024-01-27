@@ -1,7 +1,10 @@
 import * as crypto from "crypto";
 import { Express, Request } from "express";
 import { Model, Types, model } from "mongoose";
+import { isError } from "util";
+import deleteNotificationsForTask from "../functions/deleteNotificationsForTask";
 import requireJwt from "../middlewares/requireJwt";
+import { InteractionType, NotificationsType } from "../models/Notifications";
 import { PublicTaskListType, PublicTaskType } from "../models/PublicTaskList";
 import { TaskListType, TaskType, TaskTypeIncoming } from "../models/TaskList";
 import { ValidUserType } from "../models/User";
@@ -11,6 +14,8 @@ const Task = model<TaskType>("task");
 const TaskList = model<TaskListType>("taskList");
 const PublicTask = model<PublicTaskType>("publicTask");
 const PublicTaskList = model<PublicTaskListType>("publicTaskList");
+const Notifications = model<NotificationsType>("notifications");
+const Interaction = model<InteractionType>("interaction");
 
 const taskListRoutes = (app: Express) => {
   app.get("/api/tasks", requireJwt, async (req, res) => {
@@ -25,6 +30,7 @@ const taskListRoutes = (app: Express) => {
 
       res.send(data ? data.tasks.map((task) => task) : false);
     } catch (err) {
+      console.log(err);
       res.status(500).send("Issue retrieving task list, server error");
     }
   });
@@ -59,6 +65,7 @@ const taskListRoutes = (app: Express) => {
           }
         ).exec();
       } catch (err) {
+        console.log(err);
         res.status(500).send("Issue editing task, try again");
       }
 
@@ -75,8 +82,11 @@ const taskListRoutes = (app: Express) => {
               _user: req.user?._user,
             }).exec();
 
+            await deleteNotificationsForTask(req.user._user, req.body.taskId);
+
             updatedUserPublicTasks = null;
           } catch (err) {
+            console.log(err);
             res
               .status(500)
               .send("Edited task but unable to delete task wall task");
@@ -90,7 +100,10 @@ const taskListRoutes = (app: Express) => {
                 $inc: { totalTasks: -1 },
               }
             ).exec();
+
+            await deleteNotificationsForTask(req.user._user, req.body.taskId);
           } catch (err) {
+            console.log(err);
             res
               .status(500)
               .send("Edited task but unable to delete task wall task");
@@ -120,7 +133,25 @@ const taskListRoutes = (app: Express) => {
               "tasks.$.onTaskWall": onTaskWall,
             }
           ).exec();
+
+          await Notifications.findOneAndUpdate<NotificationsType>(
+            { _user: req.user._user },
+            {
+              "userTaskLikes.$[task].task": task,
+              "userTaskComments.$[task].task": task,
+            },
+            { arrayFilters: [{ "task.taskId": req.body.taskId }] }
+          ).exec();
+
+          await Notifications.updateMany<NotificationsType>(
+            {},
+            {
+              "commentLikes.$[task].task": task,
+            },
+            { arrayFilters: [{ "task.taskId": req.body.taskId }] }
+          ).exec();
         } catch (err) {
+          console.log(err);
           res.status(500).send("Unable to update task wall task, try again");
         } finally {
           const tasks = await PublicTaskList.findOne<PublicTaskListType>({
@@ -147,6 +178,11 @@ const taskListRoutes = (app: Express) => {
           taskId: req.body.taskId,
         });
 
+        const newNotificationObject = new Interaction<InteractionType>({
+          taskId: req.body.taskId,
+          task,
+        });
+
         if (!totalTasks?.totalTasks || totalTasks.totalTasks === 0) {
           try {
             const taskList = await new PublicTaskList({
@@ -155,8 +191,19 @@ const taskListRoutes = (app: Express) => {
               totalTasks: 1,
             }).save();
 
+            await Notifications.findOneAndUpdate<NotificationsType>(
+              { _user: req.user._user },
+              {
+                $push: {
+                  userTaskLikes: newNotificationObject,
+                  userTaskComments: newNotificationObject,
+                },
+              }
+            ).exec();
+
             updatedUserPublicTasks = taskList.tasks;
           } catch (err) {
+            console.log(err);
             res
               .status(500)
               .send("Edited task but unable add task to task wall");
@@ -170,7 +217,18 @@ const taskListRoutes = (app: Express) => {
                 $inc: { totalTasks: 1 },
               }
             ).exec();
+
+            await Notifications.findOneAndUpdate<NotificationsType>(
+              { _user: req.user._user },
+              {
+                $push: {
+                  userTaskLikes: newNotificationObject,
+                  userTaskComments: newNotificationObject,
+                },
+              }
+            ).exec();
           } catch (err) {
+            console.log(err);
             res
               .status(500)
               .send("Edited task but unable add task to task wall");
@@ -227,6 +285,7 @@ const taskListRoutes = (app: Express) => {
 
         updatedUserTasks = tasks?.tasks.map((task) => task);
       } catch (err) {
+        console.log(err);
         return res
           .status(500)
           .send("Unable to set task as complete, try again");
@@ -250,6 +309,7 @@ const taskListRoutes = (app: Express) => {
 
           updatedUserPublicTasks = publicTasks?.tasks.map((task) => task);
         } catch (err) {
+          console.log(err);
           return res
             .status(500)
             .send("Unable to set task wall task as complete, try again");
@@ -290,6 +350,7 @@ const taskListRoutes = (app: Express) => {
             { $push: { tasks: newTask }, $inc: { totalTasks: 1 } }
           ).exec();
         } catch (err) {
+          console.log(err);
           res.status(500).send("Unable to update task list, try again");
           return;
         } finally {
@@ -311,6 +372,7 @@ const taskListRoutes = (app: Express) => {
 
           updatedUserTasks = tasks?.tasks.map((task) => task);
         } catch (err) {
+          console.log(err);
           res.status(500).send("Unable to create new task, try again");
           return;
         }
@@ -334,13 +396,29 @@ const taskListRoutes = (app: Express) => {
           taskId,
         });
 
+        const newNotificationObject = new Interaction({
+          taskId,
+          task,
+        });
+
         if (publicTaskList) {
           try {
             await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
               { _user: req.user?._user },
               { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }
             ).exec();
+
+            await Notifications.findOneAndUpdate<NotificationsType>(
+              { _user: req.user._user },
+              {
+                $push: {
+                  userTaskLikes: newNotificationObject,
+                  userTaskComments: newNotificationObject,
+                },
+              }
+            ).exec();
           } catch (err) {
+            console.log(err);
             return res
               .status(500)
               .send("Unable to add your first task to task wall, try again");
@@ -360,7 +438,18 @@ const taskListRoutes = (app: Express) => {
               tasks: [publicTask],
               totalTasks: 1,
             }).save();
+
+            await Notifications.findOneAndUpdate<NotificationsType>(
+              { _user: req.user._user },
+              {
+                $push: {
+                  userTaskLikes: newNotificationObject,
+                  userTaskComments: newNotificationObject,
+                },
+              }
+            ).exec();
           } catch (err) {
+            console.log(err);
             return res
               .status(500)
               .send("Unable to add your task to task wall, try again");
@@ -400,6 +489,8 @@ const taskListRoutes = (app: Express) => {
     "/api/task",
     requireJwt,
     async (req: Request<{}, any, { taskId: TaskType["taskId"] }>, res) => {
+      assertRequestWithUser<TaskType["taskId"]>(req);
+
       let updatedUserTasks;
       let updatedUserPublicTasks;
 
@@ -445,6 +536,7 @@ const taskListRoutes = (app: Express) => {
 
           updatedUserTasks = tasks?.tasks.map((task) => task);
         } catch (err) {
+          console.log(err);
           res.status(500).send("Unable to delete task, try again");
           return;
         }
@@ -458,6 +550,7 @@ const taskListRoutes = (app: Express) => {
 
           updatedUserTasks = null;
         } catch (err) {
+          console.log(err);
           res.status(500).send("Unable to delete task, try again");
           return;
         }
@@ -473,12 +566,15 @@ const taskListRoutes = (app: Express) => {
             }
           ).exec();
 
+          await deleteNotificationsForTask(req.user._user, req.body.taskId);
+
           const tasks = await PublicTaskList.findOne({
             _user: req.user?._user,
           });
 
           updatedUserPublicTasks = tasks?.tasks.map((task) => task);
         } catch (err) {
+          console.log(err);
           res
             .status(500)
             .send("Unable to delete task from Task Wall, try again");
@@ -492,8 +588,11 @@ const taskListRoutes = (app: Express) => {
             _user: req.user?._user,
           }).exec();
 
+          await deleteNotificationsForTask(req.user._user, req.body.taskId);
+
           updatedUserPublicTasks = null;
         } catch (err) {
+          console.log(err);
           return res
             .status(500)
             .send("Unable to delete task from Task Wall, try again");

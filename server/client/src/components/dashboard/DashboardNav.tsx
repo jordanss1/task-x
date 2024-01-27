@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { colors, fonts } from "../../constants";
 import { authSelector } from "../../features/auth/authSlice";
+import { notificationSelector } from "../../features/notification/notificationSlice";
 import artificialDelay from "../../functions/artificialDelay";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import useArtificialProgress from "../../hooks/useArtificialProgress";
@@ -13,7 +14,8 @@ import MenuPopout from "../__reusable/MenuPopout";
 import NotificationBell from "../__reusable/NotificationBell";
 import ProfileIcon from "../__reusable/ProfileIcon";
 import LightBulb from "../svg/LightBulb";
-import { notifications, settingsList } from "./content";
+import DashboardNavNotification from "./DashboardNavNotification";
+import { settingsList } from "./content";
 
 const menuVariants: Variants = {
   initial: {
@@ -45,8 +47,9 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
   const timer2 = useRef<NodeJS.Timeout | number>(0);
   const route = useRef<string>("");
   const { user } = useSelector(authSelector);
+  const { notifications } = useSelector(notificationSelector);
   const navigate = useNavigate();
-  const { beginProgress, stopProgress, complete } = useArtificialProgress({
+  const { beginProgress, stopProgress } = useArtificialProgress({
     onFullProgress: () => handleFullProgress(),
   });
 
@@ -85,14 +88,9 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
         exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
         className="absolute z-[5] w-44 top-[40px] cursor-default origin-top-right h-fit right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
       >
-        {notifications.length ? (
+        {notifications && notifications?.length ? (
           notifications.map((notification) => (
-            <div
-              key={notification}
-              className="w-full p-2 hover:bg-slate-100 text-slate-800 hover:text-black rounded-[3px] text-left text-xs"
-            >
-              {notification}
-            </div>
+            <DashboardNavNotification notification={notification} />
           ))
         ) : (
           <div

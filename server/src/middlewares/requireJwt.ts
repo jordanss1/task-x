@@ -61,6 +61,7 @@ export const requireJwt = async (
     req.user = user;
     next();
   } catch (err) {
+    console.log(err);
     errorFunc();
   }
 };

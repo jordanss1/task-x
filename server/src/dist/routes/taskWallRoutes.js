@@ -7,6 +7,10 @@ const mongoose_1 = require("mongoose");
 const requireJwt_1 = __importDefault(require("../middlewares/requireJwt"));
 const types_1 = require("../types");
 const PublicTaskList = (0, mongoose_1.model)("publicTaskList");
+const Notifications = (0, mongoose_1.model)("notifications");
+const Interaction = (0, mongoose_1.model)("interaction");
+const CommentInteraction = (0, mongoose_1.model)("commentNotification");
+const AwardNotification = (0, mongoose_1.model)("awardNotification");
 const Comment = (0, mongoose_1.model)("comment");
 const taskWallRoutes = (app) => {
     app.get("/api/task_wall/user", requireJwt_1.default, async (req, res) => {
@@ -19,6 +23,7 @@ const taskWallRoutes = (app) => {
             return;
         }
         catch (err) {
+            console.log(err);
             res
                 .status(500)
                 .send("Issue retrieving user task wall tasks, server error");
@@ -39,6 +44,7 @@ const taskWallRoutes = (app) => {
             res.send(allPublicTasks || false);
         }
         catch (err) {
+            console.log(err);
             res.status(500).send("Issue retrieving all wall tasks, server error");
         }
     });
@@ -91,10 +97,28 @@ const taskWallRoutes = (app) => {
             res.status(400).send("Comment does not meet required length");
             return;
         }
+        const publicTask = await PublicTaskList.findOne({
+            tasks: { $elemMatch: { taskId } },
+        })
+            .select({
+            tasks: { $elemMatch: { taskId } },
+        })
+            .exec();
+        const userCommentNotification = await Notifications.findOne({
+            userTaskComments: { $elemMatch: { taskId } },
+        })
+            .select("_user")
+            .exec();
+        const ownUserCommentOnOwnTask = userCommentNotification?._user === req.user._user;
         const newComment = new Comment({
             comment,
             user: req.user.profile,
             created: new Date().toISOString(),
+        });
+        const newCommentLikeNotificationObject = new CommentInteraction({
+            taskId,
+            commentId: newComment.id,
+            task: publicTask?.tasks[0]?.task,
         });
         try {
             await PublicTaskList.findOneAndUpdate({
@@ -104,9 +128,26 @@ const taskWallRoutes = (app) => {
             }, { arrayFilters: [{ "task.taskId": taskId }] })
                 .select({ tasks: { $elemMatch: { taskId } } })
                 .exec();
+            await Notifications.findOneAndUpdate({ _user: req.user._user }, {
+                $push: { commentLikes: newCommentLikeNotificationObject },
+            }).exec();
+            if (!ownUserCommentOnOwnTask) {
+                await Notifications.findOneAndUpdate({
+                    _user: publicTask?.tasks[0]?.user._user,
+                }, {
+                    $inc: {
+                        "userTaskComments.$[task].total": 1,
+                    },
+                    $set: {
+                        "userTaskComments.$[task].unseen": true,
+                        "userTaskComments.$[task].created": new Date().toISOString(),
+                    },
+                }, { arrayFilters: [{ "task.taskId": taskId }] }).exec();
+            }
             res.send({ comment: newComment, taskId });
         }
         catch (err) {
+            console.log(err);
             res.status(500).send("Error adding comment, try again");
         }
     });
@@ -129,6 +170,7 @@ const taskWallRoutes = (app) => {
             res.send({ comment: updatedComment, taskId });
         }
         catch (err) {
+            console.log(err);
             res.status(500).send("Error editing comment, try again");
         }
     });
@@ -155,6 +197,14 @@ const taskWallRoutes = (app) => {
         (0, types_1.assertRequestWithUser)(req);
         const { previousLikes, currentAwards, liked, taskId } = req.body;
         let awardArray = currentAwards?.length ? currentAwards : [];
+        const userLikeNotification = await Notifications.findOne({
+            userTaskLikes: { $elemMatch: { taskId } },
+        })
+            .select(["_user", "userTaskLikes"])
+            .exec();
+        const ownUserTask = userLikeNotification?._user === req.user._user;
+        const filteredUserLikeNotification = userLikeNotification?.userTaskLikes?.filter((notification) => notification.taskId === taskId)[0];
+        const userHasLiked = filteredUserLikeNotification?.users?.some((user) => user === req.user._user);
         if (!liked) {
             const newAward = previousLikes === 24
                 ? "supported"
@@ -165,6 +215,19 @@ const taskWallRoutes = (app) => {
                         : null;
             if (newAward && !awardArray.includes(newAward)) {
                 awardArray.push(newAward);
+                const awardNotification = new AwardNotification({
+                    taskId,
+                    task: filteredUserLikeNotification?.task,
+                    award: newAward,
+                    created: new Date().toISOString(),
+                });
+                await Notifications.findOneAndUpdate({
+                    _user: userLikeNotification?._user,
+                }, {
+                    $push: {
+                        awardNotifications: awardNotification,
+                    },
+                }).exec();
             }
         }
         const updateQuery = liked
@@ -191,9 +254,26 @@ const taskWallRoutes = (app) => {
             }, { arrayFilters: [{ "task.taskId": taskId }], new: true })
                 .select({ tasks: { $elemMatch: { taskId } } })
                 .exec();
+            if (!userHasLiked && !ownUserTask) {
+                await Notifications.findOneAndUpdate({
+                    _user: userLikeNotification?._user,
+                }, {
+                    $push: {
+                        "userTaskLikes.$[task].users": req.user._user,
+                    },
+                    $inc: {
+                        "userTaskLikes.$[task].total": 1,
+                    },
+                    $set: {
+                        "userTaskLikes.$[task].unseen": true,
+                        "userTaskLikes.$[task].created": new Date().toISOString(),
+                    },
+                }, { arrayFilters: [{ "task.taskId": taskId }] }).exec();
+            }
             res.send(likedTask?.tasks[0]);
         }
         catch (err) {
+            console.log(err);
             res.status(500).send("Problem liking task, try again");
         }
     });
@@ -213,6 +293,14 @@ const taskWallRoutes = (app) => {
                     "tasks.$[task].comments.$[comment].likes.users": req.user.profile,
                 },
             };
+        const commentLikeNotifications = await Notifications.findOne({
+            commentLikes: { $elemMatch: { commentId: _id } },
+        })
+            .select(["_user", "commentLikes"])
+            .exec();
+        const ownUsersComment = commentLikeNotifications?._user === req.user._user;
+        const filteredCommentLikeNotification = commentLikeNotifications?.commentLikes?.filter((notification) => notification.commentId === _id)[0];
+        const userHasLiked = filteredCommentLikeNotification?.users?.some((user) => user === req.user._user);
         try {
             const comment = await PublicTaskList.findOneAndUpdate({
                 tasks: { $elemMatch: { taskId } },
@@ -223,9 +311,26 @@ const taskWallRoutes = (app) => {
                 .select({ tasks: { $elemMatch: { taskId } } })
                 .exec();
             const updatedComment = comment?.tasks[0]?.comments?.find((comment) => comment.id === _id);
+            if (!userHasLiked && !ownUsersComment) {
+                await Notifications.findOneAndUpdate({
+                    _user: commentLikeNotifications?._user,
+                }, {
+                    $push: {
+                        "commentLikes.$[comment].users": req.user._user,
+                    },
+                    $inc: {
+                        "commentLikes.$[comment].total": 1,
+                    },
+                    $set: {
+                        "commentLikes.$[comment].unseen": true,
+                        "commentLikes.$[comment].created": new Date().toISOString(),
+                    },
+                }, { arrayFilters: [{ "comment.commentId": _id }] }).exec();
+            }
             res.send({ comment: updatedComment, taskId });
         }
         catch (err) {
+            console.log(err);
             res.status(500).send("Error liking comment, try again");
         }
     });

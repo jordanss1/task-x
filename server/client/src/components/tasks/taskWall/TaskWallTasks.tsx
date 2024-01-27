@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "../../../app/store";
 import { colors, placeholderVariants } from "../../../constants";
 import { getUser } from "../../../features/auth/authSlice";
+import { getNotifications } from "../../../features/notification/notificationSlice";
 import { taskListSelector } from "../../../features/taskList/taskListSlice";
 import {
   getAllTaskWallTasks,
@@ -37,6 +38,7 @@ const TaskWallTasks = ({
 
   useEffect(() => {
     dispatch(getUser());
+    dispatch(getNotifications());
   }, []);
 
   useEffect(() => {

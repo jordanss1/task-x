@@ -6,11 +6,13 @@ import path from "path";
 import keys from "./config/keys";
 import getCookies from "./middlewares/getCookies";
 import redirectToClient from "./middlewares/redirectToClient";
+import "./models/Notifications";
 import "./models/PublicTaskList";
 import "./models/TaskList";
 import "./models/User";
 import assetsRoutes from "./routes/assetsRoutes";
 import googleAuthRoutes from "./routes/authRoutes";
+import notificationsRoutes from "./routes/notificationsRoutes";
 import taskListRoutes from "./routes/taskListRoutes";
 import taskWallRoutes from "./routes/taskWallRoutes";
 import "./services/passport";
@@ -64,6 +66,8 @@ assetsRoutes(app);
 taskListRoutes(app);
 
 taskWallRoutes(app);
+
+notificationsRoutes(app);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/dist"));

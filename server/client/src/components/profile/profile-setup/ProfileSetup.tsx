@@ -30,7 +30,7 @@ const ProfileSetup = (): ReactElement => {
   const dispatch = useDispatch<AppThunkDispatch>();
   const navigate = useNavigate();
   const { error } = useSelector(notificationSelector);
-  const { user } = useSelector(authSelector);
+  const { user, updatedProfile } = useSelector(authSelector);
   const { progress } = useSelector(interfaceSelector);
   const { beginProgress, stopProgress } = useArtificialProgress({
     onFullProgress: () => setTimeout(() => navigate("/dashboard/home"), 300),
@@ -84,11 +84,9 @@ const ProfileSetup = (): ReactElement => {
     }
   }, [user]);
 
-  console.log(user && user?.profile);
-
   return (
     <>
-      {(user === null || (user && user.profile)) && (
+      {(user === null || (user && user.profile && !updatedProfile)) && (
         <div className="z-[100] h-screen w-full bg-white" />
       )}
       <ProgressBar progress={progress} />

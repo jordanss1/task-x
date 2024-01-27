@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  AllNotificationsReturnType,
   AllTasksReturnType,
   CommentReturnType,
   CommentType,
@@ -122,6 +123,15 @@ export const axiosCompleteTask = async (
 
   return data;
 };
+
+export const axiosGetNotifications =
+  async (): Promise<AllNotificationsReturnType> => {
+    const api = createAxios(true);
+
+    const { data } = await api.get("/notifications");
+
+    return data;
+  };
 
 export const axiosGetUserTasks = async (): Promise<TaskType[] | false> => {
   const api = createAxios(true);

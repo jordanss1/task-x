@@ -3,6 +3,7 @@ import { HydratedDocument, model } from "mongoose";
 import passport from "passport";
 import createTokenAndCookie from "../functions/createTokenAndCookie";
 import requireJwt from "../middlewares/requireJwt";
+import { NotificationsType } from "../models/Notifications";
 import { PublicTaskListType } from "../models/PublicTaskList";
 import { TaskListType } from "../models/TaskList";
 import { UserType, ValidUserType } from "../models/User";
@@ -11,6 +12,7 @@ import { assertRequestWithUser } from "../types";
 const User = model<UserType>("users");
 const TaskList = model<TaskListType>("taskList");
 const PublicTaskList = model<PublicTaskListType>("publicTaskList");
+const Notifications = model<NotificationsType>("notifications");
 
 const googleAuthRoutes = (app: Express) => {
   app.get(
@@ -75,6 +77,10 @@ const googleAuthRoutes = (app: Express) => {
       req: Request<any, {}, Omit<ValidUserType["profile"], "nameLowerCase">>,
       res: Response
     ) => {
+      assertRequestWithUser<Omit<ValidUserType["profile"], "nameLowerCase">>(
+        req
+      );
+
       const { userName, profilePicture } = req.body;
 
       try {
@@ -91,6 +97,10 @@ const googleAuthRoutes = (app: Express) => {
           { new: true }
         ).exec();
 
+        await new Notifications<NotificationsType>({
+          _user: req.user?._user,
+        }).save();
+
         const response = createTokenAndCookie(
           updatedUser as HydratedDocument<ValidUserType>,
           res
@@ -99,6 +109,7 @@ const googleAuthRoutes = (app: Express) => {
         req.user = updatedUser as HydratedDocument<ValidUserType>;
         response.send(updatedUser);
       } catch (err) {
+        console.log(err);
         res.status(500).send("Server error please try again");
       }
     }
@@ -138,6 +149,7 @@ const googleAuthRoutes = (app: Express) => {
 
         response.send(user as HydratedDocument<ValidUserType>);
       } catch (err) {
+        console.log(err);
         res.status(500).send("Problem updating profile, try again");
       }
     }
@@ -147,6 +159,7 @@ const googleAuthRoutes = (app: Express) => {
     try {
       await TaskList.findOneAndDelete<TaskListType>({ _user: req.user?._user });
     } catch (err) {
+      console.log(err);
       res.status(500).send("Problem deleting your tasks, try again");
       return;
     }
@@ -154,6 +167,7 @@ const googleAuthRoutes = (app: Express) => {
     try {
       await PublicTaskList.findOneAndDelete({ _user: req.user?._user }).exec();
     } catch (err) {
+      console.log(err);
       res.status(500).send("Problem deleting your tasks, try again");
       return;
     }
@@ -192,6 +206,17 @@ const googleAuthRoutes = (app: Express) => {
         { arrayFilters: [{ "like.likes.users._user": req.user?._user }] }
       ).exec();
     } catch (err) {
+      console.log(err);
+      res.status(500).send("Problem deleting your content, try again");
+      return;
+    }
+
+    try {
+      await Notifications.findOneAndDelete({
+        _user: req.user?._user,
+      }).exec();
+    } catch (err) {
+      console.log(err);
       res.status(500).send("Problem deleting your content, try again");
       return;
     }
@@ -204,6 +229,7 @@ const googleAuthRoutes = (app: Express) => {
       req.user = undefined;
       res.clearCookie("token");
     } catch (err) {
+      console.log(err);
       res.status(500).send("Problem deleting your account, try again");
     }
 

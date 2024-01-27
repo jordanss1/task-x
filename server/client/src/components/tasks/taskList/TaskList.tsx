@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "../../../app/store";
 import { colors, placeholderVariants } from "../../../constants";
 import { getUser } from "../../../features/auth/authSlice";
+import { getNotifications } from "../../../features/notification/notificationSlice";
 import {
   getUserTasks,
   taskListSelector,
@@ -22,7 +23,8 @@ const TaskList = (): ReactElement => {
   const dispatch = useDispatch<AppThunkDispatch>();
 
   useEffect(() => {
-      dispatch(getUser());
+    dispatch(getUser());
+    dispatch(getNotifications());
 
     if (tasks === null) {
       dispatch(getUserTasks());
