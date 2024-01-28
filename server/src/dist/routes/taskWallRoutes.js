@@ -8,8 +8,7 @@ const requireJwt_1 = __importDefault(require("../middlewares/requireJwt"));
 const types_1 = require("../types");
 const PublicTaskList = (0, mongoose_1.model)("publicTaskList");
 const Notifications = (0, mongoose_1.model)("notifications");
-const Interaction = (0, mongoose_1.model)("interaction");
-const CommentInteraction = (0, mongoose_1.model)("commentNotification");
+const CommentNotification = (0, mongoose_1.model)("commentNotification");
 const AwardNotification = (0, mongoose_1.model)("awardNotification");
 const Comment = (0, mongoose_1.model)("comment");
 const taskWallRoutes = (app) => {
@@ -115,10 +114,11 @@ const taskWallRoutes = (app) => {
             user: req.user.profile,
             created: new Date().toISOString(),
         });
-        const newCommentLikeNotificationObject = new CommentInteraction({
+        const newCommentLikeNotification = new CommentNotification({
             taskId,
             commentId: newComment.id,
             task: publicTask?.tasks[0]?.task,
+            type: "commentLike",
         });
         try {
             await PublicTaskList.findOneAndUpdate({
@@ -129,7 +129,7 @@ const taskWallRoutes = (app) => {
                 .select({ tasks: { $elemMatch: { taskId } } })
                 .exec();
             await Notifications.findOneAndUpdate({ _user: req.user._user }, {
-                $push: { commentLikes: newCommentLikeNotificationObject },
+                $push: { commentLikes: newCommentLikeNotification },
             }).exec();
             if (!ownUserCommentOnOwnTask) {
                 await Notifications.findOneAndUpdate({
@@ -220,6 +220,7 @@ const taskWallRoutes = (app) => {
                     task: filteredUserLikeNotification?.task,
                     award: newAward,
                     created: new Date().toISOString(),
+                    unseen: true,
                 });
                 await Notifications.findOneAndUpdate({
                     _user: userLikeNotification?._user,

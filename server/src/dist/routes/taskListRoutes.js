@@ -36,7 +36,8 @@ const TaskList = (0, mongoose_1.model)("taskList");
 const PublicTask = (0, mongoose_1.model)("publicTask");
 const PublicTaskList = (0, mongoose_1.model)("publicTaskList");
 const Notifications = (0, mongoose_1.model)("notifications");
-const Interaction = (0, mongoose_1.model)("interaction");
+const LikeNotification = (0, mongoose_1.model)("likeNotification");
+const CommentNotification = (0, mongoose_1.model)("commentNotification");
 const taskListRoutes = (app) => {
     app.get("/api/tasks", requireJwt_1.default, async (req, res) => {
         (0, types_1.assertRequestWithUser)(req);
@@ -169,9 +170,14 @@ const taskListRoutes = (app) => {
                 task,
                 taskId: req.body.taskId,
             });
-            const newNotificationObject = new Interaction({
+            const newLikeNotification = new LikeNotification({
                 taskId: req.body.taskId,
                 task,
+            });
+            const newCommentNotification = new CommentNotification({
+                taskId: req.body.taskId,
+                task,
+                type: "newComment",
             });
             if (!totalTasks?.totalTasks || totalTasks.totalTasks === 0) {
                 try {
@@ -182,8 +188,8 @@ const taskListRoutes = (app) => {
                     }).save();
                     await Notifications.findOneAndUpdate({ _user: req.user._user }, {
                         $push: {
-                            userTaskLikes: newNotificationObject,
-                            userTaskComments: newNotificationObject,
+                            userTaskLikes: newLikeNotification,
+                            userTaskComments: newCommentNotification,
                         },
                     }).exec();
                     updatedUserPublicTasks = taskList.tasks;
@@ -203,8 +209,8 @@ const taskListRoutes = (app) => {
                     }).exec();
                     await Notifications.findOneAndUpdate({ _user: req.user._user }, {
                         $push: {
-                            userTaskLikes: newNotificationObject,
-                            userTaskComments: newNotificationObject,
+                            userTaskLikes: newLikeNotification,
+                            userTaskComments: newCommentNotification,
                         },
                     }).exec();
                 }
@@ -339,7 +345,12 @@ const taskListRoutes = (app) => {
                 task,
                 taskId,
             });
-            const newNotificationObject = new Interaction({
+            const newCommentNotification = new CommentNotification({
+                taskId,
+                task,
+                type: "newComment",
+            });
+            const newLikeNotification = new LikeNotification({
                 taskId,
                 task,
             });
@@ -348,8 +359,8 @@ const taskListRoutes = (app) => {
                     await PublicTaskList.findOneAndUpdate({ _user: req.user?._user }, { $push: { tasks: publicTask }, $inc: { totalTasks: 1 } }).exec();
                     await Notifications.findOneAndUpdate({ _user: req.user._user }, {
                         $push: {
-                            userTaskLikes: newNotificationObject,
-                            userTaskComments: newNotificationObject,
+                            userTaskLikes: newLikeNotification,
+                            userTaskComments: newCommentNotification,
                         },
                     }).exec();
                 }
@@ -377,8 +388,8 @@ const taskListRoutes = (app) => {
                     }).save();
                     await Notifications.findOneAndUpdate({ _user: req.user._user }, {
                         $push: {
-                            userTaskLikes: newNotificationObject,
-                            userTaskComments: newNotificationObject,
+                            userTaskLikes: newLikeNotification,
+                            userTaskComments: newCommentNotification,
                         },
                     }).exec();
                 }

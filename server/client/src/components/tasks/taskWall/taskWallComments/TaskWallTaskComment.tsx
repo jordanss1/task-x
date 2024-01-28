@@ -14,6 +14,7 @@ import {
 import { CommentType, TaskWallTaskType } from "../../../../types";
 import LikeButton from "../../../__reusable/LikeButton";
 import Popup, { PopupPropsType } from "../../../__reusable/Popup";
+import TaskWallTaskTimeStamp from "../TaskWallTaskTimeStamp";
 import TaskWallCommentUser from "./TaskWallCommentUser";
 import TaskWallTaskCommentEdit from "./TaskWallTaskCommentEdit";
 
@@ -117,7 +118,7 @@ const TaskWallTaskComment = ({
   return (
     <motion.div
       variants={commentVariants}
-      className="flex flex-col gap-1 justify-center"
+      className="flex flex-col sm:gap-1 gap-3 justify-center"
     >
       <TaskWallCommentUser
         currentUserComment={currentUserComment}
@@ -140,7 +141,10 @@ const TaskWallTaskComment = ({
       >
         {renderComment}
       </motion.div>
-      <div className="w-full relative bottom-1 flex justify-end px-6">
+      <div className="w-full relative bottom-1 flex justify-between items-center sm:justify-end px-2 sm:px-6">
+        <div className="sm:hidden">
+          <TaskWallTaskTimeStamp time={created} />
+        </div>
         {!formActive && (
           <LikeButton
             size={15}

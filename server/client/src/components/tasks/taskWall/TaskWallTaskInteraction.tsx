@@ -43,6 +43,9 @@ const TaskWallTaskInteraction = ({
         <LikeButton
           likes={likes}
           liked={liked}
+          style={{
+            padding: mobile ? "5px" : "0px",
+          }}
           disabled={fetching}
           fetching={fetching}
           size={mobile ? 13 : 18}
@@ -55,6 +58,9 @@ const TaskWallTaskInteraction = ({
           }}
         />
         <Button
+          style={{
+            padding: mobile ? "5px" : "0px",
+          }}
           label={comments}
           onClick={() => handleComments((prev) => !prev)}
           className="gap-1 sm:-mr-3 sm:text-lg text-xs items-baseline font-extralight flex-row-reverse"
@@ -62,7 +68,7 @@ const TaskWallTaskInteraction = ({
             <>
               <SmallIcon
                 className="text-[#991ff1]"
-                size={mobile ? 12 : 18}
+                size={mobile ? 14 : 18}
                 icon="fa-solid fa-comment"
               />
               {commentAmount > 0 && (

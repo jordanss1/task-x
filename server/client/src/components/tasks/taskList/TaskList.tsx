@@ -13,6 +13,7 @@ import {
   getUserWallTasks,
   taskWallSelector,
 } from "../../../features/taskWall/taskWallSlice";
+import ProgressBar from "../../__reusable/ProgressBar";
 import Spinner from "../../__reusable/Spinner";
 import TaskListCategory from "./TaskListCategory";
 import TaskListPlaceholder from "./TaskListPlaceholder";

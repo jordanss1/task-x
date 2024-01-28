@@ -1,20 +1,18 @@
 import { Variants, motion } from "framer-motion";
-import { ReactElement, useRef } from "react";
+import { ReactElement, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import { colors, fonts } from "../../constants";
 import { authSelector } from "../../features/auth/authSlice";
-import { notificationSelector } from "../../features/notification/notificationSlice";
 import artificialDelay from "../../functions/artificialDelay";
 import { useMediaQuery } from "../../hooks/MediaQueryHooks";
 import useArtificialProgress from "../../hooks/useArtificialProgress";
 import { ValidUserType } from "../../types";
 import ButtonPopout from "../__reusable/ButtonPopout";
 import MenuPopout from "../__reusable/MenuPopout";
-import NotificationBell from "../__reusable/NotificationBell";
 import ProfileIcon from "../__reusable/ProfileIcon";
 import LightBulb from "../svg/LightBulb";
-import DashboardNavNotification from "./DashboardNavNotification";
+import DashboardNavNotifications from "./DashboardNavNotifications";
 import { settingsList } from "./content";
 
 const menuVariants: Variants = {
@@ -41,15 +39,26 @@ const menuVariants: Variants = {
   },
 };
 
+export type RouteRefType = {
+  pathname: string;
+  search?:
+    | undefined
+    | {
+        taskId: string | null;
+        commentId: string | null;
+      };
+} | null;
+
 const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
   const mobile = useMediaQuery(640);
   const timer = useRef<NodeJS.Timeout | number>(0);
   const timer2 = useRef<NodeJS.Timeout | number>(0);
-  const route = useRef<string>("");
+  const route = useRef<RouteRefType>({
+    pathname: "",
+  });
   const { user } = useSelector(authSelector);
-  const { notifications } = useSelector(notificationSelector);
   const navigate = useNavigate();
-  const { beginProgress, stopProgress } = useArtificialProgress({
+  const progress = useArtificialProgress({
     onFullProgress: () => handleFullProgress(),
   });
 
@@ -57,10 +66,18 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
     clearTimeout(timer2.current);
 
     timer2.current = setTimeout(() => {
-      if (route.current.includes("/api/logout")) {
-        window.location.href = route.current;
+      if (route.current?.pathname.includes("/api/logout")) {
+        window.location.href = route.current.pathname;
+      } else if (!route.current?.search) {
+        navigate(route.current?.pathname as string);
       } else {
-        navigate(route.current);
+        navigate({
+          pathname: route.current.pathname,
+          search: `?${createSearchParams({
+            taskId: route.current.search.taskId as string,
+            commentId: route.current.search.commentId as string,
+          })}`,
+        });
       }
     }, 300);
   };
@@ -71,38 +88,22 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
       transition={{ duration: 0.6 }}
       className="w-full gap-4 sm:min-h-0 min-h-[73px] sm:gap-2 items-center p-2 ps-8 sm:ps-2 hover:bg-slate-500 hover:text-slate-200 sm:hover:bg-slate-200 sm:text-slate-700 sm:hover:text-black sm:rounded-[3px] text-left text-xl sm:text-xs sm:z-auto z-[16] relative flex cursor-pointer"
       onClick={async () => {
-        await artificialDelay(timer, undefined, beginProgress, stopProgress);
-        route.current = url;
+        await artificialDelay(
+          timer,
+          undefined,
+          progress.beginProgress,
+          progress.stopProgress
+        );
+
+        if (route.current) {
+          route.current.pathname = url;
+        }
       }}
     >
       <i className={icon} />
       <span>{label}</span>
     </motion.div>
   ));
-
-  const renderNotifications = () => {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ opacity: 1, scale: 1, transition: { ease: "easeIn" } }}
-        exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
-        className="absolute z-[5] w-44 top-[40px] cursor-default origin-top-right h-fit right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
-      >
-        {notifications && notifications?.length ? (
-          notifications.map((notification) => (
-            <DashboardNavNotification notification={notification} />
-          ))
-        ) : (
-          <div
-            style={{ fontFamily: fonts.jura }}
-            className="w-full p-2 h-full flex items-center justify-center text-slate-800 rounded-[3px] text-sm"
-          >
-            No notifications
-          </div>
-        )}
-      </motion.div>
-    );
-  };
 
   const renderProfile = (profile: ValidUserType["profile"]) => (
     <div
@@ -138,14 +139,11 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
           className="text-sl items-center list-none flex gap-6 sm:gap-5 z-3"
         >
           {!profile && (
-            <li>
-              <ButtonPopout
-                icon={<NotificationBell notifications={[]} />}
-                action="click"
-              >
-                {renderNotifications()}
-              </ButtonPopout>
-            </li>
+            <DashboardNavNotifications
+              key={progress.complete ? 1 : 2}
+              route={route}
+              progress={progress}
+            />
           )}
           <li className="sm:flex hidden items-center">
             <ButtonPopout

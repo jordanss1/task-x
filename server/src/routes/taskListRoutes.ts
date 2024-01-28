@@ -1,10 +1,13 @@
 import * as crypto from "crypto";
 import { Express, Request } from "express";
-import { Model, Types, model } from "mongoose";
-import { isError } from "util";
+import { model } from "mongoose";
 import deleteNotificationsForTask from "../functions/deleteNotificationsForTask";
 import requireJwt from "../middlewares/requireJwt";
-import { InteractionType, NotificationsType } from "../models/Notifications";
+import {
+  CommentNotificationType,
+  LikeNotificationType,
+  NotificationsType,
+} from "../models/Notifications";
 import { PublicTaskListType, PublicTaskType } from "../models/PublicTaskList";
 import { TaskListType, TaskType, TaskTypeIncoming } from "../models/TaskList";
 import { ValidUserType } from "../models/User";
@@ -15,7 +18,10 @@ const TaskList = model<TaskListType>("taskList");
 const PublicTask = model<PublicTaskType>("publicTask");
 const PublicTaskList = model<PublicTaskListType>("publicTaskList");
 const Notifications = model<NotificationsType>("notifications");
-const Interaction = model<InteractionType>("interaction");
+const LikeNotification = model<LikeNotificationType>("likeNotification");
+const CommentNotification = model<CommentNotificationType>(
+  "commentNotification"
+);
 
 const taskListRoutes = (app: Express) => {
   app.get("/api/tasks", requireJwt, async (req, res) => {
@@ -178,10 +184,17 @@ const taskListRoutes = (app: Express) => {
           taskId: req.body.taskId,
         });
 
-        const newNotificationObject = new Interaction<InteractionType>({
+        const newLikeNotification = new LikeNotification<LikeNotificationType>({
           taskId: req.body.taskId,
           task,
         });
+
+        const newCommentNotification =
+          new CommentNotification<CommentNotificationType>({
+            taskId: req.body.taskId,
+            task,
+            type: "newComment",
+          });
 
         if (!totalTasks?.totalTasks || totalTasks.totalTasks === 0) {
           try {
@@ -195,8 +208,8 @@ const taskListRoutes = (app: Express) => {
               { _user: req.user._user },
               {
                 $push: {
-                  userTaskLikes: newNotificationObject,
-                  userTaskComments: newNotificationObject,
+                  userTaskLikes: newLikeNotification,
+                  userTaskComments: newCommentNotification,
                 },
               }
             ).exec();
@@ -222,8 +235,8 @@ const taskListRoutes = (app: Express) => {
               { _user: req.user._user },
               {
                 $push: {
-                  userTaskLikes: newNotificationObject,
-                  userTaskComments: newNotificationObject,
+                  userTaskLikes: newLikeNotification,
+                  userTaskComments: newCommentNotification,
                 },
               }
             ).exec();
@@ -396,7 +409,14 @@ const taskListRoutes = (app: Express) => {
           taskId,
         });
 
-        const newNotificationObject = new Interaction({
+        const newCommentNotification =
+          new CommentNotification<CommentNotificationType>({
+            taskId,
+            task,
+            type: "newComment",
+          });
+
+        const newLikeNotification = new LikeNotification<LikeNotificationType>({
           taskId,
           task,
         });
@@ -412,8 +432,8 @@ const taskListRoutes = (app: Express) => {
               { _user: req.user._user },
               {
                 $push: {
-                  userTaskLikes: newNotificationObject,
-                  userTaskComments: newNotificationObject,
+                  userTaskLikes: newLikeNotification,
+                  userTaskComments: newCommentNotification,
                 },
               }
             ).exec();
@@ -443,8 +463,8 @@ const taskListRoutes = (app: Express) => {
               { _user: req.user._user },
               {
                 $push: {
-                  userTaskLikes: newNotificationObject,
-                  userTaskComments: newNotificationObject,
+                  userTaskLikes: newLikeNotification,
+                  userTaskComments: newCommentNotification,
                 },
               }
             ).exec();

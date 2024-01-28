@@ -1,15 +1,13 @@
 import { Express, Request } from "express";
-import { HydratedDocument, UpdateQuery, model } from "mongoose";
+import { UpdateQuery, model } from "mongoose";
 import requireJwt from "../middlewares/requireJwt";
-import { CommentType, commentSchema } from "../models/Comment";
+import { CommentType } from "../models/Comment";
 import {
-  AwardInteractionType,
-  CommentInteractionType,
-  InteractionType,
+  AwardNotificationType,
+  CommentNotificationType,
   NotificationsType,
 } from "../models/Notifications";
 import { PublicTaskListType, PublicTaskType } from "../models/PublicTaskList";
-import { TaskType } from "../models/TaskList";
 import { ValidUserType } from "../models/User";
 import {
   AwardType,
@@ -22,9 +20,10 @@ import {
 
 const PublicTaskList = model<PublicTaskListType>("publicTaskList");
 const Notifications = model<NotificationsType>("notifications");
-const Interaction = model<InteractionType>("interaction");
-const CommentInteraction = model<CommentInteractionType>("commentNotification");
-const AwardNotification = model<AwardInteractionType>("awardNotification");
+const CommentNotification = model<CommentNotificationType>(
+  "commentNotification"
+);
+const AwardNotification = model<AwardNotificationType>("awardNotification");
 const Comment = model<CommentType>("comment");
 
 const taskWallRoutes = (app: Express) => {
@@ -172,11 +171,13 @@ const taskWallRoutes = (app: Express) => {
         created: new Date().toISOString(),
       });
 
-      const newCommentLikeNotificationObject = new CommentInteraction({
-        taskId,
-        commentId: newComment.id,
-        task: publicTask?.tasks[0]?.task,
-      });
+      const newCommentLikeNotification =
+        new CommentNotification<CommentNotificationType>({
+          taskId,
+          commentId: newComment.id,
+          task: publicTask?.tasks[0]?.task as string,
+          type: "commentLike",
+        });
 
       try {
         await PublicTaskList.findOneAndUpdate(
@@ -194,7 +195,7 @@ const taskWallRoutes = (app: Express) => {
         await Notifications.findOneAndUpdate<NotificationsType>(
           { _user: req.user._user },
           {
-            $push: { commentLikes: newCommentLikeNotificationObject },
+            $push: { commentLikes: newCommentLikeNotification },
           }
         ).exec();
 
@@ -336,14 +337,14 @@ const taskWallRoutes = (app: Express) => {
         if (newAward && !awardArray.includes(newAward)) {
           awardArray.push(newAward);
 
-          const awardNotification = new AwardNotification<AwardInteractionType>(
-            {
+          const awardNotification =
+            new AwardNotification<AwardNotificationType>({
               taskId,
               task: filteredUserLikeNotification?.task as string,
               award: newAward,
               created: new Date().toISOString(),
-            }
-          );
+              unseen: true,
+            });
 
           await Notifications.findOneAndUpdate<NotificationsType>(
             {

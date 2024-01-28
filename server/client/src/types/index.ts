@@ -61,7 +61,8 @@ export type UserStateType = UserType | ValidUserType | false | null;
 export type AwardNotificationType = {
   taskId: string;
   task: string;
-  award: string;
+  type: "award";
+  award: "supported" | "superSupported" | "communityLegend";
   unseen: boolean;
   created: string;
 };
@@ -69,6 +70,7 @@ export type AwardNotificationType = {
 export type CommentAndLikeNotificationType = {
   taskId: string;
   task: string;
+  type: "commentLike" | "newComment" | "taskLike";
   total: number;
   unseen: boolean;
   created: string;
@@ -77,7 +79,9 @@ export type CommentAndLikeNotificationType = {
 export type CombinedNotificationType = {
   taskId: string;
   task: string;
-  award?: string;
+  type: "award" | "commentLike" | "newComment" | "taskLike";
+  commentId?: string;
+  award?: "supported" | "superSupported" | "communityLegend";
   total?: number;
   unseen: boolean;
   created: string;

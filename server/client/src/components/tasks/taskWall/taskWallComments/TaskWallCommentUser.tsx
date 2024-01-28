@@ -54,7 +54,9 @@ const TaskWallCommentUser = ({
         >
           {userName}
         </span>
-        <TaskWallTaskTimeStamp time={created} />
+        <div className="sm:block hidden">
+          <TaskWallTaskTimeStamp time={created} />
+        </div>
       </div>
       <AnimatePresence initial={false}>
         {currentUserComment && !formActive && (

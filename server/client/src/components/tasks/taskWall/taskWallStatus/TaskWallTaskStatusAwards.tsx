@@ -110,7 +110,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             animate="animate"
             exit="exit"
             style={{ fontFamily: fonts.jura }}
-            className="absolute z-[10] whitespace-nowrap bottom-[45px] cursor-default origin-bottom -left-[160%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+            className="absolute z-[10] sm:whitespace-nowrap bottom-[45px] cursor-default origin-bottom -left-6 sm:-left-[160%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
           >
             Supported: 25 likes
           </motion.div>
@@ -150,9 +150,9 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             animate="animate"
             exit="exit"
             style={{ fontFamily: fonts.jura }}
-            className="absolute z-[5] whitespace-nowrap bottom-[45px] cursor-default origin-bottom -left-[250%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+            className="absolute z-[5] max-w-[100px] bottom-[45px] cursor-default origin-bottom -left-[80%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
           >
-            Super Supported: 50 likes
+            Super Supported:<br></br> 50 likes
           </motion.div>
         </ButtonPopout>
       );
@@ -207,7 +207,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             animate="animate"
             exit="exit"
             style={{ fontFamily: fonts.jura }}
-            className="absolute z-[5] whitespace-nowrap bottom-[47px] cursor-default origin-bottom -left-[110%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+            className="absolute z-[5] sm:whitespace-nowrap bottom-[47px] cursor-default origin-bottom -left-3 sm:-left-[110%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
           >
             Legend: 100 likes
           </motion.div>

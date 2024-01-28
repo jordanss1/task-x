@@ -24,8 +24,7 @@ const Dashboard = (): ReactElement => {
   const { user } = useSelector(authSelector);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
-  const { formActive, taskListFetching } = useSelector(taskListSelector);
-  const { taskWallFetching } = useSelector(taskWallSelector);
+  const { formActive } = useSelector(taskListSelector);
 
   const mobile = useMediaQuery(640);
 
@@ -60,7 +59,7 @@ const Dashboard = (): ReactElement => {
         )}
         <>
           <Header
-            link="/dashboard/home"
+            link="/"
             containerClass="dashboard_header"
             nav={<DashboardNav />}
           />

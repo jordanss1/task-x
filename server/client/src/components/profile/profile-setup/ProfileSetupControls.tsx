@@ -129,8 +129,6 @@ const ProgressBar = ({ step }: { step: number }): ReactElement => {
   const progressBar =
     step === 0 ? "0%" : step === 1 ? "33%" : step === 2 ? "66%" : "100%";
 
-console.log(step)
-
   return (
     <motion.div className="relative flex max-w-[210px] w-full h-[10px] rounded-full border-1 border-black mr-auto ml-auto">
       <motion.div
