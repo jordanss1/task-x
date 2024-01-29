@@ -67,7 +67,7 @@ const TaskWallTaskCommentList = ({
     actions
   ) => {
     await dispatch(submitComment(values));
-    actions.resetForm({ values });
+    actions.resetForm();
   };
 
   return (

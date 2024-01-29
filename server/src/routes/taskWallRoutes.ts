@@ -60,7 +60,7 @@ const taskWallRoutes = (app: Express) => {
         return allPublicTasks.push(...tasks);
       });
 
-      res.send(allPublicTasks || false);
+      res.send(allPublicTasks.length > 0 ? allPublicTasks : false);
     } catch (err) {
       console.log(err);
       res.status(500).send("Issue retrieving all wall tasks, server error");

@@ -40,7 +40,7 @@ const taskWallRoutes = (app) => {
             publicTasks.forEach(({ tasks }) => {
                 return allPublicTasks.push(...tasks);
             });
-            res.send(allPublicTasks || false);
+            res.send(allPublicTasks.length > 0 ? allPublicTasks : false);
         }
         catch (err) {
             console.log(err);

@@ -59,9 +59,6 @@ const TaskWallNotificationTask = (): ReactElement => {
     dispatch(getNotifications());
   }, []);
 
-  console.log(taskWallFetching);
-  console.log(notificationFetching);
-
   const BigSpinner = (
     <div
       style={{ background: "rgba(0,0,0,.3)" }}
