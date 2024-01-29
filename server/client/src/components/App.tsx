@@ -57,6 +57,7 @@ const App = (): ReactElement => {
         <Route path="profile/edit" element={<ProfileEdit />} />
         <Route path="/dashboard/home" element={<Dashboard />} />
         <Route path="/dashboard/social" element={<Dashboard />} />
+        <Route path="/dashboard/social/notification" element={<Dashboard />} />
       </Routes>
     </>
   );

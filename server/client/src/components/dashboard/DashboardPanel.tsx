@@ -44,30 +44,30 @@ const DashboardPanel = ({
   expanded,
   setExpanded,
 }: DashboardPanelPropsType): ReactElement => {
-  const { beginProgress, stopProgress, complete, resetProgress } =
-    useArtificialProgress({});
   const { progress } = useSelector(interfaceSelector);
   const dispatch = useDispatch<AppThunkDispatch>();
   const timer = useRef<NodeJS.Timeout | number>(0);
-  const timer2 = useRef<number | NodeJS.Timeout>(0);
+  const route = useRef<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const mobile = useMediaQuery(640);
 
-  useEffect(() => {
-    if (complete && location.pathname === "/dashboard/home") {
-      setTimeout(() => navigate("/dashboard/social"), 300);
-    } else if (complete && location.pathname === "/dashboard/social") {
-      setTimeout(() => navigate("/dashboard/home"), 300);
-    }
+  const { pathname } = location;
 
-    return () => {
-      setTimeout(() => resetProgress(), 300);
-    };
-  }, [complete]);
+  const { beginProgress, stopProgress, resetProgress } = useArtificialProgress({
+    onFullProgress: () =>
+      setTimeout(() => {
+        navigate(route.current as string);
+        resetProgress();
+
+        if (expanded) {
+          setExpanded(false);
+        }
+      }, 300),
+  });
 
   const getAllTasks = async () => {
-    if (location.pathname === "/dashboard/home") {
+    if (pathname === "/dashboard/home") {
       await dispatch(getAllTaskWallTasks());
       await dispatch(getUserWallTasks());
     } else {
@@ -76,60 +76,67 @@ const DashboardPanel = ({
   };
 
   const handleClick = async (path: string) => {
-    if (path !== location.pathname) {
+    if (path !== pathname) {
+      route.current = path;
       await artificialDelay(timer, getAllTasks, beginProgress, stopProgress);
     }
   };
 
   const renderButtons = panelButtons.map(
-    ({ Element, label, path }: PanelButtonType) => (
-      <div
-        key={label}
-        className="min-w-[50px] items-center sm:min-w-0 sm:w-full flex justify-center"
-      >
-        <Button
-          style={{
-            padding: "var(--p-from)",
-            outline: "var(--border-active)",
-            background: colors.buttonGradients[0],
-          }}
-          variants={buttonVariants}
-          animate="animate"
-          whileHover={path === location.pathname ? "hovered" : ""}
-          custom={path === location.pathname}
-          onClick={() => handleClick(path)}
-          className="group min-h-[50px] sm:min-h-0 sm:[--border-active:1px_solid_#991FFF] sm:[--border-inactive:1px_solid_#991FFF00] [--border-active:3px_solid_rgb(242,_238,_235)] [--border-inactive:3px_solid_rgb(242,_238,_235,0)] scale-[1.10] sm:scale-[.9]  transition-all relative rounded-[30%] [--p-from:1rem] [--p-to:.5rem_.8rem] sm:[--p-from:1rem] sm:[--p-to:1rem] p-4 sm:bottom-0 bottom-[32px]"
+    ({ Element, label, path }: PanelButtonType) => {
+      const active =
+        path === pathname ||
+        (pathname.includes("notification") && path.includes("social"));
+
+      return (
+        <div
+          key={label}
+          className="min-w-[50px] items-center sm:min-w-0 sm:w-full flex justify-center"
         >
-          <Element
-            animate={
-              mobile
-                ? {
-                    y: path === location.pathname ? 0 : 20,
-                    scale: path === location.pathname ? 1.3 : 0.8,
-                  }
-                : {}
-            }
-            active={path === location.pathname ? true : false}
-          />
-          {!expanded && (
+          <Button
+            style={{
+              padding: "var(--p-from)",
+              outline: "var(--border-active)",
+              background: colors.buttonGradients[0],
+            }}
+            variants={buttonVariants}
+            animate="animate"
+            whileHover={!active ? "hovered" : ""}
+            custom={active}
+            onClick={() => handleClick(path)}
+            className="group min-h-[50px] sm:min-h-0 sm:[--border-active:1px_solid_#991FFF] sm:[--border-inactive:1px_solid_#991FFF00] [--border-active:3px_solid_rgb(242,_238,_235)] [--border-inactive:3px_solid_rgb(242,_238,_235,0)] scale-[1.10] sm:scale-[.9]  transition-all relative rounded-[30%] [--p-from:1rem] [--p-to:.5rem_.8rem] sm:[--p-from:1rem] sm:[--p-to:1rem] p-4 sm:bottom-0 bottom-[32px]"
+          >
+            <Element
+              animate={
+                mobile
+                  ? {
+                      y: active ? 0 : 20,
+                      scale: active ? 1.3 : 0.8,
+                    }
+                  : {}
+              }
+              active={active}
+            />
+            {!expanded && (
+              <motion.span
+                style={{ fontFamily: fonts.jura }}
+                className="absolute rounded-full sm:bg-[rgb(54,54,54)]  w-full sm:inline panel_span  sm:text-slate-200 text-slate-800 transition-all duration-300 delay-75 sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:left-[52px] sm:[--opacity-from:1] sm:[--opacity-to:0] [--opacity-from:1] [--opacity-to:0] sm:text-xs text-[10px] font-semibold -bottom-[20px] -left-0 sm:bottom-3 sm:p-1 sm:left-11"
+              >
+                {capitalize(label)}
+              </motion.span>
+            )}
+          </Button>
+          {expanded && (
             <motion.span
               style={{ fontFamily: fonts.jura }}
-              className="absolute rounded-full sm:bg-[rgb(54,54,54)]  w-full sm:inline panel_span  sm:text-slate-200 text-slate-800 transition-all duration-300 delay-75 sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:left-[52px] sm:[--opacity-from:1] sm:[--opacity-to:0] [--opacity-from:1] [--opacity-to:0] sm:text-xs text-[10px] font-semibold -bottom-[20px] -left-0 sm:bottom-3 sm:p-1 sm:left-11"
+              className="ps-5 text-slate-800 text-xs font-semibold sm:inline hidden"
             >
               {capitalize(label)}
             </motion.span>
           )}
-        </Button>
-        {expanded && (
-          <motion.span
-            style={{ fontFamily: fonts.jura }}
-            className="ps-5 text-slate-800 text-xs font-semibold sm:inline hidden"
-          >
-            {capitalize(label)}
-          </motion.span>
-        )}
-      </div>
-    )
+        </div>
+      );
+    }
   );
 
   return (

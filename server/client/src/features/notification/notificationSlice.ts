@@ -1,13 +1,18 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import dayjs from "dayjs";
-import { axiosGetNotifications } from "../../api";
+import {
+  axiosGetNotifications,
+  axiosUpdateNotificationStatus,
+} from "../../api";
 import { StateType } from "../../app/store";
 import {
   AllNotificationsReturnType,
   AwardNotificationType,
   CommentAndLikeNotificationType,
+  TaskWallTaskType,
 } from "../../types";
+import { setTaskWallFetching } from "../taskWall/taskWallSlice";
 
 export const getNotifications = createAsyncThunk<
   AllNotificationsReturnType | false,
@@ -17,23 +22,50 @@ export const getNotifications = createAsyncThunk<
   try {
     return await axiosGetNotifications();
   } catch (err) {
-    if (err instanceof AxiosError) {
-    }
     return false;
   }
 });
+
+export const updateNotificationStatus = createAsyncThunk<
+  void,
+  string,
+  { state: StateType }
+>(
+  "notifications/updateNotificationStatus",
+  async (taskId, { dispatch, getState }) => {
+    const { notificationFetching } = getState().notification;
+
+    if (!notificationFetching) {
+      dispatch(setNotificationFetching(true));
+    }
+
+    try {
+      await axiosUpdateNotificationStatus(taskId);
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        dispatch(setError(err.response?.data));
+      }
+    } finally {
+      dispatch(setNotificationFetching(false));
+    }
+  }
+);
 
 type NotificationStateType = {
   notifications:
     | (CommentAndLikeNotificationType | AwardNotificationType)[]
     | null
     | false;
+  notificationId: string | null;
+  notificationFetching: boolean;
   error: null | string;
   success: null | string;
 };
 
 const initialState: NotificationStateType = {
   notifications: null,
+  notificationId: null,
+  notificationFetching: false,
   error: null,
   success: null,
 };
@@ -47,6 +79,12 @@ const notificationSlice = createSlice({
     },
     setSuccess: (state, action: PayloadAction<string | null>) => {
       state.success = action.payload;
+    },
+    setNotificationFetching: (state, action: PayloadAction<boolean>) => {
+      state.notificationFetching = action.payload;
+    },
+    setNotificationId: (state, action: PayloadAction<string | null>) => {
+      state.notificationId = action.payload;
     },
   },
   extraReducers: (builders) => {
@@ -85,6 +123,11 @@ type NotificationSelectorType = (state: StateType) => NotificationStateType;
 export const notificationSelector: NotificationSelectorType = (state) =>
   state.notification;
 
-export const { setError, setSuccess } = notificationSlice.actions;
+export const {
+  setError,
+  setSuccess,
+  setNotificationFetching,
+  setNotificationId,
+} = notificationSlice.actions;
 
 export default notificationSlice.reducer;

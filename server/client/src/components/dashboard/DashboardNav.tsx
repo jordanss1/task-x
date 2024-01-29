@@ -41,12 +41,7 @@ const menuVariants: Variants = {
 
 export type RouteRefType = {
   pathname: string;
-  search?:
-    | undefined
-    | {
-        taskId: string | null;
-        commentId: string | null;
-      };
+  search?: undefined | string;
 } | null;
 
 const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
@@ -74,8 +69,7 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
         navigate({
           pathname: route.current.pathname,
           search: `?${createSearchParams({
-            taskId: route.current.search.taskId as string,
-            commentId: route.current.search.commentId as string,
+            taskId: route.current.search as string,
           })}`,
         });
       }

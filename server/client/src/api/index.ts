@@ -133,6 +133,16 @@ export const axiosGetNotifications =
     return data;
   };
 
+export const axiosUpdateNotificationStatus = async (
+  taskId: string
+): Promise<TaskWallTaskType | false> => {
+  const api = createAxios(true);
+
+  const { data } = await api.patch("/notifications", { taskId });
+
+  return data;
+};
+
 export const axiosGetUserTasks = async (): Promise<TaskType[] | false> => {
   const api = createAxios(true);
 

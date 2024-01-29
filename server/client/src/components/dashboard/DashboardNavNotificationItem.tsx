@@ -1,6 +1,6 @@
 import { Variants, motion, progress } from "framer-motion";
 import { ReactElement, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { colors, fonts } from "../../constants";
 import artificialDelay from "../../functions/artificialDelay";
 import useArtificialProgress from "../../hooks/useArtificialProgress";
@@ -35,15 +35,14 @@ const DashboardNavNotificationItem = ({
   route,
   progress,
 }: DashboardNavNotificationItemPropsType): ReactElement => {
-  const { award, task, taskId, total, commentId, unseen, created, type } =
-    notification;
+  const { award, task, taskId, total, unseen, type } = notification;
   const timer = useRef<NodeJS.Timeout | number>(0);
 
   const { beginProgress, stopProgress } = progress;
 
   if (route.current) {
-    route.current.pathname = "/dashboard/social";
-    route.current.search = { taskId, commentId: commentId || null };
+    route.current.pathname = "/dashboard/social/notification";
+    route.current.search = taskId;
   }
 
   const taskSnippet = (

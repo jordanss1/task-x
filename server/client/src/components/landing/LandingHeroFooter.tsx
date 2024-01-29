@@ -16,7 +16,6 @@ const LandingHeroFooter = (): ReactElement => {
     <div
       style={{
         fontFamily: fonts.jura,
-        boxShadow: `0px -1px 10px rgb(0,0,0,.3)`,
       }}
       className="absolute h-7 text-slate-600 items-center font-semibold text-xs bottom-0 left-0 w-full flex justify-start  min-[800px]:px-24 px-10"
     >
