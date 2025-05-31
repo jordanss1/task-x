@@ -291,9 +291,7 @@ const taskListRoutes = (app: Express) => {
 
         updatedUserTasks = tasks?.tasks.map((task) => task);
       } catch (err) {
-        return res
-          .status(500)
-          .send('Unable to set task as complete, try again');
+        res.status(500).send('Unable to set task as complete, try again');
       }
 
       if (publicTask) {
@@ -314,7 +312,7 @@ const taskListRoutes = (app: Express) => {
 
           updatedUserPublicTasks = publicTasks?.tasks.map((task) => task);
         } catch (err) {
-          return res
+          res
             .status(500)
             .send('Unable to set task wall task as complete, try again');
         }
@@ -376,7 +374,6 @@ const taskListRoutes = (app: Express) => {
           updatedUserTasks = tasks?.tasks.map((task) => task);
         } catch (err) {
           res.status(500).send('Unable to create new task, try again');
-          return;
         }
       }
 
@@ -427,7 +424,7 @@ const taskListRoutes = (app: Express) => {
               }
             ).exec();
           } catch (err) {
-            return res
+            res
               .status(500)
               .send('Unable to add your first task to task wall, try again');
           } finally {
@@ -457,7 +454,7 @@ const taskListRoutes = (app: Express) => {
               }
             ).exec();
           } catch (err) {
-            return res
+            res
               .status(500)
               .send('Unable to add your task to task wall, try again');
           } finally {
@@ -596,7 +593,7 @@ const taskListRoutes = (app: Express) => {
 
           updatedUserPublicTasks = null;
         } catch (err) {
-          return res
+          res
             .status(500)
             .send('Unable to delete task from Task Wall, try again');
         }
