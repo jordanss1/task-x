@@ -1,12 +1,11 @@
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import { Variants, motion } from "framer-motion";
-import { CSSProperties, ReactElement } from "react";
-import { colors, fonts } from "../../constants";
-import Error from "../svg/Error";
-import Question from "../svg/Question";
-import Success from "../svg/Success";
-import Button from "./Button";
-import ModalBackground from "./ModalBackground";
+import { Variants, motion } from 'framer-motion';
+import { CSSProperties, ReactElement } from 'react';
+import { colors, fonts } from '../../constants';
+import Error from '../svg/Error';
+import Question from '../svg/Question';
+import Success from '../svg/Success';
+import Button from './Button';
+import ModalBackground from './ModalBackground';
 
 export type PopupPropsType = {
   error?: string | null;
@@ -14,31 +13,31 @@ export type PopupPropsType = {
   prompt?: {
     onDeny: () => void;
     onAccept: () => void;
-    message: string | ReactJSXElement;
+    message: string | ReactElement;
   };
 };
 
 const PromptVariants: Variants = {
-  initial: { filter: "blur(3px)", y: 20, scale: 0.8 },
+  initial: { filter: 'blur(3px)', y: 20, scale: 0.8 },
   animate: {
-    filter: "blur(0px)",
+    filter: 'blur(0px)',
     y: 0,
     scale: 1,
-    transition: { type: "tween", ease: "easeInOut" },
+    transition: { type: 'tween', ease: 'easeInOut' },
   },
   exit: {
-    filter: "blur(3px)",
+    filter: 'blur(3px)',
     opacity: 0,
     y: -20,
     scale: 0.95,
-    transition: { type: "tween", ease: "easeInOut", opacity: { delay: 0.1 } },
+    transition: { type: 'tween', ease: 'easeInOut', opacity: { delay: 0.1 } },
   },
 };
 
 const SuccessOrErrorVariants: Variants = {
-  initial: { y: "-100%", left: "calc(50% - 140px)" },
-  animate: { y: "10%", transition: { type: "tween", ease: "easeInOut" } },
-  exit: { y: "-100%", transition: { type: "tween", ease: "easeInOut" } },
+  initial: { y: '-100%', left: 'calc(50% - 140px)' },
+  animate: { y: '10%', transition: { type: 'tween', ease: 'easeInOut' } },
+  exit: { y: '-100%', transition: { type: 'tween', ease: 'easeInOut' } },
 };
 
 const Popup = ({ error, success, prompt }: PopupPropsType): ReactElement => {
@@ -107,10 +106,10 @@ const Popup = ({ error, success, prompt }: PopupPropsType): ReactElement => {
         animate="animate"
         exit="exit"
         style={{
-          top: prompt ? "unset" : "0",
-          margin: prompt ? "auto" : "0",
-          flexDirection: prompt ? "column" : "row",
-          inset: prompt ? "0" : "unset",
+          top: prompt ? 'unset' : '0',
+          margin: prompt ? 'auto' : '0',
+          flexDirection: prompt ? 'column' : 'row',
+          inset: prompt ? '0' : 'unset',
         }}
         className="fixed px-5 z-30 h-fit w-fit justify-center items-center mx-auto flex"
       >
@@ -118,22 +117,22 @@ const Popup = ({ error, success, prompt }: PopupPropsType): ReactElement => {
           style={{
             background: colors.purpleGradients[1],
             outline: prompt
-              ? "2px solid purple"
+              ? '2px solid purple'
               : error
-              ? "5px double red"
-              : "5px solid green",
-            outlineOffset: "3px",
-            outlineStyle: "double",
-            padding: prompt ? "20px" : "10px",
-            height: prompt ? "initial" : "128px",
-            maxWidth: prompt ? "400px" : "320px",
+                ? '5px double red'
+                : '5px solid green',
+            outlineOffset: '3px',
+            outlineStyle: 'double',
+            padding: prompt ? '20px' : '10px',
+            height: prompt ? 'initial' : '128px',
+            maxWidth: prompt ? '400px' : '320px',
           }}
           className="min-h-[128px] flex flex-col gap-1 overflow-visible rounded-xl justify-center items-center max-w-xs w-full mx-auto"
         >
           <div
             style={{
               flex: prompt ? 1 : 1,
-              alignItems: prompt ? "center" : "center",
+              alignItems: prompt ? 'center' : 'center',
             }}
             className="flex flex-2"
           >
@@ -143,7 +142,7 @@ const Popup = ({ error, success, prompt }: PopupPropsType): ReactElement => {
               style={{
                 fontFamily: fonts.jura,
                 color: colors.whiteShades[1],
-                textAlign: prompt ? "center" : "initial",
+                textAlign: prompt ? 'center' : 'initial',
               }}
             >
               {error || success || prompt?.message}
