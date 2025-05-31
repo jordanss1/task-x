@@ -26,8 +26,6 @@ const app: Express = express();
 
 app.use('/api', express.static('src/public'));
 
-console.log(`Running Node.js version: ${process.version}`);
-
 app.use(
   helmet({
     contentSecurityPolicy: {

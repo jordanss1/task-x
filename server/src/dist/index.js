@@ -25,7 +25,6 @@ const { mongoURI } = keys_1.default;
 (0, mongoose_1.connect)(mongoURI);
 const app = (0, express_1.default)();
 app.use('/api', express_1.default.static('src/public'));
-console.log(`Running Node.js version: ${process.version}`);
 app.use((0, helmet_1.default)({
     contentSecurityPolicy: {
         directives: {
