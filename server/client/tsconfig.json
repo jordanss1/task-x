@@ -16,7 +16,8 @@
     "jsx": "react-jsx",
     /* Linting */
     "strict": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "jsxImportSource": "@emotion/react"
   },
   "include": ["src", "tailwind.config.ts"]
 }
