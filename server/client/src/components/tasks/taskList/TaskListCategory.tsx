@@ -38,7 +38,7 @@ const TaskListCategory = ({
             scale: { type: "tween", ease: "easeIn" },
           },
         }}
-        className="text-sm py-1 ps-[1px]"
+        className="text-sm py-1 ps-px"
       >
         {sortBy}
       </motion.h3>

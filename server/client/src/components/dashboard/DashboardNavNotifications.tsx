@@ -10,7 +10,7 @@ import { RouteRefType } from "./DashboardNav";
 import DashboardNavNotificationItem from "./DashboardNavNotificationItem";
 
 type DashboardNavNotificationsPropsType = {
-  route: React.MutableRefObject<RouteRefType>;
+  route: React.RefObject<RouteRefType>;
   progress: ReturnType<typeof useArtificialProgress>;
 };
 
@@ -32,7 +32,7 @@ const DashboardNavNotifications = ({
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1, transition: { ease: "easeIn" } }}
         exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
-        className="absolute z-[5] w-56 top-[40px] cursor-default origin-top-right h-fit max-h-96 sm:right-0 -right-14 px-0 border-[1px] rounded-lg overflow-scroll bg-slate-200 border-slate-400"
+        className="absolute z-5 w-56 top-[40px] cursor-default origin-top-right h-fit max-h-96 sm:right-0 -right-14 px-0 border rounded-lg overflow-scroll bg-slate-200 border-slate-400"
       >
         {notifications && notifications?.length ? (
           notifications.map((notification, i) => (

@@ -85,7 +85,7 @@ const SVGVariants = (is800: boolean): Variants => {
 
 type LandingHeroCenterPropsType = {
   hero: string;
-  speed: React.MutableRefObject<"fast" | "slow">;
+  speed: React.RefObject<"fast" | "slow">;
 };
 
 const LandingHeroCenter = ({

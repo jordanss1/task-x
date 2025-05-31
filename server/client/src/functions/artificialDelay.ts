@@ -1,8 +1,8 @@
-import axios from "axios";
-import { MutableRefObject } from "react";
+import axios from 'axios';
+import { RefObject } from 'react';
 
 type ArtificialDelayType = (
-  timer: MutableRefObject<number | NodeJS.Timeout>,
+  timer: RefObject<number | NodeJS.Timeout>,
   action?: () => void,
   beginProgress?: () => void,
   stopProgress?: () => void

@@ -105,7 +105,7 @@ const TaskListTaskStatus = ({
         className="w-full gap-1 flex max-w-[85px]"
       >
         {editing ? (
-          <div className="flex items-center gap-[1px]">
+          <div className="flex items-center gap-px">
             <Button
               style={{ ...buttonStyle, boxShadow: "0px" }}
               icon={<i className="fa-solid fa-arrow-rotate-left" />}

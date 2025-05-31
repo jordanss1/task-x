@@ -32,7 +32,7 @@ const TaskWallTaskInteraction = ({
   const comments = commentAmount > 0 ? commentAmount : "";
 
   return (
-    <div className="w-full min-h-[15px] sm:px-0 px-[1px] flex relative items-baseline justify-between sm:mr-auto sm:ml-auto">
+    <div className="w-full min-h-[15px] sm:px-0 px-px flex relative items-baseline justify-between sm:mr-auto sm:ml-auto">
       <div className="sm:hidden">
         <TaskWallTaskTimeStamp time={created} />
       </div>

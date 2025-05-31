@@ -9,7 +9,7 @@ import { RouteRefType } from "./DashboardNav";
 
 type DashboardNavNotificationItemPropsType = {
   notification: CombinedNotificationType;
-  route: React.MutableRefObject<RouteRefType>;
+  route: React.RefObject<RouteRefType>;
   progress: ReturnType<typeof useArtificialProgress>;
 };
 

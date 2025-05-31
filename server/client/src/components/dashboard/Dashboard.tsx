@@ -42,7 +42,7 @@ const Dashboard = (): ReactElement => {
   return (
     <>
       {(user === null || (user && !user.profile)) && (
-        <div className="z-[100] absolute h-screen w-full bg-white" />
+        <div className="z-100 absolute h-screen w-full bg-white" />
       )}
       <motion.div
         onClick={() => dismissForm()}

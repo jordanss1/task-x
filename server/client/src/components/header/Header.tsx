@@ -1,12 +1,12 @@
-import { ReactElement } from "react";
-import { useSelector } from "react-redux";
-import { boolean } from "yup";
-import { authSelector } from "../../features/auth/authSlice";
-import { useMediaQuery } from "../../hooks/MediaQueryHooks";
-import "../../styles/header.css";
-import LightBulb from "../svg/LightBulb";
-import HeaderAuth from "./HeaderAuth";
-import HeaderLogo from "./HeaderLogo";
+import { ReactElement } from 'react';
+import { useSelector } from 'react-redux';
+import { boolean } from 'yup';
+import { authSelector } from '../../features/auth/authSlice';
+import { useMediaQuery } from '../../hooks/MediaQueryHooks';
+import '../../styles/header.css';
+import LightBulb from '../svg/LightBulb';
+import HeaderAuth from './HeaderAuth';
+import HeaderLogo from './HeaderLogo';
 
 type HeaderPropsType = {
   link: string;
@@ -15,7 +15,7 @@ type HeaderPropsType = {
   profile?: boolean;
 };
 
-const   Header = ({
+const Header = ({
   link,
   containerClass,
   nav,
@@ -33,7 +33,7 @@ const   Header = ({
     return <HeaderAuth user={user} />;
   };
 
-  containerClass = containerClass ? containerClass : "";
+  containerClass = containerClass ? containerClass : '';
 
   return (
     <header className={`${containerClass} flex justify-center items-center`}>

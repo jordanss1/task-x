@@ -73,7 +73,7 @@ const NextButton = ({
       onClick={(e) => handleClick(e)}
       type="button"
       disabled={disabled}
-      className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990] gap-[1px] rounded-xl"
+      className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990] gap-px rounded-xl"
       icon={
         isSubmitting ? (
           <Spinner position="initial" />
@@ -111,7 +111,7 @@ const BackButton = ({
       type="button"
       onClick={(e) => handleClick(e)}
       disabled={disabled}
-      className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990]  flex-row-reverse rounded-xl gap-[1px]"
+      className="p-[6px] text-slate-900 disabled:text-slate-700 bg-[#e0dcd9] disabled:bg-[#e0dcd990]  flex-row-reverse rounded-xl gap-px"
       icon={
         <SmallIcon
           style={{ color: colors.purple }}
@@ -130,7 +130,7 @@ const ProgressBar = ({ step }: { step: number }): ReactElement => {
     step === 0 ? "0%" : step === 1 ? "33%" : step === 2 ? "66%" : "100%";
 
   return (
-    <motion.div className="relative flex max-w-[210px] w-full h-[10px] rounded-full border-1 border-black mr-auto ml-auto">
+    <motion.div className="relative flex max-w-[210px] w-full h-[10px] rounded-full border border-black mr-auto ml-auto">
       <motion.div
         style={{
           background: colors.buttonGradients[1],

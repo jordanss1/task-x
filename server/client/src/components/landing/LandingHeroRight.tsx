@@ -1,12 +1,12 @@
-import { Variants, motion } from "framer-motion";
-import { ReactElement } from "react";
-import { colors } from "../../constants";
-import { HandleClickType } from "./LandingHero";
-import { sidebarItems } from "./content";
+import { Variants, motion } from 'framer-motion';
+import { ReactElement } from 'react';
+import { colors } from '../../constants';
+import { HandleClickType } from './LandingHero';
+import { sidebarItems } from './content';
 
 type LandingHeroRightPropsType = {
   hero: string;
-  speed: React.MutableRefObject<"fast" | "slow">;
+  speed: React.RefObject<'fast' | 'slow'>;
   handleClick: HandleClickType;
 };
 
@@ -15,10 +15,10 @@ const tabVariants: Variants = {
     active
       ? {}
       : {
-          backdropFilter: "blur(10px) drop-shadow(1px 1px white)",
+          backdropFilter: 'blur(10px) drop-shadow(1px 1px white)',
           background:
-            "linear-gradient(135deg, rgba(0, 0, 0, .5), rgba(0, 0, 0,.2)",
-          outline: "2px solid white",
+            'linear-gradient(135deg, rgba(0, 0, 0, .5), rgba(0, 0, 0,.2)',
+          outline: '2px solid white',
           scale: 1.05,
         },
 };
@@ -42,7 +42,7 @@ const LandingHeroRight = ({
       style={{
         borderRadius: 20,
         background:
-          "linear-gradient(90deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, .1)",
+          'linear-gradient(90deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, .1)',
       }}
       variants={tabVariants}
       onClick={() => handleClick(heading, i)}
@@ -56,11 +56,11 @@ const LandingHeroRight = ({
           className="hero_right_tab_bg"
           style={{
             borderRadius: 20,
-            boxShadow: "2px 2px 10px black",
+            boxShadow: '2px 2px 10px black',
           }}
           transition={{
-            type: "spring",
-            duration: speed.current === "slow" ? 1 : 0.4,
+            type: 'spring',
+            duration: speed.current === 'slow' ? 1 : 0.4,
           }}
         />
       )}

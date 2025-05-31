@@ -66,7 +66,7 @@ const TaskWallTaskStatusDue = ({
           fontFamily: fonts.orbitron,
           display: complete ? "none" : "flex",
         }}
-        className="absolute z-[5] whitespace-nowrap bottom-[40px] cursor-default origin-bottom -left-[325%] sm:-left-[50%] p-1 border-[1px] text-[10px] sm:text-xs rounded-lg overflow-hidden bg-[#f4f0ed] text-black border-slate-400"
+        className="absolute z-5 whitespace-nowrap bottom-[40px] cursor-default origin-bottom -left-[325%] sm:-left-[50%] p-1 border text-[10px] sm:text-xs rounded-lg overflow-hidden bg-[#f4f0ed] text-black border-slate-400"
       >
         {renderPopout}
       </motion.div>

@@ -34,7 +34,7 @@ const HeaderLogo = ({
   return (
     <div
       onClick={handleClick}
-      className="flex flex-[1] h-full cursor-pointer items-center"
+      className="flex flex-1 h-full cursor-pointer items-center"
     >
       <LightBulb size={iconSize ?? 45} />
       <HeaderLogoText fontSize={fontSize} />

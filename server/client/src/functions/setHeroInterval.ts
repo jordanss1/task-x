@@ -5,7 +5,7 @@ type SetHeroIntervalType = (
     React.SetStateAction<"Welcome" | "Prioritize" | "Popular">
   >,
   currentIndex?: number,
-  speed?: React.MutableRefObject<string>
+  speed?: React.RefObject<string>
 ) => NodeJS.Timeout;
 
 const setHeroInterval: SetHeroIntervalType = (setHero, currentIndex, speed) => {

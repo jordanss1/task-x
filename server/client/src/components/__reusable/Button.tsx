@@ -26,7 +26,7 @@ const Button = forwardRef(
     return (
       <motion.button
         ref={ref}
-        className={`${className ?? ""} ${icon ? "flex items-baseline" : ""}`}
+        className={`${className ?? ""} ${icon ? "flex items-baseline" : ""} cursor-pointer`}
         {...props}
       >
         {typeof label === "string" ? (

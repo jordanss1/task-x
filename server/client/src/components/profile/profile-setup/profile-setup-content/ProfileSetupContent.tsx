@@ -77,7 +77,7 @@ const ProfileSetupContent = ({
           type: "spring",
         },
       }}
-      className="absolute w-full h-full m-auto inset-0 mix-blend-difference -z-[10]"
+      className="absolute w-full h-full m-auto inset-0 mix-blend-difference -z-10"
     />
   );
 

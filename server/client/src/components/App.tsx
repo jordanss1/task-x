@@ -1,23 +1,23 @@
-import { AnimatePresence } from "framer-motion";
-import { ReactElement, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { AppThunkDispatch } from "../app/store";
-import { getUser } from "../features/auth/authSlice";
+import { AnimatePresence } from 'framer-motion';
+import { ReactElement, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { AppThunkDispatch } from '../app/store';
+import { getUser } from '../features/auth/authSlice';
 import {
   notificationSelector,
   setError,
   setSuccess,
-} from "../features/notification/notificationSlice";
-import useRedirect from "../hooks/useRedirect";
-import "../index.css";
-import "../styles/all.css";
-import Popup from "./__reusable/Popup";
-import Dashboard from "./dashboard/Dashboard";
-import Landing from "./landing/Landing";
-import PrivacyPolicy from "./privacy/PrivacyPolicy";
-import ProfileEdit from "./profile/profile-edit/ProfileEdit";
-import ProfileSetup from "./profile/profile-setup/ProfileSetup";
+} from '../features/notification/notificationSlice';
+import useRedirect from '../hooks/useRedirect';
+import '../index.css';
+import '../styles/all.css';
+import Popup from './__reusable/Popup';
+import Dashboard from './dashboard/Dashboard';
+import Landing from './landing/Landing';
+import PrivacyPolicy from './privacy/PrivacyPolicy';
+import ProfileEdit from './profile/profile-edit/ProfileEdit';
+import ProfileSetup from './profile/profile-setup/ProfileSetup';
 
 const App = (): ReactElement => {
   useRedirect();
@@ -25,7 +25,7 @@ const App = (): ReactElement => {
   const { error, success } = useSelector(notificationSelector);
   const navigate = useNavigate();
 
-  const timer = useRef<NodeJS.Timeout>();
+  const timer = useRef<number | NodeJS.Timeout>(0);
 
   useEffect(() => {
     dispatch(getUser());

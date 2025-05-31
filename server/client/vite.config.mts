@@ -1,18 +1,19 @@
-import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
-import svgr from "vite-plugin-svgr";
-import viteTsconfigPaths from "vite-tsconfig-paths";
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
+import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    outDir: "dist",
+    outDir: 'dist',
   },
   server: {
     open: true,
     proxy: {
-      "/api": {
-        target: "http://localhost:5000",
+      '/api': {
+        target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
       },
@@ -22,7 +23,8 @@ export default defineConfig({
     react(),
     viteTsconfigPaths(),
     svgr({
-      include: "**/*.svg?react",
+      include: '**/*.svg?react',
     }),
+    tailwindcss(),
   ],
 });

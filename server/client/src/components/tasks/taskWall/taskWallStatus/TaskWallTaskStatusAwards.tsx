@@ -87,7 +87,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             backgroundColor: "#e0dcd9",
             scale: "var(--scale)",
           }}
-          className="shadow-sm sm:[--scale:1.2] [scale:.8] shadow-black relative z-10 rounded-full"
+          className="shadow-sm sm:[--scale:1.2] scale-[.8] shadow-black relative z-10 rounded-full"
           icon={
             <motion.img
               variants={svgVariants}
@@ -110,7 +110,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             animate="animate"
             exit="exit"
             style={{ fontFamily: fonts.jura }}
-            className="absolute z-[10] sm:whitespace-nowrap bottom-[45px] cursor-default origin-bottom -left-6 sm:-left-[160%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+            className="absolute z-10 sm:whitespace-nowrap bottom-[45px] cursor-default origin-bottom -left-6 sm:-left-[160%] p-1 border text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
           >
             Supported: 25 likes
           </motion.div>
@@ -127,7 +127,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             backgroundColor: "#e0dcd9",
             scale: "var(--scale)",
           }}
-          className="shadow-md shadow-cyan-800 sm:[--scale:1.2] [scale:.8] rounded-full border-2 border-solid border-slate-400"
+          className="shadow-md shadow-cyan-800 sm:[--scale:1.2] scale-[.8] rounded-full border-2 border-solid border-slate-400"
           icon={
             <motion.img
               variants={svgVariants}
@@ -150,7 +150,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             animate="animate"
             exit="exit"
             style={{ fontFamily: fonts.jura }}
-            className="absolute z-[5] max-w-[100px] bottom-[45px] cursor-default origin-bottom -left-[80%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+            className="absolute z-5 max-w-[100px] bottom-[45px] cursor-default origin-bottom -left-[80%] p-1 border text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
           >
             Super Supported:<br></br> 50 likes
           </motion.div>
@@ -199,7 +199,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
               />
             </>
           }
-          className="relative shadow-lg shadow-[#991ff1] sm:[--scale:1.2] [scale:.8] p-[2px] rounded-full border-[3px] border-solid border-[#daa520] isolate"
+          className="relative shadow-lg shadow-[#991ff1] sm:[--scale:1.2] scale-[.8] p-[2px] rounded-full border-[3px] border-solid border-[#daa520] isolate"
         >
           <motion.div
             variants={popoutVariants}
@@ -207,7 +207,7 @@ const Award = ({ award }: { award: AwardType }): ReactElement => {
             animate="animate"
             exit="exit"
             style={{ fontFamily: fonts.jura }}
-            className="absolute z-[5] sm:whitespace-nowrap bottom-[47px] cursor-default origin-bottom -left-3 sm:-left-[110%] p-1 border-[1px] text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+            className="absolute z-5 sm:whitespace-nowrap bottom-[47px] cursor-default origin-bottom -left-3 sm:-left-[110%] p-1 border text-xs rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
           >
             Legend: 100 likes
           </motion.div>

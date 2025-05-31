@@ -111,7 +111,7 @@ const TaskNewTaskOverlay = ({
         custom={{ hovered, formActive }}
         variants={variants.tapped === undefined ? buttonVariants : formVariants}
         style={{ borderRadius: "30%", filter: "blur(0px)", y: 10, scale: 0.9 }}
-        className="absolute inset-0 -z-[11]"
+        className="absolute inset-0 -z-11"
       />
     </>
   );

@@ -94,7 +94,7 @@ const LandingHeroLeft = ({
       : "Need motivation?";
 
   return (
-    <div className="hero_left">
+    <div className="hero_left !p-5">
       <h2 className="hero_left_heading leading-snug">{renderHeading}</h2>
       <div className="hero_left_body">
         <LandingHeroLeftContent index={index} />

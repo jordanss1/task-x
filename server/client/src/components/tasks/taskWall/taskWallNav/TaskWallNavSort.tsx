@@ -41,7 +41,7 @@ const TaskWallNavSort = (): ReactElement => {
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1, transition: { ease: "easeIn" } }}
         exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
-        className="absolute origin-top z-10 overflow-hidden rounded-xl border border-1 border-slate-400 bg-[#f4f0ed] right-0 top-8 w-28 "
+        className="absolute origin-top z-10 overflow-hidden rounded-xl border border border-slate-400 bg-[#f4f0ed] right-0 top-8 w-28 "
       >
         {renderOptions}
       </motion.div>

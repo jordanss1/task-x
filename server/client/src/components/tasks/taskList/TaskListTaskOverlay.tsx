@@ -47,7 +47,7 @@ const TaskListTaskOverlay = ({
               blue 80%
             )`,
         }}
-        className="absolute  -z-[5]"
+        className="absolute  -z-5"
       />
       <motion.div
         layoutDependency={editing}
@@ -77,7 +77,7 @@ const TaskListTaskOverlay = ({
           left: "-3px",
           background: "rgb(0,0,0,.3)",
         }}
-        className="absolute w-[108%] -z-[4]"
+        className="absolute w-[108%] -z-4"
       />
     </>
   );

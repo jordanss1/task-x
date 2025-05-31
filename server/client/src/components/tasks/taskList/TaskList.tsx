@@ -39,7 +39,7 @@ const TaskList = (): ReactElement => {
   const BigSpinner = (
     <div
       style={{ background: "rgba(0,0,0,.3)" }}
-      className="fixed rounded-full z-[100] inset-0 m-auto p-9 w-fit h-fit flex justify-center items-center"
+      className="fixed rounded-full z-100 inset-0 m-auto p-9 w-fit h-fit flex justify-center items-center"
     >
       <Spinner size="large" color={colors.purple} />
     </div>

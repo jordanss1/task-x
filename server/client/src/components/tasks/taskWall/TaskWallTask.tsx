@@ -78,7 +78,7 @@ const TaskWallTask = ({ taskItem }: TaskWallTaskPropsType): ReactElement => {
         boxShadow: "1px 1px 2px black, -1px -1px 2px black",
         background: "#ebe7e4",
       }}
-      className="sm:min-h-[15rem] w-full flex flex-col gap-5 p-3 rounded-2xl"
+      className="sm:min-h-60 w-full flex flex-col gap-5 p-3 rounded-2xl"
     >
       <TaskWallTaskStatus
         awards={awards}

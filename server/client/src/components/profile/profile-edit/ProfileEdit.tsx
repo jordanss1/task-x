@@ -16,7 +16,7 @@ const ProfileEdit = (): ReactElement => {
   return (
     <>
       {(user === null || (user && !user.profile)) && (
-        <div className="z-[100] h-screen w-full bg-white" />
+        <div className="z-100 h-screen w-full bg-white" />
       )}
       <ProgressBar progress={progress} />
       <main className="profile_edit px-5 min-h-screen">

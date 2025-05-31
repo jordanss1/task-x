@@ -62,7 +62,7 @@ const TaskWallNotificationTask = (): ReactElement => {
   const BigSpinner = (
     <div
       style={{ background: "rgba(0,0,0,.3)" }}
-      className="fixed rounded-full z-[100] inset-0 m-auto p-9 w-fit h-fit flex justify-center items-center"
+      className="fixed rounded-full z-100 inset-0 m-auto p-9 w-fit h-fit flex justify-center items-center"
     >
       <Spinner size="large" color={colors.purple} />
     </div>
@@ -73,7 +73,7 @@ const TaskWallNotificationTask = (): ReactElement => {
       return (
         <motion.div
           key={1}
-          className="fixed rounded-full z-[100] inset-0 m-auto p-9 w-fit h-fit flex justify-center items-center"
+          className="fixed rounded-full z-100 inset-0 m-auto p-9 w-fit h-fit flex justify-center items-center"
           exit={{ opacity: 0, transition: { delay: 1 } }}
         >
           <Spinner size="large" color={colors.purple} />

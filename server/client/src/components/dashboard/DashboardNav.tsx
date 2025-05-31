@@ -80,7 +80,7 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
     <motion.div
       key={label}
       transition={{ duration: 0.6 }}
-      className="w-full gap-4 sm:min-h-0 min-h-[73px] sm:gap-2 items-center p-2 ps-8 sm:ps-2 hover:bg-slate-500 hover:text-slate-200 sm:hover:bg-slate-200 sm:text-slate-700 sm:hover:text-black sm:rounded-[3px] text-left text-xl sm:text-xs sm:z-auto z-[16] relative flex cursor-pointer"
+      className="w-full gap-4 sm:min-h-0 min-h-[73px] sm:gap-2 items-center p-2 ps-8 sm:ps-2 hover:bg-slate-500 hover:text-slate-200 sm:hover:bg-slate-200 sm:text-slate-700 sm:hover:text-black sm:rounded-[3px] text-left text-xl sm:text-xs sm:z-auto z-16 relative flex cursor-pointer"
       onClick={async () => {
         await artificialDelay(
           timer,
@@ -106,7 +106,7 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
     >
       <div className="min-w-[32px]">
         <ProfileIcon
-          className="rounded-full mx-auto w-fit sm:p-[1px] p-[2px] bg-slate-400"
+          className="rounded-full mx-auto w-fit sm:p-px p-[2px] bg-slate-400"
           size={mobile ? 45 : 30}
           img={profile.profilePicture}
         />
@@ -159,7 +159,7 @@ const DashboardNav = ({ profile }: { profile?: boolean }): ReactElement => {
                   scale: 0.95,
                   transition: { duration: 0.1 },
                 }}
-                className="absolute w-44 z-[5] top-[40px] cursor-default origin-top-right h-fit right-0 px-0 border-[1px] rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
+                className="absolute w-44 z-5 top-[40px] cursor-default origin-top-right h-fit right-0 px-0 border rounded-lg overflow-hidden bg-[#f4f0ed] border-slate-400"
               >
                 {renderProfile(user.profile)}
                 {renderSettings}

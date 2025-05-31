@@ -104,7 +104,7 @@ const DashboardPanel = ({
             whileHover={!active ? "hovered" : ""}
             custom={active}
             onClick={() => handleClick(path)}
-            className="group min-h-[50px] sm:min-h-0 sm:[--border-active:1px_solid_#991FFF] sm:[--border-inactive:1px_solid_#991FFF00] [--border-active:3px_solid_rgb(242,_238,_235)] [--border-inactive:3px_solid_rgb(242,_238,_235,0)] scale-[1.10] sm:scale-[.9]  transition-all relative rounded-[30%] [--p-from:1rem] [--p-to:.5rem_.8rem] sm:[--p-from:1rem] sm:[--p-to:1rem] p-4 sm:bottom-0 bottom-[32px]"
+            className="group min-h-[50px] sm:min-h-0 sm:[--border-active:1px_solid_#991FFF] sm:[--border-inactive:1px_solid_#991FFF00] [--border-active:3px_solid_rgb(242,238,235)] [--border-inactive:3px_solid_rgb(242,238,235,0)] scale-[1.10] sm:scale-[.9]  transition-all relative rounded-[30%] [--p-from:1rem] [--p-to:.5rem_.8rem] sm:[--p-from:1rem] sm:[--p-to:1rem] p-4 sm:bottom-0 bottom-[32px]"
           >
             <Element
               animate={
@@ -145,10 +145,10 @@ const DashboardPanel = ({
       <motion.section
         style={{ width: mobile ? "100%" : "70px" }}
         animate={{ width: expanded ? "var(--w-from)" : "var(--w-to)" }}
-        className="dashboard_panel z-[5] sm:py-7 flex justify-center sm:justify-start gap-8 sm:gap-6 sm:flex-col items-center fixed left-0 sm:top-0 bottom-0 sm:h-full h-11 sm:w-32 w-full sm:[--w-from:155px] sm:[--w-to:70px] [--w-from:100%] [--w-to:100%]"
+        className="dashboard_panel z-5 sm:py-7 flex justify-center sm:justify-start gap-8 sm:gap-6 sm:flex-col items-center fixed left-0 sm:top-0 bottom-0 sm:h-full h-11 sm:w-32 w-full sm:[--w-from:155px] sm:[--w-to:70px] [--w-from:100%] [--w-to:100%]"
       >
         <div className="sm:flex px-3 py-4 gap-1 w-full justify-center items-center hidden min-h-[60px]">
-          <motion.div className="flex justify-center flex-[2]">
+          <motion.div className="flex justify-center flex-2">
             <MenuButton
               animate={{ scale: expanded ? 1.1 : 1 }}
               onClick={() => setExpanded((prev) => !prev)}

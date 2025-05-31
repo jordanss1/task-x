@@ -87,7 +87,7 @@ const ProfileSetup = (): ReactElement => {
   return (
     <>
       {(user === null || (user && user.profile && !updatedProfile)) && (
-        <div className="z-[100] h-screen w-full bg-white" />
+        <div className="z-100 h-screen w-full bg-white" />
       )}
       <ProgressBar progress={progress} />
       <motion.main
@@ -147,7 +147,7 @@ const ProfileSetup = (): ReactElement => {
                 duration: 1,
               },
             }}
-            className="sm:[--width:90%] [--width:100%] mix-blend-color-burn absolute rounded-[100px] inset-0 m-auto h-[95%] -z-[10]"
+            className="sm:[--width:90%] [--width:100%] mix-blend-color-burn absolute rounded-[100px] inset-0 m-auto h-[95%] -z-10"
           />
 
           <Formik<ProfileSchemaType>
