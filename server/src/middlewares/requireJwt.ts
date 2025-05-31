@@ -1,11 +1,11 @@
-import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { model } from "mongoose";
-import keys from "../config/keys";
-import { UserType } from "../models/User";
-import types from "../types/express";
+import { NextFunction, Request, Response } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { model } from 'mongoose';
+import keys from '../config/keys';
+import { UserType } from '../models/User';
+import types from '../types/express';
 
-const User = model<UserType>("users");
+const User = model<UserType>('users');
 
 const { jwtSecret } = keys;
 
@@ -20,13 +20,13 @@ export const requireJwt = async (
   res: Response,
   next: NextFunction
 ) => {
-  const unprotectedPaths = req.path.includes("current_user");
+  const unprotectedPaths = req.path.includes('current_user');
 
   if (unprotectedPaths) {
     const user = req.cookies.token ? verifyToken(req.cookies.token) : undefined;
 
     const foundUser = await User.findOne({ _user: user?._user })
-      .select(["-_id", "_user", "profile"])
+      .select(['-_id', '_user', 'profile'])
       .exec();
 
     req.user = foundUser || undefined;
@@ -36,7 +36,7 @@ export const requireJwt = async (
   }
 
   if (!req.cookies.token) {
-    res.status(401).send("You must be logged in");
+    res.status(401).send('You must be logged in');
     return;
   }
 
@@ -44,8 +44,8 @@ export const requireJwt = async (
 
   const errorFunc = () => {
     req.user = undefined;
-    res.clearCookie("token");
-    res.status(401).send("You must be logged in");
+    res.clearCookie('token');
+    res.status(401).send('You must be logged in');
     return;
   };
 
@@ -61,7 +61,6 @@ export const requireJwt = async (
     req.user = user;
     next();
   } catch (err) {
-    console.log(err);
     errorFunc();
   }
 };

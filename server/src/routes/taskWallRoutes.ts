@@ -1,14 +1,14 @@
-import { Express, Request } from "express";
-import { UpdateQuery, model } from "mongoose";
-import requireJwt from "../middlewares/requireJwt";
-import { CommentType } from "../models/Comment";
+import { Express, Request } from 'express';
+import { UpdateQuery, model } from 'mongoose';
+import requireJwt from '../middlewares/requireJwt';
+import { CommentType } from '../models/Comment';
 import {
   AwardNotificationType,
   CommentNotificationType,
   NotificationsType,
-} from "../models/Notifications";
-import { PublicTaskListType, PublicTaskType } from "../models/PublicTaskList";
-import { ValidUserType } from "../models/User";
+} from '../models/Notifications';
+import { PublicTaskListType, PublicTaskType } from '../models/PublicTaskList';
+import { ValidUserType } from '../models/User';
 import {
   AwardType,
   EditCommentRequestType,
@@ -16,42 +16,41 @@ import {
   LikeTaskRequestType,
   NewCommentRequestType,
   assertRequestWithUser,
-} from "../types";
+} from '../types';
 
-const PublicTaskList = model<PublicTaskListType>("publicTaskList");
-const Notifications = model<NotificationsType>("notifications");
+const PublicTaskList = model<PublicTaskListType>('publicTaskList');
+const Notifications = model<NotificationsType>('notifications');
 const CommentNotification = model<CommentNotificationType>(
-  "commentNotification"
+  'commentNotification'
 );
-const AwardNotification = model<AwardNotificationType>("awardNotification");
-const Comment = model<CommentType>("comment");
+const AwardNotification = model<AwardNotificationType>('awardNotification');
+const Comment = model<CommentType>('comment');
 
 const taskWallRoutes = (app: Express) => {
-  app.get("/api/task_wall/user", requireJwt, async (req, res) => {
+  app.get('/api/task_wall/user', requireJwt, async (req, res) => {
     assertRequestWithUser(req);
 
     try {
       const data = await PublicTaskList.findOne({ _user: req.user._user })
-        .select("tasks")
+        .select('tasks')
         .exec();
 
       res.send(data ? data.tasks.map((task) => task) : false);
       return;
     } catch (err) {
-      console.log(err);
       res
         .status(500)
-        .send("Issue retrieving user task wall tasks, server error");
+        .send('Issue retrieving user task wall tasks, server error');
       return;
     }
   });
 
-  app.get("/api/task_wall/all", requireJwt, async (req, res) => {
+  app.get('/api/task_wall/all', requireJwt, async (req, res) => {
     try {
       const publicTasks = await PublicTaskList.find({
         totalTasks: { $gt: 0 },
       })
-        .select(["tasks", "-_id"])
+        .select(['tasks', '-_id'])
         .exec();
 
       let allPublicTasks: PublicTaskType[] = [];
@@ -62,16 +61,15 @@ const taskWallRoutes = (app: Express) => {
 
       res.send(allPublicTasks.length > 0 ? allPublicTasks : false);
     } catch (err) {
-      console.log(err);
-      res.status(500).send("Issue retrieving all wall tasks, server error");
+      res.status(500).send('Issue retrieving all wall tasks, server error');
     }
   });
 
   app.patch(
-    "/api/task_wall",
+    '/api/task_wall',
     requireJwt,
-    async (req: Request<any, {}, ValidUserType["profile"]>, res) => {
-      assertRequestWithUser<ValidUserType["profile"]>(req);
+    async (req: Request<any, {}, ValidUserType['profile']>, res) => {
+      assertRequestWithUser<ValidUserType['profile']>(req);
 
       const { _user, profile } = req.user as ValidUserType;
 
@@ -80,32 +78,32 @@ const taskWallRoutes = (app: Express) => {
           {},
           {
             $set: {
-              "tasks.$[deepUser].user.profilePicture": profile.profilePicture,
-              "tasks.$[deepUser].user.userName": profile.userName,
-              "tasks.$[deepUser].user.nameLowerCase":
+              'tasks.$[deepUser].user.profilePicture': profile.profilePicture,
+              'tasks.$[deepUser].user.userName': profile.userName,
+              'tasks.$[deepUser].user.nameLowerCase':
                 profile.userName.toLowerCase(),
-              "tasks.$[].likes.users.$[user].userName": profile.userName,
-              "tasks.$[].likes.users.$[user].nameLowerCase":
+              'tasks.$[].likes.users.$[user].userName': profile.userName,
+              'tasks.$[].likes.users.$[user].nameLowerCase':
                 profile.userName.toLowerCase(),
-              "tasks.$[].likes.users.$[user].profilePicture":
+              'tasks.$[].likes.users.$[user].profilePicture':
                 profile.profilePicture,
-              "tasks.$[].comments.$[deepUser].user.profilePicture":
+              'tasks.$[].comments.$[deepUser].user.profilePicture':
                 profile.profilePicture,
-              "tasks.$[].comments.$[deepUser].user.userName": profile.userName,
-              "tasks.$[].comments.$[deepUser].user.nameLowerCase":
+              'tasks.$[].comments.$[deepUser].user.userName': profile.userName,
+              'tasks.$[].comments.$[deepUser].user.nameLowerCase':
                 profile.userName.toLowerCase(),
-              "tasks.$[].comments.$[].likes.users.$[user].profilePicture":
+              'tasks.$[].comments.$[].likes.users.$[user].profilePicture':
                 profile.profilePicture,
-              "tasks.$[].comments.$[].likes.users.$[user].userName":
+              'tasks.$[].comments.$[].likes.users.$[user].userName':
                 profile.userName,
-              "tasks.$[].comments.$[].likes.users.$[user].nameLowerCase":
+              'tasks.$[].comments.$[].likes.users.$[user].nameLowerCase':
                 profile.userName.toLowerCase(),
             },
           },
           {
             arrayFilters: [
-              { "user._user": _user },
-              { "deepUser.user._user": _user },
+              { 'user._user': _user },
+              { 'deepUser.user._user': _user },
             ],
           }
         ).exec();
@@ -113,7 +111,7 @@ const taskWallRoutes = (app: Express) => {
         const publicTasks = await PublicTaskList.find({
           totalTasks: { $gt: 0 },
         })
-          .select(["tasks", "-_id"])
+          .select(['tasks', '-_id'])
           .exec();
 
         let allPublicTasks: PublicTaskType[] = [];
@@ -128,14 +126,13 @@ const taskWallRoutes = (app: Express) => {
 
         res.send([allPublicTasks || false, userTasks || false]);
       } catch (err) {
-        console.log(err);
-        res.status(500).send("Problem");
+        res.status(500).send('Problem');
       }
     }
   );
 
   app.post(
-    "/api/task_wall/comment",
+    '/api/task_wall/comment',
     requireJwt,
     async (req: Request<any, {}, NewCommentRequestType>, res) => {
       assertRequestWithUser<NewCommentRequestType>(req);
@@ -143,7 +140,7 @@ const taskWallRoutes = (app: Express) => {
       const { comment, taskId } = req.body;
 
       if (!comment.length || comment.length > 80) {
-        res.status(400).send("Comment does not meet required length");
+        res.status(400).send('Comment does not meet required length');
         return;
       }
 
@@ -159,7 +156,7 @@ const taskWallRoutes = (app: Express) => {
         await Notifications.findOne<NotificationsType>({
           userTaskComments: { $elemMatch: { taskId } },
         })
-          .select("_user")
+          .select('_user')
           .exec();
 
       const ownUserCommentOnOwnTask =
@@ -167,7 +164,7 @@ const taskWallRoutes = (app: Express) => {
 
       const newComment = new Comment<CommentType>({
         comment,
-        user: req.user.profile as ValidUserType["profile"],
+        user: req.user.profile as ValidUserType['profile'],
         created: new Date().toISOString(),
       });
 
@@ -176,7 +173,7 @@ const taskWallRoutes = (app: Express) => {
           taskId,
           commentId: newComment.id,
           task: publicTask?.tasks[0]?.task as string,
-          type: "commentLike",
+          type: 'commentLike',
         });
 
       try {
@@ -185,9 +182,9 @@ const taskWallRoutes = (app: Express) => {
             tasks: { $elemMatch: { taskId } },
           },
           {
-            $push: { "tasks.$[task].comments": newComment },
+            $push: { 'tasks.$[task].comments': newComment },
           },
-          { arrayFilters: [{ "task.taskId": taskId }] }
+          { arrayFilters: [{ 'task.taskId': taskId }] }
         )
           .select({ tasks: { $elemMatch: { taskId } } })
           .exec();
@@ -206,33 +203,32 @@ const taskWallRoutes = (app: Express) => {
             },
             {
               $inc: {
-                "userTaskComments.$[task].total": 1,
+                'userTaskComments.$[task].total': 1,
               },
               $set: {
-                "userTaskComments.$[task].unseen": true,
-                "userTaskComments.$[task].created": new Date().toISOString(),
+                'userTaskComments.$[task].unseen': true,
+                'userTaskComments.$[task].created': new Date().toISOString(),
               },
             },
-            { arrayFilters: [{ "task.taskId": taskId }] }
+            { arrayFilters: [{ 'task.taskId': taskId }] }
           ).exec();
         }
 
         res.send({ comment: newComment, taskId });
       } catch (err) {
-        console.log(err);
-        res.status(500).send("Error adding comment, try again");
+        res.status(500).send('Error adding comment, try again');
       }
     }
   );
 
   app.patch(
-    "/api/task_wall/comment",
+    '/api/task_wall/comment',
     requireJwt,
     async (req: Request<any, {}, EditCommentRequestType>, res) => {
       const { comment, _id, taskId } = req.body;
 
       if (!comment.length || comment.length > 80) {
-        res.status(400).send("Comment does not meet required length");
+        res.status(400).send('Comment does not meet required length');
         return;
       }
 
@@ -241,11 +237,11 @@ const taskWallRoutes = (app: Express) => {
           await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
             { tasks: { $elemMatch: { taskId } } },
             {
-              $set: { "tasks.$[task].comments.$[comment].comment": comment },
+              $set: { 'tasks.$[task].comments.$[comment].comment': comment },
             },
             {
               new: true,
-              arrayFilters: [{ "task.taskId": taskId }, { "comment._id": _id }],
+              arrayFilters: [{ 'task.taskId': taskId }, { 'comment._id': _id }],
             }
           )
             .select({ tasks: { $elemMatch: { taskId } } })
@@ -257,17 +253,16 @@ const taskWallRoutes = (app: Express) => {
 
         res.send({ comment: updatedComment, taskId });
       } catch (err) {
-        console.log(err);
-        res.status(500).send("Error editing comment, try again");
+        res.status(500).send('Error editing comment, try again');
       }
     }
   );
 
   app.delete(
-    "/api/task_wall/comment",
+    '/api/task_wall/comment',
     requireJwt,
     async (
-      req: Request<any, {}, Omit<EditCommentRequestType, "comment">>,
+      req: Request<any, {}, Omit<EditCommentRequestType, 'comment'>>,
       res
     ) => {
       const { _id, taskId } = req.body;
@@ -276,11 +271,11 @@ const taskWallRoutes = (app: Express) => {
         const task = await PublicTaskList.findOneAndUpdate<PublicTaskListType>(
           { tasks: { $elemMatch: { taskId } } },
           {
-            $pull: { "tasks.$[task].comments": { _id: { _id } } },
+            $pull: { 'tasks.$[task].comments': { _id: { _id } } },
           },
           {
             new: true,
-            arrayFilters: [{ "task.taskId": taskId }],
+            arrayFilters: [{ 'task.taskId': taskId }],
           }
         )
           .select({ tasks: { $elemMatch: { taskId } } })
@@ -290,14 +285,13 @@ const taskWallRoutes = (app: Express) => {
 
         res.send({ comments, taskId });
       } catch (err) {
-        console.log(err);
-        res.status(500).send("Error deleting comment, try again");
+        res.status(500).send('Error deleting comment, try again');
       }
     }
   );
 
   app.post(
-    "/api/task_wall/task/like",
+    '/api/task_wall/task/like',
     requireJwt,
     async (req: Request<{}, any, LikeTaskRequestType>, res) => {
       assertRequestWithUser<LikeTaskRequestType>(req);
@@ -310,7 +304,7 @@ const taskWallRoutes = (app: Express) => {
         await Notifications.findOne<NotificationsType>({
           userTaskLikes: { $elemMatch: { taskId } },
         })
-          .select(["_user", "userTaskLikes"])
+          .select(['_user', 'userTaskLikes'])
           .exec();
 
       const ownUserTask = userLikeNotification?._user === req.user._user;
@@ -327,11 +321,11 @@ const taskWallRoutes = (app: Express) => {
       if (!liked) {
         const newAward: AwardType | null =
           previousLikes === 24
-            ? "supported"
+            ? 'supported'
             : previousLikes === 49
-            ? "superSupported"
+            ? 'superSupported'
             : previousLikes === 99
-            ? "communityLegend"
+            ? 'communityLegend'
             : null;
 
         if (newAward && !awardArray.includes(newAward)) {
@@ -361,17 +355,17 @@ const taskWallRoutes = (app: Express) => {
 
       const updateQuery: UpdateQuery<PublicTaskListType> = liked
         ? {
-            $inc: { "tasks.$[task].likes.likes": -1 },
+            $inc: { 'tasks.$[task].likes.likes': -1 },
             $pull: {
-              "tasks.$[task].likes.users": {
+              'tasks.$[task].likes.users': {
                 userName: req.user.profile?.userName,
               },
             },
           }
         : {
-            $inc: { "tasks.$[task].likes.likes": 1 },
+            $inc: { 'tasks.$[task].likes.likes': 1 },
             $push: {
-              "tasks.$[task].likes.users": req.user.profile,
+              'tasks.$[task].likes.users': req.user.profile,
             },
           };
 
@@ -382,10 +376,10 @@ const taskWallRoutes = (app: Express) => {
               tasks: { $elemMatch: { taskId } },
             },
             {
-              $set: { "tasks.$[task].awards": awardArray },
+              $set: { 'tasks.$[task].awards': awardArray },
               ...updateQuery,
             },
-            { arrayFilters: [{ "task.taskId": taskId }], new: true }
+            { arrayFilters: [{ 'task.taskId': taskId }], new: true }
           )
             .select({ tasks: { $elemMatch: { taskId } } })
             .exec();
@@ -397,30 +391,29 @@ const taskWallRoutes = (app: Express) => {
             },
             {
               $push: {
-                "userTaskLikes.$[task].users": req.user._user,
+                'userTaskLikes.$[task].users': req.user._user,
               },
               $inc: {
-                "userTaskLikes.$[task].total": 1,
+                'userTaskLikes.$[task].total': 1,
               },
               $set: {
-                "userTaskLikes.$[task].unseen": true,
-                "userTaskLikes.$[task].created": new Date().toISOString(),
+                'userTaskLikes.$[task].unseen': true,
+                'userTaskLikes.$[task].created': new Date().toISOString(),
               },
             },
-            { arrayFilters: [{ "task.taskId": taskId }] }
+            { arrayFilters: [{ 'task.taskId': taskId }] }
           ).exec();
         }
 
         res.send(likedTask?.tasks[0]);
       } catch (err) {
-        console.log(err);
-        res.status(500).send("Problem liking task, try again");
+        res.status(500).send('Problem liking task, try again');
       }
     }
   );
 
   app.post(
-    "/api/task_wall/comment/like",
+    '/api/task_wall/comment/like',
     requireJwt,
     async (req: Request<{}, any, LikeCommentRequestType>, res) => {
       assertRequestWithUser<LikeCommentRequestType>(req);
@@ -429,15 +422,15 @@ const taskWallRoutes = (app: Express) => {
 
       const updateQuery: UpdateQuery<PublicTaskListType> = liked
         ? {
-            $inc: { "tasks.$[task].comments.$[comment].likes.likes": -1 },
+            $inc: { 'tasks.$[task].comments.$[comment].likes.likes': -1 },
             $pull: {
-              "tasks.$[task].comments.$[comment].likes.users": req.user.profile,
+              'tasks.$[task].comments.$[comment].likes.users': req.user.profile,
             },
           }
         : {
-            $inc: { "tasks.$[task].comments.$[comment].likes.likes": 1 },
+            $inc: { 'tasks.$[task].comments.$[comment].likes.likes': 1 },
             $push: {
-              "tasks.$[task].comments.$[comment].likes.users": req.user.profile,
+              'tasks.$[task].comments.$[comment].likes.users': req.user.profile,
             },
           };
 
@@ -445,7 +438,7 @@ const taskWallRoutes = (app: Express) => {
         await Notifications.findOne<NotificationsType>({
           commentLikes: { $elemMatch: { commentId: _id } },
         })
-          .select(["_user", "commentLikes"])
+          .select(['_user', 'commentLikes'])
           .exec();
 
       const ownUsersComment =
@@ -467,7 +460,7 @@ const taskWallRoutes = (app: Express) => {
           },
           updateQuery,
           {
-            arrayFilters: [{ "task.taskId": taskId }, { "comment._id": _id }],
+            arrayFilters: [{ 'task.taskId': taskId }, { 'comment._id': _id }],
             new: true,
           }
         )
@@ -485,24 +478,23 @@ const taskWallRoutes = (app: Express) => {
             },
             {
               $push: {
-                "commentLikes.$[comment].users": req.user._user,
+                'commentLikes.$[comment].users': req.user._user,
               },
               $inc: {
-                "commentLikes.$[comment].total": 1,
+                'commentLikes.$[comment].total': 1,
               },
               $set: {
-                "commentLikes.$[comment].unseen": true,
-                "commentLikes.$[comment].created": new Date().toISOString(),
+                'commentLikes.$[comment].unseen': true,
+                'commentLikes.$[comment].created': new Date().toISOString(),
               },
             },
-            { arrayFilters: [{ "comment.commentId": _id }] }
+            { arrayFilters: [{ 'comment.commentId': _id }] }
           ).exec();
         }
 
         res.send({ comment: updatedComment, taskId });
       } catch (err) {
-        console.log(err);
-        res.status(500).send("Error liking comment, try again");
+        res.status(500).send('Error liking comment, try again');
       }
     }
   );

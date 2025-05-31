@@ -1,15 +1,15 @@
-import { Express, Request } from "express";
-import { model } from "mongoose";
-import requireJwt from "../middlewares/requireJwt";
-import { NotificationsType } from "../models/Notifications";
-import { PublicTaskListType } from "../models/PublicTaskList";
-import { assertRequestWithUser } from "../types";
+import { Express, Request } from 'express';
+import { model } from 'mongoose';
+import requireJwt from '../middlewares/requireJwt';
+import { NotificationsType } from '../models/Notifications';
+import { PublicTaskListType } from '../models/PublicTaskList';
+import { assertRequestWithUser } from '../types';
 
-const Notifications = model<NotificationsType>("notifications");
-const PublicTaskList = model<PublicTaskListType>("publicTaskList");
+const Notifications = model<NotificationsType>('notifications');
+const PublicTaskList = model<PublicTaskListType>('publicTaskList');
 
 const notificationsRoutes = (app: Express) => {
-  app.get("/api/notifications", requireJwt, async (req, res) => {
+  app.get('/api/notifications', requireJwt, async (req, res) => {
     assertRequestWithUser(req);
 
     try {
@@ -41,13 +41,12 @@ const notificationsRoutes = (app: Express) => {
         commentLikes,
       ]);
     } catch (err) {
-      console.log(err);
-      res.status(500).send("Unable to retrieve notifications right now");
+      res.status(500).send('Unable to retrieve notifications right now');
     }
   });
 
   app.patch(
-    "/api/notifications",
+    '/api/notifications',
     requireJwt,
     async (req: Request<any, {}, { taskId: string }>, res) => {
       assertRequestWithUser<{ taskId: string }>(req);
@@ -59,19 +58,18 @@ const notificationsRoutes = (app: Express) => {
           },
           {
             $set: {
-              "awardNotifications.$[noti].unseen": false,
-              "userTaskLikes.$[noti].unseen": false,
-              "userTaskComments.$[noti].unseen": false,
-              "commentLikes.$[noti].unseen": false,
+              'awardNotifications.$[noti].unseen': false,
+              'userTaskLikes.$[noti].unseen': false,
+              'userTaskComments.$[noti].unseen': false,
+              'commentLikes.$[noti].unseen': false,
             },
           },
-          { arrayFilters: [{ "noti.taskId": req.body.taskId }] }
+          { arrayFilters: [{ 'noti.taskId': req.body.taskId }] }
         ).exec();
 
         res.send();
       } catch (err) {
-        console.log(err);
-        res.status(500).send("Unable to retrieve task, try again");
+        res.status(500).send('Unable to retrieve task, try again');
       }
     }
   );
